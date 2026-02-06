@@ -1,0 +1,383 @@
+import { motion } from "motion/react";
+import { X, Shield, FileText, Info, ArrowLeft } from "lucide-react";
+import { useEffect } from "react";
+
+interface LegalPageProps {
+  type: "privacy" | "terms" | "imprint";
+  onClose: () => void;
+}
+
+export function LegalPage({ type, onClose }: LegalPageProps) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
+  const content = getLegalContent(type);
+
+  const handleClose = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    onClose();
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100000] bg-black/80 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4"
+      onClick={handleClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: 20 }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-4xl bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)] rounded-3xl shadow-2xl my-8"
+      >
+        {/* Header */}
+        <div className="sticky top-0 z-10 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 p-6 flex items-center justify-between rounded-t-3xl">
+          <div className="flex items-center gap-4">
+            {type === "privacy" && <Shield className="w-8 h-8 text-white" />}
+            {type === "terms" && <FileText className="w-8 h-8 text-white" />}
+            {type === "imprint" && <Info className="w-8 h-8 text-white" />}
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white">
+                {content.title}
+              </h2>
+              <p className="text-sm text-white/80">Last updated: January 25, 2026</p>
+            </div>
+          </div>
+          <button
+            onClick={handleClose}
+            className="p-2 hover:bg-white/20 rounded-full transition-colors"
+          >
+            <X className="w-6 h-6 text-white" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 md:p-8 space-y-8 text-[var(--text-primary)]">
+          {content.sections.map((section, index) => (
+            <motion.section
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <h3 className="text-xl md:text-2xl font-bold mb-4 text-[var(--accent-primary)]">
+                {section.heading}
+              </h3>
+              <div className="space-y-4 text-[var(--text-secondary)] leading-relaxed">
+                {section.content.map((paragraph, pIndex) => (
+                  <p key={pIndex} className="text-sm md:text-base">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            </motion.section>
+          ))}
+
+          {/* Contact Info */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-12 p-6 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl"
+          >
+            <h4 className="text-lg font-bold mb-3 text-[var(--accent-primary)]">
+              Questions or Concerns?
+            </h4>
+            <p className="text-sm text-[var(--text-secondary)] mb-4">
+              If you have any questions about this {content.title.toLowerCase()}, please contact me:
+            </p>
+            <div className="space-y-2 text-sm">
+              <p><strong>Email:</strong> hello@roze.live</p>
+              <p><strong>Location:</strong> Belgium, European Union</p>
+              <p><strong>VAT:</strong> BE 0123.456.789</p>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-6 border-t border-[var(--border-color)] flex justify-between items-center">
+          <button
+            onClick={handleClose}
+            className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)] hover:bg-[var(--accent-primary)]/10 border border-[var(--border-color)] rounded-xl transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Portfolio
+          </button>
+          <p className="text-xs text-[var(--text-muted)]">🇪🇺 GDPR Compliant</p>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function getLegalContent(type: "privacy" | "terms" | "imprint") {
+  switch (type) {
+    case "privacy":
+      return {
+        title: "Privacy Policy",
+        sections: [
+          {
+            heading: "1. Introduction",
+            content: [
+              "This Privacy Policy explains how Stepan Roze ('I', 'me', or 'my') collects, uses, and protects your personal information when you visit my portfolio website roze.live ('the Site').",
+              "I am committed to protecting your privacy and ensuring that your personal information is handled in accordance with the General Data Protection Regulation (GDPR) and other applicable data protection laws.",
+            ],
+          },
+          {
+            heading: "2. Information I Collect",
+            content: [
+              "Contact Information: When you use the contact form or send me an email, I collect your name, email address, phone number (optional), and any message content you provide.",
+              "Analytics Data: I use Google Analytics to collect anonymous usage data such as page views, time spent on site, geographic location (country/city level), device type, and browser information. This data helps me improve the website experience.",
+              "Cookies: The site uses cookies for essential functionality and analytics. You can manage your cookie preferences through the cookie banner.",
+            ],
+          },
+          {
+            heading: "3. How I Use Your Information",
+            content: [
+              "To respond to your inquiries and project requests",
+              "To improve the website and user experience",
+              "To analyze website traffic and performance",
+              "To comply with legal obligations",
+              "I will never sell, rent, or share your personal information with third parties for marketing purposes.",
+            ],
+          },
+          {
+            heading: "4. Data Storage and Security",
+            content: [
+              "Your contact form data is securely stored using Supabase with industry-standard encryption.",
+              "All data is stored in EU-based servers to comply with GDPR requirements.",
+              "I implement appropriate technical and organizational measures to protect your data against unauthorized access, alteration, disclosure, or destruction.",
+              "Contact form data is retained for up to 2 years or until the purpose of collection is fulfilled.",
+            ],
+          },
+          {
+            heading: "5. Your Rights (GDPR)",
+            content: [
+              "Right to Access: You can request a copy of your personal data I hold.",
+              "Right to Rectification: You can request correction of inaccurate data.",
+              "Right to Erasure: You can request deletion of your personal data.",
+              "Right to Restrict Processing: You can request limitation of how I use your data.",
+              "Right to Data Portability: You can request transfer of your data to another service.",
+              "Right to Object: You can object to processing of your data for certain purposes.",
+              "To exercise any of these rights, please contact me at hello@roze.live.",
+            ],
+          },
+          {
+            heading: "6. Third-Party Services",
+            content: [
+              "Google Analytics: I use Google Analytics to understand how visitors interact with my site. Google Analytics uses cookies to collect anonymous data. You can opt-out of Google Analytics by installing the Google Analytics Opt-out Browser Add-on.",
+              "Supabase: Contact form data is stored securely using Supabase, which is GDPR compliant and uses EU-based servers.",
+            ],
+          },
+          {
+            heading: "7. Cookies Policy",
+            content: [
+              "Essential Cookies: Required for the website to function properly (e.g., cookie consent preferences).",
+              "Analytics Cookies: Used to collect anonymous usage statistics via Google Analytics.",
+              "You can manage your cookie preferences at any time through the cookie banner or your browser settings.",
+            ],
+          },
+          {
+            heading: "8. International Data Transfers",
+            content: [
+              "Your data is primarily stored within the European Union. If data is transferred outside the EU, I ensure appropriate safeguards are in place as required by GDPR.",
+            ],
+          },
+          {
+            heading: "9. Children's Privacy",
+            content: [
+              "This website is not intended for children under 16 years of age. I do not knowingly collect personal information from children.",
+            ],
+          },
+          {
+            heading: "10. Changes to This Policy",
+            content: [
+              "I may update this Privacy Policy from time to time. The 'Last Updated' date at the top of this page will reflect when the most recent changes were made. Continued use of the site after changes constitutes acceptance of the updated policy.",
+            ],
+          },
+        ],
+      };
+
+    case "terms":
+      return {
+        title: "Terms & Conditions",
+        sections: [
+          {
+            heading: "1. Acceptance of Terms",
+            content: [
+              "By accessing and using the roze.live portfolio website ('the Site'), you accept and agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use the Site.",
+            ],
+          },
+          {
+            heading: "2. Use of the Site",
+            content: [
+              "The Site is intended for informational purposes to showcase my portfolio, skills, and services as a frontend developer.",
+              "You may view, download, and print content from the Site for personal, non-commercial use only.",
+              "You may not modify, reproduce, distribute, or create derivative works from any content on the Site without my express written permission.",
+            ],
+          },
+          {
+            heading: "3. Intellectual Property",
+            content: [
+              "All content on this Site, including text, images, code, designs, logos, and graphics, is the intellectual property of Stepan Roze unless otherwise stated.",
+              "Project screenshots and descriptions are for portfolio purposes only. Actual project ownership and rights belong to respective clients where applicable.",
+              "You may not use any content from this Site for commercial purposes without written authorization.",
+            ],
+          },
+          {
+            heading: "4. Service Inquiries and Contracts",
+            content: [
+              "Contact through this Site does not constitute a binding contract for services.",
+              "All service agreements require a separate written contract outlining scope, deliverables, timeline, and payment terms.",
+              "Pricing displayed on the Site is indicative and subject to change based on project requirements.",
+              "I reserve the right to decline any project or service request at my discretion.",
+            ],
+          },
+          {
+            heading: "5. Accuracy of Information",
+            content: [
+              "I strive to ensure all information on the Site is accurate and up-to-date, but I make no warranties regarding the completeness, accuracy, or reliability of any content.",
+              "Project descriptions, technologies used, and timelines are approximate and for informational purposes.",
+            ],
+          },
+          {
+            heading: "6. External Links",
+            content: [
+              "The Site may contain links to external websites (e.g., GitHub, LinkedIn, project demos). I am not responsible for the content, privacy practices, or terms of these external sites.",
+              "Visiting external links is at your own risk.",
+            ],
+          },
+          {
+            heading: "7. Limitation of Liability",
+            content: [
+              "To the fullest extent permitted by law, I shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from your use of the Site.",
+              "This includes, but is not limited to, damages for loss of profits, data, or other intangible losses.",
+            ],
+          },
+          {
+            heading: "8. Disclaimer of Warranties",
+            content: [
+              "The Site is provided 'as is' and 'as available' without any warranties of any kind, either express or implied.",
+              "I do not warrant that the Site will be uninterrupted, secure, or error-free.",
+            ],
+          },
+          {
+            heading: "9. Indemnification",
+            content: [
+              "You agree to indemnify and hold me harmless from any claims, damages, losses, or expenses (including legal fees) arising from your use of the Site or violation of these Terms.",
+            ],
+          },
+          {
+            heading: "10. Governing Law",
+            content: [
+              "These Terms and Conditions are governed by and construed in accordance with the laws of Belgium and the European Union.",
+              "Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts of Belgium.",
+            ],
+          },
+          {
+            heading: "11. Changes to Terms",
+            content: [
+              "I reserve the right to modify these Terms and Conditions at any time. Changes will be effective immediately upon posting to the Site.",
+              "Continued use of the Site after changes constitutes acceptance of the updated Terms.",
+            ],
+          },
+          {
+            heading: "12. Severability",
+            content: [
+              "If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions shall continue in full force and effect.",
+            ],
+          },
+        ],
+      };
+
+    case "imprint":
+      return {
+        title: "Imprint (Legal Notice)",
+        sections: [
+          {
+            heading: "1. Information According to § 5 TMG",
+            content: [
+              "This imprint (Impressum) provides legally required information about the owner and operator of this website in accordance with European law.",
+            ],
+          },
+          {
+            heading: "2. Website Owner & Operator",
+            content: [
+              "Name: Stepan Roze",
+              "Business Name: roze.live",
+              "Profession: Software Developer & Web Development Consultant",
+              "Location: Belgium, European Union",
+            ],
+          },
+          {
+            heading: "3. Contact Information",
+            content: [
+              "Email: hello@roze.live",
+              "Website: https://roze.live",
+              "GitHub: https://github.com/irozedev",
+              "LinkedIn: https://linkedin.com/in/rozestepan",
+              "Upwork: https://www.upwork.com/freelancers/rozestepan",
+            ],
+          },
+          {
+            heading: "4. VAT Identification",
+            content: [
+              "VAT ID (BTW): BE 0123.456.789",
+              "Chamber of Commerce (KvK): 12345678",
+              "Note: As a freelance developer operating in Belgium, I am registered for VAT purposes in accordance with EU regulations.",
+            ],
+          },
+          {
+            heading: "5. Professional Liability Insurance",
+            content: [
+              "As a professional developer, I carry appropriate professional liability insurance to cover my services and protect clients.",
+            ],
+          },
+          {
+            heading: "6. Responsible for Content",
+            content: [
+              "Stepan Roze is responsible for all content on this website in accordance with § 55 Abs. 2 RStV (German Interstate Broadcasting Treaty).",
+              "All project descriptions, code examples, and portfolio items are created or properly attributed.",
+            ],
+          },
+          {
+            heading: "7. Disclaimer",
+            content: [
+              "Liability for Content: I strive to ensure all content is accurate, but I cannot guarantee the completeness, accuracy, or timeliness of all information. I am not liable for damages arising from the use of information on this site.",
+              "Liability for Links: This website contains links to external sites. I have no influence over the content of these sites and am not responsible for their content. The respective operators are responsible for external site content.",
+              "Copyright: All content on this website (text, images, graphics, code) is protected by copyright. Reproduction requires written permission unless otherwise stated.",
+            ],
+          },
+          {
+            heading: "8. Data Protection Officer",
+            content: [
+              "As a sole proprietor, I act as the data protection officer for this website. For privacy concerns, please contact me at rozedev095@gmail.com.",
+            ],
+          },
+          {
+            heading: "9. Dispute Resolution",
+            content: [
+              "The European Commission provides an online dispute resolution platform at: https://ec.europa.eu/consumers/odr",
+              "I am willing to participate in dispute resolution procedures before a consumer arbitration board.",
+            ],
+          },
+          {
+            heading: "10. Alternative Dispute Resolution",
+            content: [
+              "In accordance with EU Regulation No. 524/2013, I inform you that I am neither obligated nor willing to participate in dispute resolution proceedings before a consumer arbitration board for services rendered.",
+            ],
+          },
+        ],
+      };
+  }
+}

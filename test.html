@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Style Test</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --text-primary: #ffffff;
+      --accent-primary: #00d9ff;
+    }
+    
+    body {
+      margin: 0;
+      padding: 40px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    
+    h1 {
+      color: var(--accent-primary);
+      margin: 0 0 20px 0;
+    }
+    
+    .test-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>✅ Styles are working!</h1>
+  <div class="test-card">
+    <p>If you see this styled correctly with dark background and cyan accent, styles are loading properly.</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/* Card Backgrounds - Theme adaptive */
+.card-bg {
+  background: var(--bg-secondary);
+}
+
+.card-border {
+  border-color: var(--border-color);
+}
+
+/* Soft rounded corners */
+.rounded-soft {
+  border-radius: var(--radius-md);
+}
+
+.rounded-soft-lg {
+  border-radius: var(--radius-lg);
+}
+
+.rounded-soft-xl {
+  border-radius: var(--radius-xl);
+}
+
+/* Button base sizes for mobile */
+.btn-mobile {
+  min-height: 48px; /* 48px minimum touch target */
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* Text sizes mobile-first */
+.text-mobile-sm {
+  font-size: 0.875rem; /* 14px on mobile */
+}
+
+.text-mobile-base {
+  font-size: 1rem; /* 16px */
+}
+
+.text-mobile-lg {
+  font-size: 1.125rem; /* 18px */
+}
+
+@media (min-width: 768px) {
+  .text-mobile-sm {
+    font-size: 0.875rem;
+  }
+  
+  .text-mobile-base {
+    font-size: 1rem;
+  }
+  
+  .text-mobile-lg {
+    font-size: 1.25rem;
+  }
+}
