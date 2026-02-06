@@ -13,7 +13,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   
-  base: './',
+  base: '/',
   
   resolve: {
     alias: {

@@ -6,6 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stepan Roze | Software Developer</title>
     <meta name="description" content="Software Developer specializing in React, TypeScript, and modern web technologies." />
+    <script>
+      // КРИТИЧНА ДІАГНОСТИКА - ЦЕЙ КОД ВИКОНАЄТЬСЯ ЗАВЖДИ
+      console.log('🔥 [ROZE.LIVE v2.1.9] HTML LOADED - INLINE SCRIPT WORKS!');
+      console.log('📍 Location:', window.location.href);
+      console.log('🌐 User Agent:', navigator.userAgent);
+      
+      // Перевіряємо чи root існує після завантаження
+      window.addEventListener('DOMContentLoaded', () => {
+        const root = document.getElementById('root');
+        console.log('📦 Root element after DOMContentLoaded:', root);
+        console.log('📦 Root innerHTML:', root ? root.innerHTML : 'ROOT NOT FOUND!');
+        
+        // Перевіряємо через 2 секунди чи React змонтувався
+        setTimeout(() => {
+          const rootAfter = document.getElementById('root');
+          console.log('⏱️ Root after 2s:', rootAfter);
+          console.log('⏱️ Root innerHTML after 2s:', rootAfter ? rootAfter.innerHTML : 'STILL EMPTY!');
+          
+          if (!rootAfter || rootAfter.innerHTML === '') {
+            console.error('❌ REACT DID NOT MOUNT! Checking for script errors...');
+            console.error('❌ Check Network tab for failed JS files!');
+          }
+        }, 2000);
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -12,7 +12,11 @@ import { Toaster } from "sonner";
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "motion/react";
 
+console.log('🎯 [ROZE.LIVE v2.1.7] App.tsx LOADED');
+
 export default function App() {
+  console.log('🏗️ App component rendering...');
+  
   const [currentPage, setCurrentPage] = useState<"home" | "privacy" | "terms" | "imprint" | "admin" | "dashboard" | "profile">(() => {
     // Safe window check for SSR
     if (typeof window === 'undefined') return "home";
