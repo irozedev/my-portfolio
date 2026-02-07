@@ -304,7 +304,8 @@ export function AIAssistantPro() {
 
   const handleQuickAction = (action: string) => {
     const lang = language as keyof typeof siteData;
-    const data = siteData[lang];
+    // Fallback to 'en' if current language is not available in siteData
+    const data = siteData[lang] || siteData.en;
     
     switch (action) {
       case 'projects':

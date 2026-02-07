@@ -155,61 +155,129 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               <motion.a
                 href="#home"
                 onClick={(e) => handleNavClick(e, "#home")}
-                className="flex items-center gap-2 sm:gap-3 group relative"
+                className="flex items-center gap-3 group relative"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <div className="relative">
-                  {/* 3D Layered Effect */}
+                  {/* Holographic Background Glow */}
                   <motion.div 
-                    className="absolute inset-0 bg-gradient-to-br from-[var(--accent-primary)] to-purple-500 rounded-xl blur-sm opacity-50"
+                    className="absolute -inset-2 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-2xl blur-lg opacity-30 group-hover:opacity-60"
                     animate={{ 
-                      rotate: [0, 5, 0],
-                      scale: [1, 1.05, 1]
+                      rotate: [0, 360],
+                      scale: [1, 1.1, 1]
                     }}
-                    transition={{ duration: 3, repeat: Infinity }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                   />
-                  <div className="relative w-10 h-10 bg-gradient-to-br from-[var(--accent-primary)] via-purple-500 to-pink-500 rounded-xl flex items-center justify-center font-black text-lg transition-all duration-300 group-hover:shadow-lg group-hover:shadow-[var(--accent-primary)]/50 group-hover:rotate-[-5deg]">
-                    <span className="text-white drop-shadow-lg">R</span>
+                  
+                  {/* Hexagon Logo Container */}
+                  <div className="relative w-12 h-12 flex items-center justify-center">
+                    {/* Hexagon Background with Gradient Border */}
+                    <div className="absolute inset-0" style={{
+                      clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)"
+                    }}>
+                      <motion.div 
+                        className="w-full h-full bg-gradient-to-br from-[var(--accent-primary)] via-purple-500 to-pink-500"
+                        animate={{ 
+                          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+                        }}
+                        transition={{ duration: 5, repeat: Infinity }}
+                        style={{ backgroundSize: "200% 200%" }}
+                      />
+                    </div>
+                    
+                    {/* Inner Hexagon */}
+                    <div className="absolute inset-[2px]" style={{
+                      clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)"
+                    }}>
+                      <div className="w-full h-full bg-[var(--bg-primary)] flex items-center justify-center">
+                        <motion.span 
+                          className="text-2xl font-black bg-gradient-to-br from-[var(--accent-primary)] via-purple-400 to-pink-400 bg-clip-text text-transparent"
+                          animate={{ 
+                            scale: [1, 1.05, 1],
+                          }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        >
+                          S
+                        </motion.span>
+                      </div>
+                    </div>
+
+                    {/* Animated Ring */}
+                    <motion.div
+                      className="absolute inset-0 rounded-full border-2 border-[var(--accent-primary)]/50"
+                      animate={{
+                        rotate: [0, 360],
+                        scale: [1, 1.2, 1],
+                        opacity: [0.5, 0, 0.5]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    
+                    {/* Status Indicator with Pulse */}
+                    <motion.div 
+                      className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-[var(--bg-primary)] shadow-lg z-10 ${
+                        isAvailable ? 'bg-green-500' : 'bg-orange-500'
+                      }`}
+                      animate={{
+                        scale: [1, 1.3, 1],
+                        boxShadow: isAvailable 
+                          ? ['0 0 0 0 rgba(34, 197, 94, 0.7)', '0 0 0 8px rgba(34, 197, 94, 0)', '0 0 0 0 rgba(34, 197, 94, 0)']
+                          : ['0 0 0 0 rgba(249, 115, 22, 0.7)', '0 0 0 8px rgba(249, 115, 22, 0)', '0 0 0 0 rgba(249, 115, 22, 0)']
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    />
                   </div>
-                  {/* Status Indicator */}
-                  <motion.div 
-                    className={`absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-[var(--bg-primary)] shadow-lg ${
-                      isAvailable ? 'bg-green-500' : 'bg-orange-500'
-                    }`}
+                </div>
+                
+                {/* Live Status Badge - Clean & Professional */}
+                <motion.div 
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] group-hover:border-[var(--accent-primary)]/30 transition-all"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <motion.div
+                    className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
                     animate={{
-                      scale: [1, 1.2, 1],
-                      boxShadow: isAvailable 
-                        ? ['0 0 0 0 rgba(34, 197, 94, 0.7)', '0 0 0 6px rgba(34, 197, 94, 0)', '0 0 0 0 rgba(34, 197, 94, 0)']
-                        : ['0 0 0 0 rgba(249, 115, 22, 0.7)', '0 0 0 6px rgba(249, 115, 22, 0)', '0 0 0 0 rgba(249, 115, 22, 0)']
+                      scale: [1, 1.4, 1],
+                      opacity: [1, 0.6, 1]
                     }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
                   />
-                </div>
-                <div className="flex flex-col">
-                  <motion.span 
-                    className="font-bold text-lg bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent-primary)] bg-clip-text text-transparent"
-                    whileHover={{ letterSpacing: "0.05em" }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    roze.live
-                  </motion.span>
-                  <span className="text-[10px] text-[var(--text-muted)] font-medium">{t("hero.role")}</span>
-                </div>
+                  <span className={`text-xs font-bold tracking-wide uppercase ${
+                    isAvailable ? 'text-green-500' : 'text-orange-500'
+                  }`}>
+                    {isAvailable ? (
+                      language === 'uk' ? 'Онлайн' : 
+                      language === 'nl' ? 'Online' : 
+                      language === 'ar' ? 'متصل' :
+                      language === 'es' ? 'En línea' :
+                      'Online'
+                    ) : (
+                      language === 'uk' ? 'Зайнятий' : 
+                      language === 'nl' ? 'Bezet' : 
+                      language === 'ar' ? 'مشغول' :
+                      language === 'es' ? 'Ocupado' :
+                      'Busy'
+                    )}
+                  </span>
+                </motion.div>
               </motion.a>
             </div>
 
             {/* Desktop Navigation - Center */}
-            <div className="hidden lg:flex items-center gap-2 xl:gap-3 flex-1 justify-center">
-              {navItems.map((item) => {
+            <div className="hidden lg:flex items-center gap-2 xl:gap-3 flex-1 justify-center relative">
+              {navItems.map((item, index) => {
                 const isActive = activeSection === item.href.replace('#', '') || (item.href === '#home' && activeSection === '');
                 return (
                   <motion.a
-                    key={item.href}
+                    key={`${item.href}-${index}`}
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
                     className={`relative px-2 md:px-2.5 xl:px-3 py-2 text-xs md:text-[11px] lg:text-xs xl:text-sm font-medium transition-colors group whitespace-nowrap ${
@@ -224,9 +292,15 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                     
                     {isActive && (
                       <motion.div
-                        layoutId="activeSection"
-                        className="absolute inset-0 bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30 rounded-lg"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        layoutId="navIndicator"
+                        className="absolute inset-0 bg-gradient-to-r from-[var(--accent-primary)]/10 via-[var(--accent-primary)]/20 to-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/40 rounded-lg shadow-lg shadow-[var(--accent-primary)]/20"
+                        transition={{ 
+                          type: "spring", 
+                          bounce: 0.2, 
+                          duration: 0.6,
+                          stiffness: 200,
+                          damping: 25
+                        }}
                       />
                     )}
                     

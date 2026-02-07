@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { X, ExternalLink, Github, Calendar, Users, Zap } from 'lucide-react';
 import { ProjectComments } from './project-comments';
 import { ProjectReactions } from './project-reactions';
+import { useEffect } from 'react';
 
 interface Project {
   id?: string;
@@ -31,6 +32,33 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
   // Generate project ID if not provided
   const projectId = project.id || project.title.toLowerCase().replace(/\s+/g, '-');
 
+  useEffect(() => {
+    // Store scroll position and block body scroll
+    const scrollY = window.pageYOffset;
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    
+    return () => {
+      // Restore scroll position
+      const currentScrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.overflow = "";
+      document.body.style.width = "";
+      window.scrollTo(0, parseInt(currentScrollY || "0") * -1);
+    };
+  }, []);
+
+  const handleClose = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    onClose();
+  };
+
   return (
     <>
       {/* Backdrop */}
@@ -38,8 +66,8 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        onClick={onClose}
-        className="fixed inset-0 bg-black/90 backdrop-blur-md z-[100000]"
+        onClick={handleClose}
+        className="fixed inset-0 bg-white/80 dark:bg-black/80 backdrop-blur-md z-[100000]"
       />
 
       {/* Modal */}
@@ -48,13 +76,16 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         className="fixed inset-0 z-[100001] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
+        onClick={handleClose}
       >
         <div className="min-h-full flex items-start justify-center p-4 sm:p-6 lg:p-8">
-          <div className="bg-[var(--bg-primary)] border-2 border-[#00d9ff]/30 rounded-3xl w-full max-w-5xl shadow-[0_0_100px_rgba(0,217,255,0.3)] my-8">
+          <div 
+            className="bg-[var(--bg-primary)] border-2 border-[#00d9ff]/30 rounded-3xl w-full max-w-5xl shadow-[0_0_100px_rgba(0,217,255,0.3)] my-8"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Close Button */}
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="sticky top-4 float-right mr-4 sm:mr-6 mt-4 sm:mt-6 p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition-colors z-10"
             >
               <X className="w-5 h-5 sm:w-6 sm:h-6 text-white" />

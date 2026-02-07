@@ -87,12 +87,12 @@ export function Footer() {
             </p>
 
             {/* Status Badge - synced with availability context */}
-            <div className={`flex items-center gap-4 p-4 rounded-xl backdrop-blur-sm ${
+            <div className={`inline-flex items-center gap-4 p-4 rounded-xl backdrop-blur-sm ${
               isAvailable 
                 ? 'from-green-500/10 to-[#00d9ff]/10 border border-green-500/30' 
                 : 'from-red-500/10 to-orange-500/10 border border-red-500/30'
             }`}>
-              <div className="relative">
+              <div className="relative flex-shrink-0">
                 <div className={`w-3 h-3 rounded-full animate-pulse ${
                   isAvailable ? 'bg-green-500' : 'bg-red-500'
                 }`} />
@@ -104,7 +104,7 @@ export function Footer() {
                 <motion.a 
                   href="#contact"
                   onClick={(e) => { e.preventDefault(); smoothScrollToSection("#contact"); }}
-                  className="text-base md:text-lg font-semibold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors cursor-pointer"
+                  className="text-base md:text-lg font-semibold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors cursor-pointer whitespace-nowrap"
                   whileHover={{ scale: 1.05 }}
                 >
                   {isAvailable ? t('footer.letsBuild') : t('footer.coffeeBreak')}
@@ -112,7 +112,7 @@ export function Footer() {
                 <motion.a 
                   href="#services"
                   onClick={(e) => { e.preventDefault(); smoothScrollToSection("#services"); }}
-                  className="text-sm md:text-base text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors cursor-pointer block"
+                  className="text-sm md:text-base text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors cursor-pointer block whitespace-nowrap"
                   whileHover={{ scale: 1.05 }}
                 >
                   {t('footer.workType')}
