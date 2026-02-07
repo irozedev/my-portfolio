@@ -109,8 +109,29 @@ const NextArrow = ({ onClick }: { onClick?: () => void }) => (
 export function ServicesCreativeSlider() {
   const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  // Initialize isMobile based on window size to prevent flashing
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 1024;
+    }
+    return false;
+  });
   const sliderRef = useRef<Slider>(null);
   const { t } = useLanguage();
+
+  // Detect mobile on mount
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    // Check immediately
+    checkMobile();
+    
+    // Listen for resize
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Enable advanced navigation (keyboard + touch swipe)
   useSliderNavigation({
@@ -139,19 +160,21 @@ export function ServicesCreativeSlider() {
     setSelectedService(service);
   };
 
+  // Dynamic initial settings based on screen size
   const settings = {
     dots: true,
     infinite: true,
     speed: 600,
-    slidesToShow: 3,
+    slidesToShow: isMobile ? 1 : 3,
     slidesToScroll: 1,
     centerMode: true,
-    centerPadding: "0px",
+    centerPadding: isMobile ? "40px" : "0px",
     autoplay: true,
     autoplaySpeed: 5000,
     pauseOnHover: true,
     swipeToSlide: true,
     touchThreshold: 10,
+    arrows: !isMobile,
     beforeChange: (_current: number, next: number) => setCurrentSlide(next),
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
@@ -292,7 +315,7 @@ export function ServicesCreativeSlider() {
 
                 /* Active center card */
                 .slick-center .service-card {
-                  transform: scale(1) perspective(1000px) rotateY(0deg);
+                  transform: scale(1);
                   opacity: 1;
                   z-index: 20;
                   filter: brightness(1.1) blur(0);
@@ -301,7 +324,7 @@ export function ServicesCreativeSlider() {
 
                 /* Left side card */
                 .slick-slide:has(+ .slick-center) .service-card {
-                  transform: scale(0.85) perspective(1000px) rotateY(8deg);
+                  transform: scale(0.85);
                   opacity: 0.6;
                   z-index: 10;
                   filter: brightness(0.7) blur(1px);
@@ -310,7 +333,7 @@ export function ServicesCreativeSlider() {
 
                 /* Right side card */
                 .slick-center + .slick-slide .service-card {
-                  transform: scale(0.85) perspective(1000px) rotateY(-8deg);
+                  transform: scale(0.85);
                   opacity: 0.6;
                   z-index: 10;
                   filter: brightness(0.7) blur(1px);
@@ -319,28 +342,24 @@ export function ServicesCreativeSlider() {
 
                 /* Other cards - No flickering */
                 .service-card {
-                  transform: scale(0.75) perspective(1000px);
+                  transform: scale(0.75);
                   opacity: 0.3;
                   z-index: 1;
                   filter: brightness(0.5) blur(2px);
                   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
                               opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
                               filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-                  transform-style: preserve-3d;
                   will-change: transform, opacity, filter;
                 }
 
                 /* Smooth transitions */
                 .slick-list {
                   overflow: visible !important;
-                  perspective: 2000px;
-                  perspective-origin: center;
                 }
 
                 .slick-track {
                   display: flex;
                   align-items: center;
-                  transform-style: preserve-3d;
                 }
 
                 /* Dots styling */

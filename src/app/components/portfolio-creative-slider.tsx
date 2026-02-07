@@ -189,7 +189,28 @@ export function PortfolioCreativeSlider() {
   const { favorites, addFavorite, removeFavorite } = useFavorites();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+  // Initialize isMobile based on window size to prevent flashing
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 1024;
+    }
+    return false;
+  });
   const sliderRef = useRef<Slider>(null);
+
+  // Detect mobile on mount
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    // Check immediately
+    checkMobile();
+    
+    // Listen for resize
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Enable advanced navigation (keyboard + touch swipe)
   useSliderNavigation({
@@ -231,14 +252,15 @@ export function PortfolioCreativeSlider() {
     }
   };
 
+  // Dynamic initial settings based on screen size
   const settings = {
     dots: true,
     infinite: true,
     speed: 700,
-    slidesToShow: 3,
+    slidesToShow: isMobile ? 1 : 3,
     slidesToScroll: 1,
     centerMode: true,
-    centerPadding: "0px",
+    centerPadding: isMobile ? "40px" : "0px",
     autoplay: true,
     autoplaySpeed: 6000,
     pauseOnHover: true,
@@ -246,6 +268,7 @@ export function PortfolioCreativeSlider() {
     touchThreshold: 10,
     variableWidth: false,
     adaptiveHeight: false,
+    arrows: !isMobile,
     beforeChange: (_current: number, next: number) => setCurrentSlide(next),
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
@@ -410,7 +433,7 @@ export function PortfolioCreativeSlider() {
 
               /* Active center card */
               .slick-center .portfolio-card {
-                transform: scale(1) perspective(1000px) rotateY(0deg);
+                transform: scale(1);
                 opacity: 1;
                 z-index: 20;
                 filter: brightness(1.1) blur(0);
@@ -419,7 +442,7 @@ export function PortfolioCreativeSlider() {
 
               /* Left side card */
               .slick-slide:has(+ .slick-center) .portfolio-card {
-                transform: scale(0.88) perspective(1000px) rotateY(6deg);
+                transform: scale(0.88);
                 opacity: 0.65;
                 z-index: 10;
                 filter: brightness(0.75) blur(0.5px);
@@ -428,7 +451,7 @@ export function PortfolioCreativeSlider() {
 
               /* Right side card */
               .slick-center + .slick-slide .portfolio-card {
-                transform: scale(0.88) perspective(1000px) rotateY(-6deg);
+                transform: scale(0.88);
                 opacity: 0.65;
                 z-index: 10;
                 filter: brightness(0.75) blur(0.5px);
@@ -437,28 +460,24 @@ export function PortfolioCreativeSlider() {
 
               /* Other cards - No flickering */
               .portfolio-card {
-                transform: scale(0.8) perspective(1000px);
+                transform: scale(0.8);
                 opacity: 0.4;
                 z-index: 1;
                 filter: brightness(0.6) blur(1.5px);
                 transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
                             opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
                             filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-                transform-style: preserve-3d;
                 will-change: transform, opacity, filter;
               }
 
               /* Smooth transitions */
               .slick-list {
                 overflow: visible !important;
-                perspective: 2000px;
-                perspective-origin: center;
               }
 
               .slick-track {
                 display: flex;
                 align-items: center;
-                transform-style: preserve-3d;
               }
 
               /* Dots styling */
