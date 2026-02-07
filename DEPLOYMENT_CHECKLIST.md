@@ -1,357 +1,326 @@
-# ✅ Deployment Checklist
+# ✅ DEPLOYMENT CHECKLIST - ROZE.LIVE
 
-Use this checklist before deploying your portfolio to production.
+## 🎯 ШВИДКИЙ ЧЕКЛИСТ (5 хвилин!)
 
-## 📋 Pre-Deployment
+---
 
-### Code Quality
-- [ ] Run ESLint and fix all errors
-  ```bash
-  pnpm lint:fix
-  ```
-- [ ] Build succeeds without errors
-  ```bash
-  pnpm build
-  ```
-- [ ] All TypeScript errors resolved
-  ```bash
-  npx tsc --noEmit
-  ```
-
-### Content
-- [ ] Update personal information in `/src/utils/translations.ts`
-  - [ ] Name and title
-  - [ ] About section
-  - [ ] Contact information
-  - [ ] Social media links
-- [ ] Add your projects with real images
-- [ ] Add your work experience
-- [ ] Add testimonials (if available)
-- [ ] Update resume/CV link
-
-### Styling
-- [ ] Test dark theme on desktop
-- [ ] Test dark theme on mobile
-- [ ] Test light theme on desktop
-- [ ] Test light theme on mobile
-- [ ] Check all sections are responsive
-- [ ] Verify all images load correctly
-- [ ] Test animations on different devices
-
-### Functionality
-- [ ] Navigation works on all sections
-- [ ] Smooth scroll works
-- [ ] Theme toggle works and persists
-- [ ] Language switcher works (all languages)
-- [ ] Contact form works (if implemented)
-- [ ] Back to Top button appears and works
-- [ ] AI Assistant works (if implemented)
-- [ ] All links open in correct tabs
-
-### Performance
-- [ ] Check Lighthouse score (should be 90+)
-  ```bash
-  # In Chrome DevTools
-  # Open Lighthouse tab and run audit
-  ```
-- [ ] Test loading speed on 3G network
-- [ ] Verify lazy loading works
-- [ ] Check bundle size is reasonable
-  ```bash
-  pnpm build
-  # Check dist/ folder size
-  ```
-
-### SEO
-- [ ] Add proper meta tags in `index.html`
-- [ ] Add Open Graph tags
-- [ ] Add Twitter Card tags
-- [ ] Create `robots.txt`
-- [ ] Create `sitemap.xml`
-- [ ] Add Google Analytics (optional)
-
-### Accessibility
-- [ ] Test keyboard navigation
-- [ ] Check color contrast (WCAG AA)
-- [ ] Verify all images have alt text
-- [ ] Test with screen reader
-- [ ] Check focus indicators are visible
-
-## 🔐 Firebase Setup (If Using Auth)
-
-- [ ] Create Firebase project
-- [ ] Enable Google Authentication
-- [ ] Add authorized domains
-- [ ] Set up environment variables
-- [ ] Test sign-in flow
-- [ ] Test sign-out flow
-- [ ] Verify user persistence works
-
-See `GOOGLE_AUTH_SETUP.md` for details.
-
-## 🌍 Environment Variables
-
-### Development (.env.local)
-```bash
-VITE_FIREBASE_API_KEY=your_dev_key
-VITE_FIREBASE_AUTH_DOMAIN=your_dev_domain
-VITE_FIREBASE_PROJECT_ID=your_dev_project
-```
-
-### Production
-Set these in your hosting platform:
-
-**Vercel:**
-1. Go to Project Settings → Environment Variables
-2. Add all VITE_* variables
-3. Set for Production environment
-
-**Netlify:**
-1. Go to Site settings → Build & deploy → Environment
-2. Add all VITE_* variables
-
-**GitHub Pages:**
-Use GitHub Secrets and GitHub Actions
-
-## 🚀 Deployment Options
-
-### Option 1: Vercel (Recommended)
+## ☑️ КРОК 1: GIT PUSH
 
 ```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-
-# For production
-vercel --prod
+git add .
+git commit -m "fix: Production ready - Netlify config + Supabase client"
+git push origin main
 ```
 
-**Configuration:**
-- Framework Preset: Vite
-- Build Command: `pnpm build`
-- Output Directory: `dist`
+**Статус:** ⬜ Не зроблено | ✅ Готово
 
-### Option 2: Netlify
+---
 
+## ☑️ КРОК 2: NETLIFY BUILD
+
+### Автоматично після push:
+
+1. **Netlify підхопить зміни з GitHub**
+2. **Запустить:** `npm install`
+3. **Збілдить:** `npm run build`
+4. **Опублікує:** `dist/` папку
+
+### Де дивитись:
+```
+https://app.netlify.com
+→ Твій сайт
+→ Deploys
+```
+
+### Що має бути в логах:
+```
+✔ Build succeeded
+✔ Published to: https://твій-сайт.netlify.app
+```
+
+**Статус:** ⬜ В процесі | ✅ Build пройшов
+
+---
+
+## ☑️ КРОК 3: ПЕРЕВІР НА NETLIFY URL
+
+**Відкрий тимчасовий Netlify URL:**
+```
+https://твій-сайт.netlify.app
+```
+
+### Перевір:
+- [ ] Сайт відкривається (не чорний екран!)
+- [ ] Стилі застосовуються (темна тема, cyan акценти)
+- [ ] Навігація працює
+- [ ] Анімації працюють
+- [ ] Console (F12) без критичних помилок
+
+**Статус:** ⬜ Не перевірено | ✅ Все працює
+
+---
+
+## ☑️ КРОК 4: ДОДАЙ CUSTOM DOMAIN
+
+### В Netlify Dashboard:
+
+1. **Site settings → Domain management**
+2. **Add custom domain**
+3. **Введи:** `roze.live`
+4. **Netlify покаже DNS записи** (запиши їх!)
+
+**Приклад:**
+```
+A Record:
+Name: @
+Value: 75.2.60.5
+
+CNAME:
+Name: www
+Value: твій-сайт.netlify.app
+```
+
+**Статус:** ⬜ Не додано | ✅ Domain додано
+
+---
+
+## ☑️ КРОК 5: НАЛАШТУЙ DNS
+
+### У свого провайдера домену:
+
+**Де ти купив `roze.live`?**
+- Namecheap?
+- Cloudflare?
+- GoDaddy?
+- Google Domains?
+
+### Додай DNS записи:
+
+**A Record:**
+```
+Type: A
+Name/Host: @
+Value: 75.2.60.5
+TTL: Automatic
+```
+
+**CNAME (для www):**
+```
+Type: CNAME
+Name: www
+Value: твій-сайт.netlify.app
+TTL: Automatic
+```
+
+### ⚠️ ВАЖЛИВО:
+- ❌ **Видали старі** записи на Figma Sites!
+- ✅ Збережи зміни
+
+**Статус:** ⬜ Не налаштовано | ✅ DNS налаштовано
+
+---
+
+## ☑️ КРОК 6: ЧЕКАЙ DNS PROPAGATION
+
+### Скільки чекати:
+- ⏱️ **Зазвичай:** 5-30 хвилин
+- 🕐 **Іноді:** 2-6 годин
+- 🐌 **Максимум:** 48 годин
+
+### Перевір на:
+```
+https://dnschecker.org
+```
+**Введи:** `roze.live`
+**Дивись:** A Record має показувати `75.2.60.5`
+
+### Або в терміналі:
 ```bash
-# Install Netlify CLI
-npm i -g netlify-cli
-
-# Deploy
-netlify deploy
-
-# For production
-netlify deploy --prod --dir=dist
+dig roze.live
 ```
 
-**netlify.toml:**
-```toml
-[build]
-  command = "pnpm build"
-  publish = "dist"
+**Статус:** ⬜ Чекаю | ✅ DNS оновився
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+---
+
+## ☑️ КРОК 7: VERIFY DNS В NETLIFY
+
+### Коли DNS оновився:
+
+1. **Netlify → Domain settings**
+2. **Check DNS configuration**
+3. **Має бути:** ✅ DNS configured correctly
+
+**Якщо помилка:**
+- Зачекай ще 10-30 хвилин
+- Спробуй знову
+
+**Статус:** ⬜ Не перевірено | ✅ DNS verified
+
+---
+
+## ☑️ КРОК 8: НАЛАШТУЙ SSL (HTTPS)
+
+### В Netlify автоматично:
+
+1. **Domain settings → HTTPS**
+2. **Provision certificate** (автоматично)
+3. **Зачекай 1-5 хвилин**
+4. **Увімкни:** Force HTTPS
+
+### Має бути:
+```
+✅ Let's Encrypt certificate installed
+✅ HTTPS enabled
+✅ HTTP → HTTPS redirect enabled
 ```
 
-### Option 3: GitHub Pages
+**Статус:** ⬜ Не налаштовано | ✅ SSL працює
 
-1. Add to `vite.config.ts`:
-```typescript
-export default defineConfig({
-  base: '/your-repo-name/',
-  // ...
-});
+---
+
+## ☑️ КРОК 9: ФІНАЛЬНА ПЕРЕВІРКА
+
+### Відкрий свій домен:
+```
+https://roze.live
 ```
 
-2. Build and deploy:
-```bash
-pnpm build
-# Push dist folder to gh-pages branch
+### Перевір ВСЕ:
+
+#### Загальне:
+- [ ] Сайт відкривається на `roze.live`
+- [ ] HTTPS працює (замочок в браузері)
+- [ ] Немає попереджень SSL
+- [ ] Стилі завантажуються
+- [ ] Шрифти завантажуються
+- [ ] Іконки відображаються
+
+#### Навігація:
+- [ ] Scroll to sections працює
+- [ ] Мобільне меню працює
+- [ ] Перемикач мов працює (EN/UA/NL/AR/ES)
+- [ ] Theme toggle працює (light/dark)
+
+#### Функціонал:
+- [ ] Contact form працює (надсилає дані)
+- [ ] Google Sign-In працює
+- [ ] Projects відкриваються
+- [ ] Comments працюють
+- [ ] Reactions працюють
+
+#### Performance:
+- [ ] Сайт швидко завантажується (< 3 сек)
+- [ ] Анімації плавні
+- [ ] Немає layout shifts
+- [ ] Images оптимізовані
+
+#### Console (F12):
+- [ ] Немає критичних помилок
+- [ ] Бачиш лого: `🚀 [ROZE.LIVE] main.tsx LOADED`
+- [ ] Всі API calls успішні (200/201)
+
+**Статус:** ⬜ Є проблеми | ✅ ВСЕ ПРАЦЮЄ!
+
+---
+
+## ☑️ КРОК 10: POST-DEPLOYMENT
+
+### Після успішного деплою:
+
+1. **[ ] Очисти DNS кеш** на своєму комп'ютері
+   ```bash
+   # Mac
+   sudo dscacheutil -flushcache
+   
+   # Windows
+   ipconfig /flushdns
+   ```
+
+2. **[ ] Тестуй на різних пристроях:**
+   - Desktop (Chrome, Firefox, Safari)
+   - Mobile (iOS, Android)
+   - Tablet
+
+3. **[ ] Тестуй з різних країн** (VPN або попроси друзів)
+
+4. **[ ] Додай до Google Search Console:**
+   ```
+   https://search.google.com/search-console
+   ```
+
+5. **[ ] Налаштуй Google Analytics** (опціонально)
+
+6. **[ ] Налаштуй мониторінг** (Netlify Analytics або інше)
+
+7. **[ ] Backup коду на GitHub** ✅ (вже є)
+
+---
+
+## 📊 ФІНАЛЬНИЙ СТАТУС
+
+```
+🎯 Проект: Stepan Roze Portfolio
+🌐 Domain: roze.live
+🚀 Hosting: Netlify
+💾 Database: Supabase
+🔐 Auth: Supabase (Google/GitHub)
 ```
 
-### Option 4: Custom Server
+### Всі системи готові:
+- [ ] Git repository
+- [ ] Netlify build config
+- [ ] Environment variables (не потрібні!)
+- [ ] Custom domain
+- [ ] DNS records
+- [ ] SSL certificate
+- [ ] Суpabase integration
+- [ ] Frontend code
+- [ ] Backend server
+- [ ] Database (KV store)
 
-```bash
-# Build
-pnpm build
+---
 
-# Upload dist/ folder to your server
-# Configure web server (nginx/apache) to serve files
+## 🎉 ГОТОВО!
+
+**Якщо всі чекбокси ✅ - ВІТАЮ!**
+
+Твоє портфоліо live на:
 ```
-
-## 📊 Post-Deployment Checks
-
-### Immediately After Deploy
-- [ ] Visit your site URL
-- [ ] Test on mobile device
-- [ ] Check all sections load
-- [ ] Verify auth works (if enabled)
-- [ ] Test theme switching
-- [ ] Check browser console for errors
-
-### Within 24 Hours
-- [ ] Test on different browsers
-  - [ ] Chrome
-  - [ ] Firefox
-  - [ ] Safari
-  - [ ] Edge
-- [ ] Test on different devices
-  - [ ] Desktop
-  - [ ] Tablet
-  - [ ] Mobile (iOS)
-  - [ ] Mobile (Android)
-- [ ] Check analytics setup
-- [ ] Test loading speed
-- [ ] Share with friends for feedback
-
-### Within 1 Week
-- [ ] Submit to Google Search Console
-- [ ] Submit to Bing Webmaster Tools
-- [ ] Monitor error logs
-- [ ] Check performance metrics
-- [ ] Gather user feedback
-
-## 🐛 Common Issues & Fixes
-
-### Build Fails
-```bash
-# Clear cache and reinstall
-rm -rf node_modules package-lock.json dist
-pnpm install
-pnpm build
-```
-
-### Assets Not Loading
-Check `vite.config.ts` base path matches your deployment URL.
-
-### Auth Not Working
-- Verify Firebase config is correct
-- Check authorized domains in Firebase Console
-- Ensure environment variables are set
-
-### 404 Errors on Refresh
-Configure your host for SPA routing (see deployment option above).
-
-### Slow Loading
-- Check bundle size: `pnpm build`
-- Verify lazy loading is working
-- Optimize images
-
-## 📱 Mobile Testing
-
-Use these tools:
-- Chrome DevTools Device Mode
-- Real iOS device
-- Real Android device
-- BrowserStack (for multiple devices)
-
-Test on:
-- [ ] iPhone SE (small screen)
-- [ ] iPhone 14 Pro (notch)
-- [ ] iPad (tablet)
-- [ ] Android phone
-- [ ] Landscape orientation
-
-## 🔒 Security Checklist
-
-- [ ] No API keys in code (use .env)
-- [ ] `.env` file in `.gitignore`
-- [ ] Firebase rules configured
-- [ ] HTTPS enabled on production
-- [ ] Content Security Policy set (optional)
-- [ ] No console.logs in production
-
-## 🎯 Performance Targets
-
-Your portfolio should meet these targets:
-
-| Metric | Target | Priority |
-|--------|--------|----------|
-| Lighthouse Score | 90+ | High |
-| First Contentful Paint | < 1.5s | High |
-| Largest Contentful Paint | < 2.5s | High |
-| Time to Interactive | < 3s | Medium |
-| Cumulative Layout Shift | < 0.1 | Medium |
-| Bundle Size | < 250KB | Low |
-
-## 📈 Analytics Setup (Optional)
-
-### Google Analytics 4
-
-1. Create GA4 property
-2. Add tracking code to `index.html`:
-```html
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
-</script>
-```
-
-### Plausible Analytics (Privacy-friendly)
-
-```html
-<script defer data-domain="yourdomain.com" src="https://plausible.io/js/script.js"></script>
-```
-
-## 🎉 Launch Day
-
-### Announcements
-- [ ] Share on LinkedIn
-- [ ] Share on Twitter
-- [ ] Share on relevant subreddits
-- [ ] Post in Discord/Slack communities
-- [ ] Email portfolio link to contacts
-- [ ] Update resume with portfolio link
-
-### Monitoring
-- [ ] Set up uptime monitoring
-- [ ] Configure error tracking (e.g., Sentry)
-- [ ] Set up performance monitoring
-- [ ] Monitor Firebase usage (if using auth)
-
-## 📝 Maintenance Plan
-
-### Weekly
-- Check for console errors
-- Monitor loading speed
-- Review analytics
-
-### Monthly
-- Update dependencies
-- Review and respond to feedback
-- Add new projects
-- Update content
-
-### Quarterly
-- Major design review
-- Performance audit
-- SEO check
-- Security review
-
-## 🚀 Ready to Deploy?
-
-If you've checked everything above, you're ready to launch! 🎉
-
-```bash
-# Final build
-pnpm build
-
-# Deploy to your chosen platform
-# See deployment options above
-
-# Celebrate! 🎊
+🌍 https://roze.live
 ```
 
 ---
 
-**Good luck with your launch!** 🚀
+## 🆘 ЯКЩО ЩОСЬ НЕ ТАК:
 
-Remember: A portfolio is never "done" - keep updating it with new projects and improvements!
+### 1. Build failed на Netlify:
+- Подивись логи білду
+- Покажи мені помилки
+- Перевір `package.json` та `netlify.toml`
+
+### 2. DNS не оновлюється:
+- Перевір що записи правильні
+- Зачекай ще
+- Використай `dnschecker.org`
+
+### 3. SSL не працює:
+- Verify DNS в Netlify
+- Re-provision certificate
+- Перевір Cloudflare proxy (має бути DNS only)
+
+### 4. Сайт не працює:
+- Відкрий Console (F12)
+- Скопіюй помилки
+- Покажи мені - я допоможу!
+
+---
+
+## 📚 ДОКУМЕНТАЦІЯ:
+
+- `/NETLIFY_FIX.md` - Netlify setup
+- `/DNS_SETUP.md` - DNS налаштування (детально!)
+- `/ENV_SETUP.md` - Environment variables
+- `/DEPLOYMENT_CHECKLIST.md` - Цей файл
+
+**ВСЕ ГОТОВО ДЛЯ ДЕПЛОЮ! УДАЧІ! 🚀**

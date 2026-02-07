@@ -473,15 +473,70 @@ export function PortfolioCreativeSlider() {
 
               /* Mobile adjustments */
               @media (max-width: 768px) {
-                .slick-center .portfolio-card {
-                  transform: scale(1) perspective(800px);
+                /* Disable 3D transforms on mobile - simpler is better */
+                .slick-slide {
+                  padding: 0 8px;
                 }
                 
+                .portfolio-card {
+                  transform: scale(0.85) !important;
+                  opacity: 0.5 !important;
+                  filter: brightness(0.7) blur(1px) !important;
+                  transition: all 0.4s ease-out !important;
+                }
+                
+                .slick-center .portfolio-card {
+                  transform: scale(1) !important;
+                  opacity: 1 !important;
+                  filter: brightness(1) blur(0) !important;
+                  z-index: 20;
+                }
+                
+                /* Remove 3D transforms from side cards on mobile */
                 .slick-slide:has(+ .slick-center) .portfolio-card,
                 .slick-center + .slick-slide .portfolio-card {
-                  transform: scale(0.92) perspective(800px) rotateY(0deg);
-                  opacity: 0.55;
-                  filter: brightness(0.8) blur(0.3px);
+                  transform: scale(0.9) !important;
+                  opacity: 0.6 !important;
+                  filter: brightness(0.75) blur(0.5px) !important;
+                }
+                
+                /* Fix overflow issues on small screens */
+                .slick-list {
+                  overflow: hidden !important;
+                  perspective: none !important;
+                }
+                
+                .slick-track {
+                  transform-style: flat !important;
+                }
+                
+                /* Adjust dots position for mobile */
+                .slick-dots {
+                  bottom: -50px !important;
+                }
+              }
+              
+              /* Extra small screens - more aggressive fixes */
+              @media (max-width: 480px) {
+                .slick-slide {
+                  padding: 0 6px;
+                }
+                
+                .portfolio-card {
+                  transform: scale(0.9) !important;
+                  opacity: 0.6 !important;
+                }
+                
+                .slick-center .portfolio-card {
+                  transform: scale(1) !important;
+                  opacity: 1 !important;
+                }
+                
+                /* Side cards barely visible on very small screens */
+                .slick-slide:has(+ .slick-center) .portfolio-card,
+                .slick-center + .slick-slide .portfolio-card {
+                  transform: scale(0.92) !important;
+                  opacity: 0.5 !important;
                 }
               }
             `}
