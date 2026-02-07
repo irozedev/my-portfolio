@@ -135,7 +135,7 @@ export function ExperienceTimelinePremium() {
             <span className="text-sm font-medium text-cyan-400">Career Journey</span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-cyan-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[var(--text-primary)] via-cyan-400 to-purple-400 bg-clip-text text-transparent">
             {t("experience.title") || "Work Experience"}
           </h2>
           <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
@@ -183,7 +183,7 @@ export function ExperienceTimelinePremium() {
                       <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${exp.gradient} p-0.5 shadow-[0_0_20px_rgba(0,217,255,0.4)]`}>
                         {/* Inner Circle */}
                         <div className="w-full h-full rounded-full bg-[var(--bg-primary)] flex items-center justify-center">
-                          <Icon className="w-6 h-6 text-white" />
+                          <Icon className="w-6 h-6 text-cyan-400" />
                         </div>
                       </div>
 
@@ -223,7 +223,7 @@ export function ExperienceTimelinePremium() {
 
                       {/* Company & Role */}
                       <div className="relative z-10 mb-4">
-                        <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
+                        <h3 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-2 group-hover:text-cyan-400 transition-colors">
                           {exp.title}
                         </h3>
                         <div className="flex items-center gap-4 text-[var(--text-secondary)] flex-wrap">
@@ -318,7 +318,7 @@ export function ExperienceTimelinePremium() {
                       <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${exp.gradient} p-1 shadow-[0_0_30px_rgba(0,217,255,0.4)]`}>
                         {/* Inner Circle */}
                         <div className="w-full h-full rounded-full bg-[var(--bg-primary)] flex items-center justify-center">
-                          <Icon className="w-7 h-7 text-white" />
+                          <Icon className="w-7 h-7 text-cyan-400" />
                         </div>
                       </div>
 

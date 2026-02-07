@@ -42,7 +42,7 @@ export function LegalPage({ page, onClose }: LegalPageProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100000] bg-[var(--bg-primary)]/95 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4"
+      className="fixed inset-0 z-[100000] bg-white/95 dark:bg-black/95 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4"
       onClick={handleClose}
     >
       <motion.div

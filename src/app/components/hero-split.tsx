@@ -275,14 +275,14 @@ export function HeroSplit({ onViewWork }: HeroSplitProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-tertiary)] backdrop-blur-sm border border-[var(--border-color)] rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-[var(--accent-primary)]/50 transition-all duration-300 group relative overflow-hidden"
+                className="bg-[var(--bg-secondary)] backdrop-blur-sm border border-[var(--border-color)] rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-[var(--accent-primary)]/50 transition-all duration-300 group relative overflow-hidden"
               >
                 {/* Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-primary)]/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-[var(--accent-primary)]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                    <div className="p-2 sm:p-3 bg-gradient-to-br from-[var(--accent-primary)]/20 to-purple-500/20 rounded-lg sm:rounded-xl">
+                    <div className="p-2 sm:p-3 bg-[var(--accent-primary)]/10 rounded-lg sm:rounded-xl">
                       <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--accent-primary)]" />
                     </div>
                     <h3 className="text-lg sm:text-xl font-bold text-[var(--text-primary)]">
