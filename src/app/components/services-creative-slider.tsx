@@ -475,7 +475,7 @@ export function ServicesCreativeSlider() {
                           sliderRef.current?.slickGoTo(index);
                         }
                       }}
-                      className="service-card relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border-2 border-white/10 rounded-3xl p-6 md:p-8 hover:border-[#00d9ff]/50 transition-all duration-500 group cursor-pointer overflow-visible"
+                      className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-[#00d9ff]/50 transition-all duration-500 group cursor-pointer overflow-visible"
                       whileHover={{ y: -10 }}
                     >
                       {/* Animated Background Gradient */}

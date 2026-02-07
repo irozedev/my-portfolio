@@ -53,6 +53,12 @@ img {
   --availability-bg: rgba(255, 255, 255, 0.05);
   --availability-border: rgba(255, 255, 255, 0.1);
   
+  /* Glass effects & decorations */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glow-primary: rgba(0, 217, 255, 0.1);
+  --glow-secondary: rgba(168, 85, 247, 0.1);
+  
   /* Typography */
   --font-display: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
@@ -100,4 +106,10 @@ img {
   /* Availability widget adjustments for light theme */
   --availability-bg: rgba(8, 145, 178, 0.05);
   --availability-border: rgba(8, 145, 178, 0.2);
+  
+  /* Glass effects & decorations for light theme */
+  --glass-bg: rgba(248, 250, 252, 0.8);
+  --glass-border: rgba(15, 23, 42, 0.1);
+  --glow-primary: rgba(8, 145, 178, 0.15);
+  --glow-secondary: rgba(139, 92, 246, 0.15);
 }

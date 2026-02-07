@@ -3,11 +3,11 @@ import { X, Shield, FileText, Info, ArrowLeft } from "lucide-react";
 import { useEffect } from "react";
 
 interface LegalPageProps {
-  type: "privacy" | "terms" | "imprint";
+  page: "privacy" | "terms" | "imprint";
   onClose: () => void;
 }
 
-export function LegalPage({ type, onClose }: LegalPageProps) {
+export function LegalPage({ page, onClose }: LegalPageProps) {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -15,7 +15,7 @@ export function LegalPage({ type, onClose }: LegalPageProps) {
     };
   }, []);
 
-  const content = getLegalContent(type);
+  const content = getLegalContent(page);
 
   const handleClose = (e?: React.MouseEvent) => {
     if (e) {
@@ -43,9 +43,9 @@ export function LegalPage({ type, onClose }: LegalPageProps) {
         {/* Header */}
         <div className="sticky top-0 z-10 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 p-6 flex items-center justify-between rounded-t-3xl">
           <div className="flex items-center gap-4">
-            {type === "privacy" && <Shield className="w-8 h-8 text-white" />}
-            {type === "terms" && <FileText className="w-8 h-8 text-white" />}
-            {type === "imprint" && <Info className="w-8 h-8 text-white" />}
+            {page === "privacy" && <Shield className="w-8 h-8 text-white" />}
+            {page === "terms" && <FileText className="w-8 h-8 text-white" />}
+            {page === "imprint" && <Info className="w-8 h-8 text-white" />}
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-white">
                 {content.title}

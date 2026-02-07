@@ -136,8 +136,8 @@ export function ExperienceSection() {
   return (
     <section id="experience" className="min-h-screen py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-[var(--bg-primary)] relative overflow-hidden">
       {/* Enhanced Background Decorations */}
-      <div className="absolute top-20 right-10 w-96 h-96 bg-[var(--accent-primary)]/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-20 right-10 w-96 h-96 bg-[var(--glow-primary)] rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-[var(--glow-secondary)] rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-cyan-500/5 to-purple-500/5 rounded-full blur-3xl" />
 
       <div className="container mx-auto max-w-7xl relative z-10">
@@ -150,12 +150,12 @@ export function ExperienceSection() {
           {/* Section Header */}
           <div className="text-center mb-20">
             <motion.div
-              className="inline-flex items-center gap-3 px-6 py-3 mb-6 bg-gradient-to-r from-[#00d9ff]/20 to-purple-500/20 border border-[#00d9ff]/30 rounded-full backdrop-blur-sm"
+              className="inline-flex items-center gap-3 px-6 py-3 mb-6 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-full backdrop-blur-sm"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
             >
-              <TrendingUp className="w-5 h-5 text-[#00d9ff]" />
+              <TrendingUp className="w-5 h-5 text-[var(--accent-primary)]" />
               <span className="text-sm md:text-base text-[var(--text-primary)] font-semibold">My Journey</span>
             </motion.div>
 

@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: window.location.origin, // Redirect to home page after auth
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',

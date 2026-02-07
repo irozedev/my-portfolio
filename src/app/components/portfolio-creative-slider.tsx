@@ -592,7 +592,7 @@ export function PortfolioCreativeSlider() {
                         sliderRef.current?.slickGoTo(index);
                       }
                     }}
-                    className="portfolio-card relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border-2 border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 transition-all duration-500 group cursor-pointer"
+                    className="portfolio-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl overflow-hidden hover:border-purple-500/50 transition-all duration-500 group cursor-pointer"
                     whileHover={{ y: -8 }}
                   >
                     {/* Featured Badge */}

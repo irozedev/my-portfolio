@@ -7,9 +7,12 @@ export function LegalFooter() {
   
   const handleLegalClick = (type: string) => {
     console.log('Legal link clicked:', type);
+    
+    // Update URL hash
     window.location.hash = type;
-    // Force a hashchange event
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    
+    // Scroll to top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
