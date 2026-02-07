@@ -9,9 +9,21 @@ interface LegalPageProps {
 
 export function LegalPage({ page, onClose }: LegalPageProps) {
   useEffect(() => {
+    // Store scroll position and block body scroll
+    const scrollY = window.pageYOffset;
     document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    
     return () => {
-      document.body.style.overflow = "unset";
+      // Restore scroll position
+      const currentScrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.overflow = "";
+      document.body.style.width = "";
+      window.scrollTo(0, parseInt(currentScrollY || "0") * -1);
     };
   }, []);
 
@@ -30,7 +42,7 @@ export function LegalPage({ page, onClose }: LegalPageProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100000] bg-black/80 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4"
+      className="fixed inset-0 z-[100000] bg-[var(--bg-primary)]/95 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4"
       onClick={handleClose}
     >
       <motion.div

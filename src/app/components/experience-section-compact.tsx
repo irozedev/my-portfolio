@@ -128,7 +128,7 @@ export function ExperienceSectionCompact() {
                 transition={{ duration: 1, type: "spring" }}
               >
                 {/* Main Book Content */}
-                <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border-2 border-white/20 rounded-3xl p-8 md:p-12 shadow-[0_20px_80px_rgba(0,0,0,0.3)]">
+                <div className="relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-8 md:p-12 shadow-[0_20px_80px_rgba(0,0,0,0.3)]">
                   {/* Book Spine Effect */}
                   <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/20 to-transparent rounded-l-3xl" />
                   
@@ -162,15 +162,15 @@ export function ExperienceSectionCompact() {
                           </div>
                           
                           <div className="flex flex-wrap gap-4 mb-6">
-                            <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
+                            <div className="flex items-center gap-2 px-4 py-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-xl">
                               <Calendar className="w-4 h-4" style={{ color: currentExperience.color }} />
                               <span className="text-sm text-[var(--text-secondary)]">{currentExperience.period}</span>
                             </div>
-                            <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
+                            <div className="flex items-center gap-2 px-4 py-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-xl">
                               <Briefcase className="w-4 h-4" style={{ color: currentExperience.color }} />
                               <span className="text-sm text-[var(--text-secondary)]">{currentExperience.years}</span>
                             </div>
-                            <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
+                            <div className="flex items-center gap-2 px-4 py-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-xl">
                               <MapPin className="w-4 h-4" style={{ color: currentExperience.color }} />
                               <span className="text-sm text-[var(--text-secondary)]">{t(`experience.${currentExperience.key}.location`)}</span>
                             </div>
@@ -232,7 +232,7 @@ export function ExperienceSectionCompact() {
                             {t(`experience.${currentExperience.key}.technologies`).split(',').map((tech: string, i: number) => (
                               <span
                                 key={i}
-                                className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-sm text-[var(--text-secondary)]"
+                                className="px-3 py-1.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-lg text-sm text-[var(--text-secondary)]"
                               >
                                 {tech.trim()}
                               </span>
@@ -242,7 +242,7 @@ export function ExperienceSectionCompact() {
                       </div>
 
                       {/* Metrics */}
-                      <div className="grid grid-cols-3 gap-4 pt-6 border-t border-white/10">
+                      <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[var(--border-color)]">
                         {currentExperience.metrics.map((metric, i) => {
                           const MetricIcon = metric.icon;
                           return (
@@ -251,7 +251,7 @@ export function ExperienceSectionCompact() {
                               initial={{ opacity: 0, y: 20 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: 0.3 + i * 0.1 }}
-                              className="text-center p-4 bg-white/5 rounded-xl border border-white/10"
+                              className="text-center p-4 bg-[var(--glass-bg)] rounded-xl border border-[var(--glass-border)]"
                             >
                               <MetricIcon className="w-6 h-6 mx-auto mb-2" style={{ color: currentExperience.color }} />
                               <div className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-1">

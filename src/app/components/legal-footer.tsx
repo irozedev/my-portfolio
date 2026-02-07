@@ -10,9 +10,6 @@ export function LegalFooter() {
     
     // Update URL hash
     window.location.hash = type;
-    
-    // Scroll to top smoothly
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (

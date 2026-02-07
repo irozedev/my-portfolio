@@ -132,7 +132,7 @@ export function ServicesSection() {
 
             {/* VAT Toggle */}
             <motion.div
-              className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl text-sm"
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-xl text-sm"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -192,7 +192,7 @@ export function ServicesSection() {
                   {/* Card */}
                   <motion.div
                     onClick={() => handleServiceClick(service.key)}
-                    className="relative h-full bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border-2 border-white/10 rounded-2xl p-5 hover:border-[#00d9ff]/50 transition-all duration-300 cursor-pointer"
+                    className="relative h-full bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-2xl p-5 hover:border-[#00d9ff]/50 transition-all duration-300 cursor-pointer"
                     whileHover={{ scale: 1.02 }}
                   >
                     {/* Icon */}
@@ -215,7 +215,7 @@ export function ServicesSection() {
 
                     {/* Timeline & Hourly */}
                     <div className="flex items-center gap-2 mb-3 text-xs">
-                      <span className="px-2 py-1 bg-white/5 rounded-lg text-[var(--text-secondary)]">
+                      <span className="px-2 py-1 bg-[var(--glass-bg)] rounded-lg text-[var(--text-secondary)]">
                         {service.timeline}
                       </span>
                       <span className="text-[var(--text-muted)]">•</span>
@@ -233,7 +233,7 @@ export function ServicesSection() {
                     </ul>
 
                     {/* CTA */}
-                    <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                    <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)]">
                       <span className="text-sm font-semibold text-[var(--text-secondary)] group-hover:text-[#00d9ff] transition-colors">
                         Get Started
                       </span>

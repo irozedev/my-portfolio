@@ -104,7 +104,7 @@ export function Footer() {
                 <motion.a 
                   href="#contact"
                   onClick={(e) => { e.preventDefault(); smoothScrollToSection("#contact"); }}
-                  className="text-base md:text-lg font-semibold text-gray-300 hover:text-[var(--accent-primary)] transition-colors cursor-pointer"
+                  className="text-base md:text-lg font-semibold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors cursor-pointer"
                   whileHover={{ scale: 1.05 }}
                 >
                   {isAvailable ? t('footer.letsBuild') : t('footer.coffeeBreak')}
@@ -112,7 +112,7 @@ export function Footer() {
                 <motion.a 
                   href="#services"
                   onClick={(e) => { e.preventDefault(); smoothScrollToSection("#services"); }}
-                  className="text-sm md:text-base text-gray-500 hover:text-[var(--accent-primary)] transition-colors cursor-pointer block"
+                  className="text-sm md:text-base text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors cursor-pointer block"
                   whileHover={{ scale: 1.05 }}
                 >
                   {t('footer.workType')}

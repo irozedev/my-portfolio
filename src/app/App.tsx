@@ -68,9 +68,8 @@ export default function App() {
   }, []);
 
   const handleCloseLegal = () => {
-    const currentScroll = window.pageYOffset;
-    window.history.pushState(null, '', window.location.pathname);
-    window.scrollTo(0, currentScroll);
+    // Clear the hash without scrolling
+    window.history.replaceState(null, '', window.location.pathname);
     setCurrentPage("home");
   };
 
@@ -123,13 +122,13 @@ export default function App() {
               <AnimatePresence mode="wait">
                 {currentPage === "home" ? (
                   <MainPage key="main" />
-                ) : (
+                ) : currentPage === "privacy" || currentPage === "terms" || currentPage === "imprint" ? (
                   <LegalPage 
                     key={currentPage}
-                    page={currentPage as "privacy" | "terms" | "imprint"}
+                    page={currentPage}
                     onClose={handleCloseLegal}
                   />
-                )}
+                ) : null}
               </AnimatePresence>
               <Toaster position="top-right" richColors />
             </CartProvider>
