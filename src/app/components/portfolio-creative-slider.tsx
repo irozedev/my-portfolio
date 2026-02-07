@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Slider from "react-slick";
 import "@/styles/slick.css";
 import { 
@@ -198,6 +198,21 @@ export function PortfolioCreativeSlider() {
     enableKeyboard: true,
     enableSwipe: true,
   });
+
+  // FIX: Force slider re-initialization on mobile after mount
+  useEffect(() => {
+    // Trigger resize event to force slider recalculation
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+      
+      // Double-check: force slider to go to first slide
+      if (sliderRef.current) {
+        sliderRef.current.slickGoTo(0);
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const isFavorite = (projectId: string) => {
     return favorites.some(fav => fav.projectId === projectId);

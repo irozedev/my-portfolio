@@ -120,6 +120,21 @@ export function ServicesCreativeSlider() {
     enableSwipe: true,
   });
 
+  // FIX: Force slider re-initialization on mobile after mount
+  useEffect(() => {
+    // Trigger resize event to force slider recalculation
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+      
+      // Double-check: force slider to go to first slide
+      if (sliderRef.current) {
+        sliderRef.current.slickGoTo(0);
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleBookService = (service: typeof services[0]) => {
     setSelectedService(service);
   };
