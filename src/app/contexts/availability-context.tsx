@@ -4,6 +4,7 @@ interface AvailabilityContextType {
   isAvailable: boolean;
   statusColor: string;
   statusText: string;
+  statusTextKey: string;
   statusEmoji: string;
   nextAvailable: string;
   detailedStatus: {
@@ -99,8 +100,9 @@ export function AvailabilityProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const statusColor = isAvailable ? "green" : "orange";
-  const statusText = isAvailable ? "Let's build something" : "Coffee break ☕";
-  const statusEmoji = isAvailable ? "⚡" : "🌙";
+  const statusText = isAvailable ? "Let's build something" : "Busy - Focus Mode";
+  const statusTextKey = isAvailable ? "available" : "busy";
+  const statusEmoji = isAvailable ? "⚡" : "🔥";
 
   return (
     <AvailabilityContext.Provider 
@@ -108,6 +110,7 @@ export function AvailabilityProvider({ children }: { children: ReactNode }) {
         isAvailable, 
         statusColor, 
         statusText, 
+        statusTextKey,
         statusEmoji,
         nextAvailable, 
         detailedStatus 
@@ -126,6 +129,7 @@ export function useAvailability() {
       isAvailable: false,
       statusColor: "orange",
       statusText: "Coffee break ☕",
+      statusTextKey: "coffee-break",
       statusEmoji: "🌙",
       nextAvailable: "Check back later",
       detailedStatus: {

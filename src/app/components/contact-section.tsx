@@ -52,7 +52,6 @@ const contactLinks = [
 
 export function ContactSection() {
   const { t } = useLanguage();
-  const { isAvailable, statusText, statusEmoji, detailedStatus } = useAvailability();
   const [formData, setFormData] = useState({
     name: "",
     email: "",

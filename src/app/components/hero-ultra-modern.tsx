@@ -1,0 +1,803 @@
+import { motion, useMotionValue, useTransform, useScroll, AnimatePresence } from "motion/react";
+import { ArrowRight, Sparkles, Code, Zap, Play, Github, Linkedin, Mail, Briefcase, Star, GitFork, ExternalLink, Award, CheckCircle2, TrendingUp, Users, Rocket, Calendar, Globe, Coffee, Lightbulb, Terminal, Flame, Heart } from "lucide-react";
+import { useLanguage } from "../contexts/language-context";
+import { useAvailability } from "../contexts/availability-context";
+import { Button } from "./ui/button";
+import { useState, useEffect, useRef } from "react";
+import { BookCallModal } from "./book-call-fixed";
+import { getFormattedStats } from "../../utils/stats-calculator";
+
+interface GitHubRepo {
+  id: number;
+  name: string;
+  description: string;
+  html_url: string;
+  homepage: string | null;
+  stargazers_count: number;
+  forks_count: number;
+  language: string;
+  topics: string[];
+}
+
+interface HeroUltraModernProps {
+  onViewWork: () => void;
+}
+
+const socialLinks = [
+  { icon: Github, href: "https://github.com/irozedev", label: "GitHub", color: "#00d9ff" },
+  { icon: Linkedin, href: "https://linkedin.com/in/rozestepan", label: "LinkedIn", color: "#0077b5" },
+  { icon: Briefcase, href: "https://www.upwork.com/freelancers/rozestepan", label: "Upwork", color: "#6fda44" },
+  { icon: Mail, href: "mailto:hello@roze.live", label: "Email", color: "#00d9ff" },
+];
+
+const techStack = [
+  { name: "React", color: "#61dafb", icon: "⚛️" },
+  { name: "TypeScript", color: "#3178c6", icon: "📘" },
+  { name: "Node.js", color: "#68a063", icon: "🟢" },
+  { name: "Next.js", color: "#000000", icon: "▲" },
+  { name: "Python", color: "#3572A5", icon: "🐍" },
+  { name: "PostgreSQL", color: "#336791", icon: "🐘" },
+  { name: "Docker", color: "#2496ED", icon: "🐳" },
+  { name: "AWS", color: "#FF9900", icon: "☁️" },
+  { name: "GraphQL", color: "#E10098", icon: "◆" },
+  { name: "Tailwind", color: "#06B6D4", icon: "🎨" },
+];
+
+const codingLines = [
+  "const magic = await createAwesome();",
+  "function buildDreams() { return reality; }",
+  "const success = problems.map(solve);",
+  "while(coding) { coffee.drink(); }",
+  "export const quality = 'guaranteed';",
+];
+
+const quickFacts = [
+  { icon: Coffee, label: "Coffee Enthusiast", value: "☕️ Daily", color: "#8B4513" },
+  { icon: Flame, label: "Hot Projects", value: "6 Active", color: "#FF4500" },
+  { icon: Heart, label: "Client Satisfaction", value: "99.8%", color: "#FF1493" },
+  { icon: Lightbulb, label: "Innovation", value: "24/7", color: "#FFD700" },
+];
+
+const dynamicStats = getFormattedStats();
+
+export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
+  const { t, language } = useLanguage();
+  const { isAvailable, statusText, statusEmoji } = useAvailability();
+  const [isBookCallOpen, setIsBookCallOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+
+  // Mouse parallax
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateX = useTransform(mouseY, [-300, 300], [5, -5]);
+  const rotateY = useTransform(mouseX, [-300, 300], [-5, 5]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+      mouseX.set(clientX - innerWidth / 2);
+      mouseY.set(clientY - innerHeight / 2);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  // Typing animation
+  const [typedText, setTypedText] = useState("");
+  const [currentLineIndex, setCurrentLineIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentLine = codingLines[currentLineIndex];
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        if (typedText.length < currentLine.length) {
+          setTypedText(currentLine.slice(0, typedText.length + 1));
+        } else {
+          setTimeout(() => setIsDeleting(true), 2000);
+        }
+      } else {
+        if (typedText.length > 0) {
+          setTypedText(typedText.slice(0, -1));
+        } else {
+          setIsDeleting(false);
+          setCurrentLineIndex((prev) => (prev + 1) % codingLines.length);
+        }
+      }
+    }, isDeleting ? 50 : 100);
+
+    return () => clearTimeout(timeout);
+  }, [typedText, isDeleting, currentLineIndex]);
+
+  // Counter animation
+  const [countersStarted, setCountersStarted] = useState(false);
+  const [animatedStats, setAnimatedStats] = useState({
+    years: 0,
+    projects: 0,
+    clients: 0,
+    success: 0,
+  });
+
+  useEffect(() => {
+    if (!countersStarted) return;
+
+    const duration = 2000;
+    const steps = 60;
+    const interval = duration / steps;
+
+    const targets = {
+      years: parseInt(dynamicStats.yearsExperience),
+      projects: parseInt(dynamicStats.projectsCompleted),
+      clients: parseInt(dynamicStats.happyClients),
+      success: parseFloat(dynamicStats.successRate),
+    };
+
+    let step = 0;
+    const timer = setInterval(() => {
+      step++;
+      const progress = step / steps;
+      setAnimatedStats({
+        years: Math.floor(targets.years * progress),
+        projects: Math.floor(targets.projects * progress),
+        clients: Math.floor(targets.clients * progress),
+        success: parseFloat((targets.success * progress).toFixed(1)),
+      });
+
+      if (step >= steps) {
+        clearInterval(timer);
+        setAnimatedStats({
+          years: targets.years,
+          projects: targets.projects,
+          clients: targets.clients,
+          success: targets.success,
+        });
+      }
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, [countersStarted]);
+
+  // GitHub Repos
+  const [repos, setRepos] = useState<GitHubRepo[]>([]);
+  const [currentRepoIndex, setCurrentRepoIndex] = useState(0);
+  const [reposLoading, setReposLoading] = useState(true);
+
+  useEffect(() => {
+    fetchGitHubRepos();
+  }, []);
+
+  const fetchGitHubRepos = async () => {
+    try {
+      const response = await fetch('https://api.github.com/users/irozedev/repos?sort=updated&per_page=12');
+      const data = await response.json();
+      
+      const filteredRepos = data
+        .filter((repo: GitHubRepo) => !repo.fork)
+        .sort((a: GitHubRepo, b: GitHubRepo) => b.stargazers_count - a.stargazers_count)
+        .slice(0, 6);
+      
+      setRepos(filteredRepos);
+      setReposLoading(false);
+    } catch (error) {
+      console.error('Error fetching GitHub repos:', error);
+      setReposLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (repos.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentRepoIndex((prev) => (prev + 1) % repos.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [repos.length]);
+
+  const getLanguageColor = (lang: string) => {
+    const colors: { [key: string]: string } = {
+      JavaScript: "#f1e05a",
+      TypeScript: "#3178c6",
+      Python: "#3572A5",
+      Java: "#b07219",
+      Go: "#00ADD8",
+      Rust: "#dea584",
+      PHP: "#4F5D95",
+      Ruby: "#701516",
+      CSS: "#563d7c",
+      HTML: "#e34c26",
+      Vue: "#41b883",
+      React: "#61dafb",
+    };
+    return colors[lang] || "#00d9ff";
+  };
+
+  const currentRepo = repos[currentRepoIndex];
+
+  // Current time
+  const [currentTime, setCurrentTime] = useState(new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const belgiumTime = currentTime.toLocaleTimeString('en-BE', { 
+    timeZone: 'Europe/Brussels',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  return (
+    <>
+      <motion.section
+        id="home"
+        className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden px-4 sm:px-6 py-20"
+        style={{ y, opacity }}
+      >
+        {/* Animated Mesh Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Animated Grid */}
+          <motion.div 
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: 'linear-gradient(to right, #00d9ff0a 1px, transparent 1px), linear-gradient(to bottom, #00d9ff0a 1px, transparent 1px)',
+              backgroundSize: '60px 60px',
+              rotateX,
+              rotateY,
+            }}
+          />
+          
+          {/* Multiple Gradient Orbs */}
+          <motion.div
+            className="absolute top-1/4 -left-40 w-[800px] h-[800px] bg-[#00d9ff]/10 rounded-full blur-[120px]"
+            animate={{
+              scale: [1, 1.3, 1],
+              x: [0, 100, 0],
+              y: [0, 50, 0],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute top-1/2 -right-40 w-[700px] h-[700px] bg-purple-500/10 rounded-full blur-[120px]"
+            animate={{
+              scale: [1.2, 1, 1.2],
+              x: [0, -80, 0],
+              y: [0, -60, 0],
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute bottom-1/4 left-1/3 w-[600px] h-[600px] bg-pink-500/5 rounded-full blur-[100px]"
+            animate={{
+              scale: [1, 1.4, 1],
+              x: [-50, 50, -50],
+            }}
+            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+
+        {/* Main Content - BENTO GRID LAYOUT */}
+        <div className="container mx-auto max-w-7xl relative z-10">
+          
+          {/* Top Row - Main Info */}
+          <div className="grid lg:grid-cols-12 gap-4 mb-4">
+            
+            {/* Large Card - Hero Info (Left) */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="lg:col-span-7 relative group"
+            >
+              <div className="relative h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border border-[var(--border-color)] rounded-3xl p-8 md:p-10 overflow-hidden hover:border-[var(--accent-primary)]/50 transition-all duration-500">
+                
+                {/* Gradient Overlay */}
+                <motion.div
+                  className="absolute inset-0 opacity-10"
+                  style={{
+                    background: "linear-gradient(135deg, #00d9ff, #9333ea, #ec4899)",
+                    backgroundSize: "200% 200%"
+                  }}
+                  animate={{
+                    backgroundPosition: ['0% 0%', '100% 100%', '0% 0%']
+                  }}
+                  transition={{ duration: 10, repeat: Infinity }}
+                />
+
+                <div className="relative z-10 space-y-6">
+                  {/* Greeting with Status */}
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <motion.p
+                      className="text-lg md:text-xl text-[var(--text-secondary)] font-medium flex items-center gap-2"
+                    >
+                      <motion.span
+                        animate={{ rotate: [0, 14, -8, 14, -4, 10, 0] }}
+                        transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3 }}
+                        className="text-2xl"
+                      >
+                        👋
+                      </motion.span>
+                      {t("hero.greeting")}
+                    </motion.p>
+
+                    {/* Live Status Badge */}
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      className={`flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-sm text-sm font-bold ${
+                        isAvailable 
+                          ? 'bg-green-500/20 border border-green-500/50 text-green-400' 
+                          : 'bg-orange-500/20 border border-orange-500/50 text-orange-400'
+                      }`}
+                    >
+                      <motion.div
+                        animate={{ scale: [1, 1.3, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-green-400' : 'bg-orange-400'}`}
+                      />
+                      {statusEmoji} {statusText}
+                    </motion.div>
+                  </div>
+
+                  {/* Name - EPIC */}
+                  <div>
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight mb-3">
+                      <motion.span 
+                        className="block bg-gradient-to-r from-[#00d9ff] via-cyan-400 to-[#00d9ff] bg-clip-text text-transparent"
+                        animate={{
+                          backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+                        }}
+                        transition={{
+                          duration: 5,
+                          repeat: Infinity,
+                          ease: "linear"
+                        }}
+                        style={{
+                          backgroundSize: '200% 200%'
+                        }}
+                      >
+                        Stepan
+                      </motion.span>
+                      <motion.span 
+                        className="block bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 bg-clip-text text-transparent"
+                        animate={{
+                          backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+                        }}
+                        transition={{
+                          duration: 5,
+                          repeat: Infinity,
+                          ease: "linear",
+                          delay: 0.5
+                        }}
+                        style={{
+                          backgroundSize: '200% 200%'
+                        }}
+                      >
+                        Roze
+                      </motion.span>
+                    </h1>
+
+                    {/* Role */}
+                    <div className="flex items-center gap-3 text-xl md:text-2xl font-bold text-[var(--text-primary)]">
+                      <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}>
+                        <Code className="w-6 h-6 md:w-7 md:h-7 text-[#00d9ff]" />
+                      </motion.div>
+                      <span>{t("hero.role")}</span>
+                      <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                        <Zap className="w-6 h-6 md:w-7 md:h-7 text-purple-500" />
+                      </motion.div>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-base md:text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl">
+                    {t("hero.description")}
+                  </p>
+
+                  {/* CTA Buttons - Magnetic Effect */}
+                  <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button
+                        onClick={onViewWork}
+                        size="lg"
+                        className="w-full sm:w-auto bg-gradient-to-r from-[#00d9ff] to-cyan-400 hover:from-[#00b8dd] hover:to-cyan-300 text-black font-bold px-8 py-6 text-base md:text-lg rounded-2xl shadow-[0_0_40px_rgba(0,217,255,0.3)] hover:shadow-[0_0_60px_rgba(0,217,255,0.5)] transition-all duration-300 group"
+                      >
+                        <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                        {t("hero.viewWork")}
+                        <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </motion.div>
+                    
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button
+                        onClick={() => setIsBookCallOpen(true)}
+                        size="lg"
+                        variant="outline"
+                        className="w-full sm:w-auto border-2 border-[#00d9ff]/50 hover:border-[#00d9ff] text-[var(--text-primary)] hover:bg-[#00d9ff]/10 font-bold px-8 py-6 text-base md:text-lg rounded-2xl transition-all duration-300 group backdrop-blur-sm"
+                      >
+                        <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+                        {t("hero.getInTouch")}
+                      </Button>
+                    </motion.div>
+                  </div>
+
+                  {/* Social Links */}
+                  <div className="flex items-center gap-3">
+                    {socialLinks.map((social, index) => {
+                      const Icon = social.icon;
+                      return (
+                        <motion.a
+                          key={social.label}
+                          href={social.href}
+                          target={social.href.startsWith("http") ? "_blank" : undefined}
+                          rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                          className="p-3 bg-[var(--bg-secondary)]/60 backdrop-blur-sm border border-[var(--border-color)] rounded-xl text-[var(--text-secondary)] hover:text-[#00d9ff] hover:border-[#00d9ff]/50 transition-all duration-300"
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.8 + index * 0.1 }}
+                          whileHover={{ y: -5, scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          aria-label={social.label}
+                        >
+                          <Icon className="w-5 h-5" />
+                        </motion.a>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right Column - Split into 2 cards */}
+            <div className="lg:col-span-5 grid grid-rows-2 gap-4">
+              
+              {/* Live Coding Card */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="relative group"
+              >
+                <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border border-[var(--border-color)] rounded-3xl p-6 overflow-hidden hover:border-[var(--accent-primary)]/50 transition-all duration-500">
+                  
+                  <div className="flex items-center gap-2 mb-3">
+                    <Terminal className="w-5 h-5 text-[var(--accent-primary)]" />
+                    <span className="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-wider">
+                      {language === 'uk' ? 'Живий Код' : 
+                       language === 'nl' ? 'Live Code' : 
+                       language === 'ar' ? 'كود مباشر' :
+                       language === 'es' ? 'Código en Vivo' :
+                       'Live Code'}
+                    </span>
+                  </div>
+
+                  <div className="relative bg-black/30 rounded-xl p-4 font-mono text-sm text-green-400 min-h-[120px] flex items-center">
+                    <div className="w-full">
+                      <div className="flex items-center gap-2 mb-2 text-xs text-gray-500">
+                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span className="ml-2">~/magic.ts</span>
+                      </div>
+                      <div className="text-base">
+                        {typedText}
+                        <motion.span
+                          animate={{ opacity: [1, 0, 1] }}
+                          transition={{ duration: 0.8, repeat: Infinity }}
+                          className="inline-block w-2 h-5 bg-green-400 ml-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Time & Availability Card */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="relative group"
+              >
+                <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border border-[var(--border-color)] rounded-3xl p-6 overflow-hidden hover:border-[var(--accent-primary)]/50 transition-all duration-500">
+                  
+                  <div className="flex items-center gap-2 mb-3">
+                    <Globe className="w-5 h-5 text-[var(--accent-primary)]" />
+                    <span className="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-wider">
+                      {language === 'uk' ? 'Локація' : 
+                       language === 'nl' ? 'Locatie' : 
+                       language === 'ar' ? 'الموقع' :
+                       language === 'es' ? 'Ubicación' :
+                       'Location'}
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-[var(--text-secondary)]">
+                        {language === 'uk' ? '🇧🇪 Бельгія' : 
+                         language === 'nl' ? '🇧🇪 België' : 
+                         language === 'ar' ? '🇧🇪 بلجيكا' :
+                         language === 'es' ? '🇧🇪 Bélgica' :
+                         '🇧🇪 Belgium'}
+                      </span>
+                      <span className="text-2xl font-black text-[var(--accent-primary)]" dir="ltr">
+                        {belgiumTime}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm">
+                      <Calendar className="w-4 h-4 text-purple-500" />
+                      <span className="text-[var(--text-secondary)]">
+                        {language === 'uk' ? 'Доступний для проектів' : 
+                         language === 'nl' ? 'Beschikbaar voor projecten' : 
+                         language === 'ar' ? 'متاح للمشاريع' :
+                         language === 'es' ? 'Disponible para proyectos' :
+                         'Available for projects'}
+                      </span>
+                    </div>
+
+                    <div className="pt-2">
+                      <motion.button
+                        onClick={() => setIsBookCallOpen(true)}
+                        className="w-full py-2 px-4 bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30 rounded-xl text-[var(--accent-primary)] font-bold text-sm hover:bg-[var(--accent-primary)]/20 transition-all"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        📅 {language === 'uk' ? 'Забронювати дзвінок' : 
+                            language === 'nl' ? 'Boek een gesprek' : 
+                            language === 'ar' ? 'احجز مكالمة' :
+                            language === 'es' ? 'Reservar llamada' :
+                            'Book a Call'}
+                      </motion.button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Middle Row - Quick Facts (EXPANDED) */}
+          <div className="mb-4">
+            
+            {/* Quick Facts Card - Full Width */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="relative group"
+            >
+              <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border border-[var(--border-color)] rounded-3xl p-6 overflow-hidden hover:border-[var(--accent-primary)]/50 transition-all duration-500">
+                
+                <div className="flex items-center gap-2 mb-4">
+                  <Lightbulb className="w-5 h-5 text-[var(--accent-primary)]" />
+                  <span className="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-wider">
+                    {language === 'uk' ? 'Швидкі Факти' : 
+                     language === 'nl' ? 'Snelle Feiten' : 
+                     language === 'ar' ? 'حقائق سريعة' :
+                     language === 'es' ? 'Datos Rápidos' :
+                     'Quick Facts'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {quickFacts.map((fact, index) => {
+                    const Icon = fact.icon;
+                    return (
+                      <motion.div
+                        key={fact.label}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.6 + index * 0.1 }}
+                        whileHover={{ scale: 1.05, y: -3 }}
+                        className="relative p-4 bg-[var(--bg-primary)]/40 backdrop-blur-sm border border-[var(--border-color)] rounded-xl hover:border-[var(--accent-primary)]/30 transition-all"
+                      >
+                        <Icon className="w-5 h-5 mb-2" style={{ color: fact.color }} />
+                        <div className="text-xs text-[var(--text-muted)] mb-1">{fact.label}</div>
+                        <div className="text-lg font-bold text-[var(--text-primary)]">{fact.value}</div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Bottom Row - Stats & GitHub */}
+          <div className="grid lg:grid-cols-12 gap-4">
+            
+            {/* Stats Cards - 4 columns */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              onViewportEnter={() => setCountersStarted(true)}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="lg:col-span-7 grid grid-cols-2 md:grid-cols-4 gap-3"
+            >
+              {[
+                { icon: Award, value: `${animatedStats.years}+`, label: t("hero.yearsExperience") || "Years", color: "#FFD700" },
+                { icon: CheckCircle2, value: `${animatedStats.projects}+`, label: t("hero.projectsCompleted") || "Projects", color: "#00d9ff" },
+                { icon: Users, value: `${animatedStats.clients}+`, label: t("hero.happyClients") || "Clients", color: "#9333ea" },
+                { icon: TrendingUp, value: `${animatedStats.success}%`, label: t("hero.successRate") || "Success", color: "#10b981" },
+              ].map((stat, index) => {
+                const Icon = stat.icon;
+                return (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.7 + index * 0.1 }}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    className="relative group"
+                  >
+                    <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-xl border border-[var(--border-color)] rounded-2xl p-4 overflow-hidden transition-all duration-300 hover:border-[var(--accent-primary)]/50">
+                      
+                      <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-primary)]/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      
+                      <div className="relative z-10">
+                        <Icon className="w-5 h-5 mb-2" style={{ color: stat.color }} />
+                        <div 
+                          className="text-3xl md:text-4xl font-black bg-gradient-to-r from-[#00d9ff] to-cyan-400 bg-clip-text text-transparent mb-1"
+                          dir="ltr"
+                        >
+                          {stat.value}
+                        </div>
+                        <div className="text-xs text-[var(--text-muted)] font-medium">
+                          {stat.label}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+
+            {/* GitHub Featured Project */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="lg:col-span-5 relative group"
+            >
+              <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border-2 border-[var(--accent-primary)]/30 rounded-3xl p-6 overflow-hidden hover:border-[var(--accent-primary)]/60 transition-all duration-500">
+                
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Github className="w-5 h-5 text-[var(--accent-primary)]" />
+                    <span className="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-wider">
+                      {language === 'uk' ? 'Топ Проект' : 
+                       language === 'nl' ? 'Top Project' : 
+                       language === 'ar' ? 'أفضل مشروع' :
+                       language === 'es' ? 'Proyecto Principal' :
+                       'Featured Repo'}
+                    </span>
+                  </div>
+                  
+                  {/* Pagination Dots */}
+                  {repos.length > 0 && (
+                    <div className="flex gap-1">
+                      {repos.map((_, index) => (
+                        <motion.button
+                          key={index}
+                          onClick={() => setCurrentRepoIndex(index)}
+                          className={`transition-all rounded-full ${
+                            index === currentRepoIndex
+                              ? 'w-4 h-1.5 bg-[var(--accent-primary)]'
+                              : 'w-1.5 h-1.5 bg-[var(--text-secondary)]/30'
+                          }`}
+                          whileHover={{ scale: 1.2 }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <AnimatePresence mode="wait">
+                  {!reposLoading && currentRepo && (
+                    <motion.div
+                      key={currentRepo.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      <h3 className="text-lg font-black text-[var(--text-primary)] mb-2 line-clamp-1">
+                        {currentRepo.name}
+                      </h3>
+                      
+                      <p className="text-sm text-[var(--text-secondary)] mb-3 line-clamp-2">
+                        {currentRepo.description || 'No description'}
+                      </p>
+                      
+                      <div className="flex items-center gap-3 mb-3 text-sm">
+                        {currentRepo.language && (
+                          <div className="flex items-center gap-1.5">
+                            <div
+                              className="w-2.5 h-2.5 rounded-full"
+                              style={{ backgroundColor: getLanguageColor(currentRepo.language) }}
+                            />
+                            <span className="text-[var(--text-secondary)]">{currentRepo.language}</span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-1 text-[var(--text-secondary)]">
+                          <Star className="w-3.5 h-3.5 text-yellow-500" />
+                          <span className="font-bold">{currentRepo.stargazers_count}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-[var(--text-secondary)]">
+                          <GitFork className="w-3.5 h-3.5 text-blue-500" />
+                          <span className="font-bold">{currentRepo.forks_count}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <motion.a
+                          href={currentRepo.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[var(--accent-primary)] text-black font-bold rounded-xl text-sm"
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          <Github className="w-4 h-4" />
+                          Code
+                        </motion.a>
+                        {currentRepo.homepage && (
+                          <motion.a
+                            href={currentRepo.homepage}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold rounded-xl text-sm"
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            Demo
+                          </motion.a>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {reposLoading && (
+                    <div className="flex items-center justify-center h-32">
+                      <motion.div
+                        className="w-8 h-8 border-4 border-[var(--accent-primary)] border-t-transparent rounded-full"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      />
+                    </div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Scroll Indicator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5 }}
+            className="text-center mt-12"
+          >
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="flex flex-col items-center gap-2 text-[var(--text-muted)]"
+            >
+              <TrendingUp className="w-6 h-6 rotate-90" />
+              <span className="text-xs font-medium uppercase tracking-wider">
+                {t("hero.scrollDown") || "Explore More"}
+              </span>
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* Modals */}
+      <BookCallModal isOpen={isBookCallOpen} onClose={() => setIsBookCallOpen(false)} />
+    </>
+  );
+}

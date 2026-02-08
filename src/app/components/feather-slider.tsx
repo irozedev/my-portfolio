@@ -159,11 +159,10 @@ export function FeatherSlider({
           <motion.button
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className="absolute left-0 md:-left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-16 md:h-16 bg-gradient-to-br from-[var(--bg-secondary)]/95 to-[var(--bg-primary)]/95 backdrop-blur-xl border-2 border-[var(--accent-primary)]/40 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(0,217,255,0.3)] disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 opacity-60 hover:opacity-100 group-hover/slider:opacity-100"
+            className="absolute left-0 md:-left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-16 md:h-16 bg-gradient-to-br from-[var(--bg-secondary)]/95 to-[var(--bg-primary)]/95 backdrop-blur-xl border-2 border-[var(--accent-primary)]/40 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(0,217,255,0.3)] disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 opacity-60 hover:opacity-100 group-hover/slider:opacity-100 hover:shadow-[0_0_50px_rgba(0,217,255,0.6)]"
             whileHover={{ 
               scale: 1.1, 
-              rotate: -5,
-              boxShadow: "0 0 50px rgba(0,217,255,0.6)" 
+              rotate: -5
             }}
             whileTap={{ scale: 0.95 }}
             initial={{ x: -30, opacity: 0 }}
@@ -176,11 +175,10 @@ export function FeatherSlider({
           <motion.button
             onClick={handleNext}
             disabled={currentIndex >= maxIndex}
-            className="absolute right-0 md:-right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-16 md:h-16 bg-gradient-to-br from-[var(--bg-secondary)]/95 to-[var(--bg-primary)]/95 backdrop-blur-xl border-2 border-[var(--accent-primary)]/40 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(0,217,255,0.3)] disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 opacity-60 hover:opacity-100 group-hover/slider:opacity-100"
+            className="absolute right-0 md:-right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-16 md:h-16 bg-gradient-to-br from-[var(--bg-secondary)]/95 to-[var(--bg-primary)]/95 backdrop-blur-xl border-2 border-[var(--accent-primary)]/40 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(0,217,255,0.3)] disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 opacity-60 hover:opacity-100 group-hover/slider:opacity-100 hover:shadow-[0_0_50px_rgba(0,217,255,0.6)]"
             whileHover={{ 
               scale: 1.1,
-              rotate: 5, 
-              boxShadow: "0 0 50px rgba(0,217,255,0.6)" 
+              rotate: 5
             }}
             whileTap={{ scale: 0.95 }}
             initial={{ x: 30, opacity: 0 }}
@@ -262,13 +260,10 @@ export function FeatherSlider({
               <div className="relative flex items-center justify-center" style={{ width: currentIndex === index ? '32px' : '12px', height: '12px' }}>
                 {currentIndex === index ? (
                   <motion.div
-                    className="bg-gradient-to-r from-[#00d9ff] to-[#a78bfa] rounded-sm"
+                    className="bg-gradient-to-r from-[#00d9ff] to-[#a78bfa] rounded-sm shadow-[0_0_15px_rgba(0,217,255,0.6)]"
                     initial={{ width: "12px", height: "12px", borderRadius: "50%" }}
                     animate={{ width: "32px", height: "4px", borderRadius: "2px" }}
                     transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
-                    style={{
-                      boxShadow: "0 0 15px rgba(0, 217, 255, 0.6)"
-                    }}
                   />
                 ) : (
                   <motion.div

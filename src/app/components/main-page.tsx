@@ -1,4 +1,4 @@
-import { HeroSplit } from "./hero-split";
+import { HeroUltraModern } from "./hero-ultra-modern";
 import { ServicesCreativeSlider } from "./services-creative-slider";
 import { AboutSection } from "./about-section";
 import { ExperienceTimelinePremium } from "./experience-timeline-premium";
@@ -29,10 +29,10 @@ export function MainPage() {
       <SEOHead />
       
       {/* Navigation */}
-      <Navigation onProfileClick={() => setIsProfileOpen(true)} />
+      <Navigation onOpenProfile={() => setIsProfileOpen(true)} />
 
-      {/* Hero Section */}
-      <HeroSplit onViewWork={handleViewWork} />
+      {/* Hero Section - ULTRA MODERN BENTO GRID */}
+      <HeroUltraModern onViewWork={handleViewWork} />
       
       {/* Spacing between sections */}
       <div className="h-4 sm:h-6 md:h-8 lg:h-10" />

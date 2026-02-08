@@ -160,97 +160,244 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                 whileTap={{ scale: 0.95 }}
               >
                 <div className="relative">
-                  {/* Holographic Background Glow */}
+                  {/* Particle Effects Container */}
+                  <div className="absolute inset-0 overflow-visible pointer-events-none">
+                    {[...Array(6)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute w-1 h-1 bg-[var(--accent-primary)] rounded-full"
+                        animate={{
+                          x: [0, Math.cos(i * 60 * Math.PI / 180) * 25],
+                          y: [0, Math.sin(i * 60 * Math.PI / 180) * 25],
+                          opacity: [0, 0.8, 0],
+                          scale: [0, 1.2, 0],
+                        }}
+                        transition={{
+                          duration: 2.5,
+                          repeat: Infinity,
+                          delay: i * 0.4,
+                          ease: "easeOut"
+                        }}
+                        style={{
+                          left: '50%',
+                          top: '50%',
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Holographic Background Glow - Enhanced */}
                   <motion.div 
-                    className="absolute -inset-2 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-2xl blur-lg opacity-30 group-hover:opacity-60"
+                    className="absolute -inset-3 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-40 group-hover:opacity-70"
                     animate={{ 
                       rotate: [0, 360],
-                      scale: [1, 1.1, 1]
+                      scale: [1, 1.15, 1]
                     }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                    transition={{ 
+                      rotate: { duration: 10, repeat: Infinity, ease: "linear" },
+                      scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+                    }}
+                  />
+
+                  {/* Secondary Rotating Ring */}
+                  <motion.div
+                    className="absolute -inset-2 rounded-2xl"
+                    style={{
+                      background: "conic-gradient(from 0deg, transparent, var(--accent-primary), transparent)",
+                      opacity: 0.3
+                    }}
+                    animate={{ rotate: [0, -360] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
                   />
                   
-                  {/* Hexagon Logo Container */}
-                  <div className="relative w-12 h-12 flex items-center justify-center">
-                    {/* Hexagon Background with Gradient Border */}
+                  {/* Hexagon Logo Container - Enhanced */}
+                  <div className="relative w-14 h-14 flex items-center justify-center">
+                    {/* Outer Hexagon Glow */}
+                    <motion.div 
+                      className="absolute -inset-1 opacity-50"
+                      style={{
+                        clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)"
+                      }}
+                      animate={{
+                        boxShadow: [
+                          "0 0 20px rgba(0, 217, 255, 0.5)",
+                          "0 0 40px rgba(147, 51, 234, 0.5)",
+                          "0 0 20px rgba(236, 72, 153, 0.5)",
+                          "0 0 20px rgba(0, 217, 255, 0.5)",
+                        ]
+                      }}
+                      transition={{ duration: 4, repeat: Infinity }}
+                    />
+
+                    {/* Hexagon Background with Animated Gradient Border */}
                     <div className="absolute inset-0" style={{
                       clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)"
                     }}>
                       <motion.div 
-                        className="w-full h-full bg-gradient-to-br from-[var(--accent-primary)] via-purple-500 to-pink-500"
-                        animate={{ 
-                          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+                        className="w-full h-full"
+                        style={{
+                          background: "linear-gradient(135deg, #00d9ff, #9333ea, #ec4899, #00d9ff)",
+                          backgroundSize: "300% 300%"
                         }}
-                        transition={{ duration: 5, repeat: Infinity }}
-                        style={{ backgroundSize: "200% 200%" }}
+                        animate={{ 
+                          backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
+                        }}
+                        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
                       />
                     </div>
                     
-                    {/* Inner Hexagon */}
-                    <div className="absolute inset-[2px]" style={{
+                    {/* Inner Hexagon with Dynamic Background */}
+                    <div className="absolute inset-[3px]" style={{
                       clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)"
                     }}>
-                      <div className="w-full h-full bg-[var(--bg-primary)] flex items-center justify-center">
-                        <motion.span 
-                          className="text-2xl font-black bg-gradient-to-br from-[var(--accent-primary)] via-purple-400 to-pink-400 bg-clip-text text-transparent"
-                          animate={{ 
-                            scale: [1, 1.05, 1],
+                      <motion.div 
+                        className="w-full h-full bg-[var(--bg-primary)] flex items-center justify-center relative overflow-hidden"
+                      >
+                        {/* Animated Scan Line */}
+                        <motion.div
+                          className="absolute inset-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent"
+                          animate={{
+                            y: ['-100%', '200%']
                           }}
-                          transition={{ duration: 2, repeat: Infinity }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }}
+                        />
+
+                        {/* "S" Letter with Enhanced Animation */}
+                        <motion.span 
+                          className="text-3xl font-black relative z-10"
+                          style={{
+                            background: "linear-gradient(135deg, #00d9ff, #9333ea, #ec4899)",
+                            backgroundClip: "text",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent"
+                          }}
+                          animate={{ 
+                            scale: [1, 1.08, 1]
+                          }}
+                          transition={{ 
+                            duration: 3, 
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
                         >
                           S
                         </motion.span>
-                      </div>
+
+                        {/* Animated Glow Behind Letter */}
+                        <motion.div
+                          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                          animate={{
+                            opacity: [0.5, 1, 0.5]
+                          }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        >
+                          <div className="text-3xl font-black text-[#00d9ff] blur-md opacity-70">S</div>
+                        </motion.div>
+                      </motion.div>
                     </div>
 
-                    {/* Animated Ring */}
+                    {/* Multiple Animated Rings */}
                     <motion.div
                       className="absolute inset-0 rounded-full border-2 border-[var(--accent-primary)]/50"
                       animate={{
                         rotate: [0, 360],
-                        scale: [1, 1.2, 1],
+                        scale: [1, 1.3, 1],
                         opacity: [0.5, 0, 0.5]
                       }}
                       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                     />
                     
-                    {/* Status Indicator with Pulse */}
+                    <motion.div
+                      className="absolute inset-0 rounded-full border border-purple-500/50"
+                      animate={{
+                        rotate: [360, 0],
+                        scale: [1, 1.4, 1],
+                        opacity: [0.3, 0, 0.3]
+                      }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                    />
+
+                    {/* Enhanced Status Indicator with Multiple Pulses */}
                     <motion.div 
-                      className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-[var(--bg-primary)] shadow-lg z-10 ${
+                      className={`absolute -top-1 -right-1 w-5 h-5 rounded-full border-2 border-[var(--bg-primary)] shadow-lg z-10 ${
                         isAvailable ? 'bg-green-500' : 'bg-orange-500'
                       }`}
                       animate={{
-                        scale: [1, 1.3, 1],
+                        scale: [1, 1.2, 1],
                         boxShadow: isAvailable 
-                          ? ['0 0 0 0 rgba(34, 197, 94, 0.7)', '0 0 0 8px rgba(34, 197, 94, 0)', '0 0 0 0 rgba(34, 197, 94, 0)']
-                          : ['0 0 0 0 rgba(249, 115, 22, 0.7)', '0 0 0 8px rgba(249, 115, 22, 0)', '0 0 0 0 rgba(249, 115, 22, 0)']
+                          ? [
+                              '0 0 0 0 rgba(34, 197, 94, 0.7)',
+                              '0 0 0 10px rgba(34, 197, 94, 0)',
+                              '0 0 0 0 rgba(34, 197, 94, 0)'
+                            ]
+                          : [
+                              '0 0 0 0 rgba(249, 115, 22, 0.7)',
+                              '0 0 0 10px rgba(249, 115, 22, 0)',
+                              '0 0 0 0 rgba(249, 115, 22, 0)'
+                            ]
                       }}
                       transition={{
                         duration: 2,
                         repeat: Infinity,
                         ease: "easeInOut"
                       }}
-                    />
+                    >
+                      {/* Inner Glow */}
+                      <motion.div
+                        className="absolute inset-0.5 rounded-full bg-white"
+                        animate={{
+                          opacity: [0.8, 0.3, 0.8]
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity
+                        }}
+                      />
+                    </motion.div>
                   </div>
                 </div>
                 
-                {/* Live Status Badge - Clean & Professional */}
+                {/* Live Status Badge - Enhanced */}
                 <motion.div 
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] group-hover:border-[var(--accent-primary)]/30 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--bg-secondary)]/60 backdrop-blur-md border border-[var(--border-color)] group-hover:border-[var(--accent-primary)]/40 transition-all relative overflow-hidden"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
                   whileHover={{ scale: 1.05 }}
                 >
+                  {/* Shimmer Effect */}
                   <motion.div
-                    className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
+                    className="absolute inset-0 w-full h-full pointer-events-none"
+                    style={{
+                      background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)"
+                    }}
                     animate={{
-                      scale: [1, 1.4, 1],
+                      x: ['-100%', '200%']
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  />
+
+                  <motion.div
+                    className={`relative w-2 h-2 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
+                    animate={{
+                      scale: [1, 1.5, 1],
                       opacity: [1, 0.6, 1]
                     }}
                     transition={{ duration: 2, repeat: Infinity }}
                   />
-                  <span className={`text-xs font-bold tracking-wide uppercase ${
+                  <span className={`relative text-xs font-bold tracking-wide uppercase ${
                     isAvailable ? 'text-green-500' : 'text-orange-500'
                   }`}>
                     {isAvailable ? (
