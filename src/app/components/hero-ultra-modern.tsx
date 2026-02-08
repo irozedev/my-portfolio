@@ -1,10 +1,11 @@
 import { motion, useMotionValue, useTransform, useScroll, AnimatePresence } from "motion/react";
-import { ArrowRight, Sparkles, Code, Zap, Play, Github, Linkedin, Mail, Briefcase, Star, GitFork, ExternalLink, Award, CheckCircle2, TrendingUp, Users, Rocket, Calendar, Globe, Coffee, Lightbulb, Terminal, Flame, Heart } from "lucide-react";
+import { ArrowRight, Sparkles, Code, Zap, Play, Github, Linkedin, Mail, Briefcase, Star, GitFork, ExternalLink, Award, CheckCircle2, TrendingUp, Users, Rocket, Lightbulb, Terminal, Flame, Heart } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { useAvailability } from "../contexts/availability-context";
 import { Button } from "./ui/button";
 import { useState, useEffect, useRef } from "react";
 import { BookCallModal } from "./book-call-fixed";
+import { AvailabilityScheduleModal } from "./availability-schedule-modal";
 import { getFormattedStats } from "../../utils/stats-calculator";
 
 interface GitHubRepo {
@@ -52,7 +53,6 @@ const codingLines = [
 ];
 
 const quickFacts = [
-  { icon: Coffee, label: "Coffee Enthusiast", value: "☕️ Daily", color: "#8B4513" },
   { icon: Flame, label: "Hot Projects", value: "6 Active", color: "#FF4500" },
   { icon: Heart, label: "Client Satisfaction", value: "99.8%", color: "#FF1493" },
   { icon: Lightbulb, label: "Innovation", value: "24/7", color: "#FFD700" },
@@ -64,6 +64,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
   const { t, language } = useLanguage();
   const { isAvailable, statusText, statusEmoji } = useAvailability();
   const [isBookCallOpen, setIsBookCallOpen] = useState(false);
+  const [isAvailabilityScheduleOpen, setIsAvailabilityScheduleOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
   const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
@@ -73,6 +74,24 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
   const mouseY = useMotionValue(0);
   const rotateX = useTransform(mouseY, [-300, 300], [5, -5]);
   const rotateY = useTransform(mouseX, [-300, 300], [-5, 5]);
+
+  // Floating particles state
+  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; size: number; duration: number; delay: number; icon: string }>>([]);
+
+  useEffect(() => {
+    // Generate floating tech particles
+    const techIcons = ['⚛️', '📘', '🟢', '▲', '🐍', '🐘', '🐳', '☁️', '◆', '🎨', '⚡', '🔥', '💎', '✨', '🚀', '💻', '🎯', '⭐'];
+    const newParticles = Array.from({ length: 25 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 20 + 15,
+      duration: Math.random() * 20 + 15,
+      delay: Math.random() * 5,
+      icon: techIcons[Math.floor(Math.random() * techIcons.length)]
+    }));
+    setParticles(newParticles);
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -233,11 +252,38 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
     <>
       <motion.section
         id="home"
-        className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden px-4 sm:px-6 py-20"
+        className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden px-4 sm:px-6 pt-24 md:pt-28 lg:pt-32 pb-20"
         style={{ y, opacity }}
       >
         {/* Animated Mesh Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Floating Tech Particles */}
+          {particles.map((particle) => (
+            <motion.div
+              key={particle.id}
+              className="absolute text-2xl opacity-20 blur-[0.5px]"
+              style={{
+                left: `${particle.x}%`,
+                top: `${particle.y}%`,
+                fontSize: `${particle.size}px`,
+              }}
+              animate={{
+                y: [0, -100, 0],
+                x: [0, Math.random() * 50 - 25, 0],
+                rotate: [0, 360],
+                opacity: [0.1, 0.3, 0.1],
+              }}
+              transition={{
+                duration: particle.duration,
+                delay: particle.delay,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              {particle.icon}
+            </motion.div>
+          ))}
+
           {/* Animated Grid */}
           <motion.div 
             className="absolute inset-0 opacity-20"
@@ -322,13 +368,15 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                       {t("hero.greeting")}
                     </motion.p>
 
-                    {/* Live Status Badge */}
-                    <motion.div
+                    {/* Live Status Badge - CLICKABLE */}
+                    <motion.button
+                      onClick={() => setIsAvailabilityScheduleOpen(true)}
                       whileHover={{ scale: 1.05 }}
-                      className={`flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-sm text-sm font-bold ${
+                      whileTap={{ scale: 0.95 }}
+                      className={`flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-sm text-sm font-bold cursor-pointer transition-all ${
                         isAvailable 
-                          ? 'bg-green-500/20 border border-green-500/50 text-green-400' 
-                          : 'bg-orange-500/20 border border-orange-500/50 text-orange-400'
+                          ? 'bg-green-500/20 border border-green-500/50 text-green-400 hover:bg-green-500/30' 
+                          : 'bg-orange-500/20 border border-orange-500/50 text-orange-400 hover:bg-orange-500/30'
                       }`}
                     >
                       <motion.div
@@ -337,14 +385,14 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                         className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-green-400' : 'bg-orange-400'}`}
                       />
                       {statusEmoji} {statusText}
-                    </motion.div>
+                    </motion.button>
                   </div>
 
-                  {/* Name - EPIC */}
+                  {/* Name - EPIC - ONE LINE */}
                   <div>
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight mb-3">
                       <motion.span 
-                        className="block bg-gradient-to-r from-[#00d9ff] via-cyan-400 to-[#00d9ff] bg-clip-text text-transparent"
+                        className="bg-gradient-to-r from-[#00d9ff] via-cyan-400 to-[#00d9ff] bg-clip-text text-transparent"
                         animate={{
                           backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
                         }}
@@ -357,10 +405,10 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                           backgroundSize: '200% 200%'
                         }}
                       >
-                        Stepan
+                        Stepan{" "}
                       </motion.span>
                       <motion.span 
-                        className="block bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 bg-clip-text text-transparent"
+                        className="bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 bg-clip-text text-transparent"
                         animate={{
                           backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
                         }}
@@ -452,7 +500,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
             {/* Right Column - Split into 2 cards */}
             <div className="lg:col-span-5 grid grid-rows-2 gap-4">
               
-              {/* Live Coding Card */}
+              {/* Live Coding Terminal - TOP */}
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -468,91 +516,152 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                        language === 'nl' ? 'Live Code' : 
                        language === 'ar' ? 'كود مباشر' :
                        language === 'es' ? 'Código en Vivo' :
-                       'Live Code'}
+                       'Live Coding'}
                     </span>
                   </div>
 
-                  <div className="relative bg-black/30 rounded-xl p-4 font-mono text-sm text-green-400 min-h-[120px] flex items-center">
-                    <div className="w-full">
-                      <div className="flex items-center gap-2 mb-2 text-xs text-gray-500">
-                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                        <span className="ml-2">~/magic.ts</span>
-                      </div>
-                      <div className="text-base">
-                        {typedText}
+                  <div className="bg-[var(--bg-primary)]/60 backdrop-blur-sm border border-[var(--border-color)] rounded-xl p-4 font-mono text-xs md:text-sm">
+                    <div className="flex items-start gap-2">
+                      <span className="text-purple-500 select-none" dir="ltr">{'>'}</span>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-[var(--text-primary)]" dir="ltr">{typedText}</span>
                         <motion.span
                           animate={{ opacity: [1, 0, 1] }}
                           transition={{ duration: 0.8, repeat: Infinity }}
-                          className="inline-block w-2 h-5 bg-green-400 ml-1"
+                          className="inline-block w-2 h-4 bg-[var(--accent-primary)] ml-1"
+                          dir="ltr"
                         />
                       </div>
                     </div>
                   </div>
+
+                  <div className="mt-3 flex items-center gap-2 text-xs text-[var(--text-muted)]">
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                      <span>{language === 'uk' ? 'Активний' : language === 'nl' ? 'Actief' : language === 'ar' ? 'نشط' : language === 'es' ? 'Activo' : 'Active'}</span>
+                    </div>
+                    <span className="text-[var(--text-secondary)]">•</span>
+                    <span dir="ltr">{belgiumTime}</span>
+                  </div>
                 </div>
               </motion.div>
 
-              {/* Time & Availability Card */}
+              {/* GitHub Featured Project - BOTTOM */}
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
+                transition={{ duration: 0.8, delay: 0.25 }}
                 className="relative group"
               >
-                <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border border-[var(--border-color)] rounded-3xl p-6 overflow-hidden hover:border-[var(--accent-primary)]/50 transition-all duration-500">
+                <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border-2 border-[var(--accent-primary)]/30 rounded-3xl p-6 overflow-hidden hover:border-[var(--accent-primary)]/60 transition-all duration-500">
                   
-                  <div className="flex items-center gap-2 mb-3">
-                    <Globe className="w-5 h-5 text-[var(--accent-primary)]" />
-                    <span className="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-wider">
-                      {language === 'uk' ? 'Локація' : 
-                       language === 'nl' ? 'Locatie' : 
-                       language === 'ar' ? 'الموقع' :
-                       language === 'es' ? 'Ubicación' :
-                       'Location'}
-                    </span>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Github className="w-5 h-5 text-[var(--accent-primary)]" />
+                      <span className="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-wider">
+                        {language === 'uk' ? 'Топ Проект' : 
+                         language === 'nl' ? 'Top Project' : 
+                         language === 'ar' ? 'أفضل مشروع' :
+                         language === 'es' ? 'Proyecto Principal' :
+                         'Featured Repo'}
+                      </span>
+                    </div>
+                    
+                    {/* Pagination Dots */}
+                    {repos.length > 0 && (
+                      <div className="flex gap-1">
+                        {repos.map((_, index) => (
+                          <motion.button
+                            key={index}
+                            onClick={() => setCurrentRepoIndex(index)}
+                            className={`transition-all rounded-full ${
+                              index === currentRepoIndex
+                                ? 'w-4 h-1.5 bg-[var(--accent-primary)]'
+                                : 'w-1.5 h-1.5 bg-[var(--text-secondary)]/30'
+                            }`}
+                            whileHover={{ scale: 1.2 }}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-[var(--text-secondary)]">
-                        {language === 'uk' ? '🇧🇪 Бельгія' : 
-                         language === 'nl' ? '🇧🇪 België' : 
-                         language === 'ar' ? '🇧🇪 بلجيكا' :
-                         language === 'es' ? '🇧🇪 Bélgica' :
-                         '🇧🇪 Belgium'}
-                      </span>
-                      <span className="text-2xl font-black text-[var(--accent-primary)]" dir="ltr">
-                        {belgiumTime}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-sm">
-                      <Calendar className="w-4 h-4 text-purple-500" />
-                      <span className="text-[var(--text-secondary)]">
-                        {language === 'uk' ? 'Доступний для проектів' : 
-                         language === 'nl' ? 'Beschikbaar voor projecten' : 
-                         language === 'ar' ? 'متاح للمشاريع' :
-                         language === 'es' ? 'Disponible para proyectos' :
-                         'Available for projects'}
-                      </span>
-                    </div>
-
-                    <div className="pt-2">
-                      <motion.button
-                        onClick={() => setIsBookCallOpen(true)}
-                        className="w-full py-2 px-4 bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30 rounded-xl text-[var(--accent-primary)] font-bold text-sm hover:bg-[var(--accent-primary)]/20 transition-all"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                  <AnimatePresence mode="wait">
+                    {!reposLoading && currentRepo && (
+                      <motion.div
+                        key={currentRepo.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.4 }}
                       >
-                        📅 {language === 'uk' ? 'Забронювати дзвінок' : 
-                            language === 'nl' ? 'Boek een gesprek' : 
-                            language === 'ar' ? 'احجز مكالمة' :
-                            language === 'es' ? 'Reservar llamada' :
-                            'Book a Call'}
-                      </motion.button>
-                    </div>
-                  </div>
+                        <h3 className="text-base md:text-lg font-black text-[var(--text-primary)] mb-2 line-clamp-1">
+                          {currentRepo.name}
+                        </h3>
+                        
+                        <p className="text-xs md:text-sm text-[var(--text-secondary)] mb-3 line-clamp-2">
+                          {currentRepo.description || 'No description'}
+                        </p>
+                        
+                        <div className="flex items-center gap-2 md:gap-3 mb-3 text-xs md:text-sm flex-wrap">
+                          {currentRepo.language && (
+                            <div className="flex items-center gap-1.5">
+                              <div
+                                className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full"
+                                style={{ backgroundColor: getLanguageColor(currentRepo.language) }}
+                              />
+                              <span className="text-[var(--text-secondary)]">{currentRepo.language}</span>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-1 text-[var(--text-secondary)]">
+                            <Star className="w-3 h-3 md:w-3.5 md:h-3.5 text-yellow-500" />
+                            <span className="font-bold">{currentRepo.stargazers_count}</span>
+                          </div>
+                          <div className="flex items-center gap-1 text-[var(--text-secondary)]">
+                            <GitFork className="w-3 h-3 md:w-3.5 md:h-3.5 text-blue-500" />
+                            <span className="font-bold">{currentRepo.forks_count}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <motion.a
+                            href={currentRepo.html_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 bg-[var(--accent-primary)] text-black font-bold rounded-xl text-xs md:text-sm"
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                          >
+                            <Github className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                            Code
+                          </motion.a>
+                          {currentRepo.homepage && (
+                            <motion.a
+                              href={currentRepo.homepage}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold rounded-xl text-xs md:text-sm"
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                            >
+                              <ExternalLink className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                              Demo
+                            </motion.a>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {reposLoading && (
+                      <div className="flex items-center justify-center h-32">
+                        <motion.div
+                          className="w-8 h-8 border-4 border-[var(--accent-primary)] border-t-transparent rounded-full"
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        />
+                      </div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </motion.div>
             </div>
@@ -581,7 +690,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {quickFacts.map((fact, index) => {
                     const Icon = fact.icon;
                     return (
@@ -604,176 +713,53 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
             </motion.div>
           </div>
 
-          {/* Bottom Row - Stats & GitHub */}
-          <div className="grid lg:grid-cols-12 gap-4">
-            
-            {/* Stats Cards - 4 columns */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              onViewportEnter={() => setCountersStarted(true)}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="lg:col-span-7 grid grid-cols-2 md:grid-cols-4 gap-3"
-            >
-              {[
-                { icon: Award, value: `${animatedStats.years}+`, label: t("hero.yearsExperience") || "Years", color: "#FFD700" },
-                { icon: CheckCircle2, value: `${animatedStats.projects}+`, label: t("hero.projectsCompleted") || "Projects", color: "#00d9ff" },
-                { icon: Users, value: `${animatedStats.clients}+`, label: t("hero.happyClients") || "Clients", color: "#9333ea" },
-                { icon: TrendingUp, value: `${animatedStats.success}%`, label: t("hero.successRate") || "Success", color: "#10b981" },
-              ].map((stat, index) => {
-                const Icon = stat.icon;
-                return (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.7 + index * 0.1 }}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    className="relative group"
-                  >
-                    <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-xl border border-[var(--border-color)] rounded-2xl p-4 overflow-hidden transition-all duration-300 hover:border-[var(--accent-primary)]/50">
-                      
-                      <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-primary)]/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      
-                      <div className="relative z-10">
-                        <Icon className="w-5 h-5 mb-2" style={{ color: stat.color }} />
-                        <div 
-                          className="text-3xl md:text-4xl font-black bg-gradient-to-r from-[#00d9ff] to-cyan-400 bg-clip-text text-transparent mb-1"
-                          dir="ltr"
-                        >
-                          {stat.value}
-                        </div>
-                        <div className="text-xs text-[var(--text-muted)] font-medium">
-                          {stat.label}
-                        </div>
+          {/* Bottom Row - Stats ONLY (Full Width) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            onViewportEnter={() => setCountersStarted(true)}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-3"
+          >
+            {[
+              { icon: Award, value: `${animatedStats.years}+`, label: t("hero.yearsExperience") || "Years", color: "#FFD700" },
+              { icon: CheckCircle2, value: `${animatedStats.projects}+`, label: t("hero.projectsCompleted") || "Projects", color: "#00d9ff" },
+              { icon: Users, value: `${animatedStats.clients}+`, label: t("hero.happyClients") || "Clients", color: "#9333ea" },
+              { icon: TrendingUp, value: `${animatedStats.success}%`, label: t("hero.successRate") || "Success", color: "#10b981" },
+            ].map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.7 + index * 0.1 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="relative group"
+                >
+                  <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-xl border border-[var(--border-color)] rounded-2xl p-4 md:p-6 overflow-hidden transition-all duration-300 hover:border-[var(--accent-primary)]/50">
+                    
+                    <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-primary)]/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    
+                    <div className="relative z-10">
+                      <Icon className="w-5 h-5 md:w-6 md:h-6 mb-2 md:mb-3" style={{ color: stat.color }} />
+                      <div 
+                        className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#00d9ff] to-cyan-400 bg-clip-text text-transparent mb-1"
+                        dir="ltr"
+                      >
+                        {stat.value}
+                      </div>
+                      <div className="text-xs md:text-sm text-[var(--text-muted)] font-medium">
+                        {stat.label}
                       </div>
                     </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-
-            {/* GitHub Featured Project */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-              className="lg:col-span-5 relative group"
-            >
-              <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border-2 border-[var(--accent-primary)]/30 rounded-3xl p-6 overflow-hidden hover:border-[var(--accent-primary)]/60 transition-all duration-500">
-                
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Github className="w-5 h-5 text-[var(--accent-primary)]" />
-                    <span className="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-wider">
-                      {language === 'uk' ? 'Топ Проект' : 
-                       language === 'nl' ? 'Top Project' : 
-                       language === 'ar' ? 'أفضل مشروع' :
-                       language === 'es' ? 'Proyecto Principal' :
-                       'Featured Repo'}
-                    </span>
                   </div>
-                  
-                  {/* Pagination Dots */}
-                  {repos.length > 0 && (
-                    <div className="flex gap-1">
-                      {repos.map((_, index) => (
-                        <motion.button
-                          key={index}
-                          onClick={() => setCurrentRepoIndex(index)}
-                          className={`transition-all rounded-full ${
-                            index === currentRepoIndex
-                              ? 'w-4 h-1.5 bg-[var(--accent-primary)]'
-                              : 'w-1.5 h-1.5 bg-[var(--text-secondary)]/30'
-                          }`}
-                          whileHover={{ scale: 1.2 }}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <AnimatePresence mode="wait">
-                  {!reposLoading && currentRepo && (
-                    <motion.div
-                      key={currentRepo.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      <h3 className="text-lg font-black text-[var(--text-primary)] mb-2 line-clamp-1">
-                        {currentRepo.name}
-                      </h3>
-                      
-                      <p className="text-sm text-[var(--text-secondary)] mb-3 line-clamp-2">
-                        {currentRepo.description || 'No description'}
-                      </p>
-                      
-                      <div className="flex items-center gap-3 mb-3 text-sm">
-                        {currentRepo.language && (
-                          <div className="flex items-center gap-1.5">
-                            <div
-                              className="w-2.5 h-2.5 rounded-full"
-                              style={{ backgroundColor: getLanguageColor(currentRepo.language) }}
-                            />
-                            <span className="text-[var(--text-secondary)]">{currentRepo.language}</span>
-                          </div>
-                        )}
-                        <div className="flex items-center gap-1 text-[var(--text-secondary)]">
-                          <Star className="w-3.5 h-3.5 text-yellow-500" />
-                          <span className="font-bold">{currentRepo.stargazers_count}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-[var(--text-secondary)]">
-                          <GitFork className="w-3.5 h-3.5 text-blue-500" />
-                          <span className="font-bold">{currentRepo.forks_count}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-2">
-                        <motion.a
-                          href={currentRepo.html_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[var(--accent-primary)] text-black font-bold rounded-xl text-sm"
-                          whileHover={{ scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                        >
-                          <Github className="w-4 h-4" />
-                          Code
-                        </motion.a>
-                        {currentRepo.homepage && (
-                          <motion.a
-                            href={currentRepo.homepage}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] font-bold rounded-xl text-sm"
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                            Demo
-                          </motion.a>
-                        )}
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {reposLoading && (
-                    <div className="flex items-center justify-center h-32">
-                      <motion.div
-                        className="w-8 h-8 border-4 border-[var(--accent-primary)] border-t-transparent rounded-full"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                      />
-                    </div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </motion.div>
-          </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
 
           {/* Scroll Indicator */}
           <motion.div
@@ -798,6 +784,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
 
       {/* Modals */}
       <BookCallModal isOpen={isBookCallOpen} onClose={() => setIsBookCallOpen(false)} />
+      <AvailabilityScheduleModal isOpen={isAvailabilityScheduleOpen} onClose={() => setIsAvailabilityScheduleOpen(false)} />
     </>
   );
 }
