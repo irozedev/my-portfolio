@@ -8,6 +8,7 @@ import { useAuth } from "../contexts/auth-context";
 import { useAvailability } from "../contexts/availability-context";
 import { ModernAuthModal } from "./modern-auth-modal";
 import { BookCallModal } from "./book-call-fixed";
+import { AvailabilityScheduleModal } from "./availability-schedule-modal";
 
 interface NavigationProps {
   onOpenProfile?: () => void;
@@ -21,6 +22,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showBookCallModal, setShowBookCallModal] = useState(false);
+  const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
   const { scrollYProgress } = useScroll();
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
@@ -365,13 +367,20 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                   </div>
                 </div>
                 
-                {/* Live Status Badge - Enhanced */}
-                <motion.div 
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--bg-secondary)]/60 backdrop-blur-md border border-[var(--border-color)] group-hover:border-[var(--accent-primary)]/40 transition-all relative overflow-hidden"
+                {/* Live Status Badge - Enhanced - CLICKABLE */}
+                <motion.button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowAvailabilityModal(true);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--bg-secondary)]/60 backdrop-blur-md border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 transition-all relative overflow-hidden cursor-pointer"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
                   whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title="Click to view availability schedule"
                 >
                   {/* Shimmer Effect */}
                   <motion.div
@@ -414,7 +423,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                       'Busy'
                     )}
                   </span>
-                </motion.div>
+                </motion.button>
               </motion.a>
             </div>
 
@@ -1055,6 +1064,12 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
       <BookCallModal
         isOpen={showBookCallModal}
         onClose={() => setShowBookCallModal(false)}
+      />
+
+      {/* Availability Schedule Modal */}
+      <AvailabilityScheduleModal
+        isOpen={showAvailabilityModal}
+        onClose={() => setShowAvailabilityModal(false)}
       />
     </>
   );

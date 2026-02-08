@@ -33,21 +33,26 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
   const projectId = project.id || project.title.toLowerCase().replace(/\s+/g, '-');
 
   useEffect(() => {
-    // Store scroll position and block body scroll
-    const scrollY = window.pageYOffset;
-    document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
+    // Save scroll position
+    const scrollY = window.scrollY;
+    
+    // Prevent scrolling
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
     document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
+    document.body.style.width = '100%';
     
     return () => {
-      // Restore scroll position
-      const currentScrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.overflow = "";
-      document.body.style.width = "";
-      window.scrollTo(0, parseInt(currentScrollY || "0") * -1);
+      // Restore body styles
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      
+      // Restore scroll position using requestAnimationFrame
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY);
+      });
     };
   }, []);
 
@@ -61,13 +66,13 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop - DARK THEME */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={handleClose}
-        className="fixed inset-0 bg-white/80 dark:bg-black/80 backdrop-blur-md z-[100000]"
+        className="fixed inset-0 bg-black/90 backdrop-blur-md z-[100000]"
       />
 
       {/* Modal */}

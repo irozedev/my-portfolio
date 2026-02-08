@@ -1,9 +1,9 @@
 import { motion, useMotionValue, useTransform, useScroll, AnimatePresence } from "motion/react";
-import { ArrowRight, Sparkles, Code, Zap, Play, Github, Linkedin, Mail, Briefcase, Star, GitFork, ExternalLink, Award, CheckCircle2, TrendingUp, Users, Rocket, Lightbulb, Terminal, Flame, Heart } from "lucide-react";
+import { ArrowRight, Sparkles, Code, Zap, Play, Github, Linkedin, Mail, Briefcase, Star, GitFork, ExternalLink, Terminal, ChevronDown, Flame, Award, CheckCircle2, Users, TrendingUp } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { useAvailability } from "../contexts/availability-context";
 import { Button } from "./ui/button";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { BookCallModal } from "./book-call-fixed";
 import { AvailabilityScheduleModal } from "./availability-schedule-modal";
 import { getFormattedStats } from "../../utils/stats-calculator";
@@ -50,12 +50,6 @@ const codingLines = [
   "const success = problems.map(solve);",
   "while(coding) { coffee.drink(); }",
   "export const quality = 'guaranteed';",
-];
-
-const quickFacts = [
-  { icon: Flame, label: "Hot Projects", value: "6 Active", color: "#FF4500" },
-  { icon: Heart, label: "Client Satisfaction", value: "99.8%", color: "#FF1493" },
-  { icon: Lightbulb, label: "Innovation", value: "24/7", color: "#FFD700" },
 ];
 
 const dynamicStats = getFormattedStats();
@@ -667,118 +661,164 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
             </div>
           </div>
 
-          {/* Middle Row - Quick Facts (EXPANDED) */}
-          <div className="mb-4">
-            
-            {/* Quick Facts Card - Full Width */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="relative group"
-            >
-              <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border border-[var(--border-color)] rounded-3xl p-6 overflow-hidden hover:border-[var(--accent-primary)]/50 transition-all duration-500">
-                
-                <div className="flex items-center gap-2 mb-4">
-                  <Lightbulb className="w-5 h-5 text-[var(--accent-primary)]" />
-                  <span className="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-wider">
-                    {language === 'uk' ? 'Швидкі Факти' : 
-                     language === 'nl' ? 'Snelle Feiten' : 
-                     language === 'ar' ? 'حقائق سريعة' :
-                     language === 'es' ? 'Datos Rápidos' :
-                     'Quick Facts'}
-                  </span>
-                </div>
+          {/* Integrated Compact Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            onViewportEnter={() => setCountersStarted(true)}
+            viewport={{ once: true, amount: 0.3 }}
+            className="mt-3 md:mt-4"
+          >
+            {/* Glassmorphism Container - MORE COMPACT */}
+            <div className="relative bg-[var(--bg-secondary)]/60 backdrop-blur-2xl border border-[var(--border-color)] rounded-xl md:rounded-2xl p-3 md:p-4 overflow-hidden shadow-2xl">
+              
+              {/* Gradient Background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-primary)]/5 via-purple-500/5 to-pink-500/5 pointer-events-none" />
+              
+              {/* Animated Glow */}
+              <motion.div
+                className="absolute inset-0 opacity-30 pointer-events-none"
+                animate={{
+                  background: [
+                    'radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.15) 0%, transparent 50%)',
+                    'radial-gradient(circle at 80% 50%, rgba(147, 51, 234, 0.15) 0%, transparent 50%)',
+                    'radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%)',
+                    'radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.15) 0%, transparent 50%)',
+                  ]
+                }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              />
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {quickFacts.map((fact, index) => {
+              <div className="relative z-10">
+                {/* Quick Facts Row - COMPACT */}
+                <div className="grid grid-cols-3 gap-2 md:gap-3 mb-2 md:mb-3">
+                  {[
+                    { 
+                      icon: Flame, 
+                      label: language === 'uk' ? 'Активні' : 
+                             language === 'nl' ? 'Actief' : 
+                             language === 'ar' ? 'نشط' :
+                             language === 'es' ? 'Activos' :
+                             'Active', 
+                      value: '6', 
+                      color: '#ff6b35' 
+                    },
+                    { 
+                      icon: Star, 
+                      label: language === 'uk' ? 'Рейтинг' : 
+                             language === 'nl' ? 'Rating' : 
+                             language === 'ar' ? 'التقييم' :
+                             language === 'es' ? 'Rating' :
+                             'Rating', 
+                      value: '99.8%', 
+                      color: '#ffd700' 
+                    },
+                    { 
+                      icon: Zap, 
+                      label: language === 'uk' ? 'Онлайн' : 
+                             language === 'nl' ? 'Online' : 
+                             language === 'ar' ? 'متصل' :
+                             language === 'es' ? 'En Línea' :
+                             'Online', 
+                      value: '24/7', 
+                      color: '#00d9ff' 
+                    },
+                  ].map((fact, index) => {
                     const Icon = fact.icon;
                     return (
                       <motion.div
                         key={fact.label}
-                        initial={{ opacity: 0, scale: 0.8 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.6 + index * 0.1 }}
-                        whileHover={{ scale: 1.05, y: -3 }}
-                        className="relative p-4 bg-[var(--bg-primary)]/40 backdrop-blur-sm border border-[var(--border-color)] rounded-xl hover:border-[var(--accent-primary)]/30 transition-all"
+                        transition={{ delay: 0.7 + index * 0.1 }}
+                        whileHover={{ scale: 1.03, y: -2 }}
+                        className="relative p-2 md:p-3 bg-[var(--bg-primary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg md:rounded-xl hover:border-[var(--accent-primary)]/40 transition-all group"
                       >
-                        <Icon className="w-5 h-5 mb-2" style={{ color: fact.color }} />
-                        <div className="text-xs text-[var(--text-muted)] mb-1">{fact.label}</div>
-                        <div className="text-lg font-bold text-[var(--text-primary)]">{fact.value}</div>
+                        {/* Icon Glow - SMALLER */}
+                        <div className="absolute top-2 left-2 w-6 h-6 md:w-8 md:h-8 rounded-full blur-lg opacity-40 group-hover:opacity-70 transition-opacity" style={{ background: fact.color }} />
+                        
+                        <div className="relative">
+                          <Icon className="w-4 h-4 md:w-5 md:h-5 mb-1 md:mb-2" style={{ color: fact.color }} />
+                          <div className="text-sm md:text-lg lg:text-xl font-black text-[var(--text-primary)] mb-0.5" dir="ltr">
+                            {fact.value}
+                          </div>
+                          <div className="text-[9px] md:text-[10px] text-[var(--text-muted)] font-medium uppercase tracking-wider">
+                            {fact.label}
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+
+                {/* Stats Row - COMPACT */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
+                  {[
+                    { icon: Award, value: `${animatedStats.years}+`, label: t("hero.yearsExperience") || "Years", color: "#FFD700" },
+                    { icon: CheckCircle2, value: `${animatedStats.projects}+`, label: t("hero.projectsCompleted") || "Projects", color: "#00d9ff" },
+                    { icon: Users, value: `${animatedStats.clients}+`, label: t("hero.happyClients") || "Clients", color: "#9333ea" },
+                    { icon: TrendingUp, value: `${animatedStats.success}%`, label: t("hero.successRate") || "Success", color: "#10b981" },
+                  ].map((stat, index) => {
+                    const Icon = stat.icon;
+                    return (
+                      <motion.div
+                        key={stat.label}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.9 + index * 0.1 }}
+                        whileHover={{ scale: 1.03, y: -2 }}
+                        className="relative p-2 md:p-3 bg-[var(--bg-primary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg md:rounded-xl hover:border-[var(--accent-primary)]/40 transition-all group"
+                      >
+                        {/* Icon Glow - SMALLER */}
+                        <div className="absolute top-2 left-2 w-5 h-5 md:w-6 md:h-6 rounded-full blur-md opacity-30 group-hover:opacity-60 transition-opacity" style={{ background: stat.color }} />
+                        
+                        <div className="relative">
+                          <Icon className="w-3.5 h-3.5 md:w-4 md:h-4 mb-1" style={{ color: stat.color }} />
+                          <div 
+                            className="text-lg md:text-xl lg:text-2xl font-black bg-gradient-to-r from-[#00d9ff] to-cyan-400 bg-clip-text text-transparent mb-0.5"
+                            dir="ltr"
+                          >
+                            {stat.value}
+                          </div>
+                          <div className="text-[9px] md:text-[10px] text-[var(--text-muted)] font-medium uppercase tracking-wide">
+                            {stat.label}
+                          </div>
+                        </div>
                       </motion.div>
                     );
                   })}
                 </div>
               </div>
-            </motion.div>
-          </div>
-
-          {/* Bottom Row - Stats ONLY (Full Width) */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            onViewportEnter={() => setCountersStarted(true)}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-3"
-          >
-            {[
-              { icon: Award, value: `${animatedStats.years}+`, label: t("hero.yearsExperience") || "Years", color: "#FFD700" },
-              { icon: CheckCircle2, value: `${animatedStats.projects}+`, label: t("hero.projectsCompleted") || "Projects", color: "#00d9ff" },
-              { icon: Users, value: `${animatedStats.clients}+`, label: t("hero.happyClients") || "Clients", color: "#9333ea" },
-              { icon: TrendingUp, value: `${animatedStats.success}%`, label: t("hero.successRate") || "Success", color: "#10b981" },
-            ].map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.7 + index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="relative group"
-                >
-                  <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-xl border border-[var(--border-color)] rounded-2xl p-4 md:p-6 overflow-hidden transition-all duration-300 hover:border-[var(--accent-primary)]/50">
-                    
-                    <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-primary)]/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    
-                    <div className="relative z-10">
-                      <Icon className="w-5 h-5 md:w-6 md:h-6 mb-2 md:mb-3" style={{ color: stat.color }} />
-                      <div 
-                        className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#00d9ff] to-cyan-400 bg-clip-text text-transparent mb-1"
-                        dir="ltr"
-                      >
-                        {stat.value}
-                      </div>
-                      <div className="text-xs md:text-sm text-[var(--text-muted)] font-medium">
-                        {stat.label}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+            </div>
           </motion.div>
 
-          {/* Scroll Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5 }}
-            className="text-center mt-12"
-          >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="flex flex-col items-center gap-2 text-[var(--text-muted)]"
+          {/* Scroll Indicator - CENTERED */}
+          <div className="w-full flex justify-center">
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.5 }}
+              onClick={() => {
+                const aboutSection = document.getElementById('about');
+                if (aboutSection) {
+                  aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
+              className="mt-8 md:mt-12 cursor-pointer"
             >
-              <TrendingUp className="w-6 h-6 rotate-90" />
-              <span className="text-xs font-medium uppercase tracking-wider">
-                {t("hero.scrollDown") || "Explore More"}
-              </span>
-            </motion.div>
-          </motion.div>
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="flex flex-col items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent-primary)] transition-colors"
+              >
+                <ChevronDown className="w-6 h-6" />
+                <span className="text-xs font-medium uppercase tracking-wider">
+                  {t("hero.scrollDown") || "Explore More"}
+                </span>
+              </motion.div>
+            </motion.button>
+          </div>
         </div>
       </motion.section>
 
