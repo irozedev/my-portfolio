@@ -31,7 +31,7 @@ export function CookieBanner() {
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:bottom-20 md:max-w-md z-[60] bg-[var(--card-bg)] border-2 border-[var(--border-color)] rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur-xl max-h-[85vh] overflow-y-auto"
+          className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:bottom-20 md:max-w-md z-[200000] bg-[var(--card-bg)] border-2 border-[var(--border-color)] rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur-xl max-h-[85vh] overflow-y-auto"
         >
           {/* Close Button */}
           <button

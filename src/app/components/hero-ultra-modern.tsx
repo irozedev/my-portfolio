@@ -335,13 +335,27 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                 
                 {/* Gradient Overlay */}
                 <motion.div
-                  className="absolute inset-0 opacity-10"
+                  className="absolute inset-0 opacity-20 pointer-events-none"
                   style={{
-                    background: "linear-gradient(135deg, #00d9ff, #9333ea, #ec4899)",
-                    backgroundSize: "200% 200%"
+                    background: "linear-gradient(135deg, #00d9ff 0%, #9333ea 35%, #ec4899 70%, #00d9ff 100%)",
+                    backgroundSize: "400% 400%"
                   }}
                   animate={{
                     backgroundPosition: ['0% 0%', '100% 100%', '0% 0%']
+                  }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                />
+
+                {/* Additional glow effect */}
+                <motion.div
+                  className="absolute inset-0 opacity-10 blur-3xl pointer-events-none"
+                  animate={{
+                    background: [
+                      'radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.6) 0%, transparent 50%)',
+                      'radial-gradient(circle at 80% 50%, rgba(147, 51, 234, 0.6) 0%, transparent 50%)',
+                      'radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.6) 0%, transparent 50%)',
+                      'radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.6) 0%, transparent 50%)',
+                    ]
                   }}
                   transition={{ duration: 10, repeat: Infinity }}
                 />
@@ -499,9 +513,9 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="relative group"
+                className="relative group h-full"
               >
-                <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border border-[var(--border-color)] rounded-3xl p-6 overflow-hidden hover:border-[var(--accent-primary)]/50 transition-all duration-500">
+                <div className="h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border border-[var(--border-color)] rounded-3xl p-5 md:p-6 overflow-hidden hover:border-[var(--accent-primary)]/50 transition-all duration-500 flex flex-col">
                   
                   <div className="flex items-center gap-2 mb-3">
                     <Terminal className="w-5 h-5 text-[var(--accent-primary)]" />
@@ -514,8 +528,8 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                     </span>
                   </div>
 
-                  <div className="bg-[var(--bg-primary)]/60 backdrop-blur-sm border border-[var(--border-color)] rounded-xl p-4 font-mono text-xs md:text-sm">
-                    <div className="flex items-start gap-2">
+                  <div className="bg-[var(--bg-primary)]/60 backdrop-blur-sm border border-[var(--border-color)] rounded-xl p-4 font-mono text-xs md:text-sm flex-1 flex flex-col justify-between">
+                    <div className="flex items-start gap-2 mb-3">
                       <span className="text-purple-500 select-none" dir="ltr">{'>'}</span>
                       <div className="flex-1 min-w-0">
                         <span className="text-[var(--text-primary)]" dir="ltr">{typedText}</span>
@@ -527,15 +541,36 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                         />
                       </div>
                     </div>
+                    
+                    {/* Output lines */}
+                    <div className="space-y-1 text-[10px] md:text-xs text-green-400 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[var(--text-muted)]" dir="ltr">✓</span>
+                        <span dir="ltr">Build successful</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[var(--text-muted)]" dir="ltr">✓</span>
+                        <span dir="ltr">Tests passing: 127/127</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[var(--text-muted)]" dir="ltr">⚡</span>
+                        <span dir="ltr">Performance: 98/100</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="mt-3 flex items-center gap-2 text-xs text-[var(--text-muted)]">
-                    <div className="flex items-center gap-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span>{language === 'uk' ? 'Активний' : language === 'nl' ? 'Actief' : language === 'ar' ? 'نشط' : language === 'es' ? 'Activo' : 'Active'}</span>
+                  <div className="mt-3 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2 text-[var(--text-muted)]">
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                        <span>{language === 'uk' ? 'Активний' : language === 'nl' ? 'Actief' : language === 'ar' ? 'نشط' : language === 'es' ? 'Activo' : 'Active'}</span>
+                      </div>
+                      <span className="text-[var(--text-secondary)]">•</span>
+                      <span dir="ltr">{belgiumTime}</span>
                     </div>
-                    <span className="text-[var(--text-secondary)]">•</span>
-                    <span dir="ltr">{belgiumTime}</span>
+                    <div className="text-[var(--accent-primary)] font-bold" dir="ltr">
+                      roze.live
+                    </div>
                   </div>
                 </div>
               </motion.div>

@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "motion/react";
 import { Code2, Palette, Database, Wrench, Globe, Zap, Box, CheckCircle2, X, Award, Briefcase, Calendar } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface SkillExperience {
   company: string;
@@ -270,6 +270,17 @@ const skills: Skill[] = [
 
 export function SkillsModern() {
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <>
@@ -289,6 +300,17 @@ export function SkillsModern() {
                 whileTap={{ scale: 0.98 }}
                 className="group relative bg-[var(--bg-secondary)]/50 backdrop-blur-sm border-2 border-[var(--border-color)] rounded-xl sm:rounded-2xl p-4 sm:p-5 hover:border-[#00d9ff] transition-all duration-300 overflow-hidden cursor-pointer text-left"
               >
+                {/* TAP/CLICK Hint Badge */}
+                <div className="absolute top-2 right-2 z-20">
+                  <motion.span
+                    className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#00d9ff]/20 text-[#00d9ff] border border-[#00d9ff]/30 opacity-0 group-hover:opacity-100 transition-opacity"
+                    initial={{ scale: 0.8 }}
+                    whileHover={{ scale: 1 }}
+                  >
+                    {isMobile ? '👆 TAP' : '🖱️ CLICK'}
+                  </motion.span>
+                </div>
+
                 {/* Animated Background Gradient */}
                 <motion.div 
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"

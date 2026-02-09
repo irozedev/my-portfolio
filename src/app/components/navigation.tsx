@@ -55,19 +55,33 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
       
+      // Update active section based on scroll position
       const sections = navItems.map(item => item.href.replace('#', '') || 'home');
-      const current = sections.find(section => {
-        const element = section === 'home' ? document.body : document.getElementById(section);
+      let found = false;
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
+          // Check if section is in viewport (top is within upper 40% of screen)
+          if (rect.top <= window.innerHeight * 0.4 && rect.bottom >= 0) {
+            setActiveSection(section);
+            found = true;
+            break;
+          }
         }
-        return false;
-      });
-      if (current) setActiveSection(current);
+      }
+      
+      // Default to home if at top of page
+      if (!found && window.scrollY < 100) {
+        setActiveSection('home');
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    // Run immediately on mount
+    handleScroll();
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [navItems]);
 
@@ -623,14 +637,15 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               <div className="relative language-selector">
                 <motion.button
                   onClick={() => setShowLangMenu(!showLangMenu)}
-                  className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors flex items-center gap-1.5"
+                  className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors flex items-center gap-2"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Globe className="w-5 h-5 text-[var(--text-secondary)]" />
+                  <span className="text-xl">{currentLang.flag}</span>
                   <span className="text-xs font-medium text-[var(--text-secondary)] uppercase">
                     {displayLang}
                   </span>
+                  <ChevronDown className="w-4 h-4 text-[var(--text-secondary)]" />
                 </motion.button>
                 
                 {showLangMenu && (
@@ -718,11 +733,19 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                     setShowLangMenu(!showLangMenu);
                     setShowUserMenu(false);
                   }}
-                  className="p-2 bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg hover:bg-[var(--accent-primary)]/10 transition-colors flex items-center justify-center"
+                  className="p-2 bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg hover:bg-[var(--accent-primary)]/10 transition-colors flex flex-col items-center justify-center relative"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Globe className="w-5 h-5 text-[var(--text-secondary)]" />
+                  {/* Flag above Globe icon */}
+                  <motion.span 
+                    className="text-xs mb-0.5"
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    {currentLang.flag}
+                  </motion.span>
+                  <Globe className="w-4 h-4 text-[var(--text-secondary)]" />
                 </motion.button>
                 
                 <AnimatePresence>
@@ -1070,6 +1093,10 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
       <AvailabilityScheduleModal
         isOpen={showAvailabilityModal}
         onClose={() => setShowAvailabilityModal(false)}
+        onBookCall={() => {
+          setShowAvailabilityModal(false);
+          setShowBookCallModal(true);
+        }}
       />
     </>
   );
