@@ -70,18 +70,18 @@ export function AvailabilityWidget({ inline = false }: { inline?: boolean }) {
 
   return (
     <div ref={widgetRef} className="relative">
-      {/* Compact Badge */}
+      {/* Compact Badge - Developer Style */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[var(--bg-secondary)]/80 backdrop-blur-sm border border-[var(--border-color)] rounded-full hover:border-[var(--accent-primary)]/50 transition-all group"
-        whileHover={{ scale: 1.05 }}
+        className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] rounded-lg hover:border-[var(--accent-primary)]/50 transition-all group font-mono text-xs sm:text-sm shadow-[0_2px_10px_rgba(0,0,0,0.1)]"
+        whileHover={{ scale: 1.05, boxShadow: "0 4px 20px rgba(0,217,255,0.2)" }}
         whileTap={{ scale: 0.95 }}
       >
         {/* Animated Status Dot */}
         <div className="relative flex items-center gap-2">
           <div className={`w-2.5 h-2.5 ${getStatusColor()} rounded-full`} />
           <div className={`absolute left-0 w-2.5 h-2.5 ${getStatusColor()} rounded-full animate-ping opacity-75`} />
-          <span className="text-xs sm:text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors ml-2">
+          <span className="font-bold text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors ml-2">
             {getStatusText()}
           </span>
         </div>
@@ -89,7 +89,7 @@ export function AvailabilityWidget({ inline = false }: { inline?: boolean }) {
         <Calendar className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent-primary)] transition-colors" />
       </motion.button>
 
-      {/* Calendar Popup */}
+      {/* Calendar Popup - DEVELOPER STYLE */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -97,13 +97,13 @@ export function AvailabilityWidget({ inline = false }: { inline?: boolean }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full mt-2 left-0 sm:left-auto sm:right-0 w-[calc(100vw-2rem)] sm:w-96 max-w-md bg-[var(--bg-secondary)]/95 backdrop-blur-xl border border-[var(--border-color)] rounded-2xl shadow-2xl shadow-[var(--accent-primary)]/10 p-4 sm:p-5 z-[100000]"
+            className="absolute top-full mt-2 left-0 sm:left-auto sm:right-0 w-[calc(100vw-2rem)] sm:w-96 max-w-md bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] rounded-lg shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-4 sm:p-5 z-[100000]"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--border-color)]">
+            {/* Header - Developer Style */}
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--glass-border)]">
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-[var(--accent-primary)]" />
-                <h3 className="text-sm font-bold text-[var(--text-primary)]">
+                <h3 className="text-sm font-mono font-bold text-[var(--text-primary)]">
                   {t('availability.schedule')}
                 </h3>
               </div>
@@ -115,15 +115,15 @@ export function AvailabilityWidget({ inline = false }: { inline?: boolean }) {
               </button>
             </div>
 
-            {/* Current Status */}
-            <div className="mb-4 p-3 bg-gradient-to-r from-[var(--accent-primary)]/10 to-purple-500/10 border border-[var(--accent-primary)]/20 rounded-xl">
+            {/* Current Status - Developer Box */}
+            <div className="mb-4 p-3 bg-gradient-to-r from-[var(--accent-primary)]/10 to-purple-500/10 border border-[var(--accent-primary)]/20 rounded-lg">
               <div className="flex items-center gap-2 mb-1">
                 <div className={`w-2 h-2 ${getStatusColor()} rounded-full animate-pulse`} />
-                <span className="text-xs font-semibold text-[var(--text-primary)]">
+                <span className="text-xs font-mono font-bold text-[var(--text-primary)]">
                   {currentStatus.message}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)]">
+              <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] font-mono">
                 <MapPin className="w-3 h-3" />
                 <span>{availabilityConfig.timezone}</span>
               </div>
@@ -131,11 +131,11 @@ export function AvailabilityWidget({ inline = false }: { inline?: boolean }) {
 
             {/* Special Notice */}
             {availabilityConfig.specialNotice && (
-              <div className="mb-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+              <div className="mb-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
                 <div className="flex items-start gap-2">
                   <span className="text-base">⏰</span>
                   <div>
-                    <p className="text-xs font-medium text-amber-400 mb-1">
+                    <p className="text-xs font-mono font-bold text-amber-400 mb-1">
                       Until {availabilityConfig.specialNotice.until}
                     </p>
                     <p className="text-xs text-[var(--text-secondary)]">
@@ -146,27 +146,27 @@ export function AvailabilityWidget({ inline = false }: { inline?: boolean }) {
               </div>
             )}
 
-            {/* Weekly Schedule */}
+            {/* Weekly Schedule - Developer Table */}
             <div className="space-y-2">
-              <h4 className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-3">
+              <h4 className="text-xs font-mono font-bold text-[var(--text-muted)] uppercase tracking-wide mb-3">
                 {t('availability.regularHours')}
               </h4>
               {availabilityConfig.regularHours.map((day, index) => (
                 <div
                   key={index}
-                  className={`flex items-center justify-between p-2 rounded-lg ${
+                  className={`flex items-center justify-between p-2 rounded-lg font-mono text-xs ${
                     day.available
                       ? 'bg-green-500/5 border border-green-500/10'
                       : 'bg-[var(--bg-tertiary)] border border-transparent'
                   }`}
                 >
-                  <span className={`text-sm font-medium ${
+                  <span className={`font-bold ${
                     day.available ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'
                   }`}>
                     {getDayTranslation(day.day)}
                   </span>
-                  <span className={`text-xs ${
-                    day.available ? 'text-green-400' : 'text-[var(--text-muted)]'
+                  <span className={`${
+                    day.available ? 'text-green-400 font-bold' : 'text-[var(--text-muted)]'
                   }`}>
                     {day.hours === 'Off' ? t('availability.off') : day.hours}
                   </span>
@@ -174,9 +174,9 @@ export function AvailabilityWidget({ inline = false }: { inline?: boolean }) {
               ))}
             </div>
 
-            {/* Footer Note */}
-            <div className="mt-4 pt-3 border-t border-[var(--border-color)]">
-              <p className="text-xs text-center text-[var(--text-muted)]">
+            {/* Footer Note - Developer Style */}
+            <div className="mt-4 pt-3 border-t border-[var(--glass-border)]">
+              <p className="text-xs text-center text-[var(--text-muted)] font-mono">
                 {t('availability.footer')}
               </p>
             </div>

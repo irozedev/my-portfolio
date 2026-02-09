@@ -139,9 +139,9 @@ export function StatsAirport() {
 
   return (
     <section className="py-6 md:py-8 px-4">
-      <div className="container mx-auto max-w-6xl">
-        {/* Developer-Style Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-3">
+      <div className="container mx-auto max-w-7xl">
+        {/* Developer-Style Stats Grid - FULL WIDTH */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-4">
           {stats.map((stat, index) => (
             <StatCard
               key={index}

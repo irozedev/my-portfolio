@@ -117,7 +117,7 @@ export function GitHubShowcase() {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-[100px]" />
       </div>
 
-      <div className="container mx-auto max-w-6xl relative z-10">
+      <div className="container mx-auto max-w-7xl relative z-10">{/* Changed from max-w-6xl to max-w-7xl */}
         
         {/* Section Header */}
         <motion.div

@@ -16,7 +16,9 @@ import {
   ChevronRight,
   TrendingUp,
   Clock,
-  Keyboard
+  Keyboard,
+  Hand,
+  ArrowRight
 } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { useFavorites } from "../hooks/use-favorites";
@@ -595,6 +597,61 @@ export function PortfolioCreativeSlider() {
                     className="portfolio-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl overflow-hidden hover:border-purple-500/50 transition-all duration-500 group cursor-pointer"
                     whileHover={{ y: -8 }}
                   >
+                    {/* 🔥 TAP/CLICK INDICATOR - DEVELOPER STYLE - TOP POSITION */}
+                    {isActive && (
+                      <motion.div
+                        className="absolute top-4 left-4 z-30 flex items-center gap-2 px-3 py-2 bg-purple-500 text-white rounded-lg font-mono font-bold text-xs shadow-[0_0_30px_rgba(168,85,247,0.9)] md:hidden"
+                        animate={{
+                          boxShadow: [
+                            "0 0 20px rgba(168,85,247,0.9)",
+                            "0 0 40px rgba(168,85,247,1)",
+                            "0 0 20px rgba(168,85,247,0.9)",
+                          ],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                        }}
+                      >
+                        <Hand className="w-4 h-4" />
+                        <span>TAP TO OPEN</span>
+                      </motion.div>
+                    )}
+                    
+                    {isActive && (
+                      <motion.div
+                        className="hidden md:flex absolute top-4 left-4 z-30 items-center gap-2 px-3 py-2 bg-purple-500 text-white rounded-lg font-mono font-bold text-xs shadow-[0_0_30px_rgba(168,85,247,0.9)]"
+                        animate={{
+                          boxShadow: [
+                            "0 0 20px rgba(168,85,247,0.9)",
+                            "0 0 40px rgba(168,85,247,1)",
+                            "0 0 20px rgba(168,85,247,0.9)",
+                          ],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                        }}
+                      >
+                        <Hand className="w-4 h-4" />
+                        <span>CLICK TO OPEN</span>
+                      </motion.div>
+                    )}
+
+                    {/* SIDE CARDS INDICATOR - TOP POSITION */}
+                    {!isActive && (
+                      <motion.div
+                        className="absolute top-4 left-4 z-30 flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm text-white/60 rounded-lg font-mono text-xs border border-white/20"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <ArrowRight className="w-3 h-3" />
+                        <span className="hidden sm:inline">CLICK TO CENTER</span>
+                        <span className="sm:hidden">CENTER</span>
+                      </motion.div>
+                    )}
+                    
                     {/* Featured Badge */}
                     {project.featured && (
                       <div className="absolute top-4 left-4 z-20 px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white text-xs font-bold shadow-lg flex items-center gap-1">

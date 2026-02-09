@@ -475,20 +475,18 @@ export function ServicesCreativeSlider() {
                           sliderRef.current?.slickGoTo(index);
                         }
                       }}
-                      className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-[#00d9ff]/50 transition-all duration-500 group cursor-pointer overflow-visible"
+                      className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-purple-500/50 transition-all duration-500 group cursor-pointer overflow-visible"
                       whileHover={{ y: -10 }}
                     >
-                      {/* 🔥 TAP INDICATOR - ALWAYS VISIBLE ONLY ON ACTIVE */}
+                      {/* 🔥 TAP/CLICK INDICATOR - DEVELOPER STYLE - PURPLE THEME - TOP */}
                       {isActive && (
                         <motion.div
-                          className="absolute -top-2 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-4 py-2.5 bg-[#00d9ff] text-black rounded-full shadow-[0_0_50px_rgba(0,217,255,1)] font-bold text-xs md:text-sm whitespace-nowrap"
+                          className="absolute top-4 left-4 z-30 flex items-center gap-2 px-3 py-2 bg-purple-500 text-white rounded-lg font-mono font-bold text-xs shadow-[0_0_30px_rgba(168,85,247,0.9)] md:hidden"
                           animate={{
-                            scale: [1, 1.15, 1],
-                            y: [0, -5, 0],
                             boxShadow: [
-                              "0 0 40px rgba(0,217,255,1)",
-                              "0 0 70px rgba(0,217,255,1)",
-                              "0 0 40px rgba(0,217,255,1)",
+                              "0 0 20px rgba(168,85,247,0.9)",
+                              "0 0 40px rgba(168,85,247,1)",
+                              "0 0 20px rgba(168,85,247,0.9)",
                             ],
                           }}
                           transition={{
@@ -496,13 +494,42 @@ export function ServicesCreativeSlider() {
                             repeat: Infinity,
                           }}
                         >
-                          <Hand className="w-4 h-4 md:w-5 md:h-5" />
+                          <Hand className="w-4 h-4" />
                           <span>TAP TO OPEN</span>
-                          <motion.div
-                            className="w-2 h-2 bg-black rounded-full"
-                            animate={{ scale: [1, 1.7, 1] }}
-                            transition={{ duration: 1.5, repeat: Infinity }}
-                          />
+                        </motion.div>
+                      )}
+                      
+                      {isActive && (
+                        <motion.div
+                          className="hidden md:flex absolute top-4 left-4 z-30 items-center gap-2 px-3 py-2 bg-purple-500 text-white rounded-lg font-mono font-bold text-xs shadow-[0_0_30px_rgba(168,85,247,0.9)]"
+                          animate={{
+                            boxShadow: [
+                              "0 0 20px rgba(168,85,247,0.9)",
+                              "0 0 40px rgba(168,85,247,1)",
+                              "0 0 20px rgba(168,85,247,0.9)",
+                            ],
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                          }}
+                        >
+                          <Hand className="w-4 h-4" />
+                          <span>CLICK TO OPEN</span>
+                        </motion.div>
+                      )}
+
+                      {/* SIDE CARDS INDICATOR - TOP */}
+                      {!isActive && (
+                        <motion.div
+                          className="absolute top-4 left-4 z-30 flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm text-white/60 rounded-lg font-mono text-xs border border-white/20"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ArrowRight className="w-3 h-3" />
+                          <span className="hidden sm:inline">CLICK TO CENTER</span>
+                          <span className="sm:hidden">CENTER</span>
                         </motion.div>
                       )}
                       
