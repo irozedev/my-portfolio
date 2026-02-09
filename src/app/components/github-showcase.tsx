@@ -92,7 +92,7 @@ export function GitHubShowcase() {
   if (loading) {
     return (
       <section className="py-12 px-4 sm:px-6">
-        <div className="container mx-auto max-w-7xl">
+        <div className="container mx-auto max-w-6xl">
           <div className="flex items-center justify-center h-64">
             <motion.div
               className="w-12 h-12 border-4 border-[var(--accent-primary)] border-t-transparent rounded-full"
@@ -117,7 +117,7 @@ export function GitHubShowcase() {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-[100px]" />
       </div>
 
-      <div className="container mx-auto max-w-7xl relative z-10">
+      <div className="container mx-auto max-w-6xl relative z-10">
         
         {/* Section Header */}
         <motion.div

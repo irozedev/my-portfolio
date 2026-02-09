@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Code, Globe, Bot, ShoppingCart, Workflow, TrendingUp, Sparkles, Zap, CheckCircle2, ArrowRight, ChevronLeft, ChevronRight, Keyboard, Play, Pause } from "lucide-react";
+import { Code, Globe, Bot, ShoppingCart, Workflow, TrendingUp, Sparkles, Zap, CheckCircle2, ArrowRight, ChevronLeft, ChevronRight, Keyboard, Play, Pause, Hand } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import Slider from "react-slick";
 import "@/styles/slick.css";
@@ -478,6 +478,34 @@ export function ServicesCreativeSlider() {
                       className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-[#00d9ff]/50 transition-all duration-500 group cursor-pointer overflow-visible"
                       whileHover={{ y: -10 }}
                     >
+                      {/* 🔥 TAP INDICATOR - ALWAYS VISIBLE ONLY ON ACTIVE */}
+                      {isActive && (
+                        <motion.div
+                          className="absolute -top-2 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-4 py-2.5 bg-[#00d9ff] text-black rounded-full shadow-[0_0_50px_rgba(0,217,255,1)] font-bold text-xs md:text-sm whitespace-nowrap"
+                          animate={{
+                            scale: [1, 1.15, 1],
+                            y: [0, -5, 0],
+                            boxShadow: [
+                              "0 0 40px rgba(0,217,255,1)",
+                              "0 0 70px rgba(0,217,255,1)",
+                              "0 0 40px rgba(0,217,255,1)",
+                            ],
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                          }}
+                        >
+                          <Hand className="w-4 h-4 md:w-5 md:h-5" />
+                          <span>TAP TO OPEN</span>
+                          <motion.div
+                            className="w-2 h-2 bg-black rounded-full"
+                            animate={{ scale: [1, 1.7, 1] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                          />
+                        </motion.div>
+                      )}
+                      
                       {/* Animated Background Gradient */}
                       <motion.div
                         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"

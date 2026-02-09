@@ -1,5 +1,5 @@
-import { motion } from "motion/react";
-import { ExternalLink, Github, Sparkles, ArrowUpRight, Star, Code2, Layers, Zap } from "lucide-react";
+import { motion, useMotionValue, useTransform } from "motion/react";
+import { ExternalLink, Github, Sparkles, ArrowUpRight, Star, Code2, Layers, Zap, Hand } from "lucide-react";
 import { useState, useRef, MouseEvent } from "react";
 import { useLanguage } from "../contexts/language-context";
 import { FeatherSlider } from "./feather-slider";
@@ -147,6 +147,31 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 
         {/* Content */}
         <div className="relative h-full flex flex-col justify-between p-6 md:p-8 z-10">
+          
+          {/* 🔥 TAP INDICATOR - ALWAYS VISIBLE */}
+          <motion.div
+            className="absolute top-4 right-4 z-20 flex items-center gap-2 px-4 py-2.5 bg-[#00d9ff] text-black rounded-full shadow-[0_0_40px_rgba(0,217,255,0.8)] font-bold text-xs md:text-sm"
+            animate={{
+              scale: [1, 1.1, 1],
+              boxShadow: [
+                "0 0 30px rgba(0,217,255,0.8)",
+                "0 0 50px rgba(0,217,255,1)",
+                "0 0 30px rgba(0,217,255,0.8)",
+              ],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+            }}
+          >
+            <Hand className="w-4 h-4 md:w-5 md:h-5" />
+            <span>TAP</span>
+            <motion.div
+              className="w-2 h-2 bg-black rounded-full"
+              animate={{ scale: [1, 1.5, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+          </motion.div>
           
           {/* Top Section */}
           <div className="space-y-3">

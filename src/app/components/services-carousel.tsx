@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useTransform, animate } from "motion/react";
 import { useEffect, useState, useRef } from "react";
-import { Euro, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
+import { Euro, CheckCircle2, ArrowRight, Sparkles, Hand } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 
 interface Service {
@@ -258,6 +258,31 @@ function ServiceCard({
       whileHover={{ scale: isActive ? 1.02 : 1 }}
       transition={{ duration: 0.2 }}
     >
+      {/* 🔥 TAP INDICATOR - ALWAYS VISIBLE */}
+      <motion.div
+        className="absolute top-4 left-4 z-20 flex items-center gap-2 px-4 py-2.5 bg-[#00d9ff] text-black rounded-full shadow-[0_0_40px_rgba(0,217,255,0.9)] font-bold text-xs md:text-sm"
+        animate={{
+          scale: [1, 1.12, 1],
+          boxShadow: [
+            "0 0 30px rgba(0,217,255,0.9)",
+            "0 0 60px rgba(0,217,255,1)",
+            "0 0 30px rgba(0,217,255,0.9)",
+          ],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+        }}
+      >
+        <Hand className="w-4 h-4 md:w-5 md:h-5" />
+        <span>CLICK</span>
+        <motion.div
+          className="w-2 h-2 bg-black rounded-full"
+          animate={{ scale: [1, 1.6, 1] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        />
+      </motion.div>
+      
       {/* Popular Badge */}
       {service.popular && (
         <div className="absolute top-4 right-4 z-10">

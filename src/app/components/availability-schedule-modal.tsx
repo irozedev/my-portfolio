@@ -1,6 +1,8 @@
 import { motion, AnimatePresence } from "motion/react";
-import { X, Clock, Calendar, CheckCircle, Phone } from "lucide-react";
+import { X, Calendar, Clock, CheckCircle, Phone } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
+import { useState } from "react";
+import { BookCallModal } from "./book-call-fixed";
 
 interface AvailabilityScheduleModalProps {
   isOpen: boolean;
@@ -20,6 +22,7 @@ const scheduleData = [
 
 export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: AvailabilityScheduleModalProps) {
   const { language, t } = useLanguage();
+  const [isBookCallOpen, setIsBookCallOpen] = useState(false);
 
   const translations = {
     title: {
@@ -86,62 +89,78 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
   if (!isOpen) return null;
 
   return (
+    <>
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[100000] bg-[var(--bg-primary)]"
+          className="fixed inset-0 z-[100000] flex items-center justify-center p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          style={{ paddingTop: '80px' }} // Space for header on all devices
         >
-          {/* Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-primary)]/10 via-purple-500/10 to-pink-500/10 pointer-events-none" />
-          
-          {/* Animated Orbs */}
+          {/* Backdrop */}
           <motion.div
-            className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--accent-primary)]/20 rounded-full blur-3xl"
-            animate={{
-              scale: [1, 1.2, 1],
-              x: [0, 50, 0],
-              y: [0, 30, 0],
-            }}
-            transition={{ duration: 10, repeat: Infinity }}
-          />
-          <motion.div
-            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
-            animate={{
-              scale: [1.2, 1, 1.2],
-              x: [0, -50, 0],
-              y: [0, -30, 0],
-            }}
-            transition={{ duration: 12, repeat: Infinity }}
-          />
-
-          {/* Close Button - Fixed top right */}
-          <motion.button
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={onClose}
-            className="fixed top-24 right-4 md:right-8 z-10 p-3 bg-[var(--bg-secondary)]/80 hover:bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] hover:border-[var(--accent-primary)] rounded-full text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-all shadow-lg"
-            aria-label="Close"
-            whileHover={{ scale: 1.1, rotate: 90 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <X className="w-6 h-6" />
-          </motion.button>
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
 
-          {/* Content - Scrollable */}
-          <div className="h-full overflow-y-auto">
-            <div className="container mx-auto max-w-5xl px-4 py-8 md:py-12">
+          {/* Modal Container - Compact on Desktop */}
+          <motion.div
+            className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-[var(--bg-primary)] rounded-2xl border border-[var(--border-color)]"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: "spring", damping: 30, stiffness: 400 }}
+          >
+            {/* Gradient Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-primary)]/10 via-purple-500/10 to-pink-500/10 pointer-events-none rounded-3xl" />
+            
+            {/* Animated Orbs - Contained */}
+            <motion.div
+              className="absolute top-1/4 left-1/4 w-64 h-64 bg-[var(--accent-primary)]/20 rounded-full blur-3xl pointer-events-none"
+              animate={{
+                scale: [1, 1.2, 1],
+                x: [0, 30, 0],
+                y: [0, 20, 0],
+              }}
+              transition={{ duration: 10, repeat: Infinity }}
+            />
+            <motion.div
+              className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"
+              animate={{
+                scale: [1.2, 1, 1.2],
+                x: [0, -30, 0],
+                y: [0, -20, 0],
+              }}
+              transition={{ duration: 12, repeat: Infinity }}
+            />
+
+            {/* Close Button */}
+            <motion.button
+              onClick={onClose}
+              className="absolute top-4 right-4 z-10 p-2 md:p-3 bg-[var(--bg-secondary)]/80 hover:bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] hover:border-[var(--accent-primary)] rounded-full text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-all shadow-lg"
+              aria-label="Close"
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <X className="w-5 h-5 md:w-6 md:h-6" />
+            </motion.button>
+
+            {/* Content */}
+            <div className="relative px-5 md:px-8 py-6 md:py-8">
               
               {/* Header */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center mb-8 md:mb-12"
+                className="text-center mb-5 md:mb-6"
               >
-                <div className="inline-flex items-center justify-center gap-3 mb-4">
+                <div className="inline-flex items-center justify-center gap-2 mb-2">
                   <motion.div
-                    className="p-4 bg-gradient-to-br from-[var(--accent-primary)] to-purple-500 rounded-2xl"
+                    className="p-2 bg-gradient-to-br from-[var(--accent-primary)] to-purple-500 rounded-xl"
                     animate={{
                       boxShadow: [
                         "0 0 20px rgba(0, 217, 255, 0.3)",
@@ -151,11 +170,11 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                     }}
                     transition={{ duration: 2, repeat: Infinity }}
                   >
-                    <Calendar className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                    <Calendar className="w-5 h-5 md:w-6 md:h-6 text-white" />
                   </motion.div>
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-[var(--accent-primary)] via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
+                <h1 className="text-2xl md:text-3xl font-black bg-gradient-to-r from-[var(--accent-primary)] via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
                   {getTranslation("title")}
                 </h1>
                 
@@ -163,50 +182,50 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="inline-flex items-center gap-3 px-6 py-3 bg-[var(--accent-primary)]/20 border-2 border-[var(--accent-primary)]/50 rounded-2xl mb-3"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--accent-primary)]/20 border border-[var(--accent-primary)]/50 rounded-lg mb-1.5"
                 >
-                  <Clock className="w-5 h-5 md:w-6 md:h-6 text-[var(--accent-primary)]" />
-                  <span className="text-base md:text-lg font-bold text-[var(--accent-primary)]" dir="ltr">
+                  <Clock className="w-4 h-4 text-[var(--accent-primary)]" />
+                  <span className="text-xs md:text-sm font-bold text-[var(--accent-primary)]" dir="ltr">
                     {getTranslation("workingHours")}
                   </span>
                 </motion.div>
                 
-                <p className="text-sm md:text-base text-[var(--text-muted)]">
+                <p className="text-xs text-[var(--text-muted)]">
                   {getTranslation("subtitle")}
                 </p>
               </motion.div>
 
-              {/* Schedule Grid */}
+              {/* Schedule Grid - Compact 2 columns on desktop */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="grid gap-3 md:gap-4 mb-8 md:mb-12 max-w-2xl mx-auto"
+                className="grid md:grid-cols-2 gap-2 mb-5 md:mb-6"
               >
                 {scheduleData.map((item, index) => (
                   <motion.div
                     key={item.day}
-                    initial={{ opacity: 0, x: -50 }}
+                    initial={{ opacity: 0, x: -30 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + index * 0.05 }}
-                    className={`flex items-center justify-between p-4 md:p-5 rounded-2xl border-2 transition-all hover:scale-[1.02] ${
+                    transition={{ delay: 0.3 + index * 0.03 }}
+                    className={`flex items-center justify-between p-2.5 md:p-3 rounded-lg border transition-all hover:scale-[1.02] ${
                       item.available
                         ? "bg-green-500/10 border-green-500/40 hover:border-green-500/60"
                         : "bg-orange-500/10 border-orange-500/40 hover:border-orange-500/60"
                     }`}
                   >
-                    <div className="flex items-center gap-3 md:gap-4">
+                    <div className="flex items-center gap-2">
                       {item.available ? (
-                        <CheckCircle className="w-6 h-6 md:w-7 md:h-7 text-green-400" />
+                        <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-green-400" />
                       ) : (
-                        <Clock className="w-6 h-6 md:w-7 md:h-7 text-orange-400" />
+                        <Clock className="w-4 h-4 md:w-5 md:h-5 text-orange-400" />
                       )}
-                      <span className="text-base md:text-lg font-bold text-[var(--text-primary)]">
+                      <span className="text-xs md:text-sm font-bold text-[var(--text-primary)]">
                         {getDay(item.day)}
                       </span>
                     </div>
                     <span 
-                      className={`text-sm md:text-base font-bold ${
+                      className={`text-xs font-bold ${
                         item.available ? "text-green-400" : "text-orange-400"
                       }`}
                       dir="ltr"
@@ -217,19 +236,20 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                 ))}
               </motion.div>
 
-              {/* Book a Call Button */}
+              {/* Book a Call Button - NO PHONE ICON */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="max-w-md mx-auto mb-6"
+                transition={{ delay: 0.5 }}
+                className="mb-3 md:mb-4"
               >
                 <motion.button
                   onClick={() => {
                     onClose();
                     onBookCall?.();
+                    setIsBookCallOpen(true);
                   }}
-                  className="w-full flex items-center justify-center gap-3 px-6 py-5 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 hover:from-[var(--accent-primary)]/90 hover:to-cyan-300 text-black font-black text-lg rounded-2xl transition-all shadow-[0_0_40px_rgba(0,217,255,0.3)] hover:shadow-[0_0_60px_rgba(0,217,255,0.5)] relative overflow-hidden group"
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 hover:from-[var(--accent-primary)]/90 hover:to-cyan-300 text-black font-black text-sm md:text-base rounded-xl transition-all shadow-[0_0_30px_rgba(0,217,255,0.3)] hover:shadow-[0_0_50px_rgba(0,217,255,0.5)] relative overflow-hidden group"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -249,26 +269,29 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                     }}
                   />
                   
-                  <Phone className="w-6 h-6" />
                   {getTranslation("bookCallButton")}
                 </motion.button>
               </motion.div>
 
               {/* Note */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
-                className="max-w-2xl mx-auto p-4 md:p-5 bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30 rounded-2xl"
+                transition={{ delay: 0.6 }}
+                className="p-2.5 md:p-3 bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30 rounded-lg"
               >
-                <p className="text-sm md:text-base text-center text-[var(--text-secondary)]">
+                <p className="text-xs text-center text-[var(--text-secondary)]">
                   {getTranslation("note")}
                 </p>
               </motion.div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
+    
+    {/* Book Call Modal with Date/Time Selection */}
+    <BookCallModal isOpen={isBookCallOpen} onClose={() => setIsBookCallOpen(false)} />
+    </>
   );
 }

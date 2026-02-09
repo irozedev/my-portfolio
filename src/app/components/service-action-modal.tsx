@@ -37,11 +37,11 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100]"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[999998]"
       />
 
       {/* Modal */}
-      <div className="fixed inset-0 flex items-center justify-center z-[101] p-4">
+      <div className="fixed inset-0 flex items-center justify-center z-[999999] p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}

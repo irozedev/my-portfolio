@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Code, Globe, Bot, ShoppingCart, Workflow, TrendingUp, Sparkles, Zap, CheckCircle2 } from "lucide-react";
+import { Code, Globe, Bot, ShoppingCart, Workflow, TrendingUp, Sparkles, Zap, CheckCircle2, MousePointerClick } from "lucide-react";
 import { useState } from "react";
 import { ServiceActionModal } from "./service-action-modal";
 import { ServicesCarousel } from "./services-carousel";
@@ -165,6 +165,26 @@ export function ServicesUltra() {
                   className="group"
                 >
                   <div className={`relative h-full bg-[var(--card-bg)] backdrop-blur-xl border border-[var(--card-border)] rounded-3xl overflow-hidden cursor-pointer hover:border-[${service.color}]/50 transition-all`}>
+                    {/* Tap Indicator */}
+                    <motion.div
+                      className="absolute top-4 left-4 z-10 flex items-center gap-2 px-3 py-2 bg-[#00d9ff] text-black rounded-full shadow-lg font-bold text-xs"
+                      animate={{
+                        scale: [1, 1.05, 1],
+                        boxShadow: [
+                          "0 0 20px rgba(0,217,255,0.4)",
+                          "0 0 30px rgba(0,217,255,0.7)",
+                          "0 0 20px rgba(0,217,255,0.4)",
+                        ],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                      }}
+                    >
+                      <MousePointerClick className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Click</span>
+                    </motion.div>
+                    
                     {/* Popular Badge */}
                     {service.popular && (
                       <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full">

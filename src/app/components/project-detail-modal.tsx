@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { X, ExternalLink, Github, Calendar, Users, Zap } from 'lucide-react';
 import { ProjectComments } from './project-comments';
 import { ProjectReactions } from './project-reactions';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface Project {
   id?: string;
@@ -31,28 +31,31 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
 
   // Generate project ID if not provided
   const projectId = project.id || project.title.toLowerCase().replace(/\s+/g, '-');
+  
+  // USE REF to keep scroll position updated
+  const scrollYRef = useRef(0);
 
   useEffect(() => {
-    // Save scroll position
-    const scrollY = window.scrollY;
+    // Save current scroll position
+    scrollYRef.current = window.scrollY;
     
     // Prevent scrolling
     document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
+    document.body.style.top = `-${scrollYRef.current}px`;
     document.body.style.width = '100%';
     
     return () => {
+      const scrollY = scrollYRef.current;
+      
       // Restore body styles
       document.body.style.overflow = '';
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
       
-      // Restore scroll position using requestAnimationFrame
-      requestAnimationFrame(() => {
-        window.scrollTo(0, scrollY);
-      });
+      // Restore scroll position IMMEDIATELY (no animation)
+      window.scrollTo(0, scrollY);
     };
   }, []);
 
@@ -75,11 +78,17 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
         className="fixed inset-0 bg-black/90 backdrop-blur-md z-[100000]"
       />
 
-      {/* Modal */}
+      {/* Modal - ZOOM IN/OUT ANIMATION */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        transition={{ 
+          type: "spring", 
+          damping: 25, 
+          stiffness: 300,
+          duration: 0.3 
+        }}
         className="fixed inset-0 z-[100001] overflow-y-auto"
         onClick={handleClose}
       >

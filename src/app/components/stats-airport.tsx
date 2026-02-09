@@ -1,0 +1,159 @@
+import { motion } from "motion/react";
+import { Award, CheckCircle2, Users, TrendingUp, Flame, Star, Zap, Code2, Cpu, Boxes } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useLanguage } from "../contexts/language-context";
+
+interface StatCardProps {
+  icon: React.ElementType;
+  value: string;
+  label: string;
+  color: string;
+  index: number;
+}
+
+function StatCard({ icon: Icon, value, label, color, index }: StatCardProps) {
+  const [displayValue, setDisplayValue] = useState("0");
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    if (hasAnimated) return;
+
+    const timer = setTimeout(() => {
+      setDisplayValue(value);
+      setHasAnimated(true);
+    }, index * 100);
+
+    return () => clearTimeout(timer);
+  }, [value, index, hasAnimated]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.4,
+        delay: index * 0.05,
+      }}
+      className="relative group"
+    >
+      {/* Card */}
+      <div className="relative bg-[var(--bg-secondary)]/40 backdrop-blur-sm border border-[var(--border-color)] hover:border-[var(--accent-primary)]/50 rounded-xl p-3 md:p-4 overflow-hidden transition-all duration-300">
+        
+        {/* Subtle accent line */}
+        <div 
+          className="absolute top-0 left-0 right-0 h-[2px]"
+          style={{ background: `linear-gradient(90deg, ${color}, transparent)` }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center text-center">
+          
+          {/* Icon */}
+          <div className="mb-2">
+            <Icon className="w-5 h-5 md:w-6 md:h-6" style={{ color }} />
+          </div>
+
+          {/* Value - Terminal style */}
+          <div className="mb-1">
+            <span 
+              className="text-xl md:text-2xl font-mono font-bold tracking-tight"
+              style={{ color }}
+            >
+              {displayValue}
+            </span>
+          </div>
+
+          {/* Label */}
+          <div className="text-[10px] md:text-xs text-[var(--text-muted)] font-medium uppercase tracking-wider">
+            {label}
+          </div>
+        </div>
+
+        {/* Hover effect - minimal */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--accent-primary)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+    </motion.div>
+  );
+}
+
+export function StatsAirport() {
+  const { language, t } = useLanguage();
+
+  const stats = [
+    {
+      icon: Code2,
+      value: "6",
+      label: language === 'uk' ? 'Активні' : 
+             language === 'nl' ? 'Actief' : 
+             language === 'ar' ? 'نشط' :
+             language === 'es' ? 'Activos' :
+             'Active',
+      color: "#00d9ff",
+    },
+    {
+      icon: Star,
+      value: "99%",
+      label: language === 'uk' ? 'Рейтинг' : 
+             language === 'nl' ? 'Rating' : 
+             language === 'ar' ? 'التقييم' :
+             language === 'es' ? 'Rating' :
+             'Rating',
+      color: "#ffd700",
+    },
+    {
+      icon: Zap,
+      value: "24/7",
+      label: language === 'uk' ? 'Онлайн' : 
+             language === 'nl' ? 'Online' : 
+             language === 'ar' ? 'متصل' :
+             language === 'es' ? 'En Línea' :
+             'Online',
+      color: "#00d9ff",
+    },
+    {
+      icon: Award,
+      value: `10+`,
+      label: t("hero.yearsExperience") || "Years",
+      color: "#FFD700",
+    },
+    {
+      icon: CheckCircle2,
+      value: `150+`,
+      label: t("hero.projectsCompleted") || "Projects",
+      color: "#00d9ff",
+    },
+    {
+      icon: Users,
+      value: `150+`,
+      label: t("hero.happyClients") || "Clients",
+      color: "#9333ea",
+    },
+    {
+      icon: TrendingUp,
+      value: `100%`,
+      label: t("hero.successRate") || "Success",
+      color: "#10b981",
+    },
+  ];
+
+  return (
+    <section className="py-6 md:py-8 px-4">
+      <div className="container mx-auto max-w-6xl">
+        {/* Developer-Style Stats Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-3">
+          {stats.map((stat, index) => (
+            <StatCard
+              key={index}
+              icon={stat.icon}
+              value={stat.value}
+              label={stat.label}
+              color={stat.color}
+              index={index}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
