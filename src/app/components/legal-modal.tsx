@@ -182,6 +182,7 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
     <AnimatePresence>
       {/* Transparent Backdrop */}
       <motion.div
+        key="legal-backdrop"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -191,7 +192,7 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
       />
 
       {/* Modal - Scrollable */}
-      <div className="fixed inset-0 z-[100001] overflow-y-auto" style={{ position: 'fixed' }}>
+      <div key="legal-modal" className="fixed inset-0 z-[100001] overflow-y-auto" style={{ position: 'fixed' }}>
         <div className="min-h-full flex items-start justify-center p-4 sm:p-6 lg:p-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}

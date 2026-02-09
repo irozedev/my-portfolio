@@ -40,14 +40,14 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
         className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[999998]"
       />
 
-      {/* Modal */}
-      <div className="fixed inset-0 flex items-center justify-center z-[999999] p-4">
+      {/* Modal - FIXED: Адаптивна висота, не перекривається header */}
+      <div className="fixed inset-0 flex items-center justify-center z-[999999] p-4 pt-20 md:pt-24">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={{ type: "spring", duration: 0.5 }}
-          className="relative w-full max-w-lg bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-primary)] backdrop-blur-xl border border-[var(--border-color)] rounded-3xl overflow-hidden shadow-2xl"
+          className="relative w-full max-w-lg bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-primary)] backdrop-blur-xl border border-[var(--border-color)] rounded-3xl shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}

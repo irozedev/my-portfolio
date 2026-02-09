@@ -1,9 +1,9 @@
 import { motion } from "motion/react";
-import { ArrowRight, Sparkles, Code, Rocket, Star, CheckCircle2, Github, Linkedin, Mail, Briefcase } from "lucide-react";
-import { useLanguage } from "../contexts/language-context";
-import { Button } from "./ui/button";
 import { useState } from "react";
-import { BookCallModal } from "./book-call-fixed";
+import { Button } from "./ui/button";
+import { ArrowRight, Github, Linkedin, Mail, Download, Code, CheckCircle2, Star, Sparkles, Zap, Rocket } from "lucide-react";
+import { useLanguage } from "../contexts/language-context";
+import { BookCallModal } from "./book-call-modal";
 
 interface HeroSectionProps {
   onViewWork: () => void;
@@ -12,7 +12,6 @@ interface HeroSectionProps {
 const socialLinks = [
   { icon: Github, href: "https://github.com/irozedev", label: "GitHub", color: "#333333" },
   { icon: Linkedin, href: "https://linkedin.com/in/rozestepan", label: "LinkedIn", color: "#0077b5" },
-  { icon: Briefcase, href: "https://www.upwork.com/freelancers/rozestepan", label: "Upwork", color: "#14a800" },
   { icon: Mail, href: "mailto:hello@roze.live", label: "Email", color: "#00d9ff" },
 ];
 
@@ -197,7 +196,7 @@ export function Hero({ onViewWork }: HeroSectionProps) {
                 </Button>
               </motion.div>
 
-              {/* Quick Stats */}
+              {/* Quick Stats - IMPROVED DESIGN */}
               <motion.div
                 className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-4 sm:pt-6"
                 initial={{ opacity: 0, y: 20 }}
@@ -211,20 +210,35 @@ export function Hero({ onViewWork }: HeroSectionProps) {
                 ].map((stat, index) => (
                   <motion.div 
                     key={index} 
-                    className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 bg-[var(--card-bg)] backdrop-blur-sm border border-[var(--card-border)] rounded-xl hover:border-[#00d9ff]/50 transition-all duration-300"
+                    className="relative group flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl hover:border-[#00d9ff]/50 transition-all duration-300 overflow-hidden"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.5 + index * 0.1 }}
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ scale: 1.05, y: -3 }}
                   >
-                    <div className="p-2 sm:p-3 bg-gradient-to-br from-[#00d9ff]/20 to-cyan-500/20 rounded-lg flex-shrink-0">
-                      <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#00d9ff]" />
+                    {/* Animated Background Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#00d9ff]/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    {/* Glow Effect */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-[#00d9ff]/20 to-purple-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      animate={{
+                        scale: [1, 1.2, 1],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                      }}
+                    />
+                    
+                    <div className="relative p-2 sm:p-3 bg-gradient-to-br from-[#00d9ff]/20 to-cyan-500/20 rounded-lg flex-shrink-0 group-hover:from-[#00d9ff]/30 group-hover:to-cyan-500/30 transition-all">
+                      <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#00d9ff] group-hover:scale-110 transition-transform" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#00d9ff] to-cyan-400 bg-clip-text text-transparent">
+                    <div className="relative flex-1 min-w-0">
+                      <div className="text-xl sm:text-2xl md:text-3xl font-black bg-gradient-to-r from-[#00d9ff] via-cyan-400 to-purple-500 bg-clip-text text-transparent group-hover:from-[#00d9ff] group-hover:to-cyan-300 transition-all font-mono">
                         {stat.value}
                       </div>
-                      <div className="text-xs sm:text-sm text-[var(--text-secondary)] truncate leading-tight">
+                      <div className="text-xs sm:text-sm text-[var(--text-secondary)] truncate leading-tight font-mono">
                         {stat.label}
                       </div>
                     </div>

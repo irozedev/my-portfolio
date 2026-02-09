@@ -180,9 +180,9 @@ export function AboutSection() {
           {/* Skills Bento Grid */}
           <div className="mb-16">
             <motion.h3
-              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-8 flex items-center justify-center gap-3 text-[var(--text-primary)] font-bold"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-[var(--text-primary)] mb-6 font-mono uppercase tracking-wider"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
               <Code2 className="w-8 h-8 text-[var(--accent-primary)]" />

@@ -23,7 +23,7 @@ import {
 import { useLanguage } from "../contexts/language-context";
 import { useFavorites } from "../hooks/use-favorites";
 import { useSliderNavigation } from "../hooks/use-slider-navigation";
-import { ProjectDetailModal } from "./project-detail-modal";
+import { ProjectFullscreenView } from "./project-fullscreen-view";
 import { AnimatePresence } from "motion/react";
 
 // Portfolio Projects
@@ -805,13 +805,25 @@ export function PortfolioCreativeSlider() {
       {/* Project Detail Modal */}
       <AnimatePresence>
         {selectedProject && (
-          <ProjectDetailModal
+          <ProjectFullscreenView
             project={{
               ...selectedProject,
               subtitle: selectedProject.category,
               timeline: `${selectedProject.year} • ${selectedProject.duration}`,
             }}
             onClose={() => setSelectedProject(null)}
+            onNext={() => {
+              const currentIndex = projects.findIndex(p => p.id === selectedProject.id);
+              const nextIndex = (currentIndex + 1) % projects.length;
+              setSelectedProject(projects[nextIndex]);
+            }}
+            onPrev={() => {
+              const currentIndex = projects.findIndex(p => p.id === selectedProject.id);
+              const prevIndex = (currentIndex - 1 + projects.length) % projects.length;
+              setSelectedProject(projects[prevIndex]);
+            }}
+            hasNext={true}
+            hasPrev={true}
           />
         )}
       </AnimatePresence>

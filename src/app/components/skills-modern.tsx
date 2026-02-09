@@ -285,6 +285,26 @@ export function SkillsModern() {
   return (
     <>
       <div className="w-full">
+        {/* 🔥 GLOBAL HINT - ONE TIME ONLY */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 text-center"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#00d9ff]/10 to-purple-500/10 border border-[#00d9ff]/30 rounded-xl">
+            <motion.span
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="text-lg"
+            >
+              👆
+            </motion.span>
+            <span className="text-sm font-mono font-bold text-[#00d9ff]">
+              {isMobile ? 'TAP' : 'CLICK'} ON ANY SKILL TO VIEW DETAILS
+            </span>
+          </div>
+        </motion.div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {skills.map((skill, index) => {
             const Icon = skill.icon;
@@ -297,55 +317,11 @@ export function SkillsModern() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
                 whileHover={{ scale: 1.05, y: -4 }}
-                whileTap={{ scale: 0.98 }}
-                className="group relative bg-[var(--bg-secondary)]/50 backdrop-blur-sm border-2 border-[var(--border-color)] rounded-xl sm:rounded-2xl p-4 sm:p-5 hover:border-[#00d9ff] transition-all duration-300 overflow-hidden cursor-pointer text-left"
+                whileTap={{ scale: 0.95 }}
+                className="group relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-xl sm:rounded-2xl p-4 sm:p-5 hover:border-[#00d9ff] transition-all duration-300 overflow-hidden cursor-pointer text-left shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgba(0,217,255,0.3)] active:scale-95"
               >
-                {/* TAP/CLICK Hint Badge */}
-                <div className="absolute top-2 right-2 z-20">
-                  <motion.span
-                    className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#00d9ff]/20 text-[#00d9ff] border border-[#00d9ff]/30 opacity-0 group-hover:opacity-100 transition-opacity"
-                    initial={{ scale: 0.8 }}
-                    whileHover={{ scale: 1 }}
-                  >
-                    {isMobile ? '👆 TAP' : '🖱️ CLICK'}
-                  </motion.span>
-                </div>
-
-                {/* Animated Background Gradient */}
-                <motion.div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ 
-                    background: `radial-gradient(circle at center, ${skill.color}15, transparent 70%)` 
-                  }}
-                  animate={{
-                    scale: [1, 1.2, 1],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-
-                {/* Pulse Effect */}
-                <motion.div
-                  className="absolute inset-0 rounded-xl sm:rounded-2xl"
-                  style={{ 
-                    boxShadow: `0 0 0 0 ${skill.color}40`
-                  }}
-                  animate={{
-                    boxShadow: [
-                      `0 0 0 0 ${skill.color}40`,
-                      `0 0 0 8px ${skill.color}00`,
-                      `0 0 0 0 ${skill.color}40`,
-                    ],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
+                {/* Animated Background Glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#00d9ff]/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                 {/* Content */}
                 <div className="relative z-10">
@@ -379,7 +355,7 @@ export function SkillsModern() {
                     </div>
                   </div>
 
-                  {/* Click Hint */}
+                  {/* Hover Hint - Minimalistic */}
                   <motion.div
                     className="text-xs text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1"
                     initial={{ y: -10 }}
@@ -391,7 +367,7 @@ export function SkillsModern() {
                     >
                       →
                     </motion.span>
-                    Click to see experience
+                    View experience
                   </motion.div>
                 </div>
 

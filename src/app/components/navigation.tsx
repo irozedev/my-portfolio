@@ -59,12 +59,20 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
       const sections = navItems.map(item => item.href.replace('#', '') || 'home');
       let found = false;
       
+      // Get navigation height for consistent offset calculation
+      const nav = document.querySelector('nav');
+      const navHeight = nav ? nav.offsetHeight : 80;
+      const isMobile = window.innerWidth < 768;
+      const extraPadding = isMobile ? 20 : 30;
+      const totalOffset = navHeight + extraPadding;
+      
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          // Check if section is in viewport (top is within upper 40% of screen)
-          if (rect.top <= window.innerHeight * 0.4 && rect.bottom >= 0) {
+          // Check if section top is within the navigation offset zone
+          // This matches the scroll offset used in smoothScrollToSection
+          if (rect.top <= totalOffset + 50 && rect.bottom >= totalOffset) {
             setActiveSection(section);
             found = true;
             break;
@@ -726,60 +734,91 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
 
             {/* Tablet/Mobile Menu Button + Controls */}
             <div className="lg:hidden flex items-center gap-2">
-              {/* Language Selector for Mobile/Tablet */}
+              {/* Language Selector for Mobile/Tablet - DEVELOPER-STYLE MINIMAL */}
               <div className="relative language-selector">
                 <motion.button
                   onClick={() => {
                     setShowLangMenu(!showLangMenu);
                     setShowUserMenu(false);
                   }}
-                  className="p-2 bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg hover:bg-[var(--accent-primary)]/10 transition-colors flex flex-col items-center justify-center relative"
+                  className="relative p-2 bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg hover:border-[var(--accent-primary)]/50 transition-all flex items-center gap-1.5 active:scale-95 min-w-[64px]"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {/* Flag above Globe icon */}
-                  <motion.span 
-                    className="text-xs mb-0.5"
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
+                  {/* Flag */}
+                  <span className="text-base">
                     {currentLang.flag}
-                  </motion.span>
-                  <Globe className="w-4 h-4 text-[var(--text-secondary)]" />
+                  </span>
+                  
+                  {/* Language Code - Developer Style */}
+                  <span className="text-xs font-mono font-bold text-[var(--text-primary)]">
+                    {displayLang}
+                  </span>
+                  
+                  {/* Chevron indicator */}
+                  <motion.div
+                    animate={{ rotate: showLangMenu ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ChevronDown className="w-3 h-3 text-[var(--text-muted)]" />
+                  </motion.div>
                 </motion.button>
                 
                 <AnimatePresence>
                   {showLangMenu && (
                     <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-2 w-40 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl shadow-2xl overflow-hidden z-[100001]`}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-2 w-48 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg shadow-[0_8px_24px_rgba(0,0,0,0.4)] overflow-hidden z-[100001]`}
                     >
-                      {languages.map((lang) => (
-                        <motion.button
-                          key={lang.code}
-                          onClick={() => {
-                            setLanguage(lang.code);
-                            setShowLangMenu(false);
-                          }}
-                          className={`w-full px-4 py-3 ${isRTL ? 'text-right' : 'text-left'} text-sm font-medium transition-all flex items-center justify-between ${
-                            language === lang.code
-                              ? "bg-[var(--accent-primary)]/20 text-[var(--accent-primary)]"
-                              : "text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]"
-                          }`}
-                          whileHover={{ x: isRTL ? -4 : 4 }}
-                        >
-                          <span>{lang.label}</span>
-                          {language === lang.code && (
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              className="w-2 h-2 rounded-full bg-[var(--accent-primary)]"
-                            />
-                          )}
-                        </motion.button>
-                      ))}
+                      {/* Header - Developer Style */}
+                      <div className="px-3 py-2 bg-[var(--bg-secondary)]/30 border-b border-[var(--border-color)]">
+                        <p className="text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest">
+                          SELECT LANG
+                        </p>
+                      </div>
+                      
+                      {/* Language Options - Clean List */}
+                      <div className="py-1">
+                        {languages.map((lang) => (
+                          <motion.button
+                            key={lang.code}
+                            onClick={() => {
+                              setLanguage(lang.code);
+                              setShowLangMenu(false);
+                            }}
+                            className={`w-full px-3 py-2.5 text-sm font-medium transition-all flex items-center gap-3 ${
+                              language === lang.code
+                                ? "bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] border-l-2 border-[var(--accent-primary)]"
+                                : "text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]/50 border-l-2 border-transparent"
+                            }`}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            {/* Flag */}
+                            <span className="text-lg">
+                              {lang.flag}
+                            </span>
+                            
+                            {/* Label */}
+                            <span className={`flex-1 text-left font-mono text-xs ${ 
+                              language === lang.code ? "font-bold" : "font-normal"
+                            }`}>
+                              {lang.label}
+                            </span>
+                            
+                            {/* Active Indicator - Minimalistic */}
+                            {language === lang.code && (
+                              <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]"
+                              />
+                            )}
+                          </motion.button>
+                        ))}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
