@@ -285,26 +285,6 @@ export function SkillsModern() {
   return (
     <>
       <div className="w-full">
-        {/* 🔥 GLOBAL HINT - ONE TIME ONLY */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6 text-center"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#00d9ff]/10 to-purple-500/10 border border-[#00d9ff]/30 rounded-xl">
-            <motion.span
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="text-lg"
-            >
-              👆
-            </motion.span>
-            <span className="text-sm font-mono font-bold text-[#00d9ff]">
-              {isMobile ? 'TAP' : 'CLICK'} ON ANY SKILL TO VIEW DETAILS
-            </span>
-          </div>
-        </motion.div>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {skills.map((skill, index) => {
             const Icon = skill.icon;
@@ -389,6 +369,27 @@ export function SkillsModern() {
             );
           })}
         </div>
+
+        {/* 🔥 GLOBAL HINT - ВНИЗУ БЛОКУ */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mt-6 text-center"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/50 border border-[var(--border-color)] rounded-lg">
+            <motion.span
+              animate={{ scale: [1, 1.15, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="text-base"
+            >
+              👆
+            </motion.span>
+            <span className="text-xs font-mono text-[var(--text-muted)]">
+              {isMobile ? 'Tap' : 'Click'} any skill to view detailed experience
+            </span>
+          </div>
+        </motion.div>
       </div>
 
       {/* Skill Detail Modal */}

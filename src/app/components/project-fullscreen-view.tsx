@@ -77,17 +77,27 @@ export function ProjectFullscreenView({
 
   return (
     <AnimatePresence>
-      {/* 🔥 FULL-SCREEN SLIDE-IN VIEW - DEVELOPER STYLE */}
+      {/* 🔥 FULL-SCREEN IMMERSIVE VIEW - ZOOM IN EFFECT */}
       <motion.div
         key="project-view"
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
+        initial={{ 
+          opacity: 0,
+          scale: 0.9,
+          y: 20
+        }}
+        animate={{ 
+          opacity: 1,
+          scale: 1,
+          y: 0
+        }}
+        exit={{ 
+          opacity: 0,
+          scale: 0.95,
+          y: 20
+        }}
         transition={{ 
-          type: "spring", 
-          damping: 30, 
-          stiffness: 300,
-          mass: 0.8
+          duration: 0.4,
+          ease: [0.25, 0.1, 0.25, 1], // Custom easing for smooth entrance
         }}
         className="fixed inset-0 z-[100000] bg-[var(--bg-primary)] overflow-hidden"
       >

@@ -196,54 +196,112 @@ export function Hero({ onViewWork }: HeroSectionProps) {
                 </Button>
               </motion.div>
 
-              {/* Quick Stats - IMPROVED DESIGN */}
+              {/* Quick Stats - TERMINAL DEVELOPER STYLE */}
               <motion.div
-                className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-4 sm:pt-6"
+                className="pt-4 sm:pt-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                {[
-                  { icon: Code, value: "5+", label: t("hero.yearsExperience") },
-                  { icon: CheckCircle2, value: "50+", label: t("hero.projectsCompleted") },
-                  { icon: Star, value: "100%", label: t("hero.happyClients") },
-                ].map((stat, index) => (
-                  <motion.div 
-                    key={index} 
-                    className="relative group flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl hover:border-[#00d9ff]/50 transition-all duration-300 overflow-hidden"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 + index * 0.1 }}
-                    whileHover={{ scale: 1.05, y: -3 }}
-                  >
-                    {/* Animated Background Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#00d9ff]/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
-                    {/* Glow Effect */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-[#00d9ff]/20 to-purple-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                      animate={{
-                        scale: [1, 1.2, 1],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                      }}
-                    />
-                    
-                    <div className="relative p-2 sm:p-3 bg-gradient-to-br from-[#00d9ff]/20 to-cyan-500/20 rounded-lg flex-shrink-0 group-hover:from-[#00d9ff]/30 group-hover:to-cyan-500/30 transition-all">
-                      <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#00d9ff] group-hover:scale-110 transition-transform" />
-                    </div>
-                    <div className="relative flex-1 min-w-0">
-                      <div className="text-xl sm:text-2xl md:text-3xl font-black bg-gradient-to-r from-[#00d9ff] via-cyan-400 to-purple-500 bg-clip-text text-transparent group-hover:from-[#00d9ff] group-hover:to-cyan-300 transition-all font-mono">
-                        {stat.value}
+                {/* Desktop: 3 columns, Mobile: 3 columns on single row */}
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  {[
+                    { 
+                      icon: Code, 
+                      value: "5+", 
+                      label: t("hero.yearsExperience"),
+                      prefix: "experience:",
+                      suffix: "years",
+                      color: "#00d9ff"
+                    },
+                    { 
+                      icon: CheckCircle2, 
+                      value: "50+", 
+                      label: t("hero.projectsCompleted"),
+                      prefix: "projects:",
+                      suffix: "completed",
+                      color: "#22c55e"
+                    },
+                    { 
+                      icon: Star, 
+                      value: "100%", 
+                      label: t("hero.happyClients"),
+                      prefix: "satisfaction:",
+                      suffix: "rate",
+                      color: "#f59e0b"
+                    },
+                  ].map((stat, index) => (
+                    <motion.div 
+                      key={index} 
+                      className="relative group bg-[#0a0a0a]/80 backdrop-blur-sm border border-[var(--border-color)] rounded-lg overflow-hidden hover:border-[#00d9ff]/50 transition-all duration-300"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.5 + index * 0.1 }}
+                      whileHover={{ y: -2, borderColor: 'rgba(0, 217, 255, 0.5)' }}
+                    >
+                      {/* Terminal Header Bar */}
+                      <div className="flex items-center gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-[var(--bg-secondary)]/50 border-b border-[var(--border-color)]">
+                        <div className="flex items-center gap-0.5 sm:gap-1">
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500/60" />
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-yellow-500/60" />
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500/60" />
+                        </div>
+                        <span className="text-[7px] sm:text-[9px] text-[var(--text-muted)] font-mono ml-auto">
+                          stats.sh
+                        </span>
                       </div>
-                      <div className="text-xs sm:text-sm text-[var(--text-secondary)] truncate leading-tight font-mono">
-                        {stat.label}
+
+                      {/* Terminal Content */}
+                      <div className="p-2 sm:p-4">
+                        {/* Command Line Style - hidden on mobile */}
+                        <div className="hidden sm:flex items-center gap-2 mb-2">
+                          <span className="text-[#00d9ff] text-xs font-mono">$</span>
+                          <span className="text-[10px] text-[var(--text-muted)] font-mono">
+                            cat {stat.prefix}
+                          </span>
+                        </div>
+
+                        {/* Value Display */}
+                        <div className="flex flex-col sm:flex-row items-center sm:items-baseline gap-1 sm:gap-2 mb-1">
+                          <stat.icon className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" style={{ color: stat.color }} />
+                          <span className="text-lg sm:text-3xl font-black font-mono" style={{ color: stat.color }}>
+                            {stat.value}
+                          </span>
+                          <span className="text-[8px] sm:text-[10px] text-[var(--text-muted)] font-mono hidden sm:inline">
+                            {stat.suffix}
+                          </span>
+                        </div>
+
+                        {/* Blinking Cursor - hidden on mobile */}
+                        <motion.span
+                          className="hidden sm:inline-block w-2 h-4 bg-[#00d9ff] ml-1"
+                          animate={{ opacity: [1, 0, 1] }}
+                          transition={{ duration: 1, repeat: Infinity }}
+                        />
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+
+                      {/* Hover Glow */}
+                      <div 
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                        style={{
+                          background: `radial-gradient(circle at 50% 50%, ${stat.color}10 0%, transparent 70%)`
+                        }}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Bottom Info - Optional */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  className="mt-3 text-center"
+                >
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono">
+                    // Real-time metrics from production
+                  </span>
+                </motion.div>
               </motion.div>
 
               {/* Social Links */}

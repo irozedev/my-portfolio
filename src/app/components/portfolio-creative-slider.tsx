@@ -199,6 +199,7 @@ export function PortfolioCreativeSlider() {
     return false;
   });
   const sliderRef = useRef<Slider>(null);
+  const [isProcessingClick, setIsProcessingClick] = useState(false);
 
   // Detect mobile on mount
   useEffect(() => {
@@ -206,10 +207,7 @@ export function PortfolioCreativeSlider() {
       setIsMobile(window.innerWidth < 1024);
     };
     
-    // Check immediately
     checkMobile();
-    
-    // Listen for resize
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
@@ -222,20 +220,61 @@ export function PortfolioCreativeSlider() {
     enableSwipe: true,
   });
 
-  // FIX: Force slider re-initialization on mobile after mount
-  useEffect(() => {
-    // Trigger resize event to force slider recalculation
-    const timer = setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
+  // 🔥 FIX: Debounced project click handler with swipe detection
+  const handleProjectClick = (project: typeof projects[0], index: number, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    // Don't trigger click if it was a drag/swipe
+    if (isDragging) {
+      setIsDragging(false);
+      return;
+    }
+    
+    if (isProcessingClick) return;
+    
+    const isActive = index === currentSlide;
+    
+    if (isActive) {
+      setIsProcessingClick(true);
+      setSelectedProject(project);
       
-      // Double-check: force slider to go to first slide
-      if (sliderRef.current) {
-        sliderRef.current.slickGoTo(0);
-      }
-    }, 100);
+      setTimeout(() => {
+        setIsProcessingClick(false);
+      }, 600);
+    } else {
+      sliderRef.current?.slickGoTo(index);
+    }
+  };
 
-    return () => clearTimeout(timer);
-  }, []);
+  // 🔥 NEW: Touch handlers to detect swipe vs click
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setTouchStart({ x: touch.clientX, y: touch.clientY });
+    setIsDragging(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart) return;
+    
+    const touch = e.touches[0];
+    const deltaX = Math.abs(touch.clientX - touchStart.x);
+    const deltaY = Math.abs(touch.clientY - touchStart.y);
+    
+    // If moved more than 15px, it's a drag
+    if (deltaX > 15 || deltaY > 15) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTouchStart(null);
+  };
 
   const isFavorite = (projectId: string) => {
     return favorites.some(fav => fav.projectId === projectId);
@@ -267,11 +306,14 @@ export function PortfolioCreativeSlider() {
     autoplaySpeed: 6000,
     pauseOnHover: true,
     swipeToSlide: true,
-    touchThreshold: 10,
+    touchThreshold: 25, // 🔥 INCREASED from 10 to 25 for better swipe detection
     variableWidth: false,
     adaptiveHeight: false,
     arrows: !isMobile,
-    beforeChange: (_current: number, next: number) => setCurrentSlide(next),
+    beforeChange: (_current: number, next: number) => {
+      setCurrentSlide(next);
+      setIsDragging(false); // Reset dragging state on slide change
+    },
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: [
@@ -587,15 +629,13 @@ export function PortfolioCreativeSlider() {
               return (
                 <div key={project.id} className="outline-none focus:outline-none">
                   <motion.div
-                    onClick={() => {
-                      if (isActive) {
-                        setSelectedProject(project);
-                      } else {
-                        sliderRef.current?.slickGoTo(index);
-                      }
-                    }}
+                    onClick={(e) => handleProjectClick(project, index, e)}
                     className="portfolio-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl overflow-hidden hover:border-purple-500/50 transition-all duration-500 group cursor-pointer"
-                    whileHover={{ y: -8 }}
+                    whileHover={!isMobile ? { y: -8 } : undefined}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
                   >
                     {/* 🔥 TAP/CLICK INDICATOR - DEVELOPER STYLE - TOP POSITION */}
                     {isActive && (

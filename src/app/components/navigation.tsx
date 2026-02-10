@@ -389,14 +389,14 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                   </div>
                 </div>
                 
-                {/* Live Status Badge - Enhanced - CLICKABLE */}
+                {/* Live Status Badge - Desktop Only */}
                 <motion.button
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     setShowAvailabilityModal(true);
                   }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--bg-secondary)]/60 backdrop-blur-md border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 transition-all relative overflow-hidden cursor-pointer"
+                  className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--bg-secondary)]/60 backdrop-blur-md border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 transition-all relative overflow-hidden cursor-pointer"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
@@ -429,6 +429,63 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                     transition={{ duration: 2, repeat: Infinity }}
                   />
                   <span className={`relative text-xs font-bold tracking-wide uppercase ${
+                    isAvailable ? 'text-green-500' : 'text-orange-500'
+                  }`}>
+                    {isAvailable ? (
+                      language === 'uk' ? 'Онлайн' : 
+                      language === 'nl' ? 'Online' : 
+                      language === 'ar' ? 'متصل' :
+                      language === 'es' ? 'En línea' :
+                      'Online'
+                    ) : (
+                      language === 'uk' ? 'Зайнятий' : 
+                      language === 'nl' ? 'Bezet' : 
+                      language === 'ar' ? 'مشغول' :
+                      language === 'es' ? 'Ocupado' :
+                      'Busy'
+                    )}
+                  </span>
+                </motion.button>
+
+                {/* Compact Status - Mobile Only (smaller with text) */}
+                <motion.button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowAvailabilityModal(true);
+                  }}
+                  className="sm:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[var(--bg-secondary)]/60 backdrop-blur-md border border-[var(--border-color)] transition-all relative overflow-hidden cursor-pointer"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  whileTap={{ scale: 0.95 }}
+                  title={isAvailable ? 'Online' : 'Busy'}
+                >
+                  {/* Shimmer Effect - Mobile */}
+                  <motion.div
+                    className="absolute inset-0 w-full h-full pointer-events-none"
+                    style={{
+                      background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)"
+                    }}
+                    animate={{
+                      x: ['-100%', '200%']
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  />
+                  
+                  <motion.div
+                    className={`relative w-1.5 h-1.5 rounded-full flex-shrink-0 ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
+                    animate={{
+                      scale: [1, 1.3, 1],
+                      opacity: [1, 0.6, 1]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  <span className={`relative text-[10px] font-bold tracking-wide uppercase ${
                     isAvailable ? 'text-green-500' : 'text-orange-500'
                   }`}>
                     {isAvailable ? (

@@ -253,6 +253,24 @@ export function ServicesUltra() {
         <ServiceActionModal
           service={selectedService}
           onClose={() => setSelectedService(null)}
+          onChatBot={() => {
+            // Store selected service in sessionStorage for ChatBot
+            sessionStorage.setItem('selectedService', selectedService.key);
+            setSelectedService(null);
+            // Trigger chatbot open (you can add a prop or event here if needed)
+            const chatBotButton = document.querySelector('[data-chatbot-trigger]') as HTMLButtonElement;
+            chatBotButton?.click();
+          }}
+          onContact={() => {
+            // Store selected service in sessionStorage for Contact Form
+            sessionStorage.setItem('selectedService', selectedService.key);
+            setSelectedService(null);
+            // Scroll to contact section
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+              contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
         />
       )}
     </>

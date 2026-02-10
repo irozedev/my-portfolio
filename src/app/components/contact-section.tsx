@@ -352,17 +352,24 @@ export function ContactSection() {
                     <label htmlFor="service" className="block text-base sm:text-lg font-semibold mb-3 text-[var(--text-primary)]">
                       {t("contact.form.service")}
                     </label>
-                    <Input
+                    <select
                       id="service"
-                      type="text"
-                      placeholder="Web Development"
                       value={formData.service}
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                       required
                       className="w-full h-14 px-5 text-base sm:text-lg bg-white dark:bg-[var(--bg-primary)] border-2 border-[var(--border-color)] rounded-xl
                         text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
-                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
-                    />
+                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 transition-all cursor-pointer"
+                    >
+                      <option value="">Select a service</option>
+                      <option value="Web Development">Web Development</option>
+                      <option value="E-Commerce Solutions">E-Commerce Solutions</option>
+                      <option value="Web Applications">Web Applications</option>
+                      <option value="Process Automation">Process Automation</option>
+                      <option value="AI Chatbots">AI Chatbots</option>
+                      <option value="Tech Consulting">Tech Consulting</option>
+                      <option value="Other">Other</option>
+                    </select>
                   </div>
 
                   <div>

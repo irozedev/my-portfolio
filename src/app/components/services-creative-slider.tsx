@@ -118,6 +118,11 @@ export function ServicesCreativeSlider() {
   });
   const sliderRef = useRef<Slider>(null);
   const { t } = useLanguage();
+  const [isProcessingClick, setIsProcessingClick] = useState(false);
+  
+  // 🔥 NEW: Touch detection to differentiate swipe vs click
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   // Detect mobile on mount
   useEffect(() => {
@@ -156,8 +161,65 @@ export function ServicesCreativeSlider() {
     return () => clearTimeout(timer);
   }, []);
 
+  // 🔥 FIX: Debounced click handler to prevent multiple triggers
   const handleBookService = (service: typeof services[0]) => {
+    if (isProcessingClick) return; // Prevent multiple clicks
+    
+    setIsProcessingClick(true);
     setSelectedService(service);
+    
+    // Reset flag after 500ms
+    setTimeout(() => {
+      setIsProcessingClick(false);
+    }, 500);
+  };
+
+  // 🔥 NEW: Touch handlers to detect swipe vs click
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setTouchStart({ x: touch.clientX, y: touch.clientY });
+    setIsDragging(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart) return;
+    
+    const touch = e.touches[0];
+    const deltaX = Math.abs(touch.clientX - touchStart.x);
+    const deltaY = Math.abs(touch.clientY - touchStart.y);
+    
+    // If moved more than 15px, it's a drag
+    if (deltaX > 15 || deltaY > 15) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTouchStart(null);
+  };
+
+  // 🔥 IMPROVED: Card click handler with swipe detection
+  const handleCardClick = (service: typeof services[0], index: number, e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Don't trigger click if it was a drag/swipe
+    if (isDragging) {
+      setIsDragging(false);
+      return;
+    }
+    
+    if (isProcessingClick) return; // Prevent multiple clicks
+    
+    const isActive = currentSlide === index;
+    
+    // If card is already centered (active), open modal
+    if (isActive) {
+      handleBookService(service);
+    } else {
+      // Otherwise, navigate to center it
+      sliderRef.current?.slickGoTo(index);
+    }
   };
 
   // Dynamic initial settings based on screen size
@@ -173,9 +235,12 @@ export function ServicesCreativeSlider() {
     autoplaySpeed: 5000,
     pauseOnHover: true,
     swipeToSlide: true,
-    touchThreshold: 10,
+    touchThreshold: 25, // 🔥 INCREASED from 10 to 25 for better swipe detection
     arrows: !isMobile,
-    beforeChange: (_current: number, next: number) => setCurrentSlide(next),
+    beforeChange: (_current: number, next: number) => {
+      setCurrentSlide(next);
+      setIsDragging(false); // Reset dragging state on slide change
+    },
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: [
@@ -466,17 +531,13 @@ export function ServicesCreativeSlider() {
                 return (
                   <div key={service.id} className="outline-none focus:outline-none pt-4">
                     <motion.div
-                      onClick={() => {
-                        // If card is already centered (active), open modal
-                        if (isActive) {
-                          handleBookService(service);
-                        } else {
-                          // Otherwise, navigate to center it
-                          sliderRef.current?.slickGoTo(index);
-                        }
-                      }}
+                      onClick={(e) => handleCardClick(service, index, e)}
+                      onTouchStart={handleTouchStart}
+                      onTouchMove={handleTouchMove}
+                      onTouchEnd={handleTouchEnd}
                       className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-purple-500/50 transition-all duration-500 group cursor-pointer overflow-visible"
-                      whileHover={{ y: -10 }}
+                      whileHover={!isMobile ? { y: -10 } : undefined}
+                      style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
                     >
                       {/* 🔥 TAP/CLICK INDICATOR - DEVELOPER STYLE - PURPLE THEME - TOP */}
                       {isActive && (
@@ -698,6 +759,8 @@ export function ServicesCreativeSlider() {
           isOpen={!!selectedService}
           onClose={() => setSelectedService(null)}
           onChatBot={() => {
+            // Store in sessionStorage for ChatBot
+            sessionStorage.setItem('selectedService', selectedService.key);
             const event = new CustomEvent('openChatBot', { 
               detail: { 
                 service: selectedService.key,
@@ -708,6 +771,8 @@ export function ServicesCreativeSlider() {
             setSelectedService(null);
           }}
           onContact={() => {
+            // Store in sessionStorage for Contact Form
+            sessionStorage.setItem('selectedService', selectedService.key);
             const contactSection = document.getElementById("contact");
             contactSection?.scrollIntoView({ behavior: "smooth" });
             setSelectedService(null);

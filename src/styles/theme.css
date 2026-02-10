@@ -96,20 +96,20 @@ img {
   --accent-primary: #0891b2;
   --accent-secondary: #0e7490;
   --accent-hover: #06b6d4;
-  --border-color: rgba(15, 23, 42, 0.1);
+  --border-color: rgba(15, 23, 42, 0.06);
   --shadow-color: rgba(8, 145, 178, 0.15);
   
   /* Card styles for light theme */
   --card-bg: #ffffff;
-  --card-border: rgba(15, 23, 42, 0.08);
+  --card-border: rgba(15, 23, 42, 0.05);
   
   /* Availability widget adjustments for light theme */
   --availability-bg: rgba(8, 145, 178, 0.05);
-  --availability-border: rgba(8, 145, 178, 0.2);
+  --availability-border: rgba(8, 145, 178, 0.15);
   
   /* Glass effects & decorations for light theme */
   --glass-bg: rgba(248, 250, 252, 0.8);
-  --glass-border: rgba(15, 23, 42, 0.1);
+  --glass-border: rgba(15, 23, 42, 0.06);
   --glow-primary: rgba(8, 145, 178, 0.15);
   --glow-secondary: rgba(139, 92, 246, 0.15);
 }

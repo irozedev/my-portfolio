@@ -9,21 +9,12 @@ interface LegalPageProps {
 
 export function LegalPage({ page, onClose }: LegalPageProps) {
   useEffect(() => {
-    // Store scroll position and block body scroll
-    const scrollY = window.pageYOffset;
+    // Block body scroll completely
     document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
     
     return () => {
-      // Restore scroll position
-      const currentScrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
+      // Restore scroll
       document.body.style.overflow = "";
-      document.body.style.width = "";
-      window.scrollTo(0, parseInt(currentScrollY || "0") * -1);
     };
   }, []);
 
