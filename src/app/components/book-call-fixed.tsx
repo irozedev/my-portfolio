@@ -25,6 +25,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [callType, setCallType] = useState<'video' | 'phone'>('video');
+  const [purpose, setPurpose] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -64,6 +65,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
       setStep('date');
       setSelectedDate(undefined);
       setSelectedTime("");
+      setPurpose("");
       setNotes("");
       setError("");
     }, 300);
@@ -91,6 +93,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
         date: format(bookingDateTime, 'yyyy-MM-dd'),
         time: selectedTime,
         callType,
+        purpose,
         notes,
         timezone: 'Europe/Brussels',
         createdAt: new Date().toISOString(),
@@ -162,13 +165,13 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-[var(--text-primary)]">
-                    {step === 'success' ? 'Call Booked!' : 'Book a Call'}
+                    {step === 'success' ? t('bookCall.bookingConfirmed') : t('bookCall.title')}
                   </h2>
                   <p className="text-sm text-[var(--text-secondary)]">
-                    {step === 'date' && 'Select a date'}
-                    {step === 'time' && 'Choose your preferred time'}
+                    {step === 'date' && t('bookCall.subtitle')}
+                    {step === 'time' && t('bookCall.selectTime')}
                     {step === 'details' && 'Add details'}
-                    {step === 'success' && 'We\'ll be in touch soon!'}
+                    {step === 'success' && t('bookCall.lookingForward')}
                   </p>
                 </div>
               </div>
@@ -208,7 +211,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                 >
                   <div className="flex items-center justify-between mb-4">
                     <p className="text-[var(--text-secondary)]">
-                      Available weekdays for the next 30 days
+                      {t('bookCall.availableWeekdays')}
                     </p>
                   </div>
                   
@@ -270,7 +273,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                       onClick={() => setStep('date')}
                       className="text-sm text-[#00d9ff] hover:underline"
                     >
-                      Change date
+                      {t('bookCall.changeDate')}
                     </button>
                   </div>
 
@@ -348,6 +351,20 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                     </div>
                   </div>
 
+                  {/* Purpose */}
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                      Purpose of Call
+                    </label>
+                    <textarea
+                      value={purpose}
+                      onChange={(e) => setPurpose(e.target.value)}
+                      placeholder="Tell me about your project..."
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#00d9ff]/50 focus:ring-2 focus:ring-[#00d9ff]/20 transition-all resize-none"
+                      rows={4}
+                    />
+                  </div>
+
                   {/* Notes */}
                   <div>
                     <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
@@ -415,28 +432,28 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                   </motion.div>
 
                   <h3 className="text-3xl font-bold mb-3 bg-gradient-to-r from-[#00d9ff] via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    Booking Confirmed!
+                    {t('bookCall.bookingConfirmed')}
                   </h3>
 
                   <p className="text-[var(--text-secondary)] mb-6">
-                    You'll receive a calendar invitation at <span className="text-[#00d9ff] font-semibold">{user?.email}</span>
+                    {t('bookCall.calendarInvitation')} <span className="text-[#00d9ff] font-semibold">{user?.email}</span>
                   </p>
 
                   <div className="p-4 bg-[#00d9ff]/10 border border-[#00d9ff]/30 rounded-xl mb-6">
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center justify-between">
-                        <span className="text-[var(--text-muted)]">Date:</span>
+                        <span className="text-[var(--text-muted)]">{t('bookCall.date')}:</span>
                         <span className="text-[var(--text-primary)] font-semibold">
                           {selectedDate && format(selectedDate, 'MMMM d, yyyy')}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-[var(--text-muted)]">Time:</span>
+                        <span className="text-[var(--text-muted)]">{t('bookCall.time')}:</span>
                         <span className="text-[var(--text-primary)] font-semibold">{selectedTime} CET</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-[var(--text-muted)]">Type:</span>
-                        <span className="text-[var(--text-primary)] font-semibold capitalize">{callType}</span>
+                        <span className="text-[var(--text-muted)]">{t('bookCall.type')}:</span>
+                        <span className="text-[var(--text-primary)] font-semibold capitalize">{t(`bookCall.${callType}`)}</span>
                       </div>
                     </div>
                   </div>

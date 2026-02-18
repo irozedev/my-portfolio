@@ -41,16 +41,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/`,
+        skipBrowserRedirect: false,
       },
     });
 
     if (error) {
       console.error('Error signing in with Google:', error);
       throw error;
+    }
+
+    // Open OAuth URL in same tab for better popup handling
+    if (data?.url) {
+      window.location.href = data.url;
     }
   };
 
