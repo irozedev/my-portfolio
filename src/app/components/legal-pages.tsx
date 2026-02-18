@@ -102,7 +102,7 @@ export function LegalPage({ page, onClose }: LegalPageProps) {
             <div className="space-y-2 text-sm">
               <p><strong>Email:</strong> hello@roze.live</p>
               <p><strong>Location:</strong> Belgium, European Union</p>
-              <p><strong>VAT:</strong> BE 0123.456.789</p>
+              <p className="opacity-50"><strong>VAT:</strong> Registration pending</p>
             </div>
           </motion.div>
         </div>
@@ -335,9 +335,8 @@ function getLegalContent(type: "privacy" | "terms" | "imprint") {
           {
             heading: "4. VAT Identification",
             content: [
-              "VAT ID (BTW): BE 0123.456.789",
-              "Chamber of Commerce (KvK): 12345678",
-              "Note: As a freelance developer operating in Belgium, I am registered for VAT purposes in accordance with EU regulations.",
+              "VAT Registration: Pending (awaiting Belgian business registration)",
+              "Note: I am in the process of registering as a freelance developer in Belgium. All VAT and business registration information will be updated once the registration is complete.",
             ],
           },
           {

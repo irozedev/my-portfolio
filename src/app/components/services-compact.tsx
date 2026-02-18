@@ -1,18 +1,13 @@
 import { motion } from "motion/react";
 import { Code, Globe, Bot, Zap, ArrowRight, CheckCircle2, Sparkles, ShoppingCart, Workflow, TrendingUp } from "lucide-react";
-import { useState } from "react";
 
 export function ServicesSection() {
-  const [showVAT, setShowVAT] = useState(true);
-  
   const services = [
     {
       key: 'website',
       icon: Globe,
       color: "#00d9ff",
       gradient: "from-[#00d9ff] to-cyan-500",
-      basePrice: 2500,
-      hourlyRate: 65,
       timeline: "2-4 weeks",
       features: ["Responsive design", "SEO optimization", "CMS integration", "Analytics"],
     },
@@ -22,8 +17,6 @@ export function ServicesSection() {
       color: "#a78bfa",
       gradient: "from-purple-500 to-indigo-500",
       popular: true,
-      basePrice: 5000,
-      hourlyRate: 70,
       timeline: "4-8 weeks",
       features: ["Full platform", "Payment gateway", "Inventory mgmt", "Admin dashboard"],
     },
@@ -32,8 +25,6 @@ export function ServicesSection() {
       icon: Workflow,
       color: "#22c55e",
       gradient: "from-green-500 to-emerald-500",
-      basePrice: 1500,
-      hourlyRate: 60,
       timeline: "1-3 weeks",
       features: ["Process automation", "API integrations", "Data sync", "Custom scripts"],
     },
@@ -42,8 +33,6 @@ export function ServicesSection() {
       icon: Bot,
       color: "#f59e0b",
       gradient: "from-orange-500 to-yellow-500",
-      basePrice: 2000,
-      hourlyRate: 65,
       timeline: "2-4 weeks",
       features: ["WhatsApp/Telegram", "AI-powered (GPT)", "Multi-language", "24/7 support"],
     },
@@ -52,8 +41,6 @@ export function ServicesSection() {
       icon: Code,
       color: "#ec4899",
       gradient: "from-pink-500 to-rose-500",
-      basePrice: 4000,
-      hourlyRate: 75,
       timeline: "4-12 weeks",
       features: ["Custom web app", "React/Vue.js", "Real-time features", "Scalable"],
     },
@@ -62,8 +49,6 @@ export function ServicesSection() {
       icon: TrendingUp,
       color: "#8b5cf6",
       gradient: "from-violet-500 to-purple-500",
-      basePrice: 500,
-      hourlyRate: 80,
       timeline: "Flexible",
       features: ["Tech consulting", "Code review", "Architecture", "Performance audit"],
     },
@@ -75,14 +60,6 @@ export function ServicesSection() {
       contactSection.scrollIntoView({ behavior: 'smooth' });
       sessionStorage.setItem('selectedService', serviceKey);
     }
-  };
-
-  const calculatePrice = (basePrice: number) => {
-    const vat = basePrice * 0.21;
-    return {
-      base: basePrice,
-      total: basePrice + vat
-    };
   };
   
   return (
@@ -107,7 +84,7 @@ export function ServicesSection() {
               viewport={{ once: true }}
             >
               <Sparkles className="w-4 h-4 text-[#00d9ff]" />
-              <span className="text-sm font-semibold text-[var(--text-primary)]">Services & Pricing</span>
+              <span className="text-sm font-semibold text-[var(--text-primary)]">Services</span>
             </motion.div>
 
             <motion.h2
@@ -122,47 +99,19 @@ export function ServicesSection() {
             </motion.h2>
 
             <motion.p
-              className="text-base md:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto mb-4"
+              className="text-base md:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
               Professional development services for European businesses
             </motion.p>
-
-            {/* VAT Toggle */}
-            <motion.div
-              className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-xl text-sm"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-[var(--text-secondary)]">Prices:</span>
-              <button
-                onClick={() => setShowVAT(!showVAT)}
-                className={`px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
-                  !showVAT ? 'bg-[#00d9ff] text-black' : 'text-[var(--text-secondary)]'
-                }`}
-              >
-                Excl. VAT
-              </button>
-              <button
-                onClick={() => setShowVAT(!showVAT)}
-                className={`px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
-                  showVAT ? 'bg-[#00d9ff] text-black' : 'text-[var(--text-secondary)]'
-                }`}
-              >
-                Incl. VAT
-              </button>
-            </motion.div>
           </div>
 
           {/* Compact Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {services.map((service, index) => {
               const Icon = service.icon;
-              const pricing = calculatePrice(service.basePrice);
-              const displayPrice = showVAT ? pricing.total : pricing.base;
 
               return (
                 <motion.div
@@ -195,15 +144,17 @@ export function ServicesSection() {
                     className="relative h-full bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-2xl p-5 hover:border-[#00d9ff]/50 transition-all duration-300 cursor-pointer"
                     whileHover={{ scale: 1.02 }}
                   >
-                    {/* Icon */}
+                    {/* Icon & Price */}
                     <div className="flex items-center justify-between mb-4">
                       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg`}>
                         <Icon className="w-6 h-6 text-white" />
                       </div>
                       <div className="text-right">
-                        <div className="text-xs text-[var(--text-muted)]">from</div>
-                        <div className="text-2xl font-bold text-[var(--text-primary)]">
-                          €{displayPrice.toLocaleString()}
+                        <div className="text-sm font-semibold text-[var(--text-primary)] opacity-70">
+                          Contact for
+                        </div>
+                        <div className="text-base font-bold text-[var(--accent-primary)]">
+                          Quote
                         </div>
                       </div>
                     </div>
@@ -213,13 +164,11 @@ export function ServicesSection() {
                       {service.key.charAt(0).toUpperCase() + service.key.slice(1)}
                     </h3>
 
-                    {/* Timeline & Hourly */}
+                    {/* Timeline */}
                     <div className="flex items-center gap-2 mb-3 text-xs">
                       <span className="px-2 py-1 bg-[var(--glass-bg)] rounded-lg text-[var(--text-secondary)]">
                         {service.timeline}
                       </span>
-                      <span className="text-[var(--text-muted)]">•</span>
-                      <span className="text-[var(--text-secondary)]">€{service.hourlyRate}/hr</span>
                     </div>
 
                     {/* Features */}

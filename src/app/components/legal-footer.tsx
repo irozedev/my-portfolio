@@ -50,7 +50,7 @@ export function LegalFooter() {
             {/* Compliance Notice */}
             <div className="text-xs text-[var(--text-muted)] text-center md:text-right">
               <p>🇪🇺 GDPR Compliant • Based in Belgium</p>
-              <p className="mt-1">VAT: BE 0123.456.789 • KvK: 12345678</p>
+              <p className="mt-1 opacity-50">VAT & Company Registration: Pending</p>
             </div>
           </div>
         </div>

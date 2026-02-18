@@ -140,9 +140,9 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
             <section>
               <h3 className="text-xl font-bold text-[var(--text-primary)] mb-3">Business Registration</h3>
               <div className="text-[var(--text-secondary)] space-y-2">
-                <p><strong>VAT Number:</strong> BE 0123.456.789</p>
-                <p><strong>Chamber of Commerce:</strong> KvK 12345678</p>
-                <p className="text-sm italic">🇪🇺 Registered in accordance with Belgian commercial law</p>
+                <p className="opacity-50"><strong>VAT Number:</strong> Registration pending</p>
+                <p className="opacity-50"><strong>Chamber of Commerce:</strong> Registration pending</p>
+                <p className="text-sm italic">🇪🇺 Belgian business registration in progress</p>
               </div>
             </section>
 

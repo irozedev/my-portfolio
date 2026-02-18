@@ -1,5 +1,4 @@
 // MINIMAL TEST VERSION - DO NOT USE IN PRODUCTION
-// This is to test if Figma Make can build the project
 
 export default function App() {
   return (

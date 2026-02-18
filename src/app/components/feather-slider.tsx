@@ -138,13 +138,26 @@ export function FeatherSlider({
     const slideWidth = getSlideWidth();
     const currentX = x.get();
     const velocity = info.velocity.x;
+    const offset = info.offset.x;
     
     // Calculate new index based on drag distance and velocity
     let newIndex = Math.round(-currentX / (slideWidth + spacing));
     
-    // Add velocity-based navigation
-    if (Math.abs(velocity) > 500) {
-      newIndex += velocity > 0 ? -1 : 1;
+    // IMPROVED: Better swipe detection for mobile
+    const swipeThreshold = slideWidth * 0.2; // 20% of slide width
+    
+    // If user swiped more than threshold or has high velocity
+    if (Math.abs(offset) > swipeThreshold || Math.abs(velocity) > 500) {
+      if (offset > 0) {
+        // Swiped right (go to previous)
+        newIndex = Math.max(0, currentIndex - 1);
+      } else {
+        // Swiped left (go to next)
+        newIndex = Math.min(maxIndex, currentIndex + 1);
+      }
+    } else {
+      // Snap to nearest slide
+      newIndex = currentIndex;
     }
     
     goToSlide(newIndex);

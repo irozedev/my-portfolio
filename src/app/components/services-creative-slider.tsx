@@ -235,7 +235,11 @@ export function ServicesCreativeSlider() {
     autoplaySpeed: 5000,
     pauseOnHover: true,
     swipeToSlide: true,
-    touchThreshold: 25, // 🔥 INCREASED from 10 to 25 for better swipe detection
+    touchThreshold: 10, // IMPROVED: Lower threshold for better touch response
+    swipe: true, // Ensure swipe is enabled
+    touchMove: true, // Enable touch move
+    draggable: true, // Enable dragging
+    accessibility: true,
     arrows: !isMobile,
     beforeChange: (_current: number, next: number) => {
       setCurrentSlide(next);

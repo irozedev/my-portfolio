@@ -8,15 +8,14 @@ import { LegalPage } from "./components/legal-pages";
 import { AdminPage } from "./components/admin-page";
 import { Dashboard } from "./components/dashboard";
 import { UserProfilePage } from "./components/user-profile-page";
+import { BetaBanner } from "./components/beta-banner";
 import { Toaster } from "sonner";
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "motion/react";
 
-console.log('🎯 [ROZE.LIVE v2.1.7] App.tsx LOADED');
 
 export default function App() {
-  console.log('🏗️ App component rendering...');
-  
+ 
   const [currentPage, setCurrentPage] = useState<"home" | "privacy" | "terms" | "imprint" | "admin" | "dashboard" | "profile">(() => {
     // Safe window check for SSR
     if (typeof window === 'undefined') return "home";
@@ -130,6 +129,7 @@ export default function App() {
                   />
                 ) : null}
               </AnimatePresence>
+              <BetaBanner />
               <Toaster position="top-right" richColors />
             </CartProvider>
           </AvailabilityProvider>

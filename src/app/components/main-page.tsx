@@ -11,6 +11,7 @@ import { CartButton } from "./cart-button";
 import { SEOHead } from "./seo-head";
 import { PersonalCabinet } from "./personal-cabinet";
 import { Navigation } from "./navigation";
+import { BetaBanner } from "./beta-banner";
 import { useState } from "react";
 
 export function MainPage() {
@@ -64,6 +65,8 @@ export function MainPage() {
       <CartButton />
       
       <PersonalCabinet isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
+      
+      <BetaBanner />
     </div>
   );
 }

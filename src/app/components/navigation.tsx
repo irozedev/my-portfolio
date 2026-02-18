@@ -63,8 +63,9 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
       const nav = document.querySelector('nav');
       const navHeight = nav ? nav.offsetHeight : 80;
       const isMobile = window.innerWidth < 768;
+      const betaBannerHeight = isMobile ? 56 : 64; // Beta banner height (h-14 = 56px, h-16 = 64px)
       const extraPadding = isMobile ? 20 : 30;
-      const totalOffset = navHeight + extraPadding;
+      const totalOffset = betaBannerHeight + navHeight + extraPadding;
       
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -150,7 +151,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
   return (
     <>
       <motion.nav
-        className={`fixed top-0 left-0 right-0 w-full z-[99999] transition-all duration-500 ease-in-out border-b ${
+        className={`fixed top-14 md:top-16 left-0 right-0 w-full z-[9999] transition-all duration-500 ease-in-out border-b ${
           scrolled
             ? 'bg-[var(--bg-primary)] backdrop-blur-xl shadow-lg border-[var(--border-color)]'
             : 'bg-[var(--bg-primary)]/80 backdrop-blur-sm border-transparent'
