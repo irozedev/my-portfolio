@@ -967,10 +967,10 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden fixed inset-0 bg-[var(--bg-primary)] z-[99998] overflow-y-auto"
+              className="lg:hidden fixed inset-0 bg-[var(--bg-primary)] z-[10001] overflow-y-auto"
               style={{ 
-                top: scrolled ? '64px' : '80px',
-                height: scrolled ? 'calc(100vh - 64px)' : 'calc(100vh - 80px)',
+                top: scrolled ? '120px' : '128px',
+                height: scrolled ? 'calc(100vh - 120px)' : 'calc(100vh - 128px)',
               }}
             >
               <div className="min-h-full flex flex-col px-4 sm:px-6 py-6 sm:py-8">

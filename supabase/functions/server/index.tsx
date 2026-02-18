@@ -771,7 +771,7 @@ app.post("/make-server-a62f57c7/update-profile", async (c) => {
 // Submit contact form
 app.post("/make-server-a62f57c7/contact", async (c) => {
   try {
-    const { name, email, message } = await c.req.json();
+    const { name, email, service, message } = await c.req.json();
 
     if (!name || !email || !message) {
       return c.json({ error: 'All fields are required' }, 400);
@@ -783,6 +783,7 @@ app.post("/make-server-a62f57c7/contact", async (c) => {
       id: contactId,
       name,
       email,
+      service: service || 'Not specified',
       message,
       createdAt: new Date().toISOString(),
     };
@@ -796,9 +797,59 @@ app.post("/make-server-a62f57c7/contact", async (c) => {
 
     console.log(`Contact form submitted: ${contactId} from ${email}`);
 
-    // Note: Email sending would require configuring an email service
-    // For now, we just save the contact data
-    // You can use services like Resend, SendGrid, or AWS SES
+    // Send email via Resend
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    
+    if (resendApiKey) {
+      try {
+        const emailResponse = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${resendApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'Portfolio Contact <onboarding@resend.dev>',
+            to: ['rozedev095@gmail.com'],
+            reply_to: email,
+            subject: `New Contact from ${name} - ${service || 'General Inquiry'}`,
+            html: `
+              <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #00d9ff;">🚀 New Contact Form Submission</h2>
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                  <p><strong>Name:</strong> ${name}</p>
+                  <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+                  <p><strong>Service:</strong> ${service || 'Not specified'}</p>
+                  <p><strong>Time:</strong> ${new Date().toLocaleString('en-GB', { timeZone: 'Europe/Brussels' })} (Brussels)</p>
+                </div>
+                <div style="background: #fff; padding: 20px; border-left: 4px solid #00d9ff; margin: 20px 0;">
+                  <h3 style="margin-top: 0;">Message:</h3>
+                  <p style="white-space: pre-wrap;">${message}</p>
+                </div>
+                <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+                <p style="color: #666; font-size: 12px;">
+                  Contact ID: ${contactId}<br>
+                  Sent from roze.live portfolio
+                </p>
+              </div>
+            `,
+          }),
+        });
+
+        if (!emailResponse.ok) {
+          const errorData = await emailResponse.json();
+          console.error('Resend API error:', errorData);
+          console.log('Email failed to send, but contact saved to database');
+        } else {
+          console.log('Email sent successfully via Resend');
+        }
+      } catch (emailError) {
+        console.error('Error sending email via Resend:', emailError);
+        console.log('Email failed to send, but contact saved to database');
+      }
+    } else {
+      console.log('RESEND_API_KEY not configured - skipping email');
+    }
 
     return c.json({ 
       success: true, 
@@ -808,6 +859,128 @@ app.post("/make-server-a62f57c7/contact", async (c) => {
   } catch (error) {
     console.log('Contact form exception:', error);
     return c.json({ error: 'Failed to submit contact form' }, 500);
+  }
+});
+
+// ============================================================
+// BOOK CALL ENDPOINT
+// ============================================================
+
+// Book a call (requires auth)
+app.post("/make-server-a62f57c7/book-call", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No authorization token provided' }, 401);
+    }
+
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(accessToken);
+
+    if (authError || !user) {
+      console.log('Book call auth error:', authError);
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const { date, time, timezone, purpose, notes } = await c.req.json();
+
+    if (!date || !time || !purpose) {
+      return c.json({ error: 'Date, time, and purpose are required' }, 400);
+    }
+
+    // Generate booking ID
+    const bookingId = `call-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const bookingData = {
+      id: bookingId,
+      userId: user.id,
+      userName: user.user_metadata?.name || user.email?.split('@')[0] || 'User',
+      userEmail: user.email,
+      date,
+      time,
+      timezone: timezone || 'UTC',
+      purpose,
+      notes: notes || '',
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    };
+
+    // Save to KV store
+    await kv.set(`booking:${bookingId}`, bookingData);
+    await kv.set(`user:${user.id}:booking:${bookingId}`, bookingData);
+
+    // Add to user's bookings list
+    const userBookings = await kv.get(`user:${user.id}:bookings:list`) || [];
+    userBookings.push(bookingId);
+    await kv.set(`user:${user.id}:bookings:list`, userBookings);
+
+    console.log(`Call booked: ${bookingId} for user ${user.id} on ${date} at ${time}`);
+
+    // Send email notification via Resend
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    
+    if (resendApiKey) {
+      try {
+        const emailResponse = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${resendApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'Portfolio Bookings <onboarding@resend.dev>',
+            to: ['rozedev095@gmail.com'],
+            reply_to: user.email,
+            subject: `📞 New Call Booking - ${date} at ${time}`,
+            html: `
+              <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #00d9ff;">📞 New Call Booking</h2>
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                  <p><strong>Client:</strong> ${bookingData.userName}</p>
+                  <p><strong>Email:</strong> <a href="mailto:${user.email}">${user.email}</a></p>
+                  <p><strong>Date:</strong> ${date}</p>
+                  <p><strong>Time:</strong> ${time} (${timezone || 'UTC'})</p>
+                  <p><strong>Purpose:</strong> ${purpose}</p>
+                  <p><strong>Booked at:</strong> ${new Date().toLocaleString('en-GB', { timeZone: 'Europe/Brussels' })} (Brussels)</p>
+                </div>
+                ${notes ? `
+                <div style="background: #fff; padding: 20px; border-left: 4px solid #00d9ff; margin: 20px 0;">
+                  <h3 style="margin-top: 0;">Additional Notes:</h3>
+                  <p style="white-space: pre-wrap;">${notes}</p>
+                </div>
+                ` : ''}
+                <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+                <p style="color: #666; font-size: 12px;">
+                  Booking ID: ${bookingId}<br>
+                  Sent from roze.live portfolio
+                </p>
+              </div>
+            `,
+          }),
+        });
+
+        if (!emailResponse.ok) {
+          const errorData = await emailResponse.json();
+          console.error('Resend API error for booking:', errorData);
+          console.log('Booking email failed to send, but booking saved to database');
+        } else {
+          console.log('Booking email sent successfully via Resend');
+        }
+      } catch (emailError) {
+        console.error('Error sending booking email via Resend:', emailError);
+        console.log('Booking email failed to send, but booking saved to database');
+      }
+    } else {
+      console.log('RESEND_API_KEY not configured - skipping booking email');
+    }
+
+    return c.json({ 
+      success: true, 
+      message: 'Call booked successfully! You will receive a confirmation email soon.',
+      booking: bookingData
+    });
+  } catch (error) {
+    console.log('Book call exception:', error);
+    return c.json({ error: 'Failed to book call' }, 500);
   }
 });
 

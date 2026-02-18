@@ -141,9 +141,13 @@ export function ServicesSection() {
                   {/* Card */}
                   <motion.div
                     onClick={() => handleServiceClick(service.key)}
-                    className="relative h-full bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-2xl p-5 hover:border-[#00d9ff]/50 transition-all duration-300 cursor-pointer"
-                    whileHover={{ scale: 1.02 }}
+                    className="relative h-full bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-2xl p-5 hover:border-[#00d9ff]/50 transition-all duration-200 cursor-pointer active:scale-[0.98]"
                   >
+                    {/* Tap Indicator for Mobile */}
+                    <div className="absolute top-3 right-3 bg-[#00d9ff]/90 text-black text-xs font-bold px-2 py-1 rounded-lg shadow-lg md:hidden">
+                      Tap
+                    </div>
+
                     {/* Icon & Price */}
                     <div className="flex items-center justify-between mb-4">
                       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg`}>

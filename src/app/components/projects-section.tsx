@@ -169,50 +169,22 @@ export function ProjectsSection() {
                   onMouseLeave={() => setHoveredIndex(null)}
                   onClick={() => setSelectedProject(index)}
                 >
-                  {/* Glow effect */}
+                  {/* Glow effect - disabled on mobile for performance */}
                   <motion.div
-                    className={`absolute -inset-1 rounded-3xl opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-500 bg-gradient-to-r ${project.gradient}`}
-                    animate={isHovered ? { scale: [1, 1.05, 1] } : {}}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    className={`hidden md:block absolute -inset-1 rounded-3xl opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-300 bg-gradient-to-r ${project.gradient}`}
                   />
 
                   {/* Main Card */}
                   <motion.div
                     className={`relative h-full min-h-[400px] ${
                       isLarge ? "md:min-h-[600px]" : "md:min-h-[400px]"
-                    } rounded-3xl overflow-hidden border-2 border-white/10 group-hover:border-[#00d9ff]/50 transition-all duration-500 cursor-pointer`}
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
+                    } rounded-3xl overflow-hidden border-2 border-white/10 hover:border-[#00d9ff]/50 transition-all duration-300 cursor-pointer`}
                   >
-                    {/* Click Indicator - Always visible */}
-                    <motion.div
-                      className="absolute top-4 right-4 z-10 flex items-center gap-2 px-4 py-2.5 bg-[#00d9ff] text-black rounded-full shadow-[0_0_30px_rgba(0,217,255,0.6)] font-bold text-xs md:text-sm"
-                      animate={{
-                        scale: [1, 1.08, 1],
-                        boxShadow: [
-                          "0 0 30px rgba(0,217,255,0.6)",
-                          "0 0 50px rgba(0,217,255,0.9)",
-                          "0 0 30px rgba(0,217,255,0.6)",
-                        ],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                      }}
-                    >
+                    {/* Click Indicator - Simple on mobile */}
+                    <div className="absolute top-4 right-4 z-10 flex items-center gap-2 px-4 py-2.5 bg-[#00d9ff] text-black rounded-full shadow-lg font-bold text-xs md:text-sm">
                       <Eye className="w-4 h-4 md:w-5 md:h-5" />
                       <span className="hidden sm:inline">Tap to view</span>
-                      <motion.div
-                        className="w-1.5 h-1.5 bg-black rounded-full"
-                        animate={{
-                          scale: [1, 1.5, 1],
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          repeat: Infinity,
-                        }}
-                      />
-                    </motion.div>
+                    </div>
 
                     {/* Background Image with overlay */}
                     <div className="absolute inset-0">
