@@ -151,6 +151,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
   return (
     <>
       <motion.nav
+        id="navigation"
         className={`fixed top-14 md:top-16 left-0 right-0 w-full z-[9999] transition-all duration-500 ease-in-out border-b ${
           scrolled
             ? 'bg-[var(--bg-primary)] backdrop-blur-xl shadow-lg border-[var(--border-color)]'

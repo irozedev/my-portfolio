@@ -4,6 +4,7 @@ import { Mail, Linkedin, Github, Briefcase, Send, CheckCircle2, XCircle, Loader2
 import { useLanguage } from "../contexts/language-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
 import { useAvailability } from "../contexts/availability-context";
+import { toast } from "sonner";
 
 // Simple form components
 const Input = ({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) => (
@@ -128,15 +129,15 @@ export function ContactSection() {
       });
 
       if (response.ok) {
-        alert(t("contact.successMessage") || "Message sent successfully! I'll get back to you soon.");
+        toast.success(t("contact.successMessage") || "Message sent successfully! I'll get back to you soon.");
         setFormData({ name: "", email: "", service: "", message: "" });
       } else {
         const error = await response.json();
-        alert(error.error || "Failed to send message. Please try emailing directly.");
+        toast.error(error.error || "Failed to send message. Please try emailing directly.");
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      alert("Failed to send message. Please try emailing stepan@roze.live directly.");
+      toast.error("Failed to send message. Please try emailing stepan@roze.live directly.");
     } finally {
       setIsSubmitting(false);
     }

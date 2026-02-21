@@ -3,6 +3,7 @@ import { ExternalLink, Github, Sparkles, ArrowUpRight, Star, Code2, Layers, Zap,
 import { useState, useRef, MouseEvent } from "react";
 import { useLanguage } from "../contexts/language-context";
 import { FeatherSlider } from "./feather-slider";
+import { ProjectDetailModal } from "./project-detail-modal";
 
 const projects = [
   {
@@ -10,7 +11,7 @@ const projects = [
     title: "AI SaaS Platform",
     category: "Full-Stack",
     description: "Next-generation AI-powered business automation platform with real-time analytics",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=75",
     tech: ["React", "Node.js", "OpenAI", "PostgreSQL"],
     gradient: "from-cyan-500 to-blue-600",
     size: "large",
@@ -22,7 +23,7 @@ const projects = [
     title: "E-Commerce Pro",
     category: "Frontend",
     description: "Modern e-commerce platform with seamless checkout experience",
-    image: "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1557821552-17105176677c?w=600&q=75",
     tech: ["Next.js", "Stripe", "Tailwind"],
     gradient: "from-purple-500 to-pink-600",
     size: "medium",
@@ -34,7 +35,7 @@ const projects = [
     title: "DeFi Dashboard",
     category: "Web3",
     description: "Real-time cryptocurrency portfolio tracker with advanced analytics",
-    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&q=75",
     tech: ["Web3.js", "Ethers", "React"],
     gradient: "from-amber-500 to-orange-600",
     size: "medium",
@@ -46,7 +47,7 @@ const projects = [
     title: "Social Analytics",
     category: "Data Viz",
     description: "Powerful social media analytics dashboard with ML insights",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=75",
     tech: ["D3.js", "Python", "React"],
     gradient: "from-green-500 to-emerald-600",
     size: "small",
@@ -58,7 +59,7 @@ const projects = [
     title: "Healthcare Portal",
     category: "Enterprise",
     description: "HIPAA-compliant patient management system",
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=75",
     tech: ["Angular", "AWS", "PostgreSQL"],
     gradient: "from-blue-500 to-indigo-600",
     size: "small",
@@ -67,7 +68,7 @@ const projects = [
   }
 ];
 
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
+function ProjectCard({ project, index, onClick }: { project: typeof projects[0]; index: number; onClick: () => void }) {
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -104,7 +105,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       onMouseLeave={() => setIsHovered(false)}
       onMouseMove={handleMouseMove}
       className={`group relative overflow-hidden rounded-3xl ${sizeClasses[project.size]} cursor-pointer`}
-      onClick={handleProjectClick}
+      onClick={onClick}
     >
       {/* Animated Glow on Hover */}
       <motion.div
@@ -127,6 +128,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             src={project.image}
             alt={project.title}
             onLoad={() => setImageLoaded(true)}
+            loading="lazy"
             className="w-full h-full object-cover"
             animate={{
               scale: isHovered ? 1.1 : 1,
@@ -287,6 +289,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 
 export function ProjectsSectionUltra() {
   const { t } = useLanguage();
+  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
 
   return (
     <section id="projects-section" className="relative py-12 md:py-16 px-4 bg-[var(--bg-primary)] overflow-hidden" style={{ position: 'relative' }}>
@@ -371,7 +374,12 @@ export function ProjectsSectionUltra() {
           showPagination={true}
         >
           {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+            <ProjectCard 
+              key={project.id} 
+              project={project} 
+              index={index}
+              onClick={() => setSelectedProject(project)}
+            />
           ))}
         </FeatherSlider>
 
@@ -399,6 +407,33 @@ export function ProjectsSectionUltra() {
           </motion.button>
         </motion.div>
       </div>
+
+      {/* Project Detail Modal */}
+      {selectedProject && (
+        <ProjectDetailModal
+          project={{
+            ...selectedProject,
+            subtitle: selectedProject.category,
+            fullDescription: `${selectedProject.description}\n\nThis project showcases cutting-edge technologies and modern development practices. Built with performance and scalability in mind, it demonstrates expertise in ${selectedProject.tech.join(', ')}.`,
+            features: [
+              "Modern & responsive design",
+              "High performance optimization",
+              "Scalable architecture",
+              "Clean & maintainable code"
+            ],
+            timeline: "4-8 weeks",
+            team: "Solo project",
+            liveUrl: selectedProject.links.live,
+            githubUrl: selectedProject.links.github,
+            metrics: Object.entries(selectedProject.stats).map(([label, value]) => ({
+              icon: Sparkles,
+              label,
+              value: String(value)
+            }))
+          }}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
     </section>
   );
 }

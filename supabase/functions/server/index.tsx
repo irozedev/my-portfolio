@@ -866,117 +866,62 @@ app.post("/make-server-a62f57c7/contact", async (c) => {
 // BOOK CALL ENDPOINT
 // ============================================================
 
-// Book a call (requires auth)
+// Book a call (NO AUTH REQUIRED - guests can book)
 app.post("/make-server-a62f57c7/book-call", async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
     
-    if (!accessToken) {
-      return c.json({ error: 'No authorization token provided' }, 401);
+    // Try to get user if token provided, but don't require it
+    let user = null;
+    if (accessToken && accessToken !== supabaseAnonKey) {
+      const { data: { user: authUser } } = await supabaseAdmin.auth.getUser(accessToken);
+      user = authUser;
     }
 
-    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(accessToken);
+    const body = await c.req.json();
+    const { userId, userName, userEmail, date, time, timezone, purpose, notes, callType } = body;
 
-    if (authError || !user) {
-      console.log('Book call auth error:', authError);
-      return c.json({ error: 'Unauthorized' }, 401);
-    }
-
-    const { date, time, timezone, purpose, notes } = await c.req.json();
-
-    if (!date || !time || !purpose) {
-      return c.json({ error: 'Date, time, and purpose are required' }, 400);
+    if (!date || !time) {
+      return c.json({ error: 'Date and time are required' }, 400);
     }
 
     // Generate booking ID
     const bookingId = `call-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const bookingData = {
       id: bookingId,
-      userId: user.id,
-      userName: user.user_metadata?.name || user.email?.split('@')[0] || 'User',
-      userEmail: user.email,
+      userId: user?.id || userId || 'guest',
+      userName: user?.user_metadata?.name || userName || 'Guest User',
+      userEmail: user?.email || userEmail || 'Not provided',
       date,
       time,
-      timezone: timezone || 'UTC',
-      purpose,
+      timezone: timezone || 'Europe/Brussels',
+      callType: callType || 'video',
+      purpose: purpose || 'General inquiry',
       notes: notes || '',
       status: 'pending',
       createdAt: new Date().toISOString(),
     };
 
+    console.log('Saving booking:', bookingData);
+
     // Save to KV store
     await kv.set(`booking:${bookingId}`, bookingData);
-    await kv.set(`user:${user.id}:booking:${bookingId}`, bookingData);
-
-    // Add to user's bookings list
-    const userBookings = await kv.get(`user:${user.id}:bookings:list`) || [];
-    userBookings.push(bookingId);
-    await kv.set(`user:${user.id}:bookings:list`, userBookings);
-
-    console.log(`Call booked: ${bookingId} for user ${user.id} on ${date} at ${time}`);
-
-    // Send email notification via Resend
-    const resendApiKey = Deno.env.get('RESEND_API_KEY');
     
-    if (resendApiKey) {
-      try {
-        const emailResponse = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${resendApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: 'Portfolio Bookings <onboarding@resend.dev>',
-            to: ['rozedev095@gmail.com'],
-            reply_to: user.email,
-            subject: `📞 New Call Booking - ${date} at ${time}`,
-            html: `
-              <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #00d9ff;">📞 New Call Booking</h2>
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
-                  <p><strong>Client:</strong> ${bookingData.userName}</p>
-                  <p><strong>Email:</strong> <a href="mailto:${user.email}">${user.email}</a></p>
-                  <p><strong>Date:</strong> ${date}</p>
-                  <p><strong>Time:</strong> ${time} (${timezone || 'UTC'})</p>
-                  <p><strong>Purpose:</strong> ${purpose}</p>
-                  <p><strong>Booked at:</strong> ${new Date().toLocaleString('en-GB', { timeZone: 'Europe/Brussels' })} (Brussels)</p>
-                </div>
-                ${notes ? `
-                <div style="background: #fff; padding: 20px; border-left: 4px solid #00d9ff; margin: 20px 0;">
-                  <h3 style="margin-top: 0;">Additional Notes:</h3>
-                  <p style="white-space: pre-wrap;">${notes}</p>
-                </div>
-                ` : ''}
-                <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
-                <p style="color: #666; font-size: 12px;">
-                  Booking ID: ${bookingId}<br>
-                  Sent from roze.live portfolio
-                </p>
-              </div>
-            `,
-          }),
-        });
-
-        if (!emailResponse.ok) {
-          const errorData = await emailResponse.json();
-          console.error('Resend API error for booking:', errorData);
-          console.log('Booking email failed to send, but booking saved to database');
-        } else {
-          console.log('Booking email sent successfully via Resend');
-        }
-      } catch (emailError) {
-        console.error('Error sending booking email via Resend:', emailError);
-        console.log('Booking email failed to send, but booking saved to database');
-      }
-    } else {
-      console.log('RESEND_API_KEY not configured - skipping booking email');
+    // If user is authenticated, also save to their bookings
+    if (user?.id) {
+      await kv.set(`user:${user.id}:booking:${bookingId}`, bookingData);
+      
+      const userBookings = await kv.get(`user:${user.id}:bookings:list`) || [];
+      userBookings.push(bookingId);
+      await kv.set(`user:${user.id}:bookings:list`, userBookings);
     }
+
+    console.log('Booking saved successfully:', bookingId);
 
     return c.json({ 
       success: true, 
-      message: 'Call booked successfully! You will receive a confirmation email soon.',
-      booking: bookingData
+      booking: bookingData,
+      message: 'Call booking created successfully'
     });
   } catch (error) {
     console.log('Book call exception:', error);

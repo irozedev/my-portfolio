@@ -1,7 +1,7 @@
 // Dynamic statistics calculator based on real portfolio data
 
 // Calculate years of experience from start date
-export function calculateYearsOfExperience(startYear: number = 2016): number {
+export function calculateYearsOfExperience(startYear: number = 2015): number {
   const currentYear = new Date().getFullYear();
   return currentYear - startYear;
 }
@@ -183,7 +183,7 @@ export function calculateSuccessRate(): number {
 // Get all statistics
 export function getPortfolioStats() {
   return {
-    yearsExperience: calculateYearsOfExperience(2016),
+    yearsExperience: calculateYearsOfExperience(2015),
     projectsCompleted: calculateCompletedProjects(),
     happyClients: calculateHappyClients(),
     successRate: calculateSuccessRate(),

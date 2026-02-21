@@ -77,7 +77,10 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
   };
 
   const handleSubmit = async () => {
-    if (!user || !selectedDate || !selectedTime || !accessToken) return;
+    if (!selectedDate || !selectedTime) {
+      setError("Please select date and time");
+      return;
+    }
 
     setLoading(true);
     setError("");
@@ -87,9 +90,9 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
       const bookingDateTime = setMinutes(setHours(selectedDate, hours), minutes);
 
       const booking = {
-        userId: user.id,
-        userName: user.user_metadata?.name || user.email,
-        userEmail: user.email,
+        userId: user?.id || 'guest',
+        userName: user?.user_metadata?.name || 'Guest User',
+        userEmail: user?.email || 'Not provided',
         date: format(bookingDateTime, 'yyyy-MM-dd'),
         time: selectedTime,
         callType,
@@ -107,7 +110,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
+            'Authorization': `Bearer ${publicAnonKey}`,
           },
           body: JSON.stringify(booking),
         }

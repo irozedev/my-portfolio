@@ -39,7 +39,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="relative bg-[var(--bg-primary)] border-t border-[var(--border-color)] py-12 px-4 overflow-hidden">
+    <footer id="footer" className="relative bg-[var(--bg-primary)] border-t border-[var(--border-color)] py-12 px-4 overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0">
         <motion.div
