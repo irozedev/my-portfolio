@@ -159,7 +159,7 @@ export function SiteTour() {
             id: "hero-section",
             icon: Rocket,
             title: "👋 Головна секція",
-            desc: "Знайомся - Stepan Roze, Full-Stack розробник з 10+ роками досвіду. Анімов��на статистика, CTA кнопки, динамічний контент!",
+            desc: "Знайомся - Stepan Roze, Full-Stack розробник з 10+ роками досвіду. Анімована статистика, CTA кнопки, динамічний контент!",
             tip: "Статистика (150+ проектів, 50+ клієнтів) розраховується з реальних даних."
           },
           {
@@ -605,7 +605,7 @@ export function SiteTour() {
         }
       }, 100);
     } else {
-      // Last step - close IMMEDIATELY without black screen
+      // Last step - close IMMEDIATELY without scrolling
       finishTour();
     }
   };
@@ -639,11 +639,16 @@ export function SiteTour() {
   };
 
   const finishTour = () => {
+    // Close tour INSTANTLY - clear state first to prevent any animations
     setIsActive(false);
     setCurrentStep(0);
     setSteps([]);
     localStorage.setItem('siteTourCompleted', 'true');
-    setShowButton(true);
+    
+    // Show button after a tiny delay to ensure overlay is gone
+    setTimeout(() => {
+      setShowButton(true);
+    }, 50);
   };
 
   // Auto-start tour on first visit
