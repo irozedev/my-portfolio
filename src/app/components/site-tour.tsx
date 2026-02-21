@@ -566,6 +566,15 @@ export function SiteTour() {
         const elementPosition = firstElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - offset;
         window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        
+        // CRITICAL: Recalculate highlights AFTER scroll completes
+        setTimeout(() => {
+          const recalculatedSteps = validSteps.map(step => ({
+            ...step,
+            highlight: calculateHighlight(step.id)
+          }));
+          setSteps(recalculatedSteps);
+        }, 600); // Wait for smooth scroll to finish
       }
     }, 300);
   };
@@ -582,10 +591,24 @@ export function SiteTour() {
           const elementPosition = nextElement.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - offset;
           window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+          
+          // Recalculate highlights after scroll - ONLY if tour is still active
+          setTimeout(() => {
+            setSteps(prevSteps => {
+              if (prevSteps.length === 0) return prevSteps;
+              return prevSteps.map(step => ({
+                ...step,
+                highlight: calculateHighlight(step.id)
+              }));
+            });
+          }, 600);
         }
       }, 100);
     } else {
-      finishTour();
+      // Last step - finish immediately without any delays
+      setTimeout(() => {
+        finishTour();
+      }, 100);
     }
   };
 
@@ -601,6 +624,17 @@ export function SiteTour() {
           const elementPosition = prevElement.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - offset;
           window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+          
+          // Recalculate highlights after scroll - ONLY if tour is still active
+          setTimeout(() => {
+            setSteps(prevSteps => {
+              if (prevSteps.length === 0) return prevSteps;
+              return prevSteps.map(step => ({
+                ...step,
+                highlight: calculateHighlight(step.id)
+              }));
+            });
+          }, 600);
         }
       }, 100);
     }
@@ -708,27 +742,34 @@ export function SiteTour() {
                 width="100%"
                 height="100%"
                 style={{
-                  position: 'absolute',
+                  position: 'fixed',
                   top: 0,
                   left: 0,
                   width: '100%',
-                  height: Math.max(document.documentElement.scrollHeight, window.innerHeight),
+                  height: '100vh',
                 }}
               >
                 <defs>
                   <mask id="spotlight-mask">
                     {/* White = visible, Black = hidden */}
                     <rect x="0" y="0" width="100%" height="100%" fill="white" />
-                    {/* Cut out the highlighted element */}
+                    {/* Cut out the highlighted element - DON'T subtract scrollY here because SVG is fixed */}
                     <rect
                       x={step.highlight.left - 16}
-                      y={step.highlight.top - 16}
+                      y={step.highlight.top - window.pageYOffset - 16}
                       width={step.highlight.width + 32}
                       height={step.highlight.height + 32}
                       fill="black"
                       rx="12"
                     />
                   </mask>
+                  
+                  {/* Radial gradient for glow inside cutout */}
+                  <radialGradient id="spotlight-glow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="rgba(0, 217, 255, 0.15)" />
+                    <stop offset="50%" stopColor="rgba(0, 217, 255, 0.08)" />
+                    <stop offset="100%" stopColor="rgba(0, 217, 255, 0)" />
+                  </radialGradient>
                 </defs>
                 
                 {/* Dark overlay with cutout */}
@@ -737,8 +778,32 @@ export function SiteTour() {
                   y="0"
                   width="100%"
                   height="100%"
-                  fill="rgba(0, 0, 0, 0.88)"
+                  fill="rgba(0, 0, 0, 0.92)"
                   mask="url(#spotlight-mask)"
+                />
+                
+                {/* Light glow INSIDE the cutout area to make element visible */}
+                <rect
+                  x={step.highlight.left - 16}
+                  y={step.highlight.top - window.pageYOffset - 16}
+                  width={step.highlight.width + 32}
+                  height={step.highlight.height + 32}
+                  fill="url(#spotlight-glow)"
+                  rx="12"
+                  style={{ mixBlendMode: 'screen' }}
+                />
+                
+                {/* Bright spotlight effect around edges */}
+                <rect
+                  x={step.highlight.left - 20}
+                  y={step.highlight.top - window.pageYOffset - 20}
+                  width={step.highlight.width + 40}
+                  height={step.highlight.height + 40}
+                  fill="none"
+                  stroke="rgba(0, 217, 255, 0.3)"
+                  strokeWidth="8"
+                  rx="14"
+                  style={{ filter: 'blur(12px)' }}
                 />
               </svg>
             </motion.div>

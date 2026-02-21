@@ -34,6 +34,187 @@ app.get("/make-server-a62f57c7/health", (c) => {
 });
 
 // ============================================================
+// AI CHAT ENDPOINT - Anthropic Claude Integration
+// ============================================================
+
+// Rate limiting storage (in-memory for demo, use Redis in production)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+// Response cache to save API calls
+const responseCache = new Map<string, { response: string; timestamp: number }>();
+const CACHE_DURATION = 3600000; // 1 hour
+
+// Rate limiting helper
+function checkRateLimit(identifier: string, maxRequests: number, windowMs: number): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(identifier);
+  
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(identifier, { count: 1, resetTime: now + windowMs });
+    return true;
+  }
+  
+  if (record.count >= maxRequests) {
+    return false;
+  }
+  
+  record.count++;
+  return true;
+}
+
+// Clean old cache entries
+function cleanCache() {
+  const now = Date.now();
+  for (const [key, value] of responseCache.entries()) {
+    if (now - value.timestamp > CACHE_DURATION) {
+      responseCache.delete(key);
+    }
+  }
+}
+
+app.post("/make-server-a62f57c7/ai/chat", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { message, context } = body;
+
+    // Input validation
+    if (!message || typeof message !== 'string') {
+      return c.json({ error: 'Message is required' }, 400);
+    }
+
+    // Max message length to prevent abuse
+    if (message.length > 500) {
+      return c.json({ error: 'Message too long. Max 500 characters.' }, 400);
+    }
+
+    // Prevent spam/abuse patterns
+    const spamPatterns = [
+      /(.)\1{10,}/i, // Repeated characters
+      /https?:\/\//i, // URLs
+      /<script/i, // Script tags
+      /SELECT.*FROM/i, // SQL injection attempts
+    ];
+    
+    for (const pattern of spamPatterns) {
+      if (pattern.test(message)) {
+        console.warn('Spam/abuse detected:', message.substring(0, 50));
+        return c.json({ error: 'Invalid message content' }, 400);
+      }
+    }
+
+    // Get client IP for rate limiting
+    const clientIp = c.req.header('x-forwarded-for') || 
+                     c.req.header('x-real-ip') || 
+                     'unknown';
+    
+    // Rate limit: 10 requests per 5 minutes per IP
+    if (!checkRateLimit(clientIp, 10, 300000)) {
+      console.warn('Rate limit exceeded for IP:', clientIp);
+      return c.json({ 
+        error: 'Too many requests. Please wait a few minutes.',
+        rateLimited: true 
+      }, 429);
+    }
+
+    // Generate cache key
+    const cacheKey = message.toLowerCase().trim().substring(0, 100);
+    
+    // Check cache first (save API calls!)
+    cleanCache();
+    const cached = responseCache.get(cacheKey);
+    if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+      console.log('Cache hit for message:', cacheKey.substring(0, 30));
+      return c.json({
+        success: true,
+        message: cached.response,
+        model: 'claude-3-5-sonnet',
+        cached: true
+      });
+    }
+
+    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
+    
+    if (!anthropicApiKey) {
+      console.error('ANTHROPIC_API_KEY not configured');
+      return c.json({ error: 'AI service not configured' }, 500);
+    }
+
+    // ULTRA-COMPRESSED system prompt to save tokens
+    const systemPrompt = `You are Roze Bot for Stepan Roze's portfolio (roze.live).
+
+QUICK FACTS:
+- Full-Stack Dev, 10+ yrs exp, Belgium 🇧🇪
+- Email: stepan@roze.live
+- Stack: React, Vue, Node.js, TypeScript, Magento 2
+- Rates: €45-75/hr (Frontend to Full-Stack)
+- Stats: 150+ projects, 50+ clients, 99% satisfaction
+- Experience: Freelance (2015-19), Ronis (2019-22), eConsulting (2022-24)
+- Languages: UA (native), EN (B1), NL (A2), ES (A1)
+
+RULES:
+1. Answer in 1-2 sentences max
+2. Be direct, no fluff
+3. Only portfolio topics (services, pricing, skills, contact)
+4. For off-topic: "I can only help with Stepan's services. Email stepan@roze.live for details."
+5. Use emojis sparingly (max 1 per response)`;
+
+    // Call Anthropic API with minimal tokens
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': anthropicApiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-3-5-haiku-20241022', // HAIKU = 5x cheaper than Sonnet!
+        max_tokens: 150, // Reduced from 512 to 150 (save 72% tokens!)
+        system: systemPrompt,
+        messages: [
+          {
+            role: 'user',
+            content: message
+          }
+        ],
+        temperature: 0.7 // Slightly lower for more consistent responses
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Anthropic API error:', response.status, errorData);
+      return c.json({ error: 'AI service temporarily unavailable' }, 500);
+    }
+
+    const data = await response.json();
+    const aiMessage = data.content[0].text;
+
+    // Cache the response
+    responseCache.set(cacheKey, {
+      response: aiMessage,
+      timestamp: Date.now()
+    });
+
+    // Log usage for monitoring
+    console.log(`AI request: ${message.substring(0, 30)}... | Tokens: input=${data.usage?.input_tokens || 0}, output=${data.usage?.output_tokens || 0}`);
+
+    return c.json({
+      success: true,
+      message: aiMessage,
+      model: 'claude-3-5-haiku',
+      cached: false
+    });
+
+  } catch (error) {
+    console.error('AI chat error:', error);
+    return c.json({ 
+      error: 'Failed to process request',
+      details: error.message 
+    }, 500);
+  }
+});
+
+// ============================================================
 // AUTH ENDPOINTS
 // ============================================================
 

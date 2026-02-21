@@ -18,8 +18,13 @@ export function ChatBot() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [hasServiceContext, setHasServiceContext] = useState(false);
+  const [requestCount, setRequestCount] = useState(0);
+  const [isRateLimited, setIsRateLimited] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
+
+  // Rate limit: max 8 messages per session
+  const MAX_REQUESTS = 8;
 
   // Listen for service selection event
   useEffect(() => {
@@ -141,9 +146,47 @@ export function ChatBot() {
     setMessages((prev) => [...prev, userMessage]);
     setInputValue("");
 
-    // Simulate bot response
+    // Check if rate limited
+    if (requestCount >= MAX_REQUESTS) {
+      setIsRateLimited(true);
+      const rateLimitMessage: Message = {
+        id: Date.now() + 1,
+        text: "Rate limit reached. Please try again later.",
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, rateLimitMessage]);
+      return;
+    }
+
+    // Call AI endpoint
     setIsTyping(true);
-    setTimeout(() => {
+    fetch(`https://saeohtefpfuzzajfduad.supabase.co/functions/v1/make-server-a62f57c7/ai/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhZW9odGVwZnB1enphamZkdWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxOTgzNjEsImV4cCI6MjA4NDc3NDM2MX0.bxKkFIXrqVzRVU72E_zZHVGkWuVF_hyJVqvdYrRls9U`
+      },
+      body: JSON.stringify({
+        message: inputValue.trim(),
+        context: hasServiceContext ? 'service_selected' : 'general'
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const botMessage: Message = {
+        id: Date.now() + 1,
+        text: data.message || data.error || 'Sorry, I encountered an error. Please try again.',
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botMessage]);
+      setIsTyping(false);
+      setRequestCount(prev => prev + 1);
+    })
+    .catch(error => {
+      console.error('AI Chat error:', error);
+      // Fallback to static responses
       const botResponse = getBotResponse(inputValue.toLowerCase());
       const botMessage: Message = {
         id: Date.now() + 1,
@@ -153,7 +196,8 @@ export function ChatBot() {
       };
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
-    }, 1000);
+      setRequestCount(prev => prev + 1);
+    });
   };
 
   const getBotResponse = (input: string): string => {
@@ -561,7 +605,7 @@ export function ChatBot() {
                 />
                 <button
                   onClick={handleSend}
-                  disabled={!inputValue.trim()}
+                  disabled={!inputValue.trim() || isRateLimited}
                   className="px-4 py-3 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
                   <Send className="w-5 h-5" />
