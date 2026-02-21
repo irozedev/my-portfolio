@@ -1,9 +1,9 @@
-import { motion } from "motion/react";
-import { useState } from "react";
 import { Button } from "./ui/button";
 import { ArrowRight, Github, Linkedin, Mail, Download, Code, CheckCircle2, Star, Sparkles, Zap, Rocket } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
-import { BookCallModal } from "./book-call-modal";
+import { BookCallModal } from "./book-call-fixed";
+import { useState } from "react";
+import { motion } from "motion/react";
 
 interface HeroSectionProps {
   onViewWork: () => void;
@@ -28,7 +28,7 @@ export function Hero({ onViewWork }: HeroSectionProps) {
   return (
     <>
       <section
-        id="home"
+        id="hero-section"
         className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 px-3 sm:px-4 sm:pt-28 md:pt-24 md:pb-16"
       >
         {/* Background Effects */}
@@ -186,12 +186,13 @@ export function Hero({ onViewWork }: HeroSectionProps) {
                 </Button>
                 
                 <Button
+                  id="book-call-button"
                   onClick={() => setIsBookCallOpen(true)}
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto border-2 border-[#00d9ff]/50 hover:border-[#00d9ff] text-[var(--text-primary)] hover:bg-[#00d9ff]/10 font-bold px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg transition-all duration-300 group backdrop-blur-sm"
+                  className="w-full sm:w-auto border-2 border-[#00d9ff] bg-transparent hover:bg-[#00d9ff] text-[#00d9ff] hover:text-black font-mono font-bold px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg transition-all duration-300 group backdrop-blur-sm shadow-[0_0_20px_rgba(0,217,255,0.3)] hover:shadow-[0_0_40px_rgba(0,217,255,0.6)]"
                 >
-                  <Rocket className="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:scale-110 transition-transform" />
+                  <Rocket className="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:scale-110 group-hover:rotate-12 transition-transform" />
                   <span className="truncate">{t("hero.getInTouch") || "Book a Consultation"}</span>
                 </Button>
               </motion.div>

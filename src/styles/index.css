@@ -986,3 +986,41 @@ body.modal-open {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
+
+/* ==========================================
+   DRIVER.JS TOUR CUSTOMIZATION
+   ========================================== */
+
+/* Custom overlay - Very light and transparent */
+.driver-overlay {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(2px) !important;
+}
+
+/* Highlighted element styling - VERY VISIBLE with bright border */
+.driver-highlighted-element {
+  box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.3),
+              0 0 0 4px #00d9ff,
+              0 0 30px rgba(0, 217, 255, 0.8),
+              inset 0 0 0 4px rgba(0, 217, 255, 0.2) !important;
+  border-radius: 12px !important;
+  position: relative !important;
+  z-index: 10000 !important;
+  background: var(--bg-secondary) !important;
+  animation: pulse-highlight 2s ease-in-out infinite !important;
+}
+
+@keyframes pulse-highlight {
+  0%, 100% {
+    box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.3),
+                0 0 0 4px #00d9ff,
+                0 0 30px rgba(0, 217, 255, 0.8),
+                inset 0 0 0 4px rgba(0, 217, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.3),
+                0 0 0 6px #00d9ff,
+                0 0 50px rgba(0, 217, 255, 1),
+                inset 0 0 0 6px rgba(0, 217, 255, 0.3);
+  }
+}

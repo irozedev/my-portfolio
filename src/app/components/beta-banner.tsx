@@ -1,15 +1,26 @@
 import { motion } from "motion/react";
 import { AlertTriangle } from "lucide-react";
+import { useLanguage } from "../contexts/language-context";
+
+const betaTranslations = {
+  en: "BETA VERSION   ●   WORK IN PROGRESS   ●   This portfolio is under active development   ●   Some features may not work as expected   ●   ",
+  uk: "БЕТА ВЕРСІЯ   ●   У РОЗРОБЦІ   ●   Це портфоліо активно розробляється   ●   Деякі функції можуть працювати некоректно   ●   ",
+  nl: "BETA VERSIE   ●   IN ONTWIKKELING   ●   Deze portfolio is in actieve ontwikkeling   ●   Sommige functies werken mogelijk niet zoals verwacht   ●   ",
+  ar: "نسخة تجريبية   ●   قيد التطوير   ●   هذا الملف الشخصي قيد التطوير النشط   ●   قد لا تعمل بعض الميزات كما هو متوقع   ●   ",
+  es: "VERSIÓN BETA   ●   EN DESARROLLO   ●   Este portafolio está en desarrollo activo   ●   Algunas funciones pueden no funcionar como se espera   ●   "
+};
 
 export function BetaBanner() {
-  // Airport split-flap board style message
-  const message = "BETA VERSION   ●   WORK IN PROGRESS   ●   This portfolio is under active development   ●   Some features may not work as expected   ●   ";
+  const { language, isRTL } = useLanguage();
+  
+  // Get translated message
+  const message = betaTranslations[language as keyof typeof betaTranslations] || betaTranslations.en;
   
   // Create long repeating string for seamless animation
   const repeatedMessage = Array(10).fill(message).join("");
   
   return (
-    <div className="fixed top-0 left-0 right-0 z-[10000] bg-[#1a1a1a] border-b-2 border-[#ffcc00] overflow-hidden">
+    <div id="beta-banner" className="fixed top-0 left-0 right-0 z-[10000] bg-[#1a1a1a] border-b-2 border-[#ffcc00] overflow-hidden">
       {/* Horizontal scanlines effect */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-20"

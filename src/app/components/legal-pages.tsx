@@ -318,7 +318,7 @@ function getLegalContent(type: "privacy" | "terms" | "imprint") {
             content: [
               "Name: Stepan Roze",
               "Business Name: roze.live",
-              "Profession: Software Developer & Web Development Consultant",
+              "Profession: Full-Stack Developer & Web Development Consultant",
               "Location: Belgium, European Union",
             ],
           },

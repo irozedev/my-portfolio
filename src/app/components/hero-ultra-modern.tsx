@@ -472,9 +472,9 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                         onClick={() => setIsBookCallOpen(true)}
                         size="lg"
                         variant="outline"
-                        className="w-full sm:w-auto border-2 border-[#00d9ff]/50 hover:border-[#00d9ff] text-[var(--text-primary)] hover:bg-[#00d9ff]/10 font-bold px-8 py-6 text-base md:text-lg rounded-2xl transition-all duration-300 group backdrop-blur-sm"
+                        className="w-full sm:w-auto border-2 border-[#00d9ff] bg-transparent hover:bg-[#00d9ff] text-[#00d9ff] hover:text-black font-mono font-bold px-8 py-6 text-base md:text-lg rounded-2xl transition-all duration-300 group backdrop-blur-sm shadow-[0_0_20px_rgba(0,217,255,0.3)] hover:shadow-[0_0_40px_rgba(0,217,255,0.6)]"
                       >
-                        <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+                        <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 group-hover:scale-110 transition-transform" />
                         {t("hero.getInTouch")}
                       </Button>
                     </motion.div>

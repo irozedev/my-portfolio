@@ -379,7 +379,10 @@ export function SiteTour() {
       doneBtnText: t.doneButton,
       showButtons: ['next', 'previous', 'close'],
       allowClose: true,
-      overlayColor: 'rgba(0, 0, 0, 0.8)',
+      overlayColor: 'rgba(0, 0, 0, 0.3)',
+      overlayOpacity: 0.3,
+      smoothScroll: true,
+      animate: true,
       
       onDestroyStarted: () => {
         // Mark tour as completed
