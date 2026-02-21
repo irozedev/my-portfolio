@@ -246,7 +246,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
   return (
     <>
       <motion.section
-        id="home"
+        id="hero-section"
         className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden px-4 sm:px-6 pt-36 md:pt-40 lg:pt-44 pb-20"
         style={{ y, opacity }}
       >
@@ -468,6 +468,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                     
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button
+                        id="book-call-button"
                         onClick={() => setIsBookCallOpen(true)}
                         size="lg"
                         variant="outline"

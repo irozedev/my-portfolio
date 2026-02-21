@@ -700,7 +700,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               </div>
 
               {/* Language Selector */}
-              <div className="relative language-selector">
+              <div id="language-selector" className="relative language-selector">
                 <motion.button
                   onClick={() => setShowLangMenu(!showLangMenu)}
                   className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors flex items-center gap-2"
@@ -741,6 +741,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
 
               {/* Theme Toggle */}
               <motion.button
+                id="theme-toggle"
                 onClick={toggleTheme}
                 className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors"
                 whileHover={{ scale: 1.05 }}

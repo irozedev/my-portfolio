@@ -160,7 +160,31 @@ export function ServicesCarousel({ services, onBookService }: ServicesCarouselPr
 
       {/* Mobile View: Swipeable Cards with Peek Effect */}
       <div className="md:hidden relative overflow-visible px-2">
-        <div className="relative h-[550px]">
+        <div 
+          className="relative h-[550px] touch-pan-x"
+          onTouchStart={(e) => {
+            const touch = e.touches[0];
+            if (touch) {
+              (e.currentTarget as any).touchStartX = touch.clientX;
+            }
+          }}
+          onTouchEnd={(e) => {
+            const touch = e.changedTouches[0];
+            const startX = (e.currentTarget as any).touchStartX;
+            if (touch && startX !== undefined) {
+              const deltaX = touch.clientX - startX;
+              const threshold = 50; // Swipe threshold in pixels
+              
+              if (deltaX > threshold && activeIndex > 0) {
+                // Swiped right - go to previous
+                setActiveIndex(activeIndex - 1);
+              } else if (deltaX < -threshold && activeIndex < services.length - 1) {
+                // Swiped left - go to next
+                setActiveIndex(activeIndex + 1);
+              }
+            }
+          }}
+        >
           {services.map((service, index) => {
             const offset = index - activeIndex;
             const absOffset = Math.abs(offset);

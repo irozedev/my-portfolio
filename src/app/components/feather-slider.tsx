@@ -144,10 +144,10 @@ export function FeatherSlider({
     let newIndex = Math.round(-currentX / (slideWidth + spacing));
     
     // IMPROVED: Better swipe detection for mobile
-    const swipeThreshold = slideWidth * 0.2; // 20% of slide width
+    const swipeThreshold = slideWidth * 0.15; // 15% of slide width for easier swiping
     
     // If user swiped more than threshold or has high velocity
-    if (Math.abs(offset) > swipeThreshold || Math.abs(velocity) > 500) {
+    if (Math.abs(offset) > swipeThreshold || Math.abs(velocity) > 300) {
       if (offset > 0) {
         // Swiped right (go to previous)
         newIndex = Math.max(0, currentIndex - 1);
@@ -172,7 +172,7 @@ export function FeatherSlider({
           <motion.button
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className="absolute left-0 md:-left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-16 md:h-16 bg-gradient-to-br from-[var(--bg-secondary)]/95 to-[var(--bg-primary)]/95 backdrop-blur-xl border-2 border-[var(--accent-primary)]/40 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(0,217,255,0.3)] disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 opacity-60 hover:opacity-100 group-hover/slider:opacity-100 hover:shadow-[0_0_50px_rgba(0,217,255,0.6)]"
+            className="absolute left-0 md:-left-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-[var(--bg-secondary)]/95 to-[var(--bg-primary)]/95 backdrop-blur-xl border-2 border-[var(--accent-primary)]/40 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(0,217,255,0.3)] disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 hover:opacity-100 hover:shadow-[0_0_50px_rgba(0,217,255,0.6)] active:scale-95"
             whileHover={{ 
               scale: 1.1, 
               rotate: -5
@@ -181,14 +181,14 @@ export function FeatherSlider({
             initial={{ x: -30, opacity: 0 }}
             animate={{ x: 0, opacity: currentIndex === 0 ? 0.3 : 1 }}
           >
-            <ChevronLeft className="w-5 h-5 md:w-7 md:h-7 text-[var(--accent-primary)]" strokeWidth={3} />
+            <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-[var(--accent-primary)]" strokeWidth={3} />
           </motion.button>
 
           {/* Next Button */}
           <motion.button
             onClick={handleNext}
             disabled={currentIndex >= maxIndex}
-            className="absolute right-0 md:-right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-16 md:h-16 bg-gradient-to-br from-[var(--bg-secondary)]/95 to-[var(--bg-primary)]/95 backdrop-blur-xl border-2 border-[var(--accent-primary)]/40 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(0,217,255,0.3)] disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 opacity-60 hover:opacity-100 group-hover/slider:opacity-100 hover:shadow-[0_0_50px_rgba(0,217,255,0.6)]"
+            className="absolute right-0 md:-right-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-[var(--bg-secondary)]/95 to-[var(--bg-primary)]/95 backdrop-blur-xl border-2 border-[var(--accent-primary)]/40 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(0,217,255,0.3)] disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 hover:opacity-100 hover:shadow-[0_0_50px_rgba(0,217,255,0.6)] active:scale-95"
             whileHover={{ 
               scale: 1.1,
               rotate: 5
@@ -197,13 +197,13 @@ export function FeatherSlider({
             initial={{ x: 30, opacity: 0 }}
             animate={{ x: 0, opacity: currentIndex >= maxIndex ? 0.3 : 1 }}
           >
-            <ChevronRight className="w-5 h-5 md:w-7 md:h-7 text-[var(--accent-primary)]" strokeWidth={3} />
+            <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-[var(--accent-primary)]" strokeWidth={3} />
           </motion.button>
         </>
       )}
 
       {/* Slides Container */}
-      <div ref={containerRef} className="overflow-hidden relative touch-pan-y">
+      <div ref={containerRef} className="overflow-hidden relative">
         <motion.div
           drag="x"
           dragConstraints={{
@@ -215,7 +215,7 @@ export function FeatherSlider({
           onDragStart={() => setIsDragging(true)}
           onDragEnd={handleDragEnd}
           style={{ x, touchAction: 'pan-y' }}
-          className="flex cursor-grab active:cursor-grabbing"
+          className="flex touch-pan-x select-none"
         >
           {children.map((child, index) => (
             <motion.div

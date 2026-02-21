@@ -160,12 +160,12 @@ export function ChatBot() {
     const lowerInput = input.toLowerCase();
     
     // Multilingual greetings
-    if (lowerInput.match(/\b(hello|hi|hey|привіт|привет|hallo|hoi)\b/)) {
+    if (lowerInput.match(/\b(hello|hi|hey|привіт|привет|hallo|hoi|hola|مرحبا)\b/)) {
       return "Hello! 👋 I'm Stepan's AI assistant. I can help you with:\n\n• Project pricing & rates 💰\n• Technical expertise & skills 🛠️\n• Portfolio & past work 🚀\n• Availability & scheduling ⏰\n• Contact information 📧\n\nWhat would you like to know?";
     }
 
     // Price & Rates - More detailed
-    if (lowerInput.match(/\b(price|cost|rate|budget|charging|fee|pricing)\b/)) {
+    if (lowerInput.match(/\b(price|cost|rate|budget|charging|fee|pricing|money|payment|pay)\b/)) {
       return "💰 **Hourly Rates (EUR, incl. Belgian VAT):**\n\n" +
         "• Frontend Development: €45/hr\n" +
         "• E-commerce Solutions: €60/hr\n" +
@@ -177,9 +177,9 @@ export function ChatBot() {
     }
 
     // Contact info - Enhanced
-    if (lowerInput.match(/\b(contact|email|reach|call|message|telegram|whatsapp)\b/)) {
+    if (lowerInput.match(/\b(contact|email|reach|call|message|telegram|whatsapp|phone|write)\b/)) {
       return "📧 **Get in Touch:**\n\n" +
-        "• Email: hello@roze.live\n" +
+        "• Email: stepan@roze.live\n" +
         "• Response time: Within 24 hours\n" +
         "• LinkedIn: linkedin.com/in/rozestepan\n" +
         "• GitHub: github.com/irozedev\n\n" +
@@ -187,13 +187,13 @@ export function ChatBot() {
     }
 
     // Experience & Skills - More comprehensive
-    if (lowerInput.match(/\b(experience|skill|tech|technology|stack|expertise|know|proficient)\b/)) {
+    if (lowerInput.match(/\b(experience|skill|tech|technology|stack|expertise|know|proficient|language|framework)\b/)) {
       const stats = getPortfolioStats();
       return "🛠️ **Technical Expertise:**\n\n" +
         "**Frontend:** React, Vue.js, TypeScript, Next.js, Tailwind CSS\n" +
-        "**Backend:** Node.js, MongoDB, Express\n" +
-        "**E-commerce:** Magento, Shopify, WooCommerce\n" +
-        "**Tools:** Git, Figma, Webpack, Vite\n\n" +
+        "**Backend:** Node.js, MongoDB, Express, PHP, Symfony\n" +
+        "**E-commerce:** Magento 2, Shopify, WooCommerce\n" +
+        "**Tools:** Git, Docker, Linux, Figma, Webpack, Vite\n\n" +
         "📊 **Experience:**\n" +
         `• ${stats.yearsExperience}+ years in web development\n` +
         `• ${stats.projectsCompleted}+ completed projects\n` +
@@ -203,7 +203,7 @@ export function ChatBot() {
     }
 
     // Availability - Dynamic
-    if (lowerInput.match(/\b(availability|available|hire|hiring|free|start|when|schedule)\b/)) {
+    if (lowerInput.match(/\b(availability|available|hire|hiring|free|start|when|schedule|busy|time)\b/)) {
       const now = new Date();
       const cetHour = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Brussels" })).getHours();
       const isWorkingHours = cetHour >= 6 && cetHour < 12;
@@ -216,17 +216,17 @@ export function ChatBot() {
         `• Full-time contracts\n` +
         `• Freelance projects\n` +
         `• Consulting & code reviews\n\n` +
-        `Ready to start your project? Book a call or send me an email!`;
+        `Ready to start your project? Book a call or send me an email at stepan@roze.live!`;
     }
 
     // Portfolio & Projects - More engaging
-    if (lowerInput.match(/\b(portfolio|project|work|showcase|example|demo|built|created)\b/)) {
+    if (lowerInput.match(/\b(portfolio|project|work|showcase|example|demo|built|created|show|see)\b/)) {
       const stats = getPortfolioStats();
       return "🚀 **Featured Projects:**\n\n" +
         "Check out the **Projects section** above to see:\n\n" +
         "• E-commerce platforms (Magento, Shopify)\n" +
         "• SaaS applications (React, TypeScript)\n" +
-        "• AI-powered tools & integrations\n" +
+        "• Real-time dashboards (Vue.js, WebSocket)\n" +
         "• Custom web solutions\n\n" +
         "Each project includes:\n" +
         "✅ Live demo links\n" +
@@ -241,7 +241,7 @@ export function ChatBot() {
     }
 
     // Services - What can be done
-    if (lowerInput.match(/\b(service|offer|provide|do|help|build|develop|create)\b/)) {
+    if (lowerInput.match(/\b(service|offer|provide|do|help|build|develop|create|make)\b/)) {
       return "🎯 **Services I Offer:**\n\n" +
         "**Web Development:**\n" +
         "• Custom web applications\n" +
@@ -259,7 +259,7 @@ export function ChatBot() {
     }
 
     // Location
-    if (lowerInput.match(/\b(location|where|based|from|live|country|city)\b/)) {
+    if (lowerInput.match(/\b(location|where|based|from|live|country|city|belgium)\b/)) {
       return "📍 **Location:**\n\n" +
         "Based in Belgium 🇧🇪\n" +
         "Timezone: CET (UTC+1/+2)\n\n" +
@@ -270,7 +270,7 @@ export function ChatBot() {
     }
 
     // Languages spoken
-    if (lowerInput.match(/\b(language|speak|fluent|communicate|talk)\b/)) {
+    if (lowerInput.match(/\b(language|speak|fluent|communicate|talk|understand)\b/)) {
       return "🗣️ **Languages I Speak:**\n\n" +
         "• **Ukrainian** - Native 🇺🇦\n" +
         "• **English** - B1 (Intermediate) 🇬🇧\n" +
@@ -280,21 +280,21 @@ export function ChatBot() {
         "• Project discussions and technical requirements\n" +
         "• Code reviews and documentation\n" +
         "• Client meetings and presentations\n\n" +
-        "Distance is not an issue - I've worked with teams across Europe, US, and Asia!";
+        "Effective communication is guaranteed! ✅";
     }
 
     // Thank you
     if (lowerInput.match(/\b(thank|thanks|appreciate|grateful)\b/)) {
       return "You're very welcome! 😊\n\n" +
         "Feel free to ask anything else, or:\n" +
-        "• 📧 Send me an email\n" +
+        "• 📧 Send me an email at stepan@roze.live\n" +
         "• 📞 Book a call\n" +
         "• 📝 Use the contact form below\n\n" +
         "Looking forward to working together! 🚀";
     }
 
     // About Stepan
-    if (lowerInput.match(/\b(who|about|tell me|describe|yourself)\b/)) {
+    if (lowerInput.match(/\b(who|about|tell me|describe|yourself|background|story)\b/)) {
       return "👨‍💻 **About Stepan Roze:**\n\n" +
         "I'm a Frontend Developer & AI Enthusiast based in Belgium with 5+ years of experience building modern web applications.\n\n" +
         "**What I love:**\n" +
@@ -307,7 +307,7 @@ export function ChatBot() {
     }
 
     // Timeline / How long
-    if (lowerInput.match(/\b(timeline|how long|duration|time|deadline|deliver)\b/)) {
+    if (lowerInput.match(/\b(timeline|how long|duration|time|deadline|deliver|fast|quick)\b/)) {
       return "⏱️ **Project Timelines:**\n\n" +
         "Typical delivery times:\n" +
         "• Landing page: 3-5 days\n" +
@@ -320,7 +320,7 @@ export function ChatBot() {
     }
 
     // Process / How it works
-    if (lowerInput.match(/\b(process|how|workflow|steps|method|approach)\b/)) {
+    if (lowerInput.match(/\b(process|how|workflow|steps|method|approach|procedure)\b/)) {
       return "🔄 **My Work Process:**\n\n" +
         "**1. Discovery** 🔍\n" +
         "• Understand your goals\n" +
@@ -341,6 +341,55 @@ export function ChatBot() {
         "Transparent, collaborative, and results-driven!";
     }
 
+    // React/Vue specific
+    if (lowerInput.match(/\b(react|vue|next|nuxt|angular|svelte)\b/)) {
+      return "⚛️ **JavaScript Frameworks:**\n\n" +
+        "I specialize in:\n" +
+        "• **React** - My primary framework\n" +
+        "• **Vue.js** - 3+ years experience\n" +
+        "• **Next.js** - For SSR/SSG projects\n" +
+        "• **TypeScript** - Type-safe development\n\n" +
+        "💡 I can help with:\n" +
+        "• Migrating between frameworks\n" +
+        "• Performance optimization\n" +
+        "• Architecture planning\n" +
+        "• Best practices implementation\n\n" +
+        "Have a specific framework question? Ask away!";
+    }
+
+    // E-commerce specific
+    if (lowerInput.match(/\b(magento|shopify|woocommerce|store|shop|ecommerce|e-commerce)\b/)) {
+      return "🛒 **E-commerce Expertise:**\n\n" +
+        "**Platforms:**\n" +
+        "• Magento 2 - Advanced customization\n" +
+        "• Shopify - Theme development\n" +
+        "• WooCommerce - WordPress integration\n\n" +
+        "**Services:**\n" +
+        "• Custom theme development\n" +
+        "• Payment gateway integration\n" +
+        "• Performance optimization\n" +
+        "• Multi-store setup\n" +
+        "• Migration services\n\n" +
+        "I've built stores serving 50K+ monthly users!\n\n" +
+        "Need an e-commerce solution? Let's talk!";
+    }
+
+    // Design/UI/UX
+    if (lowerInput.match(/\b(design|ui|ux|figma|interface|layout|responsive)\b/)) {
+      return "🎨 **Design & UI/UX:**\n\n" +
+        "**Tools I use:**\n" +
+        "• Figma - For design & prototyping\n" +
+        "• Tailwind CSS - Rapid styling\n" +
+        "• Motion/Framer - Animations\n\n" +
+        "**Approach:**\n" +
+        "• Mobile-first responsive design\n" +
+        "• Accessibility (WCAG 2.1)\n" +
+        "• Performance-optimized\n" +
+        "• Pixel-perfect implementation\n\n" +
+        "I can work from your designs or create UI from scratch!\n\n" +
+        "Have designs ready? Share them and let's build!";
+    }
+
     // Default fallback - more helpful
     return "🤔 I'm not sure about that specific question, but I'm here to help!\n\n" +
       "**Popular topics:**\n" +
@@ -349,7 +398,7 @@ export function ChatBot() {
       "• 🚀 Portfolio & projects\n" +
       "• ⏰ Availability\n" +
       "• 📧 Contact info\n\n" +
-      "Try asking about any of these, or **email me directly** at hello@roze.live for detailed answers!";
+      "Try asking about any of these, or **email me directly** at stepan@roze.live for detailed answers!";
   };
 
   const quickActions = [

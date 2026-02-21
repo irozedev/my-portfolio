@@ -15,6 +15,24 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Better touch handling for mobile sliders */
+.touch-pan-x {
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
+}
+
+.touch-pan-y {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+.select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -29,6 +47,81 @@ html {
 /* Optimize images */
 img {
   content-visibility: auto;
+}
+
+/* Driver.js Tour Customization */
+.driver-popover {
+  background: linear-gradient(135deg, #0a0a0a 0%, #141414 100%) !important;
+  border: 2px solid rgba(0, 217, 255, 0.3) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 0 50px rgba(0, 217, 255, 0.4) !important;
+  backdrop-filter: blur(20px) !important;
+  max-width: 380px !important;
+}
+
+.driver-popover-title {
+  color: #ffffff !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 12px !important;
+  font-family: 'Geist Mono', monospace !important;
+}
+
+.driver-popover-description {
+  color: #d4d4d4 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+}
+
+.driver-popover-progress-text {
+  color: #00d9ff !important;
+  font-weight: 600 !important;
+  font-family: 'Geist Mono', monospace !important;
+}
+
+.driver-popover-navigation-btns {
+  gap: 8px !important;
+}
+
+.driver-popover-next-btn,
+.driver-popover-prev-btn {
+  background: linear-gradient(135deg, #00d9ff 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  font-family: 'Geist Mono', monospace !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3) !important;
+}
+
+.driver-popover-next-btn:hover,
+.driver-popover-prev-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 217, 255, 0.5) !important;
+}
+
+.driver-popover-close-btn {
+  color: #ffffff !important;
+  font-size: 1.5rem !important;
+  opacity: 0.7 !important;
+  transition: opacity 0.2s !important;
+}
+
+.driver-popover-close-btn:hover {
+  opacity: 1 !important;
+}
+
+.driver-active-element {
+  outline: 3px solid #00d9ff !important;
+  outline-offset: 5px !important;
+  border-radius: 12px !important;
+}
+
+.driver-overlay {
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(5px) !important;
 }
 
 :root {

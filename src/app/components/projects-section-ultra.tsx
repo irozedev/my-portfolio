@@ -106,9 +106,9 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       className={`group relative overflow-hidden rounded-3xl ${sizeClasses[project.size]} cursor-pointer`}
       onClick={handleProjectClick}
     >
-      {/* Magnetic Border Effect */}
+      {/* Animated Glow on Hover */}
       <motion.div
-        className="absolute inset-0 rounded-3xl"
+        className="absolute inset-0 rounded-3xl pointer-events-none"
         animate={isHovered ? {
           background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(0, 217, 255, 0.15), transparent 40%)`
         } : {}}
@@ -119,7 +119,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       <div className="relative h-full min-h-[300px] bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-primary)] backdrop-blur-xl border border-[var(--border-color)] rounded-3xl overflow-hidden group-hover:border-[var(--accent-primary)]/50 transition-all duration-500">
         
         {/* Background Image */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 pointer-events-none">
           {!imageLoaded && (
             <div className="w-full h-full bg-[var(--bg-secondary)] shimmer" />
           )}
@@ -289,7 +289,7 @@ export function ProjectsSectionUltra() {
   const { t } = useLanguage();
 
   return (
-    <section id="projects" className="relative py-12 md:py-16 px-4 bg-[var(--bg-primary)] overflow-hidden" style={{ position: 'relative' }}>
+    <section id="projects-section" className="relative py-12 md:py-16 px-4 bg-[var(--bg-primary)] overflow-hidden" style={{ position: 'relative' }}>
       
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

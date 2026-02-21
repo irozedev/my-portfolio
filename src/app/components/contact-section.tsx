@@ -22,8 +22,8 @@ const contactLinks = [
   {
     icon: Mail,
     key: 'email',
-    value: "hello@roze.live",
-    href: "mailto:hello@roze.live",
+    value: "stepan@roze.live",
+    href: "mailto:stepan@roze.live",
     color: "#00d9ff",
   },
   {
@@ -136,7 +136,7 @@ export function ContactSection() {
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      alert("Failed to send message. Please try emailing hello@roze.live directly.");
+      alert("Failed to send message. Please try emailing stepan@roze.live directly.");
     } finally {
       setIsSubmitting(false);
     }
@@ -149,7 +149,7 @@ export function ContactSection() {
   ];
 
   return (
-    <section id="contact" className="min-h-screen py-6 sm:py-8 md:py-10 px-3 sm:px-4 bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-secondary)] to-[var(--bg-primary)] relative overflow-hidden">
+    <section id="contact-section" className="min-h-screen py-6 sm:py-8 md:py-10 px-3 sm:px-4 bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-secondary)] to-[var(--bg-primary)] relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-20 left-1/4 w-96 h-96 bg-[var(--accent-primary)]/5 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
