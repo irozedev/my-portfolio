@@ -159,7 +159,7 @@ export function SiteTour() {
             id: "hero-section",
             icon: Rocket,
             title: "👋 Головна секція",
-            desc: "Знайомся - Stepan Roze, Full-Stack розробник з 10+ роками досвіду. Анімована статистика, CTA кнопки, динамічний контент!",
+            desc: "Знайомся - Stepan Roze, Full-Stack розробник з 10+ роками досвіду. Анімов��на статистика, CTA кнопки, динамічний контент!",
             tip: "Статистика (150+ проектів, 50+ клієнтів) розраховується з реальних даних."
           },
           {
@@ -875,22 +875,29 @@ export function SiteTour() {
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.9 }}
-              className="fixed z-[100000] pointer-events-auto"
+              className="fixed z-[100000] pointer-events-auto px-4 sm:px-0"
               style={{
-                top: Math.min(
-                  step.highlight.top - window.pageYOffset + step.highlight.height + 40,
-                  window.innerHeight - 400
-                ),
-                left: Math.max(
-                  20,
-                  Math.min(
-                    step.highlight.left + step.highlight.width / 2 - 200,
-                    window.innerWidth - 420
-                  )
-                ),
+                // Mobile: bottom of screen, Desktop: near element
+                top: window.innerWidth < 640
+                  ? 'auto'
+                  : Math.min(
+                      step.highlight.top - window.pageYOffset + step.highlight.height + 40,
+                      window.innerHeight - 450
+                    ),
+                bottom: window.innerWidth < 640 ? '20px' : 'auto',
+                left: window.innerWidth < 640
+                  ? '0'
+                  : Math.max(
+                      20,
+                      Math.min(
+                        step.highlight.left + step.highlight.width / 2 - 200,
+                        window.innerWidth - 420
+                      )
+                    ),
+                right: window.innerWidth < 640 ? '0' : 'auto',
               }}
             >
-              <div className="relative w-[calc(100vw-2rem)] sm:w-[400px]">
+              <div className="relative w-full sm:w-[400px] max-w-[calc(100vw-2rem)] mx-auto">
                 {/* Roze Bot Avatar */}
                 <motion.div
                   className="absolute -top-14 left-6 w-20 h-20 bg-gradient-to-br from-[#00d9ff] to-purple-500 rounded-full flex items-center justify-center border-4 border-[var(--bg-primary)] shadow-[0_0_40px_rgba(0,217,255,0.7)]"
