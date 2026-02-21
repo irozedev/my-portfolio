@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { Code2, Palette, Database, Wrench, Globe, Zap, CheckCircle2, Award, Target, GraduationCap, MapPin, Calendar, Briefcase, Box } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
-import { SkillsModern } from "./skills-modern";
+import { SkillsFuturistic } from "./skills-futuristic";
 import { LanguagesModern } from "./languages-modern";
 
 const highlights = [
@@ -189,7 +189,7 @@ export function AboutSection() {
               {(t("about.skillsTitle") || "Technical Skills").toUpperCase()}
             </motion.h3>
             
-            <SkillsModern />
+            <SkillsFuturistic />
           </div>
 
           {/* Languages */}

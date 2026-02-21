@@ -75,7 +75,7 @@ function cleanCache() {
 app.post("/make-server-a62f57c7/ai/chat", async (c) => {
   try {
     const body = await c.req.json();
-    const { message, context } = body;
+    const { message, context, language } = body;
 
     // Input validation
     if (!message || typeof message !== 'string') {
@@ -127,7 +127,7 @@ app.post("/make-server-a62f57c7/ai/chat", async (c) => {
       return c.json({
         success: true,
         message: cached.response,
-        model: 'claude-3-5-sonnet',
+        model: 'claude-3-5-haiku',
         cached: true
       });
     }
@@ -138,6 +138,11 @@ app.post("/make-server-a62f57c7/ai/chat", async (c) => {
       console.error('ANTHROPIC_API_KEY not configured');
       return c.json({ error: 'AI service not configured' }, 500);
     }
+
+    // Detect language and add instruction
+    const languageInstruction = language && language !== 'English' 
+      ? `\n\nIMPORTANT: User speaks ${language}. Respond in ${language} language!` 
+      : '';
 
     // ULTRA-COMPRESSED system prompt to save tokens
     const systemPrompt = `You are Roze Bot for Stepan Roze's portfolio (roze.live).
@@ -156,7 +161,7 @@ RULES:
 2. Be direct, no fluff
 3. Only portfolio topics (services, pricing, skills, contact)
 4. For off-topic: "I can only help with Stepan's services. Email stepan@roze.live for details."
-5. Use emojis sparingly (max 1 per response)`;
+5. Use emojis sparingly (max 1 per response)${languageInstruction}`;
 
     // Call Anthropic API with minimal tokens
     const response = await fetch('https://api.anthropic.com/v1/messages', {

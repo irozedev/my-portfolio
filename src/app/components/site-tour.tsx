@@ -605,10 +605,8 @@ export function SiteTour() {
         }
       }, 100);
     } else {
-      // Last step - finish immediately without any delays
-      setTimeout(() => {
-        finishTour();
-      }, 100);
+      // Last step - close IMMEDIATELY without black screen
+      finishTour();
     }
   };
 

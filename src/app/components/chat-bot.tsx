@@ -21,7 +21,7 @@ export function ChatBot() {
   const [requestCount, setRequestCount] = useState(0);
   const [isRateLimited, setIsRateLimited] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   // Rate limit: max 8 messages per session
   const MAX_REQUESTS = 8;
@@ -151,7 +151,7 @@ export function ChatBot() {
       setIsRateLimited(true);
       const rateLimitMessage: Message = {
         id: Date.now() + 1,
-        text: "Rate limit reached. Please try again later.",
+        text: t.rateLimitMessage || "You've reached the message limit. Please try again later or contact me directly at stepan@roze.live",
         sender: "bot",
         timestamp: new Date(),
       };
@@ -161,6 +161,13 @@ export function ChatBot() {
 
     // Call AI endpoint
     setIsTyping(true);
+    
+    // Determine user's language for AI context
+    const userLanguage = language === 'uk' ? 'Ukrainian' : 
+                        language === 'nl' ? 'Dutch' : 
+                        language === 'ar' ? 'Arabic' : 
+                        language === 'es' ? 'Spanish' : 'English';
+    
     fetch(`https://saeohtefpfuzzajfduad.supabase.co/functions/v1/make-server-a62f57c7/ai/chat`, {
       method: 'POST',
       headers: {
@@ -169,14 +176,15 @@ export function ChatBot() {
       },
       body: JSON.stringify({
         message: inputValue.trim(),
-        context: hasServiceContext ? 'service_selected' : 'general'
+        context: hasServiceContext ? 'service_selected' : 'general',
+        language: userLanguage
       })
     })
     .then(res => res.json())
     .then(data => {
       const botMessage: Message = {
         id: Date.now() + 1,
-        text: data.message || data.error || 'Sorry, I encountered an error. Please try again.',
+        text: data.message || data.error || t.errorMessage || 'Sorry, I encountered an error. Please try again.',
         sender: "bot",
         timestamp: new Date(),
       };

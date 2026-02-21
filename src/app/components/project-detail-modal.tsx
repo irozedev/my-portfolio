@@ -115,7 +115,7 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
             </motion.button>
 
             {/* SCROLLABLE CONTENT */}
-            <div className="relative max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent">
+            <div className="relative overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/40 scrollbar-track-[var(--bg-secondary)]/30 hover:scrollbar-thumb-[var(--accent-primary)]/60" style={{ maxHeight: 'calc(90vh - 80px)' }}>
               
               {/* 🔥 HERO IMAGE - PREMIUM GRADIENT OVERLAY */}
               <div className="relative h-48 sm:h-64 md:h-80 lg:h-96 overflow-hidden">
