@@ -101,13 +101,6 @@ export function SiteTour() {
             tip: "You can also reach me directly via LinkedIn, GitHub, Email, or Upwork - all links below!"
           },
           {
-            id: "book-call-button",
-            icon: Phone,
-            title: "📞 Book a Call",
-            desc: "Schedule a FREE 30-minute consultation! Pick your timezone, preferred date, and time - syncs automatically with my calendar.",
-            tip: "No login required - guest booking is enabled for everyone!"
-          },
-          {
             id: "footer",
             icon: Shield,
             title: "📄 Footer & Legal",
@@ -196,13 +189,6 @@ export function SiteTour() {
             title: "📧 Контактна форма",
             desc: "Зв'яжись зі мною! Заповни форму і я відповім протягом 24 годин. Дані йдуть через безпечний API.",
             tip: "Також можеш написати напряму через LinkedIn, GitHub, Email або Upwork!"
-          },
-          {
-            id: "book-call-button",
-            icon: Phone,
-            title: "📞 Забронювати дзвінок",
-            desc: "Заплануй БЕЗКОШТОВНУ 30-хв консультацію! Обери часовий пояс, дату та час - синхронізується з календарем.",
-            tip: "Вхід не потрібен - гості можуть бронювати!"
           },
           {
             id: "footer",
@@ -295,13 +281,6 @@ export function SiteTour() {
             tip: "Je kunt me ook direct bereiken via LinkedIn, GitHub, Email of Upwork!"
           },
           {
-            id: "book-call-button",
-            icon: Phone,
-            title: "📞 Gesprek boeken",
-            desc: "Plan een GRATIS 30-min consultatie! Kies je tijdzone, datum en tijd - synchroniseert automatisch.",
-            tip: "Geen login vereist - gasten kunnen boeken!"
-          },
-          {
             id: "footer",
             icon: Shield,
             title: "📄 Footer & Legal",
@@ -390,13 +369,6 @@ export function SiteTour() {
             title: "📧 نموذج الاتصال",
             desc: "تواصل معي! املأ النموذج وسأرد خلال 24 ساعة. البيانات تذهب بأمان عبر API.",
             tip: "يمكنك أيضا التواصل مباشرة عبر LinkedIn أو GitHub أو Email أو Upwork!"
-          },
-          {
-            id: "book-call-button",
-            icon: Phone,
-            title: "📞 حجز مكالمة",
-            desc: "جدول استشارة مجانية 30 دقيقة! اختر المنطقة الزمنية والتاريخ والوقت - يتم المزامنة تلقائيا.",
-            tip: "لا حاجة لتسجيل الدخول - الضيوف يمكنهم الحجز!"
           },
           {
             id: "footer",
@@ -489,13 +461,6 @@ export function SiteTour() {
             tip: "¡También puedes contactarme directamente por LinkedIn, GitHub, Email o Upwork!"
           },
           {
-            id: "book-call-button",
-            icon: Phone,
-            title: "📞 Reservar llamada",
-            desc: "¡Programa una consulta GRATUITA de 30 min! Elige zona horaria, fecha y hora - se sincroniza automáticamente.",
-            tip: "¡No se requiere inicio de sesión - los invitados pueden reservar!"
-          },
-          {
             id: "footer",
             icon: Shield,
             title: "📄 Footer y Legal",
@@ -524,6 +489,22 @@ export function SiteTour() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
+    // MOBILE FALLBACK: If theme-toggle or language-selector not visible (hidden on mobile),
+    // highlight the entire navigation bar instead
+    const isMobile = window.innerWidth < 1024; // lg breakpoint
+    if (isMobile && (elementId === 'theme-toggle' || elementId === 'language-selector')) {
+      const navElement = document.getElementById('navigation');
+      if (navElement) {
+        const navRect = navElement.getBoundingClientRect();
+        return {
+          top: navRect.top + scrollTop,
+          left: navRect.left + scrollLeft,
+          width: navRect.width,
+          height: navRect.height
+        };
+      }
+    }
+
     return {
       top: rect.top + scrollTop,
       left: rect.left + scrollLeft,
@@ -545,8 +526,12 @@ export function SiteTour() {
       highlight: calculateHighlight(step.id)
     }));
 
+    console.log('[Site Tour] Initial steps:', tourSteps.map(s => ({ id: s.id, hasHighlight: !!s.highlight })));
+
     // Filter out missing elements but keep tour going
     const validSteps = tourSteps.filter(step => step.highlight !== null);
+    
+    console.log('[Site Tour] Valid steps after filter:', validSteps.map(s => s.id));
     
     if (validSteps.length === 0) {
       console.warn('[Site Tour] No elements found. Showing button.');
@@ -587,21 +572,51 @@ export function SiteTour() {
       setTimeout(() => {
         const nextElement = document.getElementById(steps[nextStepIndex].id);
         if (nextElement) {
-          const offset = 120;
+          // MOBILE: Center element in viewport with more offset
+          const isMobile = window.innerWidth < 640;
+          const offset = isMobile ? 200 : 120; // Larger offset on mobile to keep element visible above tooltip
+          
           const elementPosition = nextElement.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - offset;
           window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
           
           // Recalculate highlights after scroll - ONLY if tour is still active
           setTimeout(() => {
+            if (!isActive) return; // Tour closed during scroll
+            
             setSteps(prevSteps => {
               if (prevSteps.length === 0) return prevSteps;
-              return prevSteps.map(step => ({
+              const recalculated = prevSteps.map(step => ({
                 ...step,
                 highlight: calculateHighlight(step.id)
               }));
+              
+              // Check if current step still has valid highlight
+              const currentHighlight = recalculated[nextStepIndex]?.highlight;
+              if (!currentHighlight) {
+                console.warn(`[Site Tour] Step ${nextStepIndex} has no highlight, skipping to next`);
+                // Skip this step and go to next one
+                setTimeout(() => {
+                  if (nextStepIndex < steps.length - 1) {
+                    nextStep();
+                  } else {
+                    finishTour();
+                  }
+                }, 100);
+                return prevSteps;
+              }
+              
+              return recalculated;
             });
           }, 600);
+        } else {
+          // Element not found - skip to next step or finish
+          console.warn(`[Site Tour] Element ${steps[nextStepIndex].id} not found, skipping`);
+          if (nextStepIndex < steps.length - 1) {
+            setTimeout(() => nextStep(), 100);
+          } else {
+            finishTour();
+          }
         }
       }, 100);
     } else {
@@ -639,16 +654,18 @@ export function SiteTour() {
   };
 
   const finishTour = () => {
-    // Close tour INSTANTLY - clear state first to prevent any animations
-    setIsActive(false);
-    setCurrentStep(0);
-    setSteps([]);
+    // FORCE CLOSE - NO DELAYS, NO ANIMATIONS
     localStorage.setItem('siteTourCompleted', 'true');
     
-    // Show button after a tiny delay to ensure overlay is gone
+    // Clear state SYNCHRONOUSLY
+    setIsActive(false);
+    setSteps([]);
+    setCurrentStep(0);
+    
+    // Show button immediately
     setTimeout(() => {
       setShowButton(true);
-    }, 50);
+    }, 100);
   };
 
   // Auto-start tour on first visit
@@ -681,6 +698,15 @@ export function SiteTour() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [isActive, steps]);
+
+  // Prevent any scroll/resize updates when tour is closing
+  useEffect(() => {
+    if (!isActive && steps.length > 0) {
+      // Tour is in process of closing - clear steps immediately
+      setSteps([]);
+      setCurrentStep(0);
+    }
+  }, [isActive]);
 
   const t = getTourSteps();
   const step = steps[currentStep];
@@ -738,6 +764,7 @@ export function SiteTour() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               className="fixed inset-0 z-[99998] pointer-events-none"
               style={{ isolation: 'isolate' }}
             >
@@ -816,7 +843,8 @@ export function SiteTour() {
               className="fixed z-[99999] pointer-events-none"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
               style={{
                 top: step.highlight.top - window.pageYOffset - 16,
                 left: step.highlight.left - 16,
@@ -903,9 +931,9 @@ export function SiteTour() {
               }}
             >
               <div className="relative w-full sm:w-[400px] max-w-[calc(100vw-2rem)] mx-auto">
-                {/* Roze Bot Avatar */}
+                {/* Roze Bot Avatar - SMALLER ON MOBILE */}
                 <motion.div
-                  className="absolute -top-14 left-6 w-20 h-20 bg-gradient-to-br from-[#00d9ff] to-purple-500 rounded-full flex items-center justify-center border-4 border-[var(--bg-primary)] shadow-[0_0_40px_rgba(0,217,255,0.7)]"
+                  className="absolute -top-10 sm:-top-14 left-4 sm:left-6 w-14 h-14 sm:w-20 sm:h-20 bg-gradient-to-br from-[#00d9ff] to-purple-500 rounded-full flex items-center justify-center border-2 sm:border-4 border-[var(--bg-primary)] shadow-[0_0_40px_rgba(0,217,255,0.7)]"
                   animate={{
                     y: [0, -6, 0],
                     rotate: [0, 5, -5, 0]
@@ -915,18 +943,18 @@ export function SiteTour() {
                     repeat: Infinity
                   }}
                 >
-                  <Bot className="w-10 h-10 text-white" />
+                  <Bot className="w-7 h-7 sm:w-10 sm:h-10 text-white" />
                   
                   {/* Thinking dots */}
                   <motion.div
-                    className="absolute -top-3 -right-3 flex gap-1"
+                    className="absolute -top-2 sm:-top-3 -right-2 sm:-right-3 flex gap-0.5 sm:gap-1"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                   >
                     {[0, 1, 2].map((i) => (
                       <motion.div
                         key={i}
-                        className="w-2 h-2 bg-[#00d9ff] rounded-full"
+                        className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#00d9ff] rounded-full"
                         animate={{
                           y: [0, -10, 0],
                           opacity: [0.4, 1, 0.4]
@@ -954,26 +982,26 @@ export function SiteTour() {
                   />
                 </motion.div>
 
-                {/* Popover Card */}
+                {/* Popover Card - COMPACT ON MOBILE */}
                 <div className="relative bg-[var(--bg-primary)] border-2 border-[#00d9ff] rounded-2xl shadow-[0_20px_80px_rgba(0,217,255,0.6)] overflow-hidden">
                   {/* Gradient bg */}
                   <div className="absolute inset-0 bg-gradient-to-br from-[#00d9ff]/10 via-transparent to-purple-500/10 pointer-events-none" />
                   
-                  {/* Scanlines */}
-                  <div className="absolute inset-0 pointer-events-none opacity-10">
+                  {/* Scanlines - HIDDEN ON MOBILE for clarity */}
+                  <div className="absolute inset-0 pointer-events-none opacity-10 hidden sm:block">
                     {[...Array(20)].map((_, i) => (
                       <div key={i} className="h-[2px] bg-[#00d9ff] mb-4" />
                     ))}
                   </div>
 
-                  {/* Content */}
-                  <div className="relative p-5">
+                  {/* Content - COMPACT PADDING ON MOBILE */}
+                  <div className="relative p-3 sm:p-5">
                     {/* Header */}
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start justify-between mb-2 sm:mb-3">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="px-2.5 py-1 bg-[#00d9ff]/20 border border-[#00d9ff]/40 rounded-md">
-                            <span className="text-[10px] font-bold text-[#00d9ff] font-mono">
+                        <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+                          <div className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-[#00d9ff]/20 border border-[#00d9ff]/40 rounded-md">
+                            <span className="text-[9px] sm:text-[10px] font-bold text-[#00d9ff] font-mono">
                               {t.stepOf.replace('{{current}}', String(currentStep + 1)).replace('{{total}}', String(steps.length))}
                             </span>
                           </div>
@@ -981,19 +1009,19 @@ export function SiteTour() {
                             animate={{ rotate: 360 }}
                             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                           >
-                            {step.icon && <step.icon className="w-4 h-4 text-[#00d9ff]" />}
+                            {step.icon && <step.icon className="w-3 h-3 sm:w-4 sm:h-4 text-[#00d9ff]" />}
                           </motion.div>
                         </div>
-                        <h3 className="text-base font-black text-[var(--text-primary)] font-mono mb-2 leading-tight">
+                        <h3 className="text-sm sm:text-base font-black text-[var(--text-primary)] font-mono mb-1.5 sm:mb-2 leading-tight">
                           {step.title}
                         </h3>
-                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-2">
+                        <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed mb-1.5 sm:mb-2">
                           {step.description}
                         </p>
                         
-                        {/* Pro Tip */}
-                        {step.tip && (
-                          <div className="mt-3 p-2.5 bg-purple-500/10 border border-purple-500/30 rounded-lg backdrop-blur-sm">
+                        {/* Pro Tip - SHOW ONLY ON DESKTOP or when not in first 3 steps */}
+                        {step.tip && currentStep > 2 && (
+                          <div className="hidden sm:block mt-3 p-2.5 bg-purple-500/10 border border-purple-500/30 rounded-lg backdrop-blur-sm">
                             <div className="flex items-start gap-2">
                               <Zap className="w-3.5 h-3.5 text-purple-400 mt-0.5 flex-shrink-0" />
                               <p className="text-xs text-purple-200 leading-relaxed">
@@ -1006,15 +1034,15 @@ export function SiteTour() {
                       
                       <button
                         onClick={finishTour}
-                        className="ml-3 p-2 hover:bg-[var(--glass-bg)] rounded-lg transition-colors"
+                        className="ml-2 sm:ml-3 p-1.5 sm:p-2 hover:bg-[var(--glass-bg)] rounded-lg transition-colors"
                       >
-                        <X className="w-4 h-4 text-[var(--text-muted)]" />
+                        <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--text-muted)]" />
                       </button>
                     </div>
 
                     {/* Progress bar */}
-                    <div className="mb-3">
-                      <div className="h-1 bg-[var(--glass-border)] rounded-full overflow-hidden">
+                    <div className="mb-2 sm:mb-3">
+                      <div className="h-0.5 sm:h-1 bg-[var(--glass-border)] rounded-full overflow-hidden">
                         <motion.div
                           className="h-full bg-gradient-to-r from-[#00d9ff] to-purple-500"
                           initial={{ width: 0 }}
@@ -1024,32 +1052,32 @@ export function SiteTour() {
                       </div>
                     </div>
 
-                    {/* Actions */}
-                    <div className="flex items-center justify-between gap-3 pt-3 border-t border-[var(--glass-border)]">
+                    {/* Actions - COMPACT ON MOBILE */}
+                    <div className="flex items-center justify-between gap-2 sm:gap-3 pt-2 sm:pt-3 border-t border-[var(--glass-border)]">
                       <button
                         onClick={finishTour}
-                        className="px-3 py-1.5 text-xs font-bold text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors font-mono"
+                        className="px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors font-mono"
                       >
                         {t.skip}
                       </button>
                       
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
                         {currentStep > 0 && (
                           <button
                             onClick={prevStep}
-                            className="flex items-center gap-1.5 px-3 py-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-lg hover:border-[#00d9ff]/50 transition-all font-mono text-xs font-bold"
+                            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-lg hover:border-[#00d9ff]/50 transition-all font-mono text-[10px] sm:text-xs font-bold"
                           >
-                            <ArrowLeft className="w-3 h-3" />
-                            {t.prev}
+                            <ArrowLeft className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                            <span className="hidden sm:inline">{t.prev}</span>
                           </button>
                         )}
                         
                         <button
                           onClick={nextStep}
-                          className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[#00d9ff] to-purple-500 text-white rounded-lg hover:shadow-[0_0_20px_rgba(0,217,255,0.5)] transition-all font-mono text-xs font-bold"
+                          className="flex items-center gap-1 sm:gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-[#00d9ff] to-purple-500 text-white rounded-lg hover:shadow-[0_0_20px_rgba(0,217,255,0.5)] transition-all font-mono text-[10px] sm:text-xs font-bold"
                         >
                           {currentStep === steps.length - 1 ? t.finish : t.next}
-                          {currentStep < steps.length - 1 && <ArrowRight className="w-3 h-3" />}
+                          {currentStep < steps.length - 1 && <ArrowRight className="w-2.5 h-2.5 sm:w-3 sm:h-3" />}
                         </button>
                       </div>
                     </div>

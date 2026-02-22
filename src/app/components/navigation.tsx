@@ -423,14 +423,14 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                   />
 
                   <motion.div
-                    className={`relative w-2 h-2 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
+                    className={`relative w-2.5 h-2.5 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
                     animate={{
                       scale: [1, 1.5, 1],
                       opacity: [1, 0.6, 1]
                     }}
                     transition={{ duration: 2, repeat: Infinity }}
                   />
-                  <span className={`relative text-xs font-bold tracking-wide uppercase ${
+                  <span className={`relative text-sm font-bold tracking-wide uppercase ${
                     isAvailable ? 'text-green-500' : 'text-orange-500'
                   }`}>
                     {isAvailable ? (
@@ -456,7 +456,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                     e.stopPropagation();
                     setShowAvailabilityModal(true);
                   }}
-                  className="sm:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[var(--bg-secondary)]/60 backdrop-blur-md border border-[var(--border-color)] transition-all relative overflow-hidden cursor-pointer"
+                  className="sm:hidden flex items-center gap-2 px-3 py-2 rounded-full bg-[var(--bg-secondary)]/60 backdrop-blur-md border border-[var(--border-color)] transition-all relative overflow-hidden cursor-pointer"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
@@ -480,14 +480,14 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                   />
                   
                   <motion.div
-                    className={`relative w-1.5 h-1.5 rounded-full flex-shrink-0 ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
+                    className={`relative w-2 h-2 rounded-full flex-shrink-0 ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
                     animate={{
                       scale: [1, 1.3, 1],
                       opacity: [1, 0.6, 1]
                     }}
                     transition={{ duration: 2, repeat: Infinity }}
                   />
-                  <span className={`relative text-[10px] font-bold tracking-wide uppercase ${
+                  <span className={`relative text-xs font-bold tracking-wide uppercase ${
                     isAvailable ? 'text-green-500' : 'text-orange-500'
                   }`}>
                     {isAvailable ? (
