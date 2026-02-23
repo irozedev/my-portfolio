@@ -600,8 +600,8 @@ When user asks about availability, confirm he's available and provide scheduling
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input - ОНОВЛЕНИЙ ДИЗАЙН */}
-            <div className="p-4 border-t-2 border-[var(--glass-border)] bg-[var(--bg-secondary)]/50 backdrop-blur-sm">
+            {/* Input - НОВИЙ ФУТУРИСТИЧНИЙ ДИЗАЙН */}
+            <div className="p-4 border-t-2 border-[var(--glass-border)] bg-gradient-to-b from-[var(--bg-secondary)]/50 to-[var(--bg-primary)]/30 backdrop-blur-sm">
               <div className="flex items-end gap-3">
                 <div className="flex-1 relative">
                   <textarea
@@ -611,51 +611,69 @@ When user asks about availability, confirm he's available and provide scheduling
                     onKeyDown={handleKeyPress}
                     placeholder={t.placeholder}
                     disabled={isLoading}
-                    className="w-full px-4 py-3 bg-[var(--glass-bg)] border-2 border-[var(--glass-border)] rounded-xl text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[#00d9ff] focus:shadow-[0_0_20px_rgba(0,217,255,0.2)] resize-none min-h-[48px] max-h-[120px] transition-all"
+                    className="w-full px-4 py-3.5 bg-[var(--bg-primary)]/80 border-2 border-[var(--glass-border)] rounded-lg text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[#00d9ff] focus:shadow-[0_0_25px_rgba(0,217,255,0.3)] resize-none min-h-[52px] max-h-[120px] transition-all font-mono backdrop-blur-sm"
                     rows={1}
-                    style={{ 
-                      scrollbarWidth: 'thin',
-                      scrollbarColor: '#00d9ff transparent'
-                    }}
                   />
                   
                   {/* Character counter */}
                   {input.length > 0 && (
                     <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="absolute bottom-2 right-3 text-[10px] text-[var(--text-muted)] font-mono"
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="absolute -bottom-5 right-0 text-[10px] text-[var(--text-muted)] font-mono flex items-center gap-1"
                     >
-                      {input.length}/500
+                      <span className={input.length > 450 ? 'text-orange-500' : input.length > 480 ? 'text-red-500' : ''}>
+                        {input.length}
+                      </span>
+                      <span>/500</span>
                     </motion.div>
                   )}
                 </div>
                 
                 <motion.button
                   onClick={handleSend}
-                  disabled={!input.trim() || isLoading}
-                  whileHover={{ scale: 1.05 }}
+                  disabled={!input.trim() || isLoading || input.length > 500}
+                  whileHover={{ scale: 1.05, rotate: 5 }}
                   whileTap={{ scale: 0.95 }}
-                  className="p-3.5 bg-gradient-to-r from-[#00d9ff] to-purple-500 text-white rounded-xl hover:shadow-[0_0_30px_rgba(0,217,255,0.6)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 relative overflow-hidden group"
+                  className="p-4 bg-gradient-to-br from-[#00d9ff] via-[#00b8d4] to-purple-600 text-white rounded-lg hover:shadow-[0_0_40px_rgba(0,217,255,0.7)] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100 relative overflow-hidden group border border-[#00d9ff]/30"
                 >
-                  {/* Shine effect on hover */}
+                  {/* Animated gradient overlay */}
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    initial={{ x: '-100%' }}
-                    whileHover={{ x: '100%' }}
-                    transition={{ duration: 0.6 }}
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                    animate={{ x: ['-200%', '200%'] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                   />
                   
-                  <Send className="w-5 h-5 relative z-10 group-hover:rotate-45 transition-transform duration-300" />
+                  {/* Corner accents */}
+                  <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-white/50" />
+                  <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-white/50" />
+                  <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-white/50" />
+                  <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-white/50" />
+                  
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 relative z-10 animate-spin" />
+                  ) : (
+                    <Send className="w-5 h-5 relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                  )}
                 </motion.button>
               </div>
               
-              {/* Powered by badge */}
-              <div className="flex items-center justify-center gap-2 mt-3">
-                <Sparkles className="w-3 h-3 text-[var(--text-muted)]" />
-                <span className="text-[10px] text-[var(--text-muted)] font-mono">
-                  Powered by Claude 3.5 Haiku
+              {/* Powered by badge - ОНОВЛЕНИЙ */}
+              <div className="flex items-center justify-center gap-2 mt-4">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#00d9ff]" />
+                </motion.div>
+                <span className="text-[10px] text-[var(--text-muted)] font-mono tracking-wider">
+                  POWERED BY <span className="text-[#00d9ff] font-bold">CLAUDE 3.5 HAIKU</span>
                 </span>
+                <motion.div
+                  className="w-2 h-2 bg-green-400 rounded-full"
+                  animate={{ opacity: [1, 0.3, 1], scale: [1, 1.3, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
               </div>
             </div>
           </motion.div>

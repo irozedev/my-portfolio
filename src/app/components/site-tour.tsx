@@ -765,7 +765,7 @@ export function SiteTour() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[99998] pointer-events-none"
+              className="fixed inset-0 z-[999] pointer-events-none"
               style={{ isolation: 'isolate' }}
             >
               <svg
@@ -783,10 +783,10 @@ export function SiteTour() {
                   <mask id="spotlight-mask">
                     {/* White = visible, Black = hidden */}
                     <rect x="0" y="0" width="100%" height="100%" fill="white" />
-                    {/* Cut out the highlighted element - DON'T subtract scrollY here because SVG is fixed */}
+                    {/* Cut out the highlighted element - Use getBoundingClientRect directly for fixed positioning */}
                     <rect
                       x={step.highlight.left - 16}
-                      y={step.highlight.top - window.pageYOffset - 16}
+                      y={(document.getElementById(steps[currentStep].id)?.getBoundingClientRect().top || step.highlight.top) - 16}
                       width={step.highlight.width + 32}
                       height={step.highlight.height + 32}
                       fill="black"
@@ -815,7 +815,7 @@ export function SiteTour() {
                 {/* Light glow INSIDE the cutout area to make element visible */}
                 <rect
                   x={step.highlight.left - 16}
-                  y={step.highlight.top - window.pageYOffset - 16}
+                  y={(document.getElementById(steps[currentStep].id)?.getBoundingClientRect().top || step.highlight.top) - 16}
                   width={step.highlight.width + 32}
                   height={step.highlight.height + 32}
                   fill="url(#spotlight-glow)"
@@ -826,7 +826,7 @@ export function SiteTour() {
                 {/* Bright spotlight effect around edges */}
                 <rect
                   x={step.highlight.left - 20}
-                  y={step.highlight.top - window.pageYOffset - 20}
+                  y={(document.getElementById(steps[currentStep].id)?.getBoundingClientRect().top || step.highlight.top) - 20}
                   width={step.highlight.width + 40}
                   height={step.highlight.height + 40}
                   fill="none"
@@ -840,13 +840,13 @@ export function SiteTour() {
 
             {/* CYAN BORDER AROUND ELEMENT */}
             <motion.div
-              className="fixed z-[99999] pointer-events-none"
+              className="fixed z-[1001] pointer-events-none"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
               style={{
-                top: step.highlight.top - window.pageYOffset - 16,
+                top: (document.getElementById(steps[currentStep].id)?.getBoundingClientRect().top || step.highlight.top) - 16,
                 left: step.highlight.left - 16,
                 width: step.highlight.width + 32,
                 height: step.highlight.height + 32,
@@ -908,27 +908,37 @@ export function SiteTour() {
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.9 }}
-              className="fixed z-[100000] pointer-events-auto px-4 sm:px-0"
-              style={{
-                // Mobile: bottom of screen, Desktop: near element
-                top: window.innerWidth < 640
-                  ? 'auto'
-                  : Math.min(
-                      step.highlight.top - window.pageYOffset + step.highlight.height + 40,
-                      window.innerHeight - 450
-                    ),
-                bottom: window.innerWidth < 640 ? '20px' : 'auto',
-                left: window.innerWidth < 640
-                  ? '0'
-                  : Math.max(
+              className="fixed z-[1002] pointer-events-auto px-4 sm:px-0"
+              style={(() => {
+                const isMobile = window.innerWidth < 640;
+                const elementRect = document.getElementById(steps[currentStep].id)?.getBoundingClientRect();
+                
+                if (isMobile) {
+                  // Mobile: Always at bottom, full width
+                  return {
+                    top: 'auto',
+                    bottom: '80px', // Higher up to avoid blocking content
+                    left: '0',
+                    right: '0',
+                  };
+                } else {
+                  // Desktop: Position near highlighted element
+                  const targetTop = elementRect ? elementRect.top + elementRect.height + 40 : step.highlight.top + step.highlight.height + 40;
+                  
+                  return {
+                    top: Math.min(targetTop, window.innerHeight - 450),
+                    bottom: 'auto',
+                    left: Math.max(
                       20,
                       Math.min(
                         step.highlight.left + step.highlight.width / 2 - 200,
                         window.innerWidth - 420
                       )
                     ),
-                right: window.innerWidth < 640 ? '0' : 'auto',
-              }}
+                    right: 'auto',
+                  };
+                }
+              })()}
             >
               <div className="relative w-full sm:w-[400px] max-w-[calc(100vw-2rem)] mx-auto">
                 {/* Roze Bot Avatar - SMALLER ON MOBILE */}
