@@ -179,30 +179,66 @@ export function AboutSection() {
 
           {/* Skills Bento Grid */}
           <div className="mb-16">
-            <motion.h3
-              className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-[var(--text-primary)] mb-6 font-mono uppercase tracking-wider"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+            {/* Enhanced Technical Skills Header */}
+            <motion.div
+              className="relative mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Code2 className="w-8 h-8 text-[var(--accent-primary)]" />
-              {(t("about.skillsTitle") || "Technical Skills").toUpperCase()}
-            </motion.h3>
+              <div className="flex items-center justify-center gap-4 mb-3">
+                <motion.div
+                  className="p-3 bg-[var(--accent-primary)]/10 rounded-xl border-2 border-[var(--accent-primary)]/30"
+                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Code2 className="w-8 h-8 text-[var(--accent-primary)]" />
+                </motion.div>
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-[var(--text-primary)] font-mono uppercase tracking-wider">
+                  {(t("about.skillsTitle") || "Technical Skills").toUpperCase()}
+                </h3>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <div className="h-[2px] w-12 bg-gradient-to-r from-transparent to-[var(--accent-primary)]" />
+                <div className="h-1 w-1 rounded-full bg-[var(--accent-primary)]" />
+                <div className="h-[2px] w-24 bg-[var(--accent-primary)]" />
+                <div className="h-1 w-1 rounded-full bg-[var(--accent-primary)]" />
+                <div className="h-[2px] w-12 bg-gradient-to-l from-transparent to-[var(--accent-primary)]" />
+              </div>
+            </motion.div>
             
             <SkillsFuturistic />
           </div>
 
           {/* Languages */}
           <div className="mt-16">
-            <motion.h3
-              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-8 flex items-center justify-center gap-3 text-[var(--text-primary)] font-bold"
+            {/* Enhanced Languages Header */}
+            <motion.div
+              className="relative mb-8"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Globe className="w-8 h-8 text-[var(--accent-primary)]" />
-              LANGUAGES
-            </motion.h3>
+              <div className="flex items-center justify-center gap-4 mb-3">
+                <motion.div
+                  className="p-3 bg-purple-500/10 rounded-xl border-2 border-purple-500/30"
+                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Globe className="w-8 h-8 text-purple-400" />
+                </motion.div>
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-[var(--text-primary)] font-mono uppercase tracking-wider">
+                  LANGUAGES
+                </h3>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <div className="h-[2px] w-12 bg-gradient-to-r from-transparent to-purple-400" />
+                <div className="h-1 w-1 rounded-full bg-purple-400" />
+                <div className="h-[2px] w-24 bg-purple-400" />
+                <div className="h-1 w-1 rounded-full bg-purple-400" />
+                <div className="h-[2px] w-12 bg-gradient-to-l from-transparent to-purple-400" />
+              </div>
+            </motion.div>
             
             <LanguagesModern />
           </div>

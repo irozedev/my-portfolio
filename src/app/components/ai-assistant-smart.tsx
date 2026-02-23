@@ -29,7 +29,7 @@ const PORTFOLIO_CONTEXT = `
 ## LANGUAGES
 - Ukrainian: Native
 - English: Fluent (C1)
-- Dutch: Fluent (B2+)
+- Dutch: Elementary (A2)
 - Russian: Native
 
 ## TECHNICAL SKILLS (EXPERT LEVEL)
@@ -248,6 +248,7 @@ export function AIAssistantSmart() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { language } = useLanguage();
 
   useEffect(() => {
@@ -260,9 +261,17 @@ export function AIAssistantSmart() {
     }
   }, [isOpen, language]);
 
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 120) + 'px';
+    }
+  }, [input]);
+
   const sendWelcomeMessage = () => {
     const welcomeMessages: Record<string, string> = {
-      en: "👋 Hi! I'm Roze AI Assistant. I have full knowledge about Stepan Roze's portfolio, skills, projects, and services. Ask me anything about his experience, pricing, availability, or technical expertise!",
+      en: "👋 Hi! I'm Roze AI Assistant. I have comprehensive knowledge about Stepan Roze's portfolio, skills, projects, and services. Feel free to ask me anything about his experience, pricing, availability, or technical expertise!",
       uk: "👋 Привіт! Я Roze AI Асистент. Я маю повні знання про портфоліо Stepan Roze, навички, проекти та послуги. Запитуй мене про його досвід, ціни, доступність або технічну експертизу!",
       nl: "👋 Hoi! Ik ben Roze AI Assistent. Ik heb volledige kennis over Stepan Roze's portfolio, vaardigheden, projecten en diensten. Vraag me alles over zijn ervaring, prijzen, beschikbaarheid of technische expertise!",
       ar: "👋 مرحبا! أنا Roze AI المساعد. لدي معرفة كاملة بمحفظة ومهارات ومشاريع وخدمات Stepan Roze. اسألني أي شيء عن خبرته أو الأسعار أو التوفر أو الخبرة التقنية!",
@@ -365,8 +374,8 @@ When user asks about availability, confirm he's available and provide scheduling
   const translations: Record<string, any> = {
     en: {
       title: "Roze AI Assistant",
-      subtitle: "Ask about portfolio, skills, projects",
-      placeholder: "Ask about Stepan's experience, pricing, projects...",
+      subtitle: "Available to help • Online now",
+      placeholder: "Ask me about Stepan's skills, projects, or pricing...",
       send: "Send"
     },
     uk: {
@@ -450,65 +459,139 @@ When user asks about availability, confirm he's available and provide scheduling
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-[100] w-[380px] max-w-[calc(100vw-3rem)] h-[600px] max-h-[calc(100vh-8rem)] bg-[var(--bg-primary)] border-2 border-[#00d9ff] rounded-2xl shadow-[0_20px_80px_rgba(0,217,255,0.5)] overflow-hidden flex flex-col"
+            className="fixed bottom-6 right-6 z-[100] w-[420px] max-w-[calc(100vw-3rem)] h-[650px] max-h-[calc(100vh-8rem)] bg-[var(--bg-primary)] border-2 border-[#00d9ff] rounded-2xl shadow-[0_20px_80px_rgba(0,217,255,0.5)] overflow-hidden flex flex-col"
           >
-            {/* Header */}
-            <div className="relative bg-gradient-to-r from-[#00d9ff] to-purple-500 p-4 flex items-center justify-between">
+            {/* Header - ОНОВЛЕНИЙ ДИЗАЙН */}
+            <div className="relative bg-gradient-to-r from-[#00d9ff] via-[#00a8cc] to-purple-500 p-5 flex items-center justify-between">
+              {/* Scanlines background */}
               <div className="absolute inset-0 opacity-10">
-                {[...Array(10)].map((_, i) => (
+                {[...Array(15)].map((_, i) => (
                   <div key={i} className="h-[2px] bg-white mb-2" />
                 ))}
               </div>
               
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/20" />
+              
               <div className="relative flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                  <Bot className="w-6 h-6 text-white" />
-                </div>
+                {/* Avatar з анімацією */}
+                <motion.div 
+                  className="relative w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border-2 border-white/30"
+                  animate={{
+                    boxShadow: [
+                      '0 0 10px rgba(255,255,255,0.3)',
+                      '0 0 20px rgba(255,255,255,0.5)',
+                      '0 0 10px rgba(255,255,255,0.3)',
+                    ]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Bot className="w-7 h-7 text-white" />
+                  
+                  {/* Active indicator */}
+                  <motion.div
+                    className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-white"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  />
+                </motion.div>
+                
                 <div>
-                  <h3 className="text-white font-bold font-mono text-sm">{t.title}</h3>
-                  <p className="text-white/80 text-xs">{t.subtitle}</p>
+                  <h3 className="text-white font-black font-mono text-base tracking-tight drop-shadow-md">
+                    {t.title}
+                  </h3>
+                  <p className="text-white/90 text-xs font-medium flex items-center gap-1.5">
+                    <motion.div
+                      className="w-2 h-2 bg-green-400 rounded-full"
+                      animate={{ opacity: [1, 0.3, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    />
+                    {t.subtitle}
+                  </p>
                 </div>
               </div>
               
               <button
                 onClick={() => setIsOpen(false)}
-                className="relative p-2 hover:bg-white/20 rounded-lg transition-colors"
+                className="relative p-2.5 hover:bg-white/20 rounded-xl transition-all group backdrop-blur-sm"
               >
-                <X className="w-5 h-5 text-white" />
+                <X className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-300" />
               </button>
             </div>
 
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-              {messages.map((msg) => (
+            {/* Messages - ОНОВЛЕНИЙ СТИЛЬ */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-secondary)]">
+              {messages.map((msg, index) => (
                 <motion.div
                   key={msg.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ delay: index * 0.05 }}
                   className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'}`}
                 >
-                  <div
-                    className={`max-w-[80%] px-4 py-2.5 rounded-xl ${
-                      msg.isBot
-                        ? 'bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-primary)]'
-                        : 'bg-gradient-to-r from-[#00d9ff] to-purple-500 text-white'
-                    }`}
-                  >
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-                  </div>
+                  {msg.isBot && (
+                    <div className="flex items-start gap-2">
+                      {/* Bot avatar mini */}
+                      <div className="w-8 h-8 bg-gradient-to-br from-[#00d9ff] to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                        <Bot className="w-4 h-4 text-white" />
+                      </div>
+                      
+                      <div className="max-w-[75%] px-4 py-3 rounded-2xl rounded-tl-sm bg-[var(--glass-bg)] border border-[var(--glass-border)] shadow-lg backdrop-blur-sm">
+                        <p className="text-sm leading-relaxed text-[var(--text-primary)] whitespace-pre-wrap">
+                          {msg.text}
+                        </p>
+                        <span className="text-[10px] text-[var(--text-muted)] mt-1.5 block">
+                          {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {!msg.isBot && (
+                    <div className="max-w-[75%] px-4 py-3 rounded-2xl rounded-tr-sm bg-gradient-to-r from-[#00d9ff] to-purple-500 text-white shadow-lg">
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                        {msg.text}
+                      </p>
+                      <span className="text-[10px] text-white/70 mt-1.5 block text-right">
+                        {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+                  )}
                 </motion.div>
               ))}
               
               {isLoading && (
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
                   className="flex justify-start"
                 >
-                  <div className="max-w-[80%] px-4 py-2.5 rounded-xl bg-[var(--glass-bg)] border border-[var(--glass-border)]">
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin text-[#00d9ff]" />
-                      <span className="text-sm text-[var(--text-secondary)]">Thinking...</span>
+                  <div className="flex items-start gap-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-[#00d9ff] to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                      <Bot className="w-4 h-4 text-white" />
+                    </div>
+                    
+                    <div className="px-5 py-3 rounded-2xl rounded-tl-sm bg-[var(--glass-bg)] border border-[var(--glass-border)] shadow-lg">
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-[#00d9ff]" />
+                        <div className="flex gap-1">
+                          {[0, 1, 2].map((i) => (
+                            <motion.div
+                              key={i}
+                              className="w-2 h-2 bg-[#00d9ff] rounded-full"
+                              animate={{ 
+                                scale: [1, 1.5, 1],
+                                opacity: [0.5, 1, 0.5]
+                              }}
+                              transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                delay: i * 0.2
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -517,25 +600,62 @@ When user asks about availability, confirm he's available and provide scheduling
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
-            <div className="p-4 border-t border-[var(--glass-border)]">
-              <div className="flex items-end gap-2">
-                <textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder={t.placeholder}
-                  disabled={isLoading}
-                  className="flex-1 px-3 py-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-lg text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[#00d9ff] resize-none min-h-[44px] max-h-[120px]"
-                  rows={1}
-                />
-                <button
+            {/* Input - ОНОВЛЕНИЙ ДИЗАЙН */}
+            <div className="p-4 border-t-2 border-[var(--glass-border)] bg-[var(--bg-secondary)]/50 backdrop-blur-sm">
+              <div className="flex items-end gap-3">
+                <div className="flex-1 relative">
+                  <textarea
+                    ref={textareaRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    placeholder={t.placeholder}
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 bg-[var(--glass-bg)] border-2 border-[var(--glass-border)] rounded-xl text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[#00d9ff] focus:shadow-[0_0_20px_rgba(0,217,255,0.2)] resize-none min-h-[48px] max-h-[120px] transition-all"
+                    rows={1}
+                    style={{ 
+                      scrollbarWidth: 'thin',
+                      scrollbarColor: '#00d9ff transparent'
+                    }}
+                  />
+                  
+                  {/* Character counter */}
+                  {input.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="absolute bottom-2 right-3 text-[10px] text-[var(--text-muted)] font-mono"
+                    >
+                      {input.length}/500
+                    </motion.div>
+                  )}
+                </div>
+                
+                <motion.button
                   onClick={handleSend}
                   disabled={!input.trim() || isLoading}
-                  className="p-3 bg-gradient-to-r from-[#00d9ff] to-purple-500 text-white rounded-lg hover:shadow-[0_0_20px_rgba(0,217,255,0.5)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-3.5 bg-gradient-to-r from-[#00d9ff] to-purple-500 text-white rounded-xl hover:shadow-[0_0_30px_rgba(0,217,255,0.6)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 relative overflow-hidden group"
                 >
-                  <Send className="w-4 h-4" />
-                </button>
+                  {/* Shine effect on hover */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    initial={{ x: '-100%' }}
+                    whileHover={{ x: '100%' }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  
+                  <Send className="w-5 h-5 relative z-10 group-hover:rotate-45 transition-transform duration-300" />
+                </motion.button>
+              </div>
+              
+              {/* Powered by badge */}
+              <div className="flex items-center justify-center gap-2 mt-3">
+                <Sparkles className="w-3 h-3 text-[var(--text-muted)]" />
+                <span className="text-[10px] text-[var(--text-muted)] font-mono">
+                  Powered by Claude 3.5 Haiku
+                </span>
               </div>
             </div>
           </motion.div>

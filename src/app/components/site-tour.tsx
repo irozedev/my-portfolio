@@ -1073,7 +1073,7 @@ export function SiteTour() {
                         )}
                         
                         <button
-                          onClick={nextStep}
+                          onClick={currentStep === steps.length - 1 ? finishTour : nextStep}
                           className="flex items-center gap-1 sm:gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-[#00d9ff] to-purple-500 text-white rounded-lg hover:shadow-[0_0_20px_rgba(0,217,255,0.5)] transition-all font-mono text-[10px] sm:text-xs font-bold"
                         >
                           {currentStep === steps.length - 1 ? t.finish : t.next}

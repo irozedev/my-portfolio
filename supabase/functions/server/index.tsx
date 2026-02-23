@@ -89,10 +89,10 @@ app.post("/make-server-a62f57c7/ai/chat", async (c) => {
 
     // Prevent spam/abuse patterns
     const spamPatterns = [
-      /(.)\1{10,}/i, // Repeated characters
-      /https?:\/\//i, // URLs
-      /<script/i, // Script tags
-      /SELECT.*FROM/i, // SQL injection attempts
+      new RegExp('(.)\\1{10,}', 'i'), // Repeated characters
+      new RegExp('https?://', 'i'), // URLs
+      new RegExp('<script', 'i'), // Script tags
+      new RegExp('SELECT.*FROM', 'i'), // SQL injection attempts
     ];
     
     for (const pattern of spamPatterns) {
@@ -214,6 +214,187 @@ RULES:
     console.error('AI chat error:', error);
     return c.json({ 
       error: 'Failed to process request',
+      details: error.message 
+    }, 500);
+  }
+});
+
+// ============================================================
+// SMART AI CHAT ENDPOINT - For AI Assistant Smart Component
+// ============================================================
+app.post("/make-server-a62f57c7/chat", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { messages } = body;
+
+    // Input validation
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return c.json({ error: 'Messages array is required' }, 400);
+    }
+
+    // Get last user message
+    const userMessage = messages[messages.length - 1]?.content;
+    if (!userMessage || typeof userMessage !== 'string') {
+      return c.json({ error: 'Invalid message format' }, 400);
+    }
+
+    // Max message length to prevent abuse
+    if (userMessage.length > 500) {
+      return c.json({ error: 'Message too long. Max 500 characters.' }, 400);
+    }
+
+    // Prevent spam/abuse patterns
+    const spamPatterns = [
+      new RegExp('(.)\\1{10,}', 'i'), // Repeated characters
+      new RegExp('https?://', 'i'), // URLs
+      new RegExp('<script', 'i'), // Script tags
+      new RegExp('SELECT.*FROM', 'i'), // SQL injection attempts
+    ];
+    
+    for (const pattern of spamPatterns) {
+      if (pattern.test(userMessage)) {
+        console.warn('[Chat] Spam/abuse detected:', userMessage.substring(0, 50));
+        return c.json({ error: 'Invalid message content' }, 400);
+      }
+    }
+
+    // Get client IP for rate limiting
+    const clientIp = c.req.header('x-forwarded-for') || 
+                     c.req.header('x-real-ip') || 
+                     'unknown';
+    
+    // Rate limit: 15 requests per 5 minutes per IP
+    if (!checkRateLimit(clientIp + '_chat', 15, 300000)) {
+      console.warn('[Chat] Rate limit exceeded for IP:', clientIp);
+      return c.json({ 
+        error: 'Too many requests. Please wait a few minutes.',
+        rateLimited: true 
+      }, 429);
+    }
+
+    // Check for off-topic keywords
+    const offTopicPatterns = [
+      new RegExp('weather|погода|weer|clima', 'i'),
+      new RegExp('recipe|рецепт|recept|receta', 'i'),
+      new RegExp('movie|film|фільм|película', 'i'),
+      new RegExp('sport|спорт|deporte', 'i'),
+      new RegExp('game|гра|spel|juego', 'i'),
+      new RegExp('joke|жарт|grap|broma', 'i'),
+      new RegExp('news|новини|nieuws|noticias', 'i'),
+      new RegExp('math.*\\d+[+\\-*/]\\d+', 'i'), // Math calculations
+      new RegExp('what.*time|який.*час|hoe laat', 'i'),
+      new RegExp('who.*president|хто.*президент', 'i'),
+    ];
+
+    let isOffTopic = false;
+    for (const pattern of offTopicPatterns) {
+      if (pattern.test(userMessage)) {
+        isOffTopic = true;
+        break;
+      }
+    }
+
+    // If off-topic, return redirect message immediately (save API cost!)
+    if (isOffTopic) {
+      const redirectMessages: Record<string, string> = {
+        en: "I'm Roze AI Assistant, specialized in Stepan Roze's portfolio. I can help you with:\n\n✅ Services & Pricing\n✅ Technical Skills\n✅ Project Portfolio\n✅ Contact & Availability\n\nPlease ask about these topics!",
+        uk: "Я Roze AI Асистент, спеціалізуюся на портфоліо Stepan Roze. Я можу допомогти з:\n\n✅ Послугами та цінами\n✅ Технічними навичками\n✅ Портфоліо проектів\n✅ Контактами та доступністю\n\nБудь ласка, запитай про ці теми!",
+        nl: "Ik ben Roze AI Assistent, gespecialiseerd in Stepan Roze's portfolio. Ik kan helpen met:\n\n✅ Diensten & Prijzen\n✅ Technische Vaardigheden\n✅ Project Portfolio\n✅ Contact & Beschikbaarheid\n\nVraag alsjeblieft over deze onderwerpen!",
+        ar: "أنا Roze AI المساعد، متخصص في محفظة Stepan Roze. يمكنني المساعدة في:\n\n✅ الخدمات والأسعار\n✅ المهارات التقنية\n✅ محفظة المشاريع\n✅ الاتصال والتوفر\n\nيرجى السؤال عن هذه المواضيع!",
+        es: "Soy Roze AI Asistente, especializado en el portafolio de Stepan Roze. Puedo ayudar con:\n\n✅ Servicios y Precios\n✅ Habilidades Técnicas\n✅ Portafolio de Proyectos\n✅ Contacto y Disponibilidad\n\n¡Por favor pregunta sobre estos temas!"
+      };
+
+      // Try to detect language from system message
+      const systemMessage = messages.find((m: any) => m.role === 'system')?.content || '';
+      let detectedLang = 'en';
+      if (systemMessage.includes('Ukrainian') || systemMessage.includes('українською')) detectedLang = 'uk';
+      else if (systemMessage.includes('Dutch') || systemMessage.includes('Nederlands')) detectedLang = 'nl';
+      else if (systemMessage.includes('Arabic') || systemMessage.includes('بالعربية')) detectedLang = 'ar';
+      else if (systemMessage.includes('Spanish') || systemMessage.includes('español')) detectedLang = 'es';
+
+      console.log(`[Chat] Off-topic detected, returning redirect (saved API call) - IP: ${clientIp}`);
+      return c.json({
+        response: redirectMessages[detectedLang] || redirectMessages.en
+      });
+    }
+
+    // Generate cache key from user message
+    const cacheKey = 'chat_' + userMessage.toLowerCase().trim().substring(0, 80);
+    
+    // Check cache first (save API calls!)
+    cleanCache();
+    const cached = responseCache.get(cacheKey);
+    if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+      console.log('[Chat] Cache hit:', cacheKey.substring(0, 40));
+      return c.json({
+        response: cached.response,
+        cached: true
+      });
+    }
+
+    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
+    
+    if (!anthropicApiKey) {
+      console.error('[Chat] ANTHROPIC_API_KEY not configured');
+      return c.json({ error: 'AI service not configured' }, 500);
+    }
+
+    // Extract system prompt from messages
+    const systemMessage = messages.find((m: any) => m.role === 'system');
+    const systemPrompt = systemMessage?.content || `You are Roze AI Assistant for Stepan Roze's portfolio.
+
+CRITICAL RULE: ONLY answer questions about Stepan Roze's portfolio, skills, services, projects, and availability.
+
+For ANY off-topic questions (weather, math, general knowledge, jokes, news, etc.), respond:
+"I'm specialized in Stepan Roze's portfolio. Please ask about his skills, projects, services, pricing, or availability!"
+
+Answer in 2-3 sentences maximum. Be professional and helpful.`;
+
+    // Call Anthropic API
+    console.log(`[Chat] Calling Claude API for message: "${userMessage.substring(0, 50)}..."`);
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': anthropicApiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-3-5-haiku-20241022',
+        max_tokens: 200,
+        system: systemPrompt,
+        messages: messages.filter((m: any) => m.role !== 'system').slice(-5), // Keep last 5 messages only
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('[Chat] Anthropic API error:', response.status, errorData);
+      return c.json({ error: 'AI service temporarily unavailable' }, 500);
+    }
+
+    const data = await response.json();
+    const aiResponse = data.content[0].text;
+
+    // Cache the response
+    responseCache.set(cacheKey, {
+      response: aiResponse,
+      timestamp: Date.now()
+    });
+
+    // Log usage for monitoring
+    console.log(`[Chat] Response generated | Tokens: input=${data.usage?.input_tokens || 0}, output=${data.usage?.output_tokens || 0}`);
+
+    return c.json({
+      response: aiResponse,
+      cached: false
+    });
+
+  } catch (error) {
+    console.error('[Chat] Error:', error);
+    return c.json({ 
+      error: 'Failed to process chat request',
       details: error.message 
     }, 500);
   }
