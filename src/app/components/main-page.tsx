@@ -1,12 +1,6 @@
-import { HeroUltraModern } from "./hero-ultra-modern";
-import { ServicesCreativeSlider } from "./services-creative-slider";
-import { AboutSection } from "./about-section";
-import { ExperienceTimelinePremium } from "./experience-timeline-premium";
-import { PortfolioCreativeSlider } from "./portfolio-creative-slider";
 import { ContactSection } from "./contact-section";
 import { Footer } from "./footer";
 import { CookieBanner } from "./cookie-banner";
-import { AIAssistantSmart } from "./ai-assistant-smart";
 import { CartButton } from "./cart-button";
 import { SEOHead } from "./seo-head";
 import { PersonalCabinet } from "./personal-cabinet";
@@ -14,6 +8,11 @@ import { Navigation } from "./navigation";
 import { BetaBanner } from "./beta-banner";
 import { SiteTour } from "./site-tour";
 import { ChatBot } from "./chat-bot";
+import { HeroUltraModern } from "./hero-ultra-modern";
+import { AboutSection } from "./about-section";
+import { ExperienceTimelinePremium } from "./experience-timeline-premium";
+import { PortfolioCreativeSlider } from "./portfolio-creative-slider";
+import { ServicesCreativeSlider } from "./services-creative-slider";
 import { useState } from "react";
 
 export function MainPage() {
@@ -28,7 +27,7 @@ export function MainPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] overflow-hidden">
+    <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
       <SEOHead />
       
       {/* Navigation */}
@@ -61,8 +60,6 @@ export function MainPage() {
       <Footer />
       
       <CookieBanner />
-      
-      <AIAssistantSmart />
       
       <CartButton />
       

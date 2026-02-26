@@ -86,7 +86,7 @@ export function EnhancedAuthModal({ isOpen, onClose, onSuccess }: EnhancedAuthMo
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full h-full md:h-auto md:max-h-[85vh] md:max-w-2xl bg-[var(--bg-primary)] md:rounded-3xl border-0 md:border-2 md:border-[#00d9ff]/30 shadow-[0_0_100px_rgba(0,217,255,0.3)] overflow-hidden flex flex-col"
+              className="relative w-full h-full md:h-auto md:max-h-[85vh] md:max-w-xl lg:max-w-2xl bg-[var(--bg-primary)] md:rounded-3xl border-0 md:border-2 md:border-[#00d9ff]/30 shadow-[0_0_100px_rgba(0,217,255,0.3)] overflow-hidden flex flex-col"
             >
               {/* Close Button */}
               <button

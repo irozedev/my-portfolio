@@ -350,21 +350,25 @@ export function SiteTour() {
 
   return (
     <>
-      {/* DARK OVERLAY WITH CUTOUT */}
+      {/* DARK OVERLAY WITH CUTOUT - NO BACKGROUND ON MOBILE */}
       <div
         className="fixed inset-0 z-[9998] pointer-events-auto"
         style={{
           background: highlightRect && isElementVisible
-            ? `
-              radial-gradient(
-                ellipse ${highlightRect.width + 40}px ${highlightRect.height + 40}px at ${highlightRect.left + highlightRect.width / 2}px ${highlightRect.top + highlightRect.height / 2}px,
-                transparent 0%,
-                transparent 50%,
-                rgba(0, 0, 0, 0.50) 50%,
-                rgba(0, 0, 0, 0.50) 100%
-              )
-            `
-            : 'rgba(0, 0, 0, 0.50)'
+            ? window.innerWidth >= 768 // Only show dark overlay on desktop
+              ? `
+                radial-gradient(
+                  ellipse ${highlightRect.width + 40}px ${highlightRect.height + 40}px at ${highlightRect.left + highlightRect.width / 2}px ${highlightRect.top + highlightRect.height / 2}px,
+                  transparent 0%,
+                  transparent 50%,
+                  rgba(0, 0, 0, 0.50) 50%,
+                  rgba(0, 0, 0, 0.50) 100%
+                )
+              `
+              : 'transparent' // No dark background on mobile
+            : window.innerWidth >= 768 
+              ? 'rgba(0, 0, 0, 0.50)' 
+              : 'transparent'
         }}
         onClick={closeTour}
       />
@@ -372,7 +376,7 @@ export function SiteTour() {
       {/* ANIMATED SPOTLIGHT RING */}
       {highlightRect && isElementVisible && (
         <>
-          {/* Outer pulsing ring */}
+          {/* Outer pulsing ring - WORKS ON MOBILE */}
           <div
             className="fixed z-[9999] pointer-events-none"
             style={{
@@ -381,13 +385,13 @@ export function SiteTour() {
               width: highlightRect.width + 40,
               height: highlightRect.height + 40,
               borderRadius: '16px',
-              border: '4px solid rgba(0, 217, 255, 0.6)',
-              boxShadow: '0 0 0 8px rgba(0, 217, 255, 0.2), 0 0 60px rgba(0, 217, 255, 0.5), inset 0 0 40px rgba(0, 217, 255, 0.1)',
+              border: '4px solid rgba(0, 217, 255, 0.8)',
+              boxShadow: '0 0 0 8px rgba(0, 217, 255, 0.3), 0 0 60px rgba(0, 217, 255, 0.7), inset 0 0 40px rgba(0, 217, 255, 0.2)',
               animation: 'tour-pulse 2s ease-in-out infinite'
             }}
           />
 
-          {/* Inner solid border */}
+          {/* Inner solid border - WORKS ON MOBILE */}
           <div
             className="fixed z-[9999] pointer-events-none"
             style={{
@@ -397,7 +401,7 @@ export function SiteTour() {
               height: highlightRect.height + 16,
               borderRadius: '12px',
               border: '3px solid #00d9ff',
-              boxShadow: '0 0 30px rgba(0, 217, 255, 0.6)'
+              boxShadow: '0 0 30px rgba(0, 217, 255, 0.8)'
             }}
           />
 

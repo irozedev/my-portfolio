@@ -564,20 +564,6 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                         {t("hero.getInTouch")}
                       </Button>
                     </motion.div>
-                    
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Button
-                        onClick={() => {
-                          window.dispatchEvent(new CustomEvent('openChatBot'));
-                        }}
-                        size="lg"
-                        variant="outline"
-                        className="w-full sm:w-auto border-2 border-purple-500 bg-transparent hover:bg-purple-500 text-purple-400 hover:text-white font-mono font-bold px-8 py-6 text-base md:text-lg rounded-2xl transition-all duration-300 group backdrop-blur-sm shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_40px_rgba(147,51,234,0.6)]"
-                      >
-                        <MessageCircle className="w-5 h-5 mr-2 group-hover:rotate-12 group-hover:scale-110 transition-transform" />
-                        Ask AI Assistant
-                      </Button>
-                    </motion.div>
                   </div>
 
                   {/* Social Links */}

@@ -989,7 +989,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden fixed left-0 right-0 bg-[var(--bg-primary)] z-[10001] overflow-y-auto"
+              className="lg:hidden fixed left-0 right-0 bg-[var(--bg-primary)] z-[10001]"
               style={{ 
                 top: scrolled ? '120px' : '128px',
                 bottom: 0,

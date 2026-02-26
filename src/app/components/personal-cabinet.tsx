@@ -176,7 +176,7 @@ export function PersonalCabinet({ isOpen, onClose }: PersonalCabinetProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 bottom-0 w-full sm:max-w-md md:max-w-lg lg:max-w-2xl bg-[var(--bg-primary)] border-l border-[#00d9ff]/30 shadow-[-10px_0_50px_rgba(0,217,255,0.2)] z-[100001] overflow-hidden flex flex-col"
+            className="fixed right-0 top-0 bottom-0 w-full sm:max-w-md md:max-w-lg bg-[var(--bg-primary)] border-l border-[#00d9ff]/30 shadow-[-10px_0_50px_rgba(0,217,255,0.2)] z-[100001] overflow-hidden flex flex-col"
           >
             {/* Header */}
             <div className="relative h-40 sm:h-48 bg-gradient-to-br from-[#00d9ff]/20 via-purple-500/20 to-pink-500/20 border-b border-white/10 flex-shrink-0">

@@ -39,23 +39,12 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
     // Save current scroll position
     scrollYRef.current = window.scrollY;
     
-    // Prevent scrolling
+    // Prevent scrolling - SIMPLE METHOD
     document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollYRef.current}px`;
-    document.body.style.width = '100%';
     
     return () => {
-      const scrollY = scrollYRef.current;
-      
       // Restore body styles
       document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      
-      // Restore scroll position IMMEDIATELY (no animation)
-      window.scrollTo(0, scrollY);
     };
   }, []);
 
@@ -76,7 +65,7 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={handleClose}
-        className="fixed inset-0 bg-black/80 backdrop-blur-lg z-[100000]"
+        className="fixed inset-0 bg-black/80 backdrop-blur-lg z-[100002]"
       />
 
       {/* 🔥 MODAL CONTAINER - ZOOM + SLIDE ANIMATION - NO OUTER SCROLL */}
@@ -90,14 +79,14 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
           damping: 30, 
           stiffness: 300,
         }}
-        className="fixed inset-0 z-[100001] flex items-center justify-center p-0 sm:p-4 md:p-6 overflow-hidden"
+        className="fixed inset-0 z-[100003] flex items-center justify-center p-0 sm:p-4 md:p-6"
         onClick={handleClose}
       >
         {/* 🔥 PREMIUM CARD - GLASSMORPHISM - OPTIMIZED FOR MOBILE */}
         <motion.div
           initial={{ y: 50 }}
           animate={{ y: 0 }}
-          className="relative bg-[var(--bg-primary)] border-0 sm:border-2 border-[var(--accent-primary)]/30 rounded-none sm:rounded-2xl md:rounded-3xl w-full h-full sm:h-auto sm:max-w-5xl shadow-[0_20px_80px_rgba(0,217,255,0.4)] overflow-hidden flex flex-col"
+          className="relative bg-[var(--bg-primary)] border-0 sm:border-2 border-[var(--accent-primary)]/30 rounded-none sm:rounded-2xl md:rounded-3xl w-full h-full sm:h-auto sm:max-w-3xl md:max-w-4xl lg:max-w-5xl shadow-[0_20px_80px_rgba(0,217,255,0.4)] flex flex-col sm:max-h-[90vh]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Ambient Glow */}
@@ -113,15 +102,8 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
             <X className="w-6 h-6 sm:w-6 sm:h-6 text-white group-hover:text-red-400 transition-colors" />
           </motion.button>
 
-          {/* SCROLLABLE CONTENT - SINGLE SCROLL CONTAINER - MOBILE OPTIMIZED */}
-          <div 
-            className="relative overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/40 scrollbar-track-[var(--bg-secondary)]/30 hover:scrollbar-thumb-[var(--accent-primary)]/60 flex-1" 
-            style={{ 
-              maxHeight: 'calc(100vh - env(safe-area-inset-bottom, 0px))',
-              WebkitOverflowScrolling: 'touch',
-              overscrollBehavior: 'contain'
-            }}
-          >
+          {/* CONTENT - NO SCROLL */}
+          <div className="relative flex-1">
             
             {/* 🔥 HERO IMAGE - PREMIUM GRADIENT OVERLAY */}
             <div className="relative h-48 sm:h-64 md:h-80 lg:h-96 overflow-hidden">
