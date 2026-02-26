@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
+import { motion } from "motion/react";
 import { useAuth } from "../contexts/auth-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
+import { Camera, Upload, Save, Check, X, User, Briefcase, Building2, Mail } from "lucide-react";
 
 export function UserProfilePage() {
   const { user, accessToken, updateUserMetadata, loading } = useAuth();
@@ -251,7 +253,7 @@ export function UserProfilePage() {
                     <img
                       src={displayAvatar}
                       alt="Avatar"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-center"
                     />
                     
                     {/* Overlay on hover */}

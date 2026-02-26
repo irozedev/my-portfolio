@@ -16,8 +16,11 @@ const socialLinks = [
 ];
 
 export function Hero({ onViewWork }: HeroSectionProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isBookCallOpen, setIsBookCallOpen] = useState(false);
+  
+  // RTL support for Arabic
+  const isRTL = language === 'ar';
 
   const handleOpenChat = () => {
     // Открываем глобальный чат-бот
@@ -29,7 +32,7 @@ export function Hero({ onViewWork }: HeroSectionProps) {
     <>
       <section
         id="hero-section"
-        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 px-3 sm:px-4 sm:pt-28 md:pt-24 md:pb-16"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-12 px-3 sm:px-4 sm:pt-36 md:pt-28 md:pb-16"
       >
         {/* Background Effects */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -60,7 +63,12 @@ export function Hero({ onViewWork }: HeroSectionProps) {
           />
           
           {/* Infinite Scrolling Text - Left Side */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 hidden lg:flex items-center justify-center overflow-hidden">
+          <div 
+            className="absolute top-0 bottom-0 w-32 hidden lg:flex items-center justify-center overflow-hidden"
+            style={{
+              [isRTL ? 'right' : 'left']: 0
+            }}
+          >
             <div className="relative h-full flex items-center">
               <motion.div
                 className="flex flex-col gap-8 text-6xl font-black tracking-tighter opacity-5"
@@ -94,7 +102,12 @@ export function Hero({ onViewWork }: HeroSectionProps) {
           </div>
           
           {/* Infinite Scrolling Text - Right Side */}
-          <div className="absolute right-0 top-0 bottom-0 w-32 hidden lg:flex items-center justify-center overflow-hidden">
+          <div 
+            className="absolute top-0 bottom-0 w-32 hidden lg:flex items-center justify-center overflow-hidden"
+            style={{
+              [isRTL ? 'left' : 'right']: 0
+            }}
+          >
             <div className="relative h-full flex items-center">
               <motion.div
                 className="flex flex-col gap-8 text-6xl font-black tracking-tighter opacity-5"

@@ -155,7 +155,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
         className={`fixed top-14 md:top-16 left-0 right-0 w-full z-[9999] transition-all duration-500 ease-in-out border-b ${
           scrolled
             ? 'bg-[var(--bg-primary)] backdrop-blur-xl shadow-lg border-[var(--border-color)]'
-            : 'bg-[var(--bg-primary)]/80 backdrop-blur-sm border-transparent'
+            : 'bg-[var(--bg-primary)]/95 backdrop-blur-md border-transparent'
         }`}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -989,13 +989,13 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden fixed left-0 right-0 bg-[var(--bg-primary)] z-[10001]"
+              className="lg:hidden fixed left-0 right-0 bg-[var(--bg-primary)]/98 backdrop-blur-2xl z-[10001] border-b border-[var(--border-color)] shadow-2xl"
               style={{ 
                 top: scrolled ? '120px' : '128px',
-                bottom: 0,
+                maxHeight: 'calc(100vh - 128px)',
               }}
             >
-              <div className="min-h-full flex flex-col px-4 sm:px-6 py-4 sm:py-6">
+              <div className="min-h-full flex flex-col px-4 sm:px-6 py-4 sm:py-6 overflow-y-auto">
                 {/* User Profile Section */}
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
@@ -1097,7 +1097,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                     
                     return (
                       <motion.a
-                        key={item.label}
+                        key={`mobile-nav-${item.href}-${index}`}
                         href={item.href}
                         onClick={() => handleNavClick(event, item.href)}
                         className={`relative py-5 px-5 sm:py-6 sm:px-6 rounded-2xl transition-all group overflow-hidden ${

@@ -74,10 +74,13 @@ export function BetaBanner() {
         <div className="absolute inset-0 flex items-center overflow-hidden">
           <motion.div
             className="flex items-center whitespace-nowrap"
-            style={{ paddingLeft: '3rem' }}
+            style={{ 
+              paddingLeft: isRTL ? '0' : '3rem',
+              paddingRight: isRTL ? '3rem' : '0',
+            }}
             animate={
               isRTL 
-                ? { x: ['-50%', 0] }  // RTL: Right to Left animation
+                ? { x: ['0%', '-50%'] }  // RTL: Still scroll left-to-right visually (for Arabic text)
                 : { x: [0, '-50%'] }  // LTR: Left to Right animation
             }
             transition={{
@@ -95,11 +98,11 @@ export function BetaBanner() {
                   0 1px 0 rgba(0, 0, 0, 0.9),
                   0 2px 4px rgba(0, 0, 0, 0.7)
                 `,
-                letterSpacing: '0.2em',
+                letterSpacing: isRTL ? '0' : '0.2em',
                 fontFamily: 'monospace',
                 fontWeight: '700',
-                direction: isRTL ? 'rtl' : 'ltr',
               }}
+              dir={isRTL ? 'rtl' : 'ltr'}
             >
               {repeatedMessage}
             </span>

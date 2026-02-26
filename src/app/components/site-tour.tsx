@@ -7,7 +7,7 @@ interface TourStep {
   title: string;
   description: string;
   tip?: string;
-  elementId: string;
+  elementId: string | string[]; // ✅ Підтримка масиву!
 }
 
 export function SiteTour() {
@@ -15,7 +15,7 @@ export function SiteTour() {
   const [isActive, setIsActive] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [showButton, setShowButton] = useState(true);
-  const [highlightRect, setHighlightRect] = useState<DOMRect | null>(null);
+  const [highlightRects, setHighlightRects] = useState<DOMRect[]>([]); // ✅ Масив rect'ів!
   const [isElementVisible, setIsElementVisible] = useState(false);
 
   const getTourSteps = useCallback((): TourStep[] => {
@@ -30,10 +30,10 @@ export function SiteTour() {
         },
         {
           id: "step-2",
-          elementId: "navigation",
-          title: "🧭 Navigation",
-          description: "Quick access to all sections. Sticky navbar follows as you scroll.",
-          tip: "Click any link to jump to section"
+          elementId: ["navigation", "theme-toggle", "language-selector"], // ✅ КІЛЬКА ЕЛЕМЕНТІВ!
+          title: "🧭 Navigation & Controls",
+          description: "Quick access to all sections. Sticky navbar with theme toggle and language selector.",
+          tip: "Click navigation links, toggle theme, or switch language"
         },
         {
           id: "step-3",
@@ -102,10 +102,10 @@ export function SiteTour() {
         },
         {
           id: "step-2",
-          elementId: "navigation",
-          title: "🧭 Навігація",
-          description: "Швидкий доступ до секцій. Липкий navbar слідує при скролі.",
-          tip: "Клік на посилання для переходу"
+          elementId: ["navigation", "theme-toggle", "language-selector"], // ✅ КІЛЬКА ЕЛЕМЕНТІВ!
+          title: "🧭 Навігація та Контролі",
+          description: "Швидкий доступ до секцій. Липкий navbar з перемикачем теми та мови.",
+          tip: "Клік на посилання, перемкніть тему або змініть мову"
         },
         {
           id: "step-3",
@@ -174,10 +174,10 @@ export function SiteTour() {
         },
         {
           id: "step-2",
-          elementId: "navigation",
-          title: "🧭 Navigatie",
-          description: "Snelle toegang tot secties. Sticky navbar volgt bij scrollen.",
-          tip: "Klik links om naar sectie te gaan"
+          elementId: ["navigation", "theme-toggle", "language-selector"], // ✅ MEERDERE ELEMENTEN!
+          title: "🧭 Navigatie & Bediening",
+          description: "Snelle toegang tot secties. Sticky navbar met thema en taal schakelaar.",
+          tip: "Klik links, schakel thema of wijzig taal"
         },
         {
           id: "step-3",
@@ -249,22 +249,27 @@ export function SiteTour() {
     const step = steps[currentStep];
     if (!step) return;
 
-    const element = document.getElementById(step.elementId);
-    if (!element) {
-      console.warn(`Element not found: ${step.elementId}`);
-      setHighlightRect(null);
-      setIsElementVisible(false);
-      return;
-    }
+    const elementIds = Array.isArray(step.elementId) ? step.elementId : [step.elementId];
+    const rects: DOMRect[] = [];
 
-    const rect = element.getBoundingClientRect();
-    setHighlightRect(rect);
-    setIsElementVisible(true);
+    elementIds.forEach(id => {
+      const element = document.getElementById(id);
+      if (!element) {
+        console.warn(`Element not found: ${id}`);
+        return;
+      }
+
+      const rect = element.getBoundingClientRect();
+      rects.push(rect);
+    });
+
+    setHighlightRects(rects);
+    setIsElementVisible(rects.length > 0);
 
     // Smooth scroll to element with better positioning
     const headerOffset = 100;
-    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-    const offsetPosition = elementPosition - headerOffset;
+    const elementPosition = rects[0]?.top + window.pageYOffset;
+    const offsetPosition = elementPosition ? elementPosition - headerOffset : 0;
 
     window.scrollTo({
       top: offsetPosition,
@@ -299,7 +304,7 @@ export function SiteTour() {
   const closeTour = () => {
     setIsActive(false);
     setCurrentStep(0);
-    setHighlightRect(null);
+    setHighlightRects([]);
     setIsElementVisible(false);
   };
 
@@ -354,11 +359,11 @@ export function SiteTour() {
       <div
         className="fixed inset-0 z-[9998] pointer-events-auto"
         style={{
-          background: highlightRect && isElementVisible
+          background: highlightRects.length > 0 && isElementVisible
             ? window.innerWidth >= 768 // Only show dark overlay on desktop
               ? `
                 radial-gradient(
-                  ellipse ${highlightRect.width + 40}px ${highlightRect.height + 40}px at ${highlightRect.left + highlightRect.width / 2}px ${highlightRect.top + highlightRect.height / 2}px,
+                  ellipse ${highlightRects[0].width + 40}px ${highlightRects[0].height + 40}px at ${highlightRects[0].left + highlightRects[0].width / 2}px ${highlightRects[0].top + highlightRects[0].height / 2}px,
                   transparent 0%,
                   transparent 50%,
                   rgba(0, 0, 0, 0.50) 50%,
@@ -373,51 +378,90 @@ export function SiteTour() {
         onClick={closeTour}
       />
 
-      {/* ANIMATED SPOTLIGHT RING */}
-      {highlightRect && isElementVisible && (
+      {/* ANIMATED SPOTLIGHT RINGS - MULTIPLE ELEMENTS */}
+      {highlightRects.length > 0 && isElementVisible && (
         <>
-          {/* Outer pulsing ring - WORKS ON MOBILE */}
-          <div
-            className="fixed z-[9999] pointer-events-none"
-            style={{
-              top: highlightRect.top - 20,
-              left: highlightRect.left - 20,
-              width: highlightRect.width + 40,
-              height: highlightRect.height + 40,
-              borderRadius: '16px',
-              border: '4px solid rgba(0, 217, 255, 0.8)',
-              boxShadow: '0 0 0 8px rgba(0, 217, 255, 0.3), 0 0 60px rgba(0, 217, 255, 0.7), inset 0 0 40px rgba(0, 217, 255, 0.2)',
-              animation: 'tour-pulse 2s ease-in-out infinite'
-            }}
-          />
+          {highlightRects.map((rect, index) => {
+            // Creative color gradients for each element
+            const colors = [
+              { border: 'rgba(0, 217, 255, 0.8)', shadow: 'rgba(0, 217, 255, 0.7)', solid: '#00d9ff' }, // Cyan
+              { border: 'rgba(168, 85, 247, 0.8)', shadow: 'rgba(168, 85, 247, 0.7)', solid: '#a855f7' }, // Purple
+              { border: 'rgba(236, 72, 153, 0.8)', shadow: 'rgba(236, 72, 153, 0.7)', solid: '#ec4899' }, // Pink
+              { border: 'rgba(34, 197, 94, 0.8)', shadow: 'rgba(34, 197, 94, 0.7)', solid: '#22c55e' }, // Green
+              { border: 'rgba(249, 115, 22, 0.8)', shadow: 'rgba(249, 115, 22, 0.7)', solid: '#f97316' }, // Orange
+            ];
+            const color = colors[index % colors.length];
 
-          {/* Inner solid border - WORKS ON MOBILE */}
-          <div
-            className="fixed z-[9999] pointer-events-none"
-            style={{
-              top: highlightRect.top - 8,
-              left: highlightRect.left - 8,
-              width: highlightRect.width + 16,
-              height: highlightRect.height + 16,
-              borderRadius: '12px',
-              border: '3px solid #00d9ff',
-              boxShadow: '0 0 30px rgba(0, 217, 255, 0.8)'
-            }}
-          />
+            return (
+              <div key={`highlight-${index}`}>
+                {/* Outer pulsing ring */}
+                <div
+                  className="fixed z-[9999] pointer-events-none"
+                  style={{
+                    top: rect.top - 20,
+                    left: rect.left - 20,
+                    width: rect.width + 40,
+                    height: rect.height + 40,
+                    borderRadius: '16px',
+                    border: `4px solid ${color.border}`,
+                    boxShadow: `0 0 0 8px ${color.border.replace('0.8', '0.3')}, 0 0 60px ${color.shadow}, inset 0 0 40px ${color.border.replace('0.8', '0.2')}`,
+                    animation: `tour-pulse 2s ease-in-out infinite ${index * 0.2}s` // Staggered animation
+                  }}
+                />
 
-          {/* Pointing arrow indicator */}
-          <div
-            className="fixed z-[9999] pointer-events-none"
-            style={{
-              top: highlightRect.top - 50,
-              left: highlightRect.left + highlightRect.width / 2 - 20,
-              animation: 'tour-bounce 1.5s ease-in-out infinite'
-            }}
-          >
-            <div className="bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 rounded-full p-2 shadow-lg">
-              <Target className="w-8 h-8 text-black" />
-            </div>
-          </div>
+                {/* Inner solid border */}
+                <div
+                  className="fixed z-[9999] pointer-events-none"
+                  style={{
+                    top: rect.top - 8,
+                    left: rect.left - 8,
+                    width: rect.width + 16,
+                    height: rect.height + 16,
+                    borderRadius: '12px',
+                    border: `3px solid ${color.solid}`,
+                    boxShadow: `0 0 30px ${color.shadow}`
+                  }}
+                />
+
+                {/* Number badge for multiple elements */}
+                {highlightRects.length > 1 && (
+                  <div
+                    className="fixed z-[9999] pointer-events-none"
+                    style={{
+                      top: rect.top - 12,
+                      left: rect.left - 12,
+                    }}
+                  >
+                    <div 
+                      className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black text-black font-mono"
+                      style={{
+                        background: `linear-gradient(135deg, ${color.solid}, ${color.border.replace('0.8', '1')})`,
+                        boxShadow: `0 0 20px ${color.shadow}`
+                      }}
+                    >
+                      {index + 1}
+                    </div>
+                  </div>
+                )}
+
+                {/* Pointing arrow indicator - only for first element */}
+                {index === 0 && (
+                  <div
+                    className="fixed z-[9999] pointer-events-none"
+                    style={{
+                      top: rect.top - 50,
+                      left: rect.left + rect.width / 2 - 20,
+                      animation: 'tour-bounce 1.5s ease-in-out infinite'
+                    }}
+                  >
+                    <div className="bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 rounded-full p-2 shadow-lg">
+                      <Target className="w-8 h-8 text-black" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </>
       )}
 

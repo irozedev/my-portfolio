@@ -8,7 +8,9 @@ export const translations = {
       projects: 'Projects',
       services: 'Services',
       contact: 'Contact',
-      hireMe: 'Hire Me'
+      hireMe: 'Hire Me',
+      hello: 'Hello!',
+      signInMessage: 'Sign in to access your dashboard'
     },
     hero: {
       greeting: 'Hello, I\'m',
@@ -347,7 +349,9 @@ export const translations = {
       projects: 'Проекти',
       services: 'Послуги',
       contact: 'Контакти',
-      hireMe: 'Найміть мене'
+      hireMe: 'Найміть мене',
+      hello: 'Привіт!',
+      signInMessage: 'Увійдіть щоб отримати доступ до панелі керування'
     },
     hero: {
       greeting: 'Привіт, я',
@@ -686,7 +690,9 @@ export const translations = {
       projects: 'Projecten',
       services: 'Diensten',
       contact: 'Contact',
-      hireMe: 'Huur mij in'
+      hireMe: 'Huur mij in',
+      hello: 'Hallo!',
+      signInMessage: 'Log in om toegang te krijgen tot uw dashboard'
     },
     hero: {
       greeting: 'Hallo, ik ben',
@@ -1025,7 +1031,9 @@ export const translations = {
       projects: 'المشاريع',
       services: 'الخدمات',
       contact: 'اتصل',
-      hireMe: 'وظفني'
+      hireMe: 'وظفني',
+      hello: 'مرحباً!',
+      signInMessage: 'تسجيل الدخول للوصول إلى لوحة التحكم الخاصة بك'
     },
     hero: {
       greeting: 'مرحباً، أنا',
@@ -1343,7 +1351,9 @@ export const translations = {
       projects: 'Proyectos',
       services: 'Servicios',
       contact: 'Contacto',
-      hireMe: 'Contrátame'
+      hireMe: 'Contrátame',
+      hello: '¡Hola!',
+      signInMessage: 'Inicia sesión para acceder a tu panel de control'
     },
     hero: {
       greeting: 'Hola, soy',
