@@ -31,20 +31,29 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
 
   // Generate project ID if not provided
   const projectId = project.id || project.title.toLowerCase().replace(/\s+/g, '-');
-  
-  // USE REF to keep scroll position updated
-  const scrollYRef = useRef(0);
 
   useEffect(() => {
-    // Save current scroll position
-    scrollYRef.current = window.scrollY;
+    // Save current scroll position BEFORE locking
+    const scrollY = window.scrollY;
+    const scrollX = window.scrollX;
     
-    // Prevent scrolling - SIMPLE METHOD
+    // Lock body scroll and PRESERVE position
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = `-${scrollX}px`;
+    document.body.style.width = '100%';
     
     return () => {
-      // Restore body styles
+      // Restore body styles and scroll position
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.width = '';
+      
+      // Restore scroll position
+      window.scrollTo(scrollX, scrollY);
     };
   }, []);
 

@@ -17,13 +17,29 @@ export function EnhancedAuthModal({ isOpen, onClose, onSuccess }: EnhancedAuthMo
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
+      // Save current scroll position BEFORE locking
+      const scrollY = window.scrollY;
+      const scrollX = window.scrollX;
+      
+      // Lock body scroll and PRESERVE position
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = `-${scrollX}px`;
+      document.body.style.width = '100%';
+      
+      return () => {
+        // Restore body styles and scroll position
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.width = '';
+        
+        // Restore scroll position
+        window.scrollTo(scrollX, scrollY);
+      };
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [isOpen]);
 
   const handleSignIn = async () => {

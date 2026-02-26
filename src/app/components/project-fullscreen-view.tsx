@@ -48,11 +48,19 @@ export function ProjectFullscreenView({
   if (!project) return null;
 
   // Generate project ID if not provided
-  const projectId = project.id || project.title.toLowerCase().replace(/\s+/g, '-');
+  const projectId = project.id || project.title.toLowerCase().replace(/\\s+/g, '-');
 
   useEffect(() => {
-    // Lock body scroll
+    // Save current scroll position BEFORE locking
+    const scrollY = window.scrollY;
+    const scrollX = window.scrollX;
+    
+    // Lock body scroll and PRESERVE position
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = `-${scrollX}px`;
+    document.body.style.width = '100%';
     
     // Handle ESC key
     const handleEscape = (e: KeyboardEvent) => {
@@ -64,7 +72,16 @@ export function ProjectFullscreenView({
     window.addEventListener('keydown', handleEscape);
     
     return () => {
+      // Restore body styles and scroll position
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.width = '';
+      
+      // Restore scroll position
+      window.scrollTo(scrollX, scrollY);
+      
       window.removeEventListener('keydown', handleEscape);
     };
   }, [onClose, onNext, onPrev, hasNext, hasPrev]);
@@ -186,7 +203,7 @@ export function ProjectFullscreenView({
           onScroll={handleScroll}
         >
           {/* 🔥 HERO IMAGE - PARALLAX EFFECT */}
-          <div className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
+          <div className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden" style={{ position: 'relative' }}>
             <motion.img
               style={{
                 y: scrollY * 0.5,

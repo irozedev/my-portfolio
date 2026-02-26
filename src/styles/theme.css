@@ -509,5 +509,4 @@ img {
 .section-wrapper,
 [class*="max-w-"] {
   max-width: 100%;
-  overflow-x: hidden;
 }
