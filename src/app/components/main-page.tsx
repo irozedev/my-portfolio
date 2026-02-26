@@ -6,7 +6,7 @@ import { PortfolioCreativeSlider } from "./portfolio-creative-slider";
 import { ContactSection } from "./contact-section";
 import { Footer } from "./footer";
 import { CookieBanner } from "./cookie-banner";
-import { AIAssistantPro } from "./ai-assistant-pro";
+import { AIAssistantSimple } from "./ai-assistant-simple";
 import { CartButton } from "./cart-button";
 import { SEOHead } from "./seo-head";
 import { PersonalCabinet } from "./personal-cabinet";
@@ -61,7 +61,7 @@ export function MainPage() {
       
       <CookieBanner />
       
-      <AIAssistantPro />
+      <AIAssistantSimple />
       
       <CartButton />
       

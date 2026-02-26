@@ -808,7 +808,12 @@ export function AIAssistantPro() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
                   placeholder={
                     language === 'uk' 
                       ? 'Напишіть повідомлення...' 
@@ -816,13 +821,17 @@ export function AIAssistantPro() {
                       ? 'Typ een bericht...' 
                       : 'Type a message...'
                   }
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck="false"
                   style={{ fontSize: '16px' }}
                   className="flex-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] focus:ring-2 focus:ring-[var(--accent-primary)]/20 transition-all min-h-[48px]"
                 />
                 <Button
                   onClick={handleSend}
                   className="bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 hover:from-[var(--accent-secondary)] hover:to-cyan-500 text-black p-3 rounded-xl min-w-[48px] h-[48px] flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0"
-                  disabled={!input || input.trim().length === 0}
+                  disabled={!input.trim()}
                 >
                   <Send className="w-5 h-5" />
                 </Button>

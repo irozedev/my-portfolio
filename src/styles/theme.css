@@ -7,6 +7,37 @@ html {
   min-width: 320px;
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
+  /* DISABLE ZOOM ON MOBILE - iPhone Fix */
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+body {
+  /* Prevent double-tap zoom on iOS */
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  /* Prevent text selection on double-tap */
+  -webkit-user-select: none;
+  user-select: none;
+  /* Allow text selection in inputs and content */
+  & input,
+  & textarea,
+  & [contenteditable],
+  & p,
+  & span,
+  & a,
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
+    -webkit-user-select: text;
+    user-select: text;
+  }
 }
 
 /* Performance optimizations */

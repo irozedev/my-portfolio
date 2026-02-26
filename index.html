@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Stepan Roze | Software Developer</title>
     <meta name="description" content="Software Developer specializing in React, TypeScript, and modern web technologies." />
     <script>
@@ -11,6 +11,52 @@
       console.log('🔥 [ROZE.LIVE v2.1.9] HTML LOADED - INLINE SCRIPT WORKS!');
       console.log('📍 Location:', window.location.href);
       console.log('🌐 User Agent:', navigator.userAgent);
+      
+      // 🚫 DISABLE ZOOM - COMPLETE PROTECTION FOR iOS/ANDROID
+      (function() {
+        // Prevent pinch zoom
+        document.addEventListener('gesturestart', function(e) {
+          e.preventDefault();
+          console.log('⛔ Pinch zoom blocked');
+        }, { passive: false });
+        
+        document.addEventListener('gesturechange', function(e) {
+          e.preventDefault();
+        }, { passive: false });
+        
+        document.addEventListener('gestureend', function(e) {
+          e.preventDefault();
+        }, { passive: false });
+        
+        // Prevent double-tap zoom
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+          const now = Date.now();
+          if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+            console.log('⛔ Double-tap zoom blocked');
+          }
+          lastTouchEnd = now;
+        }, { passive: false });
+        
+        // Prevent wheel zoom (Ctrl/Cmd + scroll)
+        document.addEventListener('wheel', function(e) {
+          if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            console.log('⛔ Ctrl+scroll zoom blocked');
+          }
+        }, { passive: false });
+        
+        // Prevent keyboard zoom (Ctrl/Cmd + Plus/Minus)
+        document.addEventListener('keydown', function(e) {
+          if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '0')) {
+            e.preventDefault();
+            console.log('⛔ Keyboard zoom blocked');
+          }
+        }, { passive: false });
+        
+        console.log('✅ Anti-zoom protection enabled!');
+      })();
       
       // Перевіряємо чи root існує після завантаження
       window.addEventListener('DOMContentLoaded', () => {
