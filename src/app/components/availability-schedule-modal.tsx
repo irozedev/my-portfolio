@@ -109,13 +109,13 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
               onClick={onClose}
             />
 
-            {/* 🔥 ULTRA COMPACT MODAL - 300px width */}
+            {/* 🔥 LARGER MODAL - 400px width for better readability */}
             <motion.div
               initial={{ opacity: 0, scale: 0.85, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.85, y: 10 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] sm:w-[300px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/40 rounded-xl shadow-[0_20px_50px_rgba(0,217,255,0.3)] z-[100000] overflow-hidden"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] sm:w-[400px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/40 rounded-xl shadow-[0_20px_50px_rgba(0,217,255,0.3)] z-[100000] overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Ambient gradient */}
@@ -128,71 +128,71 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                 }} />
               </div>
 
-              {/* Header - Ultra compact */}
-              <div className="relative flex items-center justify-between px-3 py-2.5 border-b border-[var(--glass-border)]">
-                <div className="flex items-center gap-2">
+              {/* Header - Slightly larger */}
+              <div className="relative flex items-center justify-between px-4 py-3 border-b border-[var(--glass-border)]">
+                <div className="flex items-center gap-2.5">
                   <div className="relative">
-                    <Clock className="w-4 h-4 text-[var(--accent-primary)]" />
+                    <Clock className="w-5 h-5 text-[var(--accent-primary)]" />
                     <div className="absolute inset-0 blur-sm bg-[var(--accent-primary)]/30" />
                   </div>
                   <div>
-                    <span className="text-xs font-mono font-bold text-[var(--text-primary)] uppercase tracking-wide block">
+                    <span className="text-sm font-mono font-bold text-[var(--text-primary)] uppercase tracking-wide block">
                       {getTranslation('title')}
                     </span>
-                    <span className="text-[9px] font-mono text-[var(--text-muted)] block">
+                    <span className="text-[10px] font-mono text-[var(--text-muted)] block">
                       {getTranslation('subtitle')}
                     </span>
                   </div>
                 </div>
                 <motion.button 
                   onClick={onClose} 
-                  className="p-1.5 hover:bg-red-500/20 rounded-lg transition-colors group"
+                  className="p-2 hover:bg-red-500/20 rounded-lg transition-colors group"
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <X className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-red-400 transition-colors" />
+                  <X className="w-4 h-4 text-[var(--text-muted)] group-hover:text-red-400 transition-colors" />
                 </motion.button>
               </div>
 
-              {/* Content - Max compact */}
-              <div className="relative p-3 space-y-2.5 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent">
+              {/* Content - Larger padding */}
+              <div className="relative p-4 space-y-3 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent">
                 
                 {/* Working Hours Badge */}
-                <div className="relative p-2.5 bg-gradient-to-br from-[var(--accent-primary)]/10 to-purple-500/5 border border-[var(--accent-primary)]/30 rounded-lg overflow-hidden">
+                <div className="relative p-3 bg-gradient-to-br from-[var(--accent-primary)]/10 to-purple-500/5 border border-[var(--accent-primary)]/30 rounded-lg overflow-hidden">
                   {/* Corner accents */}
                   <div className="absolute top-0 left-0 w-5 h-5 border-t border-l border-[var(--accent-primary)]" />
                   <div className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-[var(--accent-primary)]" />
                   
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <Zap className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
-                    <span className="text-[10px] font-mono font-bold text-[var(--text-primary)] uppercase">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Zap className="w-4 h-4 text-[var(--accent-primary)]" />
+                    <span className="text-xs font-mono font-bold text-[var(--text-primary)] uppercase">
                       {getTranslation('workingHours')}
                     </span>
                   </div>
-                  <p className="text-base font-mono font-bold text-[var(--accent-primary)]">
+                  <p className="text-lg font-mono font-bold text-[var(--accent-primary)]">
                     {getTranslation('hours')}
                   </p>
                 </div>
 
-                {/* Weekly Schedule - Ultra compact */}
-                <div className="space-y-1">
+                {/* Weekly Schedule - Larger text */}
+                <div className="space-y-1.5">
                   {scheduleData.map((schedule, index) => (
                     <motion.div
                       key={schedule.day}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.03 }}
-                      className={`flex items-center justify-between px-2 py-1.5 rounded-lg text-[10px] font-mono transition-all ${
+                      className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono transition-all ${
                         schedule.available
                           ? 'bg-green-500/10 border border-green-500/20 hover:border-green-500/40'
                           : 'bg-[var(--bg-tertiary)]/20 border border-[var(--glass-border)]'
                       }`}
                     >
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-2">
                         {schedule.available ? (
-                          <CheckCircle className="w-2.5 h-2.5 text-green-400 flex-shrink-0" />
+                          <CheckCircle className="w-3.5 h-3.5 text-green-400 flex-shrink-0" />
                         ) : (
-                          <X className="w-2.5 h-2.5 text-[var(--text-muted)] flex-shrink-0" />
+                          <X className="w-3.5 h-3.5 text-[var(--text-muted)] flex-shrink-0" />
                         )}
                         <span className={`font-bold ${schedule.available ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'}`}>
                           {getDay(schedule.day).substring(0, 3)}
@@ -206,19 +206,19 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                 </div>
 
                 {/* Note */}
-                <div className="p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg">
-                  <p className="text-[9px] font-mono text-[var(--text-secondary)] leading-tight">
+                <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+                  <p className="text-[10px] font-mono text-[var(--text-secondary)] leading-relaxed">
                     {getTranslation('note')}
                   </p>
                 </div>
 
-                {/* Book Call Button */}
+                {/* Book Call Button - Larger */}
                 <motion.button
                   onClick={() => {
                     setIsBookCallOpen(true);
                     onBookCall?.();
                   }}
-                  className="w-full relative p-2.5 bg-gradient-to-r from-[var(--accent-primary)] to-purple-500 text-black font-mono font-bold text-xs rounded-lg shadow-[0_4px_20px_rgba(0,217,255,0.4)] hover:shadow-[0_6px_30px_rgba(0,217,255,0.6)] transition-all overflow-hidden group"
+                  className="w-full relative p-3 bg-gradient-to-r from-[var(--accent-primary)] to-purple-500 text-black font-mono font-bold text-sm rounded-lg shadow-[0_4px_20px_rgba(0,217,255,0.4)] hover:shadow-[0_6px_30px_rgba(0,217,255,0.6)] transition-all overflow-hidden group"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -236,21 +236,21 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                 </motion.button>
               </div>
 
-              {/* Footer stats */}
-              <div className="relative border-t border-[var(--glass-border)] px-3 py-2 bg-[var(--bg-secondary)]/30 flex items-center justify-around">
+              {/* Footer stats - Larger */}
+              <div className="relative border-t border-[var(--glass-border)] px-4 py-2.5 bg-[var(--bg-secondary)]/30 flex items-center justify-around">
                 <div className="text-center">
-                  <p className="text-xs font-mono font-bold text-[var(--accent-primary)]">7</p>
-                  <p className="text-[8px] font-mono text-[var(--text-muted)] uppercase">Days</p>
+                  <p className="text-sm font-mono font-bold text-[var(--accent-primary)]">7</p>
+                  <p className="text-[9px] font-mono text-[var(--text-muted)] uppercase">Days</p>
                 </div>
-                <div className="h-6 w-px bg-[var(--glass-border)]" />
+                <div className="h-7 w-px bg-[var(--glass-border)]" />
                 <div className="text-center">
-                  <p className="text-xs font-mono font-bold text-green-400">42h</p>
-                  <p className="text-[8px] font-mono text-[var(--text-muted)] uppercase">Week</p>
+                  <p className="text-sm font-mono font-bold text-green-400">42h</p>
+                  <p className="text-[9px] font-mono text-[var(--text-muted)] uppercase">Week</p>
                 </div>
-                <div className="h-6 w-px bg-[var(--glass-border)]" />
+                <div className="h-7 w-px bg-[var(--glass-border)]" />
                 <div className="text-center">
-                  <p className="text-xs font-mono font-bold text-purple-400">CET</p>
-                  <p className="text-[8px] font-mono text-[var(--text-muted)] uppercase">Zone</p>
+                  <p className="text-sm font-mono font-bold text-purple-400">CET</p>
+                  <p className="text-[9px] font-mono text-[var(--text-muted)] uppercase">Zone</p>
                 </div>
               </div>
             </motion.div>

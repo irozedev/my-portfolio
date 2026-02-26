@@ -168,10 +168,10 @@ export function ServicesCreativeSlider() {
     setIsProcessingClick(true);
     setSelectedService(service);
     
-    // Reset flag after 500ms
+    // Reset flag after 300ms (reduced from 500ms)
     setTimeout(() => {
       setIsProcessingClick(false);
-    }, 500);
+    }, 300);
   };
 
   // 🔥 NEW: Touch handlers to detect swipe vs click
@@ -188,24 +188,30 @@ export function ServicesCreativeSlider() {
     const deltaX = Math.abs(touch.clientX - touchStart.x);
     const deltaY = Math.abs(touch.clientY - touchStart.y);
     
-    // If moved more than 15px, it's a drag
-    if (deltaX > 15 || deltaY > 15) {
+    // If moved more than 10px, it's a drag (reduced from 15px for better detection)
+    if (deltaX > 10 || deltaY > 10) {
       setIsDragging(true);
     }
   };
 
   const handleTouchEnd = () => {
-    setTouchStart(null);
+    // Use requestAnimationFrame for smoother state updates
+    requestAnimationFrame(() => {
+      setTouchStart(null);
+      // Reset dragging after a short delay to allow click detection
+      setTimeout(() => {
+        setIsDragging(false);
+      }, 50);
+    });
   };
 
-  // 🔥 IMPROVED: Card click handler with swipe detection
+  // 🔥 IMPROVED: Card click handler with better swipe detection
   const handleCardClick = (service: typeof services[0], index: number, e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+    // Don't prevent default or stop propagation - let slider handle it
+    // Only stop propagation if we're actually going to open the modal
     
     // Don't trigger click if it was a drag/swipe
     if (isDragging) {
-      setIsDragging(false);
       return;
     }
     
@@ -215,9 +221,10 @@ export function ServicesCreativeSlider() {
     
     // If card is already centered (active), open modal
     if (isActive) {
+      e.stopPropagation(); // Only stop propagation when opening modal
       handleBookService(service);
     } else {
-      // Otherwise, navigate to center it
+      // Otherwise, navigate to center it (let slider handle the event)
       sliderRef.current?.slickGoTo(index);
     }
   };
@@ -226,24 +233,28 @@ export function ServicesCreativeSlider() {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 600,
+    speed: 400, // Reduced from 600 for faster response
     slidesToShow: isMobile ? 1 : 3,
     slidesToScroll: 1,
     centerMode: true,
     centerPadding: isMobile ? "40px" : "0px",
-    autoplay: true,
+    autoplay: !isMobile, // Disable autoplay on mobile to save battery
     autoplaySpeed: 5000,
     pauseOnHover: true,
     swipeToSlide: true,
-    touchThreshold: 10, // IMPROVED: Lower threshold for better touch response
-    swipe: true, // Ensure swipe is enabled
-    touchMove: true, // Enable touch move
-    draggable: true, // Enable dragging
+    touchThreshold: 8, // Lower threshold for mobile (from 10)
+    swipe: true,
+    touchMove: true,
+    draggable: true,
     accessibility: true,
     arrows: !isMobile,
+    useCSS: true, // Use CSS transforms instead of JS
+    useTransform: true, // Enable hardware acceleration
+    lazyLoad: 'ondemand' as const, // Lazy load slides
+    waitForAnimate: false, // Don't wait for animations to complete
     beforeChange: (_current: number, next: number) => {
       setCurrentSlide(next);
-      setIsDragging(false); // Reset dragging state on slide change
+      setIsDragging(false);
     },
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
@@ -541,7 +552,6 @@ export function ServicesCreativeSlider() {
                       onTouchEnd={handleTouchEnd}
                       className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-purple-500/50 transition-all duration-500 group cursor-pointer overflow-visible"
                       whileHover={!isMobile ? { y: -10 } : undefined}
-                      style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
                     >
                       {/* 🔥 TAP/CLICK INDICATOR - DEVELOPER STYLE - PURPLE THEME - TOP */}
                       {isActive && (
@@ -598,28 +608,32 @@ export function ServicesCreativeSlider() {
                         </motion.div>
                       )}
                       
-                      {/* Animated Background Gradient */}
-                      <motion.div
-                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                        style={{
-                          background: `radial-gradient(circle at 50% 0%, ${service.color}15 0%, transparent 70%)`,
-                        }}
-                      />
-
-                      {/* Shimmer Effect */}
-                      <div className="absolute inset-0 overflow-hidden">
+                      {/* Animated Background Gradient - DISABLED ON MOBILE */}
+                      {!isMobile && (
                         <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
-                          initial={{ x: '-100%' }}
-                          animate={{ x: '200%' }}
-                          transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            repeatDelay: 5,
-                            ease: 'easeInOut'
+                          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                          style={{
+                            background: `radial-gradient(circle at 50% 0%, ${service.color}15 0%, transparent 70%)`,
                           }}
                         />
-                      </div>
+                      )}
+
+                      {/* Shimmer Effect - DISABLED ON MOBILE */}
+                      {!isMobile && (
+                        <div className="absolute inset-0 overflow-hidden">
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+                            initial={{ x: '-100%' }}
+                            animate={{ x: '200%' }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              repeatDelay: 5,
+                              ease: 'easeInOut'
+                            }}
+                          />
+                        </div>
+                      )}
 
                       {/* Popular Badge */}
                       {service.popular && (

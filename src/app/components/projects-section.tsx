@@ -158,16 +158,18 @@ export function ProjectsSection() {
               return (
                 <motion.div
                   key={project.id}
-                  className={`relative group cursor-pointer ${
-                    isLarge ? "md:col-span-2 lg:col-span-2 md:row-span-2" : ""
-                  }`}
+                  className={`relative group cursor-pointer ${\n                    isLarge ? \"md:col-span-2 lg:col-span-2 md:row-span-2\" : \"\"\n                  }`}
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
+                  viewport={{ once: true, margin: \"-100px\" }}
                   transition={{ delay: index * 0.1 }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   onClick={() => setSelectedProject(index)}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    setSelectedProject(index);
+                  }}
                 >
                   {/* Glow effect - disabled on mobile for performance */}
                   <motion.div

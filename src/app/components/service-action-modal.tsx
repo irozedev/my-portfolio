@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "motion/react";
 import { X, MessageCircle, Mail, Sparkles, Zap, ArrowRight } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLanguage } from "../contexts/language-context";
 
 interface ServiceActionModalProps {
@@ -17,6 +17,22 @@ interface ServiceActionModalProps {
 
 export function ServiceActionModal({ service, onClose, onChatBot, onContact }: ServiceActionModalProps) {
   const { language } = useLanguage();
+  
+  // Detect mobile for performance optimizations
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   const translations = {
     title: {

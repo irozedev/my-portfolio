@@ -75,9 +75,11 @@ export function BetaBanner() {
           <motion.div
             className="flex items-center whitespace-nowrap"
             style={{ paddingLeft: '3rem' }}
-            animate={{
-              x: [0, '-50%'],
-            }}
+            animate={
+              isRTL 
+                ? { x: ['-50%', 0] }  // RTL: Right to Left animation
+                : { x: [0, '-50%'] }  // LTR: Left to Right animation
+            }
             transition={{
               duration: 60,
               repeat: Infinity,
@@ -96,6 +98,7 @@ export function BetaBanner() {
                 letterSpacing: '0.2em',
                 fontFamily: 'monospace',
                 fontWeight: '700',
+                direction: isRTL ? 'rtl' : 'ltr',
               }}
             >
               {repeatedMessage}

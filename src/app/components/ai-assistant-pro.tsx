@@ -532,18 +532,77 @@ export function AIAssistantPro() {
     setInput("");
     setIsTyping(true);
 
-    // Simulate thinking
-    setTimeout(() => {
-      const response = generateResponse(currentInput);
+    // 🧠 SMART THINKING - Variable delay based on complexity
+    const wordCount = currentInput.trim().split(/\s+/).length;
+    const hasQuestion = currentInput.includes('?') || 
+                       currentInput.toLowerCase().includes('how') || 
+                       currentInput.toLowerCase().includes('what') ||
+                       currentInput.toLowerCase().includes('why') ||
+                       currentInput.toLowerCase().includes('when');
+    
+    // Calculate thinking time:
+    // - Short questions (1-5 words): 600-1000ms
+    // - Medium (6-15 words): 1000-1800ms  
+    // - Long/complex (16+ words): 1800-2500ms
+    const baseDelay = hasQuestion ? 800 : 600;
+    const complexityDelay = Math.min(wordCount * 80, 1500);
+    const thinkingTime = baseDelay + complexityDelay;
+    
+    console.log(`[AI Thinking] Words: ${wordCount}, HasQuestion: ${hasQuestion}, ThinkingTime: ${thinkingTime}ms`);
+
+    try {
+      // 🔥 CALL REAL AI API WITH SECURITY
+      const { projectId, publicAnonKey } = await import('/utils/supabase/info');
+      
+      const apiResponse = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/ai/chat`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${publicAnonKey}`,
+          },
+          body: JSON.stringify({
+            message: currentInput,
+            language: language === 'uk' ? 'Ukrainian' : language === 'nl' ? 'Dutch' : language === 'ar' ? 'Arabic' : language === 'es' ? 'Spanish' : 'English',
+            context: conversationState.currentSection || 'general'
+          })
+        }
+      );
+
+      const result = await apiResponse.json();
+
+      if (!apiResponse.ok) {
+        throw new Error(result.error || 'API request failed');
+      }
+
+      // Add artificial thinking delay for UX (API is too fast!)
+      await new Promise(resolve => setTimeout(resolve, Math.max(0, thinkingTime - 500)));
+
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: response,
+        text: result.message || result.response || generateResponse(currentInput),
+        isBot: true,
+        timestamp: new Date(),
+      };
+      
+      setMessages(prev => [...prev, botMessage]);
+      console.log(`[AI Response] Model: ${result.model || 'fallback'}, Cached: ${result.cached || false}`);
+      
+    } catch (error) {
+      console.error('[AI Error]', error);
+      
+      // Fallback to local responses if API fails
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: generateResponse(currentInput),
         isBot: true,
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, botMessage]);
+    } finally {
       setIsTyping(false);
-    }, 800);
+    }
   };
 
   return (

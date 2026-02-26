@@ -158,7 +158,7 @@ export function SiteTour() {
           {
             id: "about",
             icon: Code,
-            title: "👨‍💻 Про мене",
+            title: "👨‍💻 Про мен��",
             desc: "Дізнайся про мій бекграунд, любов до чистого коду, експертизу в AI інтеграції та що робить мене унікальним.",
             tip: "Прокрути щоб побачити анімовані скіл-бари для React, Node.js, TypeScript!"
           },
@@ -759,13 +759,13 @@ export function SiteTour() {
       <AnimatePresence>
         {isActive && step && step.highlight && (
           <>
-            {/* SVG SPOTLIGHT OVERLAY - PROPER CUTOUT */}
+            {/* SVG SPOTLIGHT OVERLAY - PROPER CUTOUT - HIGHER Z-INDEX */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[999] pointer-events-none"
+              className="fixed inset-0 z-[100100] pointer-events-none"
               style={{ isolation: 'isolate' }}
             >
               <svg
@@ -802,13 +802,13 @@ export function SiteTour() {
                   </radialGradient>
                 </defs>
                 
-                {/* Dark overlay with cutout */}
+                {/* Dark overlay with cutout - LIGHTER BACKDROP FOR MOBILE */}
                 <rect
                   x="0"
                   y="0"
                   width="100%"
                   height="100%"
-                  fill="rgba(0, 0, 0, 0.92)"
+                  fill="rgba(0, 0, 0, 0.50)"
                   mask="url(#spotlight-mask)"
                 />
                 
@@ -838,9 +838,9 @@ export function SiteTour() {
               </svg>
             </motion.div>
 
-            {/* CYAN BORDER AROUND ELEMENT */}
+            {/* CYAN BORDER AROUND ELEMENT - HIGHER Z-INDEX */}
             <motion.div
-              className="fixed z-[1001] pointer-events-none"
+              className="fixed z-[100101] pointer-events-none"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -903,12 +903,12 @@ export function SiteTour() {
               />
             </motion.div>
 
-            {/* ROZE BOT CHARACTER + POPOVER */}
+            {/* ROZE BOT CHARACTER + POPOVER - HIGHEST Z-INDEX */}
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.9 }}
-              className="fixed z-[1002] pointer-events-auto px-4 sm:px-0"
+              className="fixed z-[100102] pointer-events-auto px-4 sm:px-0"
               style={(() => {
                 const isMobile = window.innerWidth < 640;
                 const elementRect = document.getElementById(steps[currentStep].id)?.getBoundingClientRect();
