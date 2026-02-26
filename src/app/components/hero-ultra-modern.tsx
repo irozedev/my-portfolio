@@ -246,7 +246,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
   return (
     <>
       <motion.section
-        id="hero-section"
+        id="hero"
         className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden px-4 sm:px-6 pt-36 md:pt-40 lg:pt-44 pb-20"
         style={{ y, opacity }}
       >
