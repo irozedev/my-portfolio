@@ -172,7 +172,7 @@ RULES:
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307', // Correct Haiku model - official release
+        model: 'claude-3-5-haiku-20241022', // Latest Haiku model
         max_tokens: 150, // Reduced from 512 to 150 (save 72% tokens!)
         system: systemPrompt,
         messages: [
@@ -360,7 +360,7 @@ Answer in 2-3 sentences maximum. Be professional and helpful.`;
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307', // Official Haiku model
+        model: 'claude-3-5-haiku-20241022', // Latest Haiku model
         max_tokens: 200,
         system: systemPrompt,
         messages: messages.filter((m: any) => m.role !== 'system').slice(-5), // Keep last 5 messages only

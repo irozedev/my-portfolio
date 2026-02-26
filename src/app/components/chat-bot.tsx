@@ -676,8 +676,74 @@ export function ChatBot() {
 
       {/* Floating Buttons */}
       <div className="fixed bottom-6 right-6 z-[99991] flex flex-col gap-3 items-end">
-        {/* Scroll to Top Button - Removed */}
-        {/* Chat Button - Removed - Chat opens via services section */}
+        {/* Scroll to Top Button */}
+        <AnimatePresence>
+          {showScrollTop && (
+            <motion.button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="w-12 h-12 md:w-14 md:h-14 bg-[var(--bg-secondary)] backdrop-blur-sm border-2 border-[var(--accent-primary)] rounded-full flex items-center justify-center shadow-lg hover:bg-[var(--accent-primary)] transition-all group"
+              whileHover={{ scale: 1.1, y: -5 }}
+              whileTap={{ scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0, y: -20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              <ArrowUp className="w-6 h-6 text-[var(--accent-primary)] group-hover:text-black transition-colors" />
+            </motion.button>
+          )}
+        </AnimatePresence>
+
+        {/* Chat Button - Always visible */}
+        <motion.button
+          id="chat-bot-button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 rounded-full flex items-center justify-center shadow-lg hover:shadow-[0_0_30px_rgba(0,217,255,0.6)] transition-all group relative"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1 }}
+        >
+          <AnimatePresence mode="wait">
+            {isOpen ? (
+              <motion.div
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+              >
+                <X className="w-6 h-6 text-black" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="open"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+              >
+                <MessageCircle className="w-6 h-6 text-black group-hover:rotate-12 transition-transform" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          
+          {/* Notification Badge */}
+          {!isOpen && messages.length === 0 && (
+            <motion.div
+              className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 2 }}
+            >
+              <motion.span
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                !
+              </motion.span>
+            </motion.div>
+          )}
+        </motion.button>
       </div>
     </>
   );
