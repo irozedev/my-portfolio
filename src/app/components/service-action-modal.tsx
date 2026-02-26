@@ -121,6 +121,7 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
     <AnimatePresence>
       {/* Backdrop */}
       <motion.div
+        key="service-modal-backdrop"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -129,7 +130,7 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
       />
 
       {/* Modal */}
-      <div className="fixed inset-0 flex items-center justify-center z-[999999] p-4 pt-20 md:pt-24">
+      <div key="service-modal-container" className="fixed inset-0 flex items-center justify-center z-[999999] p-4 pt-20 md:pt-24">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}

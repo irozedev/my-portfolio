@@ -139,13 +139,35 @@ const siteData = {
 export function AIAssistantPro() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [conversationState, setConversationState] = useState<ConversationState>({ stage: 'initial' });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatRef = useRef<HTMLDivElement>(null);
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
+  const [conversationState, setConversationState] = useState<ConversationState>({
+    stage: 'initial'
+  });
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Show scroll to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 500);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -153,11 +175,29 @@ export function AIAssistantPro() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
+      const sections = ['hero', 'about', 'experience', 'projects', 'services', 'contact'];
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
+            setConversationState(prev => ({ ...prev, currentSection: section }));
+            break;
+          }
+        }
+      }
+    }; // Throttle scroll handler to prevent overheating on mobile
+    let scrollTimeout: NodeJS.Timeout;
+    const throttledScroll = () => {
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(handleScroll, 200); // Only update every 200ms
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', throttledScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', throttledScroll);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+    };
   }, []);
 
   useEffect(() => {
@@ -179,30 +219,11 @@ export function AIAssistantPro() {
     return () => window.removeEventListener('openChatBot', handleOpenChatBot);
   }, []);
 
-  // Track scroll position
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['hero', 'about', 'experience', 'projects', 'services', 'contact'];
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
-            setConversationState(prev => ({ ...prev, currentSection: section }));
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   // Close chat when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (chatRef.current && !chatRef.current.contains(event.target as Node) && isOpen) {
+      const chatRef = document.querySelector('.chat-window');
+      if (chatRef && !chatRef.contains(event.target as Node) && isOpen) {
         setIsOpen(false);
       }
     };
@@ -518,7 +539,7 @@ export function AIAssistantPro() {
   };
 
   const handleSend = async () => {
-    if (!input.trim()) return;
+    if (!input || input.trim().length === 0) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -701,13 +722,14 @@ export function AIAssistantPro() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-secondary)]">
-              {messages.map((message) => (
+            <div className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-secondary)]" style={{ WebkitOverflowScrolling: 'touch' }}>
+              {messages.map((message, index) => (
                 <motion.div
                   key={message.id}
                   className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={isMobile ? { opacity: 0 } : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: isMobile ? 0.2 : 0.3 }}
                 >
                   <div className={`max-w-[85%] ${message.isBot ? 'order-1' : 'order-2'}`}>
                     <div
@@ -727,12 +749,10 @@ export function AIAssistantPro() {
                     {message.actions && message.actions.length > 0 && (
                       <div className="grid grid-cols-2 gap-2 mt-3">
                         {message.actions.map((action) => (
-                          <motion.button
+                          <button
                             key={action.id}
                             onClick={action.action}
-                            className="flex items-center gap-2 p-3 bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl transition-all group"
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            className="flex items-center gap-2 p-3 bg-[var(--bg-secondary)] active:bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl transition-colors group touch-manipulation"
                           >
                             <div 
                               className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
@@ -740,10 +760,10 @@ export function AIAssistantPro() {
                             >
                               <action.icon className="w-4 h-4" style={{ color: action.color }} />
                             </div>
-                            <span className="text-xs md:text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors">
+                            <span className="text-xs md:text-sm font-medium text-[var(--text-primary)] group-active:text-[var(--accent-primary)] transition-colors">
                               {action.label}
                             </span>
-                          </motion.button>
+                          </button>
                         ))}
                       </div>
                     )}
@@ -802,7 +822,7 @@ export function AIAssistantPro() {
                 <Button
                   onClick={handleSend}
                   className="bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 hover:from-[var(--accent-secondary)] hover:to-cyan-500 text-black p-3 rounded-xl min-w-[48px] h-[48px] flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-all shrink-0"
-                  disabled={!input.trim()}
+                  disabled={!input || input.trim().length === 0}
                 >
                   <Send className="w-5 h-5" />
                 </Button>

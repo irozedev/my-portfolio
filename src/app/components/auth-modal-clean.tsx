@@ -10,8 +10,9 @@ interface AuthModalCleanProps {
 }
 
 export function AuthModalClean({ isOpen, onClose, onSuccess }: AuthModalCleanProps) {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, signInWithProvider } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [loadingProvider, setLoadingProvider] = useState<'google' | 'github' | null>(null);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -35,11 +36,26 @@ export function AuthModalClean({ isOpen, onClose, onSuccess }: AuthModalCleanPro
   const handleGoogleSignIn = async () => {
     try {
       setLoading(true);
+      setLoadingProvider('google');
       await signInWithGoogle();
       onSuccess?.();
     } catch (error) {
       console.error('Sign in error:', error);
       setLoading(false);
+      setLoadingProvider(null);
+    }
+  };
+
+  const handleGitHubSignIn = async () => {
+    try {
+      setLoading(true);
+      setLoadingProvider('github');
+      await signInWithProvider('github');
+      onSuccess?.();
+    } catch (error) {
+      console.error('GitHub sign in error:', error);
+      setLoading(false);
+      setLoadingProvider(null);
     }
   };
 
@@ -106,7 +122,7 @@ export function AuthModalClean({ isOpen, onClose, onSuccess }: AuthModalCleanPro
                   disabled={loading}
                   className="w-full mb-6 px-6 py-3.5 bg-white dark:bg-white/5 border-2 border-gray-200 dark:border-white/10 rounded-xl font-semibold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300 flex items-center justify-center gap-3 group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? (
+                  {loading && loadingProvider === 'google' ? (
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
@@ -121,6 +137,28 @@ export function AuthModalClean({ isOpen, onClose, onSuccess }: AuthModalCleanPro
                         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                       </svg>
                       <span>Continue with Google</span>
+                    </>
+                  )}
+                </button>
+
+                {/* GitHub Sign In */}
+                <button
+                  onClick={handleGitHubSignIn}
+                  disabled={loading}
+                  className="w-full mb-6 px-6 py-3.5 bg-white dark:bg-white/5 border-2 border-gray-200 dark:border-white/10 rounded-xl font-semibold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300 flex items-center justify-center gap-3 group disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading && loadingProvider === 'github' ? (
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="w-5 h-5 border-2 border-gray-300 dark:border-white/20 border-t-cyan-500 rounded-full"
+                    />
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.43 9.8 8.2 11.47.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.57 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/>
+                      </svg>
+                      <span>Continue with GitHub</span>
                     </>
                   )}
                 </button>
