@@ -449,59 +449,71 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                   </span>
                 </motion.button>
 
-                {/* Compact Status - Mobile Only (smaller with text) */}
+                {/* Compact Status - Mobile Only - MINIMAL DEVELOPER STYLE */}
                 <motion.button
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     setShowAvailabilityModal(true);
                   }}
-                  className="sm:hidden flex items-center gap-2 px-3 py-2 rounded-full bg-[var(--bg-secondary)]/60 backdrop-blur-md border border-[var(--border-color)] transition-all relative overflow-hidden cursor-pointer"
+                  className="sm:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[var(--bg-secondary)]/80 backdrop-blur-sm border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 transition-all relative overflow-hidden cursor-pointer active:scale-95"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
                   whileTap={{ scale: 0.95 }}
-                  title={isAvailable ? 'Online' : 'Busy'}
+                  title={isAvailable ? 'Online - Click for schedule' : 'Busy - Click for schedule'}
                 >
-                  {/* Shimmer Effect - Mobile */}
+                  {/* Glow Effect */}
                   <motion.div
-                    className="absolute inset-0 w-full h-full pointer-events-none"
-                    style={{
-                      background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)"
-                    }}
+                    className={`absolute inset-0 blur-xl opacity-20 ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
                     animate={{
-                      x: ['-100%', '200%']
+                      opacity: [0.2, 0.4, 0.2]
                     }}
                     transition={{
-                      duration: 3,
+                      duration: 2,
                       repeat: Infinity,
-                      ease: "linear"
+                      ease: "easeInOut"
                     }}
                   />
                   
-                  <motion.div
-                    className={`relative w-2 h-2 rounded-full flex-shrink-0 ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
-                    animate={{
-                      scale: [1, 1.3, 1],
-                      opacity: [1, 0.6, 1]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  <span className={`relative text-xs font-bold tracking-wide uppercase ${
-                    isAvailable ? 'text-green-500' : 'text-orange-500'
+                  {/* Status Dot */}
+                  <div className="relative flex items-center justify-center">
+                    <motion.div
+                      className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
+                      animate={{
+                        scale: [1, 1.3, 1],
+                        boxShadow: isAvailable 
+                          ? [
+                              '0 0 0 0 rgba(34, 197, 94, 0.7)',
+                              '0 0 0 4px rgba(34, 197, 94, 0)',
+                              '0 0 0 0 rgba(34, 197, 94, 0)'
+                            ]
+                          : [
+                              '0 0 0 0 rgba(249, 115, 22, 0.7)',
+                              '0 0 0 4px rgba(249, 115, 22, 0)',
+                              '0 0 0 0 rgba(249, 115, 22, 0)'
+                            ]
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    />
+                  </div>
+                  
+                  {/* Status Text - Very Short */}
+                  <span className={`relative text-[10px] font-mono font-extrabold tracking-wider uppercase ${
+                    isAvailable ? 'text-green-400' : 'text-orange-400'
                   }`}>
                     {isAvailable ? (
-                      language === 'uk' ? 'Онлайн' : 
-                      language === 'nl' ? 'Online' : 
-                      language === 'ar' ? 'متصل' :
-                      language === 'es' ? 'En línea' :
-                      'Online'
+                      language === 'uk' ? 'ОН' : 
+                      language === 'nl' ? 'ON' : 
+                      language === 'ar' ? 'نشط' :
+                      language === 'es' ? 'ON' :
+                      'ON'
                     ) : (
-                      language === 'uk' ? 'Зайнятий' : 
-                      language === 'nl' ? 'Bezet' : 
-                      language === 'ar' ? 'مشغول' :
-                      language === 'es' ? 'Ocupado' :
-                      'Busy'
+                      language === 'uk' ? 'ЗАЙ' : 
+                      language === 'nl' ? 'BEZ' : 
+                      language === 'ar' ? 'مش' :
+                      language === 'es' ? 'OCU' :
+                      'BSY'
                     )}
                   </span>
                 </motion.button>
@@ -517,16 +529,17 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                     key={`${item.href}-${index}`}
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className={`relative px-2 md:px-2.5 xl:px-3 py-2 text-xs md:text-[11px] lg:text-xs xl:text-sm font-medium transition-colors group whitespace-nowrap ${
+                    className={`relative px-2 md:px-2.5 xl:px-3 py-2 text-xs md:text-[11px] lg:text-xs xl:text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                       isActive
                         ? "text-[var(--accent-primary)]"
-                        : "text-[var(--text-secondary)] hover:text-[var(--accent-primary)]"
+                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                     }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     <span className="relative z-10">{item.label}</span>
                     
+                    {/* Active indicator with smooth transition */}
                     {isActive && (
                       <motion.div
                         layoutId="navIndicator"
@@ -541,14 +554,21 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                       />
                     )}
                     
-                    <motion.div
-                      className="absolute inset-0 bg-[var(--bg-secondary)]/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                    />
+                    {/* Hover background - Only when NOT active */}
+                    {!isActive && (
+                      <motion.div
+                        className="absolute inset-0 bg-[var(--bg-secondary)]/80 rounded-lg"
+                        initial={{ opacity: 0 }}
+                        whileHover={{ opacity: 1 }}
+                        transition={{ duration: 0.2 }}
+                      />
+                    )}
                     
+                    {/* Bottom highlight line */}
                     <motion.div
                       className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent"
-                      initial={{ width: 0 }}
-                      whileHover={{ width: "80%" }}
+                      initial={{ width: 0, opacity: 0 }}
+                      whileHover={{ width: "80%", opacity: 1 }}
                       transition={{ duration: 0.3 }}
                     />
                   </motion.a>
@@ -969,13 +989,13 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden fixed inset-0 bg-[var(--bg-primary)] z-[10001] overflow-y-auto"
+              className="lg:hidden fixed left-0 right-0 bg-[var(--bg-primary)] z-[10001] overflow-y-auto"
               style={{ 
                 top: scrolled ? '120px' : '128px',
-                height: scrolled ? 'calc(100vh - 120px)' : 'calc(100vh - 128px)',
+                bottom: 0,
               }}
             >
-              <div className="min-h-full flex flex-col px-4 sm:px-6 py-6 sm:py-8">
+              <div className="min-h-full flex flex-col px-4 sm:px-6 py-4 sm:py-6">
                 {/* User Profile Section */}
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}

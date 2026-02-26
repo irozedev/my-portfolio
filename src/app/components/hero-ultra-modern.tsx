@@ -55,6 +55,76 @@ const codingLines = [
 
 const dynamicStats = getFormattedStats();
 
+// Fallback GitHub repos data
+const fallbackRepos: GitHubRepo[] = [
+  {
+    id: 1,
+    name: "roze-portfolio",
+    description: "Modern portfolio with React, TypeScript, and Tailwind CSS. Features dark mode, animations, and responsive design.",
+    html_url: "https://github.com/irozedev/roze-portfolio",
+    homepage: "https://roze.live",
+    stargazers_count: 12,
+    forks_count: 3,
+    language: "TypeScript",
+    topics: ["react", "typescript", "tailwind"]
+  },
+  {
+    id: 2,
+    name: "ai-chatbot-pro",
+    description: "Advanced AI chatbot with multi-language support and context awareness. Built with Node.js and OpenAI API.",
+    html_url: "https://github.com/irozedev/ai-chatbot-pro",
+    homepage: null,
+    stargazers_count: 24,
+    forks_count: 7,
+    language: "JavaScript",
+    topics: ["ai", "chatbot", "nodejs"]
+  },
+  {
+    id: 3,
+    name: "e-commerce-platform",
+    description: "Full-stack e-commerce solution with payment integration, inventory management, and admin dashboard.",
+    html_url: "https://github.com/irozedev/e-commerce-platform",
+    homepage: null,
+    stargazers_count: 18,
+    forks_count: 5,
+    language: "TypeScript",
+    topics: ["ecommerce", "react", "nodejs"]
+  },
+  {
+    id: 4,
+    name: "task-automation-suite",
+    description: "Python automation tools for web scraping, data processing, and workflow optimization.",
+    html_url: "https://github.com/irozedev/task-automation-suite",
+    homepage: null,
+    stargazers_count: 31,
+    forks_count: 9,
+    language: "Python",
+    topics: ["automation", "python", "scraping"]
+  },
+  {
+    id: 5,
+    name: "api-gateway-microservices",
+    description: "Scalable microservices architecture with Docker, Kubernetes, and API gateway pattern.",
+    html_url: "https://github.com/irozedev/api-gateway-microservices",
+    homepage: null,
+    stargazers_count: 15,
+    forks_count: 4,
+    language: "Go",
+    topics: ["microservices", "docker", "kubernetes"]
+  },
+  {
+    id: 6,
+    name: "data-visualization-dashboard",
+    description: "Interactive dashboard for data visualization using React, D3.js, and real-time WebSocket updates.",
+    html_url: "https://github.com/irozedev/data-visualization-dashboard",
+    homepage: "https://viz.roze.live",
+    stargazers_count: 27,
+    forks_count: 8,
+    language: "JavaScript",
+    topics: ["visualization", "d3js", "react"]
+  }
+];
+
 export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
   const { t, language } = useLanguage();
   const { isAvailable, statusText, statusEmoji } = useAvailability();
@@ -185,7 +255,16 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
 
   const fetchGitHubRepos = async () => {
     try {
-      const response = await fetch('https://api.github.com/users/irozedev/repos?sort=updated&per_page=12');
+      const response = await fetch('https://api.github.com/users/irozedev/repos?sort=updated&per_page=12', {
+        headers: {
+          'Accept': 'application/vnd.github.v3+json',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status}`);
+      }
+      
       const data = await response.json();
       
       const filteredRepos = data
@@ -193,10 +272,17 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
         .sort((a: GitHubRepo, b: GitHubRepo) => b.stargazers_count - a.stargazers_count)
         .slice(0, 6);
       
-      setRepos(filteredRepos);
+      if (filteredRepos.length > 0) {
+        setRepos(filteredRepos);
+      } else {
+        // Use fallback data if no repos found
+        setRepos(fallbackRepos);
+      }
       setReposLoading(false);
     } catch (error) {
-      console.error('Error fetching GitHub repos:', error);
+      console.warn('Using fallback GitHub repos data:', error);
+      // Use fallback static data when API fails
+      setRepos(fallbackRepos);
       setReposLoading(false);
     }
   };
@@ -247,7 +333,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
     <>
       <motion.section
         id="hero"
-        className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden px-4 sm:px-6 pt-36 md:pt-40 lg:pt-44 pb-20"
+        className="relative min-h-[100dvh] flex items-center justify-center px-4 sm:px-6 pt-36 md:pt-40 lg:pt-44 pb-20"
         style={{ y, opacity }}
       >
         {/* Animated Mesh Background */}
@@ -332,7 +418,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
               transition={{ duration: 0.8 }}
               className="lg:col-span-7 relative group"
             >
-              <div className="relative h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border border-[var(--border-color)] rounded-3xl p-8 md:p-10 overflow-hidden hover:border-[var(--accent-primary)]/50 transition-all duration-500">
+              <div className="relative h-full bg-[var(--bg-secondary)]/40 backdrop-blur-2xl border border-[var(--border-color)] rounded-3xl p-8 md:p-10 hover:border-[var(--accent-primary)]/50 transition-all duration-500">
                 
                 {/* Gradient Overlay */}
                 <motion.div

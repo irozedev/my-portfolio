@@ -132,14 +132,14 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
               <div className="relative flex items-center justify-between px-4 py-3 border-b border-[var(--glass-border)]">
                 <div className="flex items-center gap-2.5">
                   <div className="relative">
-                    <Clock className="w-5 h-5 text-[var(--accent-primary)]" />
+                    <Clock className="w-6 h-6 text-[var(--accent-primary)]" />
                     <div className="absolute inset-0 blur-sm bg-[var(--accent-primary)]/30" />
                   </div>
                   <div>
-                    <span className="text-sm font-mono font-bold text-[var(--text-primary)] uppercase tracking-wide block">
+                    <span className="text-base font-mono font-bold text-[var(--text-primary)] uppercase tracking-wide block">
                       {getTranslation('title')}
                     </span>
-                    <span className="text-[10px] font-mono text-[var(--text-muted)] block">
+                    <span className="text-xs font-mono text-[var(--text-muted)] block">
                       {getTranslation('subtitle')}
                     </span>
                   </div>
@@ -150,7 +150,7 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <X className="w-4 h-4 text-[var(--text-muted)] group-hover:text-red-400 transition-colors" />
+                  <X className="w-5 h-5 text-[var(--text-muted)] group-hover:text-red-400 transition-colors" />
                 </motion.button>
               </div>
 
@@ -164,35 +164,35 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                   <div className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-[var(--accent-primary)]" />
                   
                   <div className="flex items-center gap-2 mb-2">
-                    <Zap className="w-4 h-4 text-[var(--accent-primary)]" />
-                    <span className="text-xs font-mono font-bold text-[var(--text-primary)] uppercase">
+                    <Zap className="w-5 h-5 text-[var(--accent-primary)]" />
+                    <span className="text-sm font-mono font-bold text-[var(--text-primary)] uppercase">
                       {getTranslation('workingHours')}
                     </span>
                   </div>
-                  <p className="text-lg font-mono font-bold text-[var(--accent-primary)]">
+                  <p className="text-xl font-mono font-bold text-[var(--accent-primary)]">
                     {getTranslation('hours')}
                   </p>
                 </div>
 
                 {/* Weekly Schedule - Larger text */}
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   {scheduleData.map((schedule, index) => (
                     <motion.div
                       key={schedule.day}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.03 }}
-                      className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono transition-all ${
+                      className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-mono transition-all ${
                         schedule.available
                           ? 'bg-green-500/10 border border-green-500/20 hover:border-green-500/40'
                           : 'bg-[var(--bg-tertiary)]/20 border border-[var(--glass-border)]'
                       }`}
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2.5">
                         {schedule.available ? (
-                          <CheckCircle className="w-3.5 h-3.5 text-green-400 flex-shrink-0" />
+                          <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
                         ) : (
-                          <X className="w-3.5 h-3.5 text-[var(--text-muted)] flex-shrink-0" />
+                          <X className="w-4 h-4 text-[var(--text-muted)] flex-shrink-0" />
                         )}
                         <span className={`font-bold ${schedule.available ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'}`}>
                           {getDay(schedule.day).substring(0, 3)}
@@ -206,8 +206,8 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                 </div>
 
                 {/* Note */}
-                <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-lg">
-                  <p className="text-[10px] font-mono text-[var(--text-secondary)] leading-relaxed">
+                <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+                  <p className="text-xs font-mono text-[var(--text-secondary)] leading-relaxed">
                     {getTranslation('note')}
                   </p>
                 </div>

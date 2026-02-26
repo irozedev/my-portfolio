@@ -60,8 +60,8 @@ export function SiteTour() {
           id: "step-6",
           elementId: "about",
           title: "ℹ️ About Me",
-          description: "Background, skills, tech stack with interactive bars.",
-          tip: "Hover skill bars for details"
+          description: "Background, skills, tech stack with interactive skill bars and detailed experience.",
+          tip: "Hover over skill bars to see detailed information and proficiency levels"
         },
         {
           id: "step-7",
@@ -74,11 +74,18 @@ export function SiteTour() {
           id: "step-8",
           elementId: "services",
           title: "💼 Services",
-          description: "Available services with pricing (includes 21% VAT).",
-          tip: "Prices negotiable for long-term"
+          description: "Available services with pricing (includes 21% VAT). Try the AI Assistant for process automation!",
+          tip: "Click 'Get Started with Process Automation' to open AI chatbot"
         },
         {
           id: "step-9",
+          elementId: "chat-bot-button",
+          title: "🤖 AI Chat Assistant",
+          description: "Smart AI chatbot that can answer questions about pricing, skills, projects, and availability. Auto-detects your language!",
+          tip: "Click to open chat • Ask anything in EN/UK/NL/AR/ES • Language auto-switches based on your message"
+        },
+        {
+          id: "step-10",
           elementId: "contact",
           title: "📧 Contact",
           description: "Get in touch! Response within 24 hours guaranteed.",
@@ -125,8 +132,8 @@ export function SiteTour() {
           id: "step-6",
           elementId: "about",
           title: "ℹ️ Про мене",
-          description: "Досвід, навички, технології з інтерактивними шкалами.",
-          tip: "Наведіть на навички для деталей"
+          description: "Досвід, навички, технології з інтерактивними шкалами та детальною досвідомістю.",
+          tip: "Наведіть на навички для деталей та рівнів кваліфікації"
         },
         {
           id: "step-7",
@@ -139,11 +146,18 @@ export function SiteTour() {
           id: "step-8",
           elementId: "services",
           title: "💼 Послуги",
-          description: "Доступні послуги з цінами (включає ПДВ 21%).",
-          tip: "Ціни обговорювані для довгострокових"
+          description: "Доступні послуги з цінами (включає ПДВ 21%). Спробуйте AI асистента для автоматизації процесів!",
+          tip: "Клацніть 'Get Started with Process Automation' щоб відкрити AI чатбот"
         },
         {
           id: "step-9",
+          elementId: "chat-bot-button",
+          title: "🤖 AI Чат Асистент",
+          description: "Розумний AI чатбот, який може відповідати на питання про ціни, навички, проекти та доступність. Автоматично визначає вашу мову!",
+          tip: "Клацніть, щоб відкрити чат • Задайте щось у EN/UK/NL/AR/ES • Мова автоматично змінюється відповідно до вашого повідомлення"
+        },
+        {
+          id: "step-10",
           elementId: "contact",
           title: "📧 Контакти",
           description: "Зв'яжіться! Відповідь протягом 24 годин гарантована.",
@@ -190,8 +204,8 @@ export function SiteTour() {
           id: "step-6",
           elementId: "about",
           title: "ℹ️ Over",
-          description: "Achtergrond, skills, tech stack met interactieve balken.",
-          tip: "Hover skills voor details"
+          description: "Achtergrond, skills, tech stack met interactieve skill bars en gedetailleerde ervaring.",
+          tip: "Hover over skill bars voor gedetailleerde informatie en vaardigheidsniveaus"
         },
         {
           id: "step-7",
@@ -204,11 +218,18 @@ export function SiteTour() {
           id: "step-8",
           elementId: "services",
           title: "💼 Diensten",
-          description: "Beschikbare diensten met prijzen (incl. 21% BTW).",
-          tip: "Prijzen bespreekbaar voor langetermijn"
+          description: "Beschikbare diensten met prijzen (incl. 21% BTW). Probeer de AI-assistent voor procesautomatisering!",
+          tip: "Klik 'Get Started with Process Automation' om AI chatbot te openen"
         },
         {
           id: "step-9",
+          elementId: "chat-bot-button",
+          title: "🤖 AI Chat Assistant",
+          description: "Slimme AI chatbot die vragen kan beantwoorden over prijzen, vaardigheden, projecten en beschikbaarheid. Detecteert automatisch uw taal!",
+          tip: "Klik om chat te openen • Vraag iets in EN/UK/NL/AR/ES • Taal verandert automatisch op basis van uw bericht"
+        },
+        {
+          id: "step-10",
           elementId: "contact",
           title: "📧 Contact",
           description: "Neem contact op! Reactie binnen 24 uur gegarandeerd.",
@@ -339,11 +360,11 @@ export function SiteTour() {
                 ellipse ${highlightRect.width + 40}px ${highlightRect.height + 40}px at ${highlightRect.left + highlightRect.width / 2}px ${highlightRect.top + highlightRect.height / 2}px,
                 transparent 0%,
                 transparent 50%,
-                rgba(0, 0, 0, 0.85) 50%,
-                rgba(0, 0, 0, 0.85) 100%
+                rgba(0, 0, 0, 0.50) 50%,
+                rgba(0, 0, 0, 0.50) 100%
               )
             `
-            : 'rgba(0, 0, 0, 0.85)'
+            : 'rgba(0, 0, 0, 0.50)'
         }}
         onClick={closeTour}
       />

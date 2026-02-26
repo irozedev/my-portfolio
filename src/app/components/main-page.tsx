@@ -13,6 +13,7 @@ import { PersonalCabinet } from "./personal-cabinet";
 import { Navigation } from "./navigation";
 import { BetaBanner } from "./beta-banner";
 import { SiteTour } from "./site-tour";
+import { ChatBot } from "./chat-bot";
 import { useState } from "react";
 
 export function MainPage() {
@@ -70,6 +71,8 @@ export function MainPage() {
       <BetaBanner />
       
       <SiteTour />
+      
+      <ChatBot />
     </div>
   );
 }

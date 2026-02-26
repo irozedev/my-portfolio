@@ -5,6 +5,8 @@
 /* Minimum width constraint */
 html {
   min-width: 320px;
+  max-width: 100vw;
+  overflow-x: hidden;
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
   /* DISABLE ZOOM ON MOBILE - iPhone Fix */
@@ -16,6 +18,8 @@ html {
 }
 
 body {
+  max-width: 100vw;
+  overflow-x: hidden;
   /* Prevent double-tap zoom on iOS */
   touch-action: manipulation;
   -webkit-touch-callout: none;
@@ -443,4 +447,67 @@ img {
   --glass-border: rgba(15, 23, 42, 0.06);
   --glow-primary: rgba(8, 145, 178, 0.15);
   --glow-secondary: rgba(139, 92, 246, 0.15);
+}
+
+/* LANDSCAPE & TABLET OPTIMIZATIONS */
+
+/* Landscape phones (typically height < 600px) */
+@media (orientation: landscape) and (max-height: 600px) {
+  html {
+    scroll-padding-top: 60px;
+  }
+  
+  /* Reduce vertical spacing in landscape */
+  section {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+  
+  /* Make modals scrollable in landscape */
+  .modal-content {
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+}
+
+/* Tablet portrait (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  /* Optimize spacing for tablets */
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  /* Better typography scaling */
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+  }
+}
+
+/* Tablet landscape (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  html {
+    scroll-padding-top: 70px;
+  }
+  
+  /* Optimize layout for landscape tablets */
+  .grid-cols-auto {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+/* Prevent content overflow on all screen sizes */
+* {
+  box-sizing: border-box;
+}
+
+.container,
+.section-wrapper,
+[class*="max-w-"] {
+  max-width: 100%;
+  overflow-x: hidden;
 }

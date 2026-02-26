@@ -90,7 +90,7 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
           damping: 30, 
           stiffness: 300,
         }}
-        className="fixed inset-0 z-[100001] flex items-center justify-center p-0 sm:p-4 md:p-6"
+        className="fixed inset-0 z-[100001] flex items-center justify-center p-0 sm:p-4 md:p-6 overflow-hidden"
         onClick={handleClose}
       >
         {/* 🔥 PREMIUM CARD - GLASSMORPHISM - OPTIMIZED FOR MOBILE */}

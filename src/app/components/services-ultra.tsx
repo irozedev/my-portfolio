@@ -256,10 +256,14 @@ export function ServicesUltra() {
           onChatBot={() => {
             // Store selected service in sessionStorage for ChatBot
             sessionStorage.setItem('selectedService', selectedService.key);
+            const event = new CustomEvent('openChatBot', { 
+              detail: { 
+                service: selectedService.key,
+                serviceName: selectedService.title 
+              } 
+            });
+            window.dispatchEvent(event);
             setSelectedService(null);
-            // Trigger chatbot open (you can add a prop or event here if needed)
-            const chatBotButton = document.querySelector('[data-chatbot-trigger]') as HTMLButtonElement;
-            chatBotButton?.click();
           }}
           onContact={() => {
             // Store selected service in sessionStorage for Contact Form

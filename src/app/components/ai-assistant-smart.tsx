@@ -74,6 +74,24 @@ export function AIAssistantSmart() {
     }
   }, [isOpen, language]);
 
+  // Listen for openChatBot custom event from Service modals
+  useEffect(() => {
+    const handleOpenChatBot = (e: CustomEvent) => {
+      setIsOpen(true);
+      // Optionally pre-fill the service context
+      const serviceKey = e.detail?.service;
+      const serviceName = e.detail?.serviceName;
+      if (serviceKey && serviceName) {
+        sessionStorage.setItem('selectedService', serviceKey);
+      }
+    };
+
+    window.addEventListener('openChatBot', handleOpenChatBot as EventListener);
+    return () => {
+      window.removeEventListener('openChatBot', handleOpenChatBot as EventListener);
+    };
+  }, []);
+
   // SCROLL TO SECTION WITH FLASH
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
@@ -345,8 +363,9 @@ export function AIAssistantSmart() {
   if (!isOpen) {
     return (
       <button
+        data-chatbot-trigger
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-4 sm:right-6 z-[100] w-14 h-14 md:w-16 md:h-16 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 rounded-full shadow-[0_0_30px_rgba(0,217,255,0.4)] flex items-center justify-center hover:shadow-[0_0_40px_rgba(0,217,255,0.6)] hover:scale-110 transition-all active:scale-95"
+        className="fixed bottom-6 right-6 z-[99998] w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 hover:from-[var(--accent-secondary)] hover:to-cyan-500 rounded-2xl shadow-[0_0_40px_rgba(0,217,255,0.6)] hover:shadow-[0_0_60px_rgba(0,217,255,0.8)] flex items-center justify-center transition-all hover:scale-110 active:scale-95 group relative"
         aria-label="Open AI Assistant"
       >
         <Bot className="w-6 h-6 md:w-7 md:h-7 text-black" />

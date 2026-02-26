@@ -715,11 +715,12 @@ export function PortfolioCreativeSlider() {
                     </button>
 
                     {/* Project Image */}
-                    <div className="relative h-64 md:h-80 overflow-hidden">
+                    <div className="relative h-64 md:h-80 overflow-hidden bg-black">
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700"
+                        style={{ maxWidth: '100%' }}
                       />
                       <div className={`absolute inset-0 bg-gradient-to-t ${project.gradient} opacity-30 group-hover:opacity-40 transition-opacity`} />
                     </div>

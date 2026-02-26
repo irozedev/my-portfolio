@@ -20,7 +20,7 @@ export function BetaBanner() {
   const repeatedMessage = Array(10).fill(message).join("");
   
   return (
-    <div id="beta-banner" className="fixed top-0 left-0 right-0 z-[10000] bg-[#1a1a1a] border-b-2 border-[#ffcc00] overflow-hidden">
+    <div id="beta-banner" className="fixed top-0 left-0 right-0 z-[9998] bg-[#1a1a1a] border-b-2 border-[#ffcc00] overflow-hidden">
       {/* Horizontal scanlines effect */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-20"

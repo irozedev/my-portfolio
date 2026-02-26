@@ -21,7 +21,7 @@ export function ChatBot() {
   const [requestCount, setRequestCount] = useState(0);
   const [isRateLimited, setIsRateLimited] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { t, language } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
 
   // Rate limit: max 8 messages per session
   const MAX_REQUESTS = 8;
@@ -133,8 +133,48 @@ export function ChatBot() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Detect language from user input
+  const detectLanguage = (text: string): string => {
+    // Arabic - contains Arabic characters
+    if (/[\u0600-\u06FF]/.test(text)) {
+      return 'ar';
+    }
+    
+    // Ukrainian - contains Cyrillic with Ukrainian specific characters
+    if (/[а-яёіїєґА-ЯЁІЇЄҐ]/.test(text)) {
+      return 'uk';
+    }
+    
+    // Dutch common words
+    if (/\b(hallo|hoi|dank|graag|bent|heeft|waar|wat|wanneer|hoe|waarom|dag|goedemorgen|goedemiddag|goedenavond)\b/i.test(text)) {
+      return 'nl';
+    }
+    
+    // Spanish common words
+    if (/\b(hola|gracias|cómo|qué|dónde|cuándo|por qué|buenos días|buenas tardes|buenas noches|sí|no)\b/i.test(text)) {
+      return 'es';
+    }
+    
+    // Default to English
+    return 'en';
+  };
+
   const handleSend = () => {
-    if (!inputValue.trim()) return;
+    // Allow messages with spaces - only check if completely empty
+    if (!inputValue || inputValue.length === 0) return;
+    
+    // Trim only for checking if it's just spaces
+    const trimmedValue = inputValue.trim();
+    if (!trimmedValue) return;
+
+    // Detect language and auto-switch if different
+    const detectedLang = detectLanguage(trimmedValue);
+    if (detectedLang !== language && ['en', 'uk', 'nl', 'ar', 'es'].includes(detectedLang)) {
+      setLanguage(detectedLang as 'en' | 'uk' | 'nl' | 'ar' | 'es');
+    }
+
+    // Increase request count
+    setRequestCount(prev => prev + 1);
 
     const userMessage: Message = {
       id: Date.now(),
@@ -175,7 +215,7 @@ export function ChatBot() {
         'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhZW9odGVwZnB1enphamZkdWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxOTgzNjEsImV4cCI6MjA4NDc3NDM2MX0.bxKkFIXrqVzRVU72E_zZHVGkWuVF_hyJVqvdYrRls9U`
       },
       body: JSON.stringify({
-        message: inputValue.trim(),
+        message: trimmedValue,
         context: hasServiceContext ? 'service_selected' : 'general',
         language: userLanguage
       })
@@ -190,12 +230,11 @@ export function ChatBot() {
       };
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
-      setRequestCount(prev => prev + 1);
     })
     .catch(error => {
       console.error('AI Chat error:', error);
       // Fallback to static responses
-      const botResponse = getBotResponse(inputValue.toLowerCase());
+      const botResponse = getBotResponse(trimmedValue.toLowerCase());
       const botMessage: Message = {
         id: Date.now() + 1,
         text: botResponse,
@@ -204,7 +243,6 @@ export function ChatBot() {
       };
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
-      setRequestCount(prev => prev + 1);
     });
   };
 
@@ -465,228 +503,181 @@ export function ChatBot() {
       {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-24 sm:bottom-28 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-[90vw] max-w-[420px] h-[calc(100dvh-160px)] sm:h-[600px] max-h-[600px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)] rounded-3xl shadow-2xl z-[99990] flex flex-col overflow-hidden"
-          >
-            {/* Header */}
-            <div className="bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 p-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                    <Bot className="w-6 h-6 text-[var(--accent-primary)]" />
-                  </div>
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-white">Stepan's AI Assistant</h3>
-                  <p className="text-xs text-white/80">Online • Typically replies instantly</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-white/20 rounded-full transition-colors"
-              >
-                <X className="w-5 h-5 text-white" />
-              </button>
-            </div>
-
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[var(--bg-secondary)]/30">
-              {messages.map((message) => (
-                <motion.div
-                  key={message.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`flex gap-3 ${
-                    message.sender === "user" ? "flex-row-reverse" : "flex-row"
-                  }`}
-                >
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      message.sender === "user"
-                        ? "bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400"
-                        : "bg-[var(--bg-secondary)]"
-                    }`}
-                  >
-                    {message.sender === "user" ? (
-                      <User className="w-4 h-4 text-white" />
-                    ) : (
-                      <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
-                    )}
-                  </div>
-                  <div
-                    className={`max-w-[75%] rounded-2xl px-4 py-3 ${
-                      message.sender === "user"
-                        ? "bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black"
-                        : "bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-color)]"
-                    }`}
-                  >
-                    <p className="text-sm md:text-base leading-relaxed" style={{ fontFamily: "system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif" }}>{message.text}</p>
-                    <p
-                      className={`text-xs mt-1 ${
-                        message.sender === "user"
-                          ? "text-black/60"
-                          : "text-[var(--text-muted)]"
-                      }`}
-                    >
-                      {message.timestamp.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-              {isTyping && (
-                <motion.div
-                  key="typing"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex gap-3 flex-row"
-                >
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[var(--bg-secondary)]"
-                  >
-                    <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
-                  </div>
-                  <div
-                    className="rounded-2xl px-4 py-3 bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-color)]"
-                  >
-                    <div className="flex gap-1 items-center">
-                      <motion.div
-                        className="w-2 h-2 bg-[var(--accent-primary)] rounded-full"
-                        animate={{ y: [0, -6, 0] }}
-                        transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
-                      />
-                      <motion.div
-                        className="w-2 h-2 bg-[var(--accent-primary)] rounded-full"
-                        animate={{ y: [0, -6, 0] }}
-                        transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
-                      />
-                      <motion.div
-                        className="w-2 h-2 bg-[var(--accent-primary)] rounded-full"
-                        animate={{ y: [0, -6, 0] }}
-                        transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
-                      />
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[99989]"
+            />
+            
+            {/* Chat Window */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed bottom-24 sm:bottom-28 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-[420px] max-w-[420px] h-[calc(100dvh-160px)] sm:h-[600px] max-h-[600px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)] rounded-3xl shadow-2xl z-[99990] flex flex-col overflow-hidden"
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                      <Bot className="w-6 h-6 text-[var(--accent-primary)]" />
                     </div>
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white" />
                   </div>
-                </motion.div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Quick Actions */}
-            {messages.length <= 1 && (
-              <div className="p-4 border-t border-[var(--border-color)] bg-[var(--bg-primary)]">
-                <p className="text-xs text-[var(--text-muted)] mb-2">Quick questions:</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {quickActions.map((action) => (
-                    <button
-                      key={action.label}
-                      onClick={() => {
-                        setInputValue(action.value);
-                        setTimeout(() => handleSend(), 100);
-                      }}
-                      className="text-xs px-3 py-2 bg-[var(--bg-secondary)] hover:bg-[var(--accent-primary)]/10 border border-[var(--border-color)] rounded-lg transition-colors text-left"
-                    >
-                      {action.label}
-                    </button>
-                  ))}
+                  <div>
+                    <h3 className="font-bold text-white">Stepan's AI Assistant</h3>
+                    <p className="text-xs text-white/80">Online • Typically replies instantly</p>
+                  </div>
                 </div>
-              </div>
-            )}
-
-            {/* Input */}
-            <div className="p-4 border-t border-[var(--border-color)] bg-[var(--bg-primary)]">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="Type your message..."
-                  className="flex-1 px-4 py-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]"
-                />
                 <button
-                  onClick={handleSend}
-                  disabled={!inputValue.trim() || isRateLimited}
-                  className="px-4 py-3 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  onClick={() => setIsOpen(false)}
+                  className="p-2 hover:bg-white/20 rounded-full transition-colors"
                 >
-                  <Send className="w-5 h-5" />
+                  <X className="w-5 h-5 text-white" />
                 </button>
               </div>
-            </div>
-          </motion.div>
+
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[var(--bg-secondary)]/30">
+                {messages.map((message) => (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`flex gap-3 ${
+                      message.sender === "user" ? "flex-row-reverse" : "flex-row"
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        message.sender === "user"
+                          ? "bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400"
+                          : "bg-[var(--bg-secondary)]"
+                      }`}
+                    >
+                      {message.sender === "user" ? (
+                        <User className="w-4 h-4 text-white" />
+                      ) : (
+                        <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
+                      )}
+                    </div>
+                    <div
+                      className={`max-w-[75%] rounded-2xl px-4 py-3 ${
+                        message.sender === "user"
+                          ? "bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black"
+                          : "bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-color)]"
+                      }`}
+                    >
+                      <p className="text-sm md:text-base leading-relaxed" style={{ fontFamily: "system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif" }}>{message.text}</p>
+                      <p
+                        className={`text-xs mt-1 ${
+                          message.sender === "user"
+                            ? "text-black/60"
+                            : "text-[var(--text-muted)]"
+                        }`}
+                      >
+                        {message.timestamp.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+                {isTyping && (
+                  <motion.div
+                    key="typing"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex gap-3 flex-row"
+                  >
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[var(--bg-secondary)]"
+                    >
+                      <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
+                    </div>
+                    <div
+                      className="rounded-2xl px-4 py-3 bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-color)]"
+                    >
+                      <div className="flex gap-1 items-center">
+                        <motion.div
+                          className="w-2 h-2 bg-[var(--accent-primary)] rounded-full"
+                          animate={{ y: [0, -6, 0] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                        />
+                        <motion.div
+                          className="w-2 h-2 bg-[var(--accent-primary)] rounded-full"
+                          animate={{ y: [0, -6, 0] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+                        />
+                        <motion.div
+                          className="w-2 h-2 bg-[var(--accent-primary)] rounded-full"
+                          animate={{ y: [0, -6, 0] }}
+                          transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Quick Actions */}
+              {messages.length <= 1 && (
+                <div className="p-4 border-t border-[var(--border-color)] bg-[var(--bg-primary)]">
+                  <p className="text-xs text-[var(--text-muted)] mb-2">Quick questions:</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {quickActions.map((action) => (
+                      <button
+                        key={action.label}
+                        onClick={() => {
+                          setInputValue(action.value);
+                          setTimeout(() => handleSend(), 100);
+                        }}
+                        className="text-xs px-3 py-2 bg-[var(--bg-secondary)] hover:bg-[var(--accent-primary)]/10 border border-[var(--border-color)] rounded-lg transition-colors text-left"
+                      >
+                        {action.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Input */}
+              <div className="p-4 border-t border-[var(--border-color)] bg-[var(--bg-primary)]">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                    placeholder="Type your message..."
+                    className="flex-1 px-4 py-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]"
+                  />
+                  <button
+                    onClick={handleSend}
+                    disabled={!inputValue.trim() || isRateLimited}
+                    className="px-4 py-3 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  >
+                    <Send className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
       {/* Floating Buttons */}
       <div className="fixed bottom-6 right-6 z-[99991] flex flex-col gap-3 items-end">
-        {/* Scroll to Top Button - Appears/disappears smoothly */}
-        <AnimatePresence>
-          {showScrollTop && (
-            <motion.button
-              onClick={scrollToTop}
-              className="w-14 h-14 bg-[var(--card-bg)] border-2 border-[var(--accent-primary)] rounded-full flex items-center justify-center shadow-lg hover:bg-[var(--accent-primary)] hover:shadow-[0_0_30px_rgba(0,217,255,0.6)] transition-all group"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              initial={{ opacity: 0, scale: 0, y: -20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0, y: -20 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
-              <ArrowUp className="w-6 h-6 text-[var(--accent-primary)] group-hover:text-black transition-colors" />
-            </motion.button>
-          )}
-        </AnimatePresence>
-
-        {/* Chat Button - Always in same position */}
-        <motion.button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-14 h-14 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 rounded-full flex items-center justify-center shadow-lg hover:shadow-[0_0_30px_rgba(0,217,255,0.6)] transition-all group relative"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <AnimatePresence mode="wait">
-            {isOpen ? (
-              <motion.div
-                key="close"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-              >
-                <X className="w-6 h-6 text-black" />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="open"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-              >
-                <MessageCircle className="w-6 h-6 text-black group-hover:rotate-12 transition-transform" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-          {/* Notification Badge */}
-          {!isOpen && (
-            <motion.div
-              className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 1.5 }}
-            >
-              1
-            </motion.div>
-          )}
-        </motion.button>
+        {/* Scroll to Top Button - Removed */}
+        {/* Chat Button - Removed - Chat opens via services section */}
       </div>
     </>
   );
