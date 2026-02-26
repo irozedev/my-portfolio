@@ -322,7 +322,7 @@ export function ServicesCreativeSlider() {
   return (
     <>
       <section
-        id="services-section"
+        id="services"
         className="relative py-12 md:py-16 px-4 bg-[var(--bg-primary)] overflow-hidden"
       >
         {/* Animated Background */}

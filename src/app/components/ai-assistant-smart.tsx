@@ -248,7 +248,7 @@ export function AIAssistantSmart() {
     });
     
     const bookingMsg: Message = {
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       text: language === 'uk'
         ? '📅 Чудово! Давайте заплануємо консультацію.\n\nОберіть послугу:\n1️⃣ Лендінг (€800-€1,500)\n2️⃣ Веб-додаток (€3,000-€8,000)\n3️⃣ E-commerce (€5,000-€12,000)\n4️⃣ Безкоштовна консультація (30 хв)\n\nНапишіть номер або назву!'
         : language === 'nl'
@@ -268,7 +268,7 @@ export function AIAssistantSmart() {
     // Check message limit
     if (messageCount >= MAX_FREE_MESSAGES) {
       const limitMsg: Message = {
-        id: Date.now().toString(),
+        id: `limit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         text: language === 'uk'
           ? '⚠️ Ви досягли ліміту безкоштовних повідомлень (10).\n\nДля продовження роботи з AI, будь ласка:\n• Заповніть форму контактів\n• Або напишіть на stepan@roze.live\n\nЯ з радістю допоможу вам особисто! 🚀'
           : language === 'nl'
@@ -282,7 +282,7 @@ export function AIAssistantSmart() {
 
     // Add user message
     const userMsg: Message = {
-      id: Date.now().toString(),
+      id: `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       text: trimmed,
       isBot: false
     };
@@ -307,7 +307,7 @@ export function AIAssistantSmart() {
       
       // Add bot message
       const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
+        id: `bot-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         text: responseText,
         isBot: true,
         action: intent.action,
@@ -325,7 +325,7 @@ export function AIAssistantSmart() {
     } catch (error) {
       console.error('[Chat Error]', error);
       const errorMsg: Message = {
-        id: (Date.now() + 2).toString(),
+        id: `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         text: language === 'uk' ? '❌ Помилка. Спробуйте ще!' : language === 'nl' ? '❌ Fout. Probeer opnieuw!' : '❌ Error. Try again!',
         isBot: true
       };
