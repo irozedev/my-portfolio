@@ -134,7 +134,7 @@ export function ExperienceSection() {
   const totalProjects = 60; // Rough estimate based on experience
 
   return (
-    <section id="experience" className="min-h-screen py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-[var(--bg-primary)] relative overflow-hidden">
+    <section id="experience" className="min-h-screen py-12 sm:py-16 md:py-20 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 bg-[var(--bg-primary)] relative overflow-hidden">
       {/* Enhanced Background Decorations */}
       <div className="absolute top-20 right-10 w-96 h-96 bg-[var(--glow-primary)] rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-20 left-10 w-96 h-96 bg-[var(--glow-secondary)] rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />

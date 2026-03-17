@@ -41,7 +41,7 @@ export function AvailabilityModal({ isOpen, onClose, onBookCall }: AvailabilityM
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 z-[100000] bg-black/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto pt-20 sm:pt-4"
+          className="fixed inset-0 z-[100000] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto pt-20 sm:pt-4"
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0, y: 20 }}

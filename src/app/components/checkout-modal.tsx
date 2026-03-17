@@ -52,7 +52,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9998]"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -61,11 +61,12 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
           {/* Modal */}
           <motion.div
-            className="fixed inset-4 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-4xl md:max-h-[90vh] bg-[var(--bg-primary)] border border-[var(--card-border)] rounded-2xl z-[9999] overflow-hidden flex flex-col shadow-2xl"
+            className="fixed inset-4 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl md:max-h-[90vh] bg-[var(--bg-primary)] border border-[var(--card-border)] rounded-2xl z-[9999] overflow-hidden flex flex-col shadow-2xl"
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", damping: 25 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-[var(--card-border)] bg-[var(--bg-secondary)]">

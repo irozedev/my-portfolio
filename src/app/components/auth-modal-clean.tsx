@@ -1,7 +1,10 @@
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Mail, Lock, Eye, EyeOff, ArrowRight, Sparkles, Shield } from 'lucide-react';
-import { useAuth } from '@/app/contexts/auth-context';
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { X, Sparkles, Github, Loader2, Mail, Lock, Eye, EyeOff, ArrowRight, Shield } from "lucide-react";
+import { useAuth } from "../contexts/auth-context";
+import { useLanguage } from "../contexts/language-context";
+import { toast } from "sonner";
+import { lockScroll, unlockScroll } from "../../utils/scroll-lock";
 
 interface AuthModalCleanProps {
   isOpen: boolean;
@@ -11,6 +14,7 @@ interface AuthModalCleanProps {
 
 export function AuthModalClean({ isOpen, onClose, onSuccess }: AuthModalCleanProps) {
   const { signInWithGoogle, signInWithProvider } = useAuth();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [loadingProvider, setLoadingProvider] = useState<'google' | 'github' | null>(null);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
@@ -24,28 +28,9 @@ export function AuthModalClean({ isOpen, onClose, onSuccess }: AuthModalCleanPro
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
-      // Save current scroll position BEFORE locking
-      const scrollY = window.scrollY;
-      const scrollX = window.scrollX;
-      
-      // Lock body scroll and PRESERVE position
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = `-${scrollX}px`;
-      document.body.style.width = '100%';
-      
-      return () => {
-        // Restore body styles and scroll position
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.width = '';
-        
-        // Restore scroll position
-        window.scrollTo(scrollX, scrollY);
-      };
+      lockScroll();
+    } else {
+      unlockScroll();
     }
   }, [isOpen]);
 
@@ -57,6 +42,7 @@ export function AuthModalClean({ isOpen, onClose, onSuccess }: AuthModalCleanPro
       onSuccess?.();
     } catch (error) {
       console.error('Sign in error:', error);
+      toast.error(t('auth.error_sign_in'));
       setLoading(false);
       setLoadingProvider(null);
     }
@@ -70,6 +56,7 @@ export function AuthModalClean({ isOpen, onClose, onSuccess }: AuthModalCleanPro
       onSuccess?.();
     } catch (error) {
       console.error('GitHub sign in error:', error);
+      toast.error(t('auth.error_sign_in'));
       setLoading(false);
       setLoadingProvider(null);
     }
@@ -91,7 +78,7 @@ export function AuthModalClean({ isOpen, onClose, onSuccess }: AuthModalCleanPro
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100000]"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100000]"
           />
 
           {/* Modal */}
@@ -171,9 +158,7 @@ export function AuthModalClean({ isOpen, onClose, onSuccess }: AuthModalCleanPro
                     />
                   ) : (
                     <>
-                      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.43 9.8 8.2 11.47.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.57 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/>
-                      </svg>
+                      <Github className="w-5 h-5 fill-current" />
                       <span>Continue with GitHub</span>
                     </>
                   )}

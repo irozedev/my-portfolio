@@ -3,6 +3,7 @@ import { MessageCircle, X, Send, Bot, User, ArrowUp } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../contexts/language-context";
 import { getPortfolioStats } from "../../utils/stats-calculator";
+import { lockScroll, unlockScroll } from "../../utils/scroll-lock";
 
 interface Message {
   id: number;
@@ -20,11 +21,34 @@ export function ChatBot() {
   const [hasServiceContext, setHasServiceContext] = useState(false);
   const [requestCount, setRequestCount] = useState(0);
   const [isRateLimited, setIsRateLimited] = useState(false);
+  const [showQuickQuestions, setShowQuickQuestions] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { t, language, setLanguage } = useLanguage();
 
   // Rate limit: max 8 messages per session
   const MAX_REQUESTS = 8;
+
+  // 🎯 Quick question buttons
+  const quickQuestions = [
+    { emoji: "💰", text: "What are your rates?", label: "Rates" },
+    { emoji: "🛠️", text: "What technologies do you use?", label: "Tech Stack" },
+    { emoji: "📧", text: "How can I contact you?", label: "Contact" },
+    { emoji: "⏱️", text: "How long does a project take?", label: "Timeline" },
+    { emoji: "🚀", text: "Tell me about your services", label: "Services" },
+    { emoji: "👋", text: "Who are you?", label: "About Me" },
+  ];
+
+  // 🔥 SCROLL LOCK - Lock scroll when chat is open
+  useEffect(() => {
+    if (isOpen) {
+      lockScroll();
+    } else {
+      unlockScroll();
+    }
+    
+    // Cleanup on unmount
+    return () => unlockScroll();
+  }, [isOpen]);
 
   // Listen for service selection event
   useEffect(() => {
@@ -94,7 +118,7 @@ export function ChatBot() {
 
     window.addEventListener('openChatBot', handleOpenChatBot);
     return () => window.removeEventListener('openChatBot', handleOpenChatBot);
-  }, []);
+  }, [messages.length]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,11 +136,12 @@ export function ChatBot() {
         setMessages([
           {
             id: Date.now(),
-            text: `👋 Hi! I'm Stepan's AI assistant. How can I help you today?`,
+            text: `👋 Hey there! I'm Roze Bot - Stepan's AI assistant.\n\nI can help you with:\n💰 Project rates & pricing\n🛠️ Technical skills & expertise  \n🚀 Portfolio & past projects\n⏰ Availability & timelines\n📧 Contact information\n\nWhat would you like to know? Or just pick a quick question below! 👇`,
             sender: "bot",
             timestamp: new Date(),
           },
         ]);
+        setShowQuickQuestions(true);
       }, 500);
     }
   }, [isOpen, messages.length, hasServiceContext]);
@@ -208,7 +233,7 @@ export function ChatBot() {
                         language === 'ar' ? 'Arabic' : 
                         language === 'es' ? 'Spanish' : 'English';
     
-    fetch(`https://saeohtefpfuzzajfduad.supabase.co/functions/v1/make-server-a62f57c7/ai/chat`, {
+    fetch(`https://saeohtefpfuzzajfduad.supabase.co/functions/v1/server/make-server-a62f57c7/ai/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -491,13 +516,6 @@ export function ChatBot() {
       "Try asking about any of these, or **email me directly** at stepan@roze.live for detailed answers!";
   };
 
-  const quickActions = [
-    { label: "💰 Pricing", value: "What are your rates?" },
-    { label: "📧 Contact", value: "How can I contact you?" },
-    { label: "🚀 Projects", value: "Show me your projects" },
-    { label: "⏰ Availability", value: "Are you available?" },
-  ];
-
   return (
     <>
       {/* Chat Window */}
@@ -629,20 +647,21 @@ export function ChatBot() {
               </div>
 
               {/* Quick Actions */}
-              {messages.length <= 1 && (
+              {messages.length <= 1 && showQuickQuestions && (
                 <div className="p-4 border-t border-[var(--border-color)] bg-[var(--bg-primary)]">
                   <p className="text-xs text-[var(--text-muted)] mb-2">Quick questions:</p>
                   <div className="grid grid-cols-2 gap-2">
-                    {quickActions.map((action) => (
+                    {quickQuestions.map((question) => (
                       <button
-                        key={action.label}
+                        key={question.label}
                         onClick={() => {
-                          setInputValue(action.value);
+                          setInputValue(question.text);
+                          setShowQuickQuestions(false);
                           setTimeout(() => handleSend(), 100);
                         }}
                         className="text-xs px-3 py-2 bg-[var(--bg-secondary)] hover:bg-[var(--accent-primary)]/10 border border-[var(--border-color)] rounded-lg transition-colors text-left"
                       >
-                        {action.label}
+                        {question.emoji} {question.label}
                       </button>
                     ))}
                   </div>

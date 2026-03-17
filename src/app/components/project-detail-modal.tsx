@@ -1,8 +1,8 @@
-import { motion, AnimatePresence } from 'motion/react';
-import { X, ExternalLink, Github, Calendar, Users, Zap, Star, Clock } from 'lucide-react';
-import { ProjectComments } from './project-comments';
-import { ProjectReactions } from './project-reactions';
-import { useEffect, useRef } from 'react';
+import { useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { X, ExternalLink, Github, Code2, Zap, Users, Calendar, Award } from "lucide-react";
+import { ProjectReactions } from "./project-reactions";
+import { lockScroll, unlockScroll } from "../../utils/scroll-lock";
 
 interface Project {
   id?: string;
@@ -33,27 +33,12 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
   const projectId = project.id || project.title.toLowerCase().replace(/\s+/g, '-');
 
   useEffect(() => {
-    // Save current scroll position BEFORE locking
-    const scrollY = window.scrollY;
-    const scrollX = window.scrollX;
-    
-    // Lock body scroll and PRESERVE position
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = `-${scrollX}px`;
-    document.body.style.width = '100%';
+    // Lock body scroll
+    lockScroll();
     
     return () => {
-      // Restore body styles and scroll position
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.width = '';
-      
-      // Restore scroll position
-      window.scrollTo(scrollX, scrollY);
+      // Unlock body scroll
+      unlockScroll();
     };
   }, []);
 
@@ -74,28 +59,22 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={handleClose}
-        className="fixed inset-0 bg-black/80 backdrop-blur-lg z-[100002]"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100002]"
       />
 
       {/* 🔥 MODAL CONTAINER - ZOOM + SLIDE ANIMATION - NO OUTER SCROLL */}
       <motion.div
-        key="modal"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        transition={{ 
-          type: "spring", 
-          damping: 30, 
-          stiffness: 300,
-        }}
-        className="fixed inset-0 z-[100003] flex items-center justify-center p-0 sm:p-4 md:p-6"
-        onClick={handleClose}
+        key="modal-container"
+        initial={{ opacity: 0, scale: 0.95, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 30 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="fixed inset-4 sm:inset-auto sm:relative sm:mx-auto sm:my-8 z-[100003]"
       >
-        {/* 🔥 PREMIUM CARD - GLASSMORPHISM - OPTIMIZED FOR MOBILE */}
         <motion.div
           initial={{ y: 50 }}
           animate={{ y: 0 }}
-          className="relative bg-[var(--bg-primary)] border-0 sm:border-2 border-[var(--accent-primary)]/30 rounded-none sm:rounded-2xl md:rounded-3xl w-full h-full sm:h-auto sm:max-w-3xl md:max-w-4xl lg:max-w-5xl shadow-[0_20px_80px_rgba(0,217,255,0.4)] flex flex-col sm:max-h-[90vh]"
+          className="relative bg-[var(--bg-primary)] border-0 sm:border-2 border-[var(--accent-primary)]/30 rounded-none sm:rounded-2xl md:rounded-3xl w-full h-full sm:h-auto sm:max-w-xl md:max-w-2xl shadow-[0_20px_80px_rgba(0,217,255,0.4)] flex flex-col sm:max-h-[90vh]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Ambient Glow */}
@@ -352,15 +331,6 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
                 className="mb-8 sm:mb-12"
               >
                 <ProjectReactions projectId={projectId} />
-              </motion.div>
-
-              {/* 🔥 COMMENTS SECTION */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-              >
-                <ProjectComments projectId={projectId} />
               </motion.div>
             </div>
           </div>

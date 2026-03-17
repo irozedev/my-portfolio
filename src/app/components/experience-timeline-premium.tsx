@@ -94,7 +94,7 @@ export function ExperienceTimelinePremium() {
   return (
     <section
       id="experience"
-      className="relative py-6 md:py-10 px-4 bg-[var(--bg-primary)] overflow-hidden"
+      className="relative py-6 md:py-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[var(--bg-primary)] overflow-hidden"
     >
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

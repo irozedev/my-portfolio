@@ -4,6 +4,7 @@ import { X, Sparkles, Github, Loader2, Zap, Rocket } from "lucide-react";
 import { useAuth } from "../contexts/auth-context";
 import { useLanguage } from "../contexts/language-context";
 import { toast } from "sonner";
+import { lockScroll, unlockScroll } from "../../utils/scroll-lock";
 
 interface ModernAuthModalProps {
   isOpen: boolean;
@@ -19,27 +20,9 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
   // Lock body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
-      // Save current scroll position BEFORE locking
-      const scrollY = window.scrollY;
-      const scrollX = window.scrollX;
-      
-      // Lock body scroll and PRESERVE position
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = `-${scrollX}px`;
-      document.body.style.width = '100%';
-      
+      lockScroll();
       return () => {
-        // Restore body styles and scroll position
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.width = '';
-        
-        // Restore scroll position
-        window.scrollTo(scrollX, scrollY);
+        unlockScroll();
       };
     }
   }, [isOpen]);
@@ -76,7 +59,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={handleClose}
-        className="fixed inset-0 z-[100000] bg-black/70 backdrop-blur-md flex items-center justify-center p-4"
+        className="fixed inset-0 z-[100000] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
       >
         <motion.div
           initial={{ scale: 0.9, opacity: 0, y: 20 }}

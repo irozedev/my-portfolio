@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { motion } from "motion/react";
 import { X, Shield, FileText, Info, ArrowLeft } from "lucide-react";
-import { useEffect } from "react";
+import { lockScroll, unlockScroll } from "../../utils/scroll-lock";
 
 interface LegalPageProps {
   page: "privacy" | "terms" | "imprint";
@@ -10,11 +11,11 @@ interface LegalPageProps {
 export function LegalPage({ page, onClose }: LegalPageProps) {
   useEffect(() => {
     // Block body scroll completely
-    document.body.style.overflow = "hidden";
+    lockScroll();
     
     return () => {
       // Restore scroll
-      document.body.style.overflow = "";
+      unlockScroll();
     };
   }, []);
 
@@ -29,17 +30,11 @@ export function LegalPage({ page, onClose }: LegalPageProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+    <div
       className="fixed inset-0 z-[100000] bg-white/95 dark:bg-black/95 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4"
       onClick={handleClose}
     >
-      <motion.div
-        initial={{ scale: 0.9, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 20 }}
+      <div
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-4xl bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)] rounded-3xl shadow-2xl my-8"
       >
@@ -118,8 +113,8 @@ export function LegalPage({ page, onClose }: LegalPageProps) {
           </button>
           <p className="text-xs text-[var(--text-muted)]">🇪🇺 GDPR Compliant</p>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 

@@ -1,7 +1,10 @@
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Bot, Heart, MessageCircle, Star, Bell, Zap } from 'lucide-react';
-import { useAuth } from '@/app/contexts/auth-context';
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { X, Sparkles, Github, Loader2, Zap, Rocket, Mail, Bot } from "lucide-react";
+import { useAuth } from "../contexts/auth-context";
+import { useLanguage } from "../contexts/language-context";
+import { toast } from "sonner";
+import { lockScroll, unlockScroll } from "../../utils/scroll-lock";
 
 interface EnhancedAuthModalProps {
   isOpen: boolean;
@@ -11,34 +14,16 @@ interface EnhancedAuthModalProps {
 
 export function EnhancedAuthModal({ isOpen, onClose, onSuccess }: EnhancedAuthModalProps) {
   const { signInWithGoogle } = useAuth();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<'benefits' | 'signing'>('benefits');
 
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
-      // Save current scroll position BEFORE locking
-      const scrollY = window.scrollY;
-      const scrollX = window.scrollX;
-      
-      // Lock body scroll and PRESERVE position
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = `-${scrollX}px`;
-      document.body.style.width = '100%';
-      
-      return () => {
-        // Restore body styles and scroll position
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.width = '';
-        
-        // Restore scroll position
-        window.scrollTo(scrollX, scrollY);
-      };
+      lockScroll();
+    } else {
+      unlockScroll();
     }
   }, [isOpen]);
 
@@ -50,6 +35,7 @@ export function EnhancedAuthModal({ isOpen, onClose, onSuccess }: EnhancedAuthMo
       onSuccess?.();
     } catch (error) {
       console.error('Sign in error:', error);
+      toast.error(t('auth.signInError'));
       setLoading(false);
       setStep('benefits');
     }
@@ -57,25 +43,25 @@ export function EnhancedAuthModal({ isOpen, onClose, onSuccess }: EnhancedAuthMo
 
   const benefits = [
     {
-      icon: MessageCircle,
+      icon: Sparkles,
       title: 'Comment',
       description: 'Share feedback',
       color: '#00d9ff',
     },
     {
-      icon: Heart,
+      icon: Github,
       title: 'Like & Save',
       description: 'Build favorites',
       color: '#ec4899',
     },
     {
-      icon: Star,
+      icon: Zap,
       title: 'Rate',
       description: 'Help discover',
       color: '#fbbf24',
     },
     {
-      icon: Bell,
+      icon: Rocket,
       title: 'Notifications',
       description: 'Stay updated',
       color: '#a78bfa',
@@ -92,7 +78,7 @@ export function EnhancedAuthModal({ isOpen, onClose, onSuccess }: EnhancedAuthMo
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100000]"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100000]"
           />
 
           {/* Modal Container - Responsive positioning */}
@@ -102,7 +88,7 @@ export function EnhancedAuthModal({ isOpen, onClose, onSuccess }: EnhancedAuthMo
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full h-full md:h-auto md:max-h-[85vh] md:max-w-xl lg:max-w-2xl bg-[var(--bg-primary)] md:rounded-3xl border-0 md:border-2 md:border-[#00d9ff]/30 shadow-[0_0_100px_rgba(0,217,255,0.3)] overflow-hidden flex flex-col"
+              className="relative w-full h-full md:h-auto md:max-h-[85vh] md:max-w-md bg-[var(--bg-primary)] md:rounded-3xl border-0 md:border-2 md:border-[#00d9ff]/30 shadow-[0_0_100px_rgba(0,217,255,0.3)] overflow-hidden flex flex-col"
             >
               {/* Close Button */}
               <button

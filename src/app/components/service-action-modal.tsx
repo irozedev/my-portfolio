@@ -126,7 +126,7 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/90 backdrop-blur-xl z-[999998]"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[999998]"
       />
 
       {/* Modal */}

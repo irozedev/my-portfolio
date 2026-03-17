@@ -94,7 +94,7 @@ export function ProjectsSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section id="projects" className="min-h-screen py-12 sm:py-16 md:py-20 lg:py-32 px-3 sm:px-4 bg-[var(--bg-primary)] relative overflow-hidden">
+    <section id="projects" className="min-h-screen py-12 sm:py-16 md:py-20 lg:py-32 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 bg-[var(--bg-primary)] relative overflow-hidden">
       {/* Enhanced Background Effects */}
       <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-[var(--accent-primary)]/10 rounded-full blur-[150px] animate-pulse" />
       <div className="absolute bottom-1/4 left-0 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1s' }} />

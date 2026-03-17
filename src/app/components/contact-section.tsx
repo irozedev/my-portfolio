@@ -150,7 +150,7 @@ export function ContactSection() {
   ];
 
   return (
-    <section id="contact" className="min-h-screen py-6 sm:py-8 md:py-10 px-3 sm:px-4 bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-secondary)] to-[var(--bg-primary)] relative overflow-hidden">
+    <section id="contact" className="min-h-screen py-6 sm:py-8 md:py-10 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-secondary)] to-[var(--bg-primary)] relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-20 left-1/4 w-96 h-96 bg-[var(--accent-primary)]/5 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
