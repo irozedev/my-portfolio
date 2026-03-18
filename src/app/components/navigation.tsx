@@ -6,6 +6,7 @@ import { useTheme } from "../contexts/theme-context";
 import { smoothScrollToSection } from "../../utils/scroll-utils";
 import { useAuth } from "../contexts/auth-context";
 import { useAvailability } from "../contexts/availability-context";
+import { useViewMode } from "../contexts/view-mode-context";
 import { ModernAuthModal } from "./modern-auth-modal";
 import { BookCallModal } from "./book-call-fixed";
 import { AvailabilityScheduleModal } from "./availability-schedule-modal";
@@ -28,17 +29,31 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
   const { language, setLanguage, t } = useLanguage();
   const { user, signOut, loading } = useAuth();
   const { isAvailable } = useAvailability();
+  const { isClientMode } = useViewMode();
 
   const isRTL = language === 'ar';
 
-  const navItems = useMemo(() => [
-    { label: t("nav.home"), href: "#hero" },
-    { label: t("nav.about"), href: "#about" },
-    { label: t("nav.experience"), href: "#experience" },
-    { label: t("nav.projects"), href: "#projects" },
-    { label: t("nav.services"), href: "#services" },
-    { label: t("nav.contact"), href: "#contact" },
-  ], [t]);
+  // CLIENT MODE: Hero → Services → Projects → About → Contact
+  // CV MODE: Hero → Experience → About → Projects → Contact
+  const navItems = useMemo(() => {
+    if (isClientMode) {
+      return [
+        { label: t("nav.home"), href: "#hero" },
+        { label: t("nav.services"), href: "#services" },
+        { label: t("nav.projects"), href: "#projects" },
+        { label: t("nav.about"), href: "#about" },
+        { label: t("nav.contact"), href: "#contact" },
+      ];
+    } else {
+      return [
+        { label: t("nav.home"), href: "#hero" },
+        { label: t("nav.experience"), href: "#experience" },
+        { label: t("nav.about"), href: "#about" },
+        { label: t("nav.projects"), href: "#projects" },
+        { label: t("nav.contact"), href: "#contact" },
+      ];
+    }
+  }, [t, isClientMode]);
 
   const languages: { code: Language; label: string; flag: string }[] = [
     { code: "en", label: "English", flag: "🇬🇧" },

@@ -15,7 +15,7 @@ export function AboutSection() {
   const { t } = useLanguage();
 
   return (
-    <section id="about" className="min-h-screen py-6 sm:py-8 md:py-10 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 bg-[var(--bg-primary)] relative overflow-hidden">
+    <section id="about" className="min-h-screen py-6 sm:py-8 md:py-10 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 bg-[var(--bg-primary)] relative overflow-hidden scroll-mt-32 md:scroll-mt-36">
       {/* Wave Divider */}
       <div className="absolute top-0 left-0 w-full h-32 opacity-10">
         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full">

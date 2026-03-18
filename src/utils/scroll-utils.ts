@@ -10,16 +10,19 @@ export const smoothScrollToSection = (sectionId: string) => {
   if (element) {
     // Get header height dynamically with additional padding
     const nav = document.querySelector('nav');
-    let headerOffset = nav ? nav.offsetHeight : 80;
+    const navHeight = nav ? nav.offsetHeight : 80;
     
-    // Add extra padding for better visibility (mobile vs desktop)
+    // Add beta banner height + view mode toggle
     const isMobile = window.innerWidth < 768;
-    const extraPadding = isMobile ? 20 : 30; // Extra space for visual comfort
-    headerOffset += extraPadding;
+    const betaBannerHeight = isMobile ? 56 : 64; // Beta banner h-14 = 56px, h-16 = 64px
+    const viewModeToggleHeight = 56; // Toggle height
+    const extraPadding = isMobile ? 20 : 30;
+    
+    const totalOffset = betaBannerHeight + navHeight + extraPadding;
     
     // Calculate position
     const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    const offsetPosition = elementPosition + window.pageYOffset - totalOffset;
 
     // Smooth scroll
     window.scrollTo({

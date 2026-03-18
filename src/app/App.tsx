@@ -3,12 +3,15 @@ import { LanguageProvider } from "./contexts/language-context";
 import { AvailabilityProvider } from "./contexts/availability-context";
 import { AuthProvider } from "./contexts/auth-context";
 import { CartProvider } from "./contexts/cart-context";
+import { ViewModeProvider } from "./contexts/view-mode-context";
 import { MainPage } from "./components/main-page";
 import { LegalPage } from "./components/legal-pages";
 import { AdminPage } from "./components/admin-page";
 import { Dashboard } from "./components/dashboard";
 import { UserProfilePage } from "./components/user-profile-page";
 import { BetaBanner } from "./components/beta-banner";
+import { ViewModeToggle } from "./components/view-mode-toggle";
+import { ScrollToTopButton } from "./components/scroll-to-top-button";
 import { Toaster } from "sonner";
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "motion/react";
@@ -118,19 +121,23 @@ export default function App() {
         <AuthProvider>
           <AvailabilityProvider>
             <CartProvider>
-              <AnimatePresence mode="wait">
-                {currentPage === "home" ? (
-                  <MainPage key="main" />
-                ) : currentPage === "privacy" || currentPage === "terms" || currentPage === "imprint" ? (
-                  <LegalPage 
-                    key={currentPage}
-                    page={currentPage}
-                    onClose={handleCloseLegal}
-                  />
-                ) : null}
-              </AnimatePresence>
-              <BetaBanner />
-              <Toaster position="top-right" richColors />
+              <ViewModeProvider>
+                <AnimatePresence mode="wait">
+                  {currentPage === "home" ? (
+                    <MainPage key="main" />
+                  ) : currentPage === "privacy" || currentPage === "terms" || currentPage === "imprint" ? (
+                    <LegalPage 
+                      key={currentPage}
+                      page={currentPage}
+                      onClose={handleCloseLegal}
+                    />
+                  ) : null}
+                </AnimatePresence>
+                <BetaBanner />
+                <ViewModeToggle />
+                <Toaster position="top-right" richColors />
+                <ScrollToTopButton />
+              </ViewModeProvider>
             </CartProvider>
           </AvailabilityProvider>
         </AuthProvider>

@@ -1,7 +1,9 @@
 import { useLanguage } from "../contexts/language-context";
 import { useAvailability } from "../contexts/availability-context";
+import { useViewMode } from "../contexts/view-mode-context";
 import { useState } from "react";
 import { BookCallModal } from "./book-call-fixed";
+import { DownloadCVButton } from "./download-cv-button";
 import { getFormattedStats } from "../../utils/stats-calculator";
 import { StatsAirport } from "./stats-airport";
 import { Github, Linkedin, Briefcase, Mail, Rocket, Code2 } from "lucide-react";
@@ -34,11 +36,12 @@ const techStack = [
 export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
   const { t, language } = useLanguage();
   const { statusText, statusEmoji } = useAvailability();
+  const { viewMode } = useViewMode();
   const [isBookCallOpen, setIsBookCallOpen] = useState(false);
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--bg-primary)] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 pt-20 pb-12">
+      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--bg-primary)] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 pt-32 md:pt-36 pb-12 scroll-mt-32 md:scroll-mt-36">
         {/* Animated Background Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#00d9ff08_1px,transparent_1px),linear-gradient(to_bottom,#00d9ff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000,transparent)]" />
         
@@ -139,15 +142,18 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <button
-              onClick={() => setIsBookCallOpen(true)}
-              className="group relative px-8 py-4 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black font-bold rounded-lg overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] w-full sm:w-auto"
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                <Rocket className="w-5 h-5" />
-                {t('hero.bookCall')}
-              </span>
-            </button>
+            {/* Show Book Call button ONLY in CLIENT MODE */}
+            {viewMode === 'client' && (
+              <button
+                onClick={() => setIsBookCallOpen(true)}
+                className="group relative px-8 py-4 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black font-bold rounded-lg overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] w-full sm:w-auto"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  <Rocket className="w-5 h-5" />
+                  {t('hero.bookCall')}
+                </span>
+              </button>
+            )}
 
             <button
               onClick={onViewWork}
@@ -158,6 +164,9 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                 {t('hero.viewWork')}
               </span>
             </button>
+
+            {/* Show Download CV button ONLY in CV MODE */}
+            {viewMode === 'cv' && <DownloadCVButton />}
           </motion.div>
 
           {/* Stats */}

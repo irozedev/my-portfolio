@@ -333,7 +333,7 @@ export function ServicesCreativeSlider() {
     <>
       <section
         id="services"
-        className="relative py-12 md:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[var(--bg-primary)] overflow-hidden"
+        className="relative py-12 md:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[var(--bg-primary)] overflow-hidden scroll-mt-32 md:scroll-mt-36"
       >
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
