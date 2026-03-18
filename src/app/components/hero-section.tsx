@@ -31,7 +31,7 @@ export function Hero({ onViewWork }: HeroSectionProps) {
   return (
     <>
       <section
-        id="hero-section"
+        id="hero"
         className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-12 px-3 sm:px-4 sm:pt-36 md:pt-28 md:pb-16"
       >
         {/* Background Effects */}

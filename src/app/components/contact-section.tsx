@@ -57,6 +57,8 @@ export function ContactSection() {
     name: "",
     email: "",
     service: "",
+    budget: "",
+    timeline: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -130,7 +132,7 @@ export function ContactSection() {
 
       if (response.ok) {
         toast.success(t("contact.successMessage") || "Message sent successfully! I'll get back to you soon.");
-        setFormData({ name: "", email: "", service: "", message: "" });
+        setFormData({ name: "", email: "", service: "", budget: "", timeline: "", message: "" });
       } else {
         const error = await response.json();
         toast.error(error.error || "Failed to send message. Please try emailing directly.");
@@ -371,6 +373,40 @@ export function ContactSection() {
                       <option value="Tech Consulting">Tech Consulting</option>
                       <option value="Other">Other</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <label htmlFor="budget" className="block text-base sm:text-lg font-semibold mb-3 text-[var(--text-primary)]">
+                      {t("contact.form.budget")}
+                    </label>
+                    <Input
+                      id="budget"
+                      type="text"
+                      placeholder="e.g., $5000 - $10000"
+                      value={formData.budget}
+                      onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                      required
+                      className="w-full h-14 px-5 text-base sm:text-lg bg-white dark:bg-[var(--bg-primary)] border-2 border-[var(--border-color)] rounded-xl
+                        text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
+                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="timeline" className="block text-base sm:text-lg font-semibold mb-3 text-[var(--text-primary)]">
+                      {t("contact.form.timeline")}
+                    </label>
+                    <Input
+                      id="timeline"
+                      type="text"
+                      placeholder="e.g., 1-3 months"
+                      value={formData.timeline}
+                      onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
+                      required
+                      className="w-full h-14 px-5 text-base sm:text-lg bg-white dark:bg-[var(--bg-primary)] border-2 border-[var(--border-color)] rounded-xl
+                        text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
+                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
+                    />
                   </div>
 
                   <div>

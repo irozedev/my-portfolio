@@ -29,6 +29,18 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  
+  // Detect mobile for native date/time picker
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Time slots (9 AM - 6 PM, excluding lunch 12-1 PM)
   const timeSlots: TimeSlot[] = [
@@ -218,41 +230,71 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                     </p>
                   </div>
                   
-                  <div className="calendar-wrapper">
-                    <DayPicker
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={(date) => {
-                        setSelectedDate(date);
-                        if (date) setStep('time');
-                      }}
-                      disabled={disabledDays}
-                      fromDate={addDays(new Date(), 1)}
-                      toDate={addDays(new Date(), 30)}
-                      className="bg-white/5 rounded-2xl p-4"
-                      classNames={{
-                        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-                        month: "space-y-4",
-                        caption: "flex justify-center pt-1 relative items-center text-[var(--text-primary)]",
-                        caption_label: "text-lg font-bold",
-                        nav: "space-x-1 flex items-center",
-                        nav_button: "h-7 w-7 bg-transparent p-0 hover:bg-white/10 rounded-lg transition-colors",
-                        nav_button_previous: "absolute left-1",
-                        nav_button_next: "absolute right-1",
-                        table: "w-full border-collapse space-y-1",
-                        head_row: "flex",
-                        head_cell: "text-[var(--text-muted)] rounded-md w-9 font-normal text-[0.8rem]",
-                        row: "flex w-full mt-2",
-                        cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-[#00d9ff]/20 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                        day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-white/10 rounded-md transition-colors text-[var(--text-primary)]",
-                        day_selected: "bg-[#00d9ff] text-black hover:bg-[#00d9ff] hover:text-black focus:bg-[#00d9ff] focus:text-black font-bold",
-                        day_today: "bg-white/5 text-[#00d9ff] font-bold",
-                        day_outside: "text-[var(--text-muted)] opacity-50",
-                        day_disabled: "text-[var(--text-muted)] opacity-30 line-through",
-                        day_hidden: "invisible",
-                      }}
-                    />
-                  </div>
+                  {/* NATIVE DATE INPUT FOR MOBILE */}
+                  {isMobile ? (
+                    <div className="space-y-4">
+                      <label className="block">
+                        <span className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                          Select Date
+                        </span>
+                        <input
+                          type="date"
+                          min={format(addDays(new Date(), 1), 'yyyy-MM-dd')}
+                          max={format(addDays(new Date(), 30), 'yyyy-MM-dd')}
+                          value={selectedDate ? format(selectedDate, 'yyyy-MM-dd') : ''}
+                          onChange={(e) => {
+                            const newDate = new Date(e.target.value);
+                            if (!isWeekend(newDate)) {
+                              setSelectedDate(newDate);
+                              setStep('time');
+                            } else {
+                              alert('Weekends are not available. Please select a weekday.');
+                            }
+                          }}
+                          className="w-full h-14 px-4 bg-white/5 border-2 border-white/10 rounded-xl text-[var(--text-primary)] focus:border-[#00d9ff]/50 focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
+                        />
+                      </label>
+                      <p className="text-xs text-[var(--text-muted)]">
+                        ℹ️ Only weekdays are available. Weekends will be rejected.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="calendar-wrapper">
+                      <DayPicker
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={(date) => {
+                          setSelectedDate(date);
+                          if (date) setStep('time');
+                        }}
+                        disabled={disabledDays}
+                        fromDate={addDays(new Date(), 1)}
+                        toDate={addDays(new Date(), 30)}
+                        className="bg-white/5 rounded-2xl p-4"
+                        classNames={{
+                          months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                          month: "space-y-4",
+                          caption: "flex justify-center pt-1 relative items-center text-[var(--text-primary)]",
+                          caption_label: "text-lg font-bold",
+                          nav: "space-x-1 flex items-center",
+                          nav_button: "h-7 w-7 bg-transparent p-0 hover:bg-white/10 rounded-lg transition-colors",
+                          nav_button_previous: "absolute left-1",
+                          nav_button_next: "absolute right-1",
+                          table: "w-full border-collapse space-y-1",
+                          head_row: "flex",
+                          head_cell: "text-[var(--text-muted)] rounded-md w-9 font-normal text-[0.8rem]",
+                          row: "flex w-full mt-2",
+                          cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-[#00d9ff]/20 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                          day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-white/10 rounded-md transition-colors text-[var(--text-primary)]",
+                          day_selected: "bg-[#00d9ff] text-black hover:bg-[#00d9ff] hover:text-black focus:bg-[#00d9ff] focus:text-black font-bold",
+                          day_today: "bg-white/5 text-[#00d9ff] font-bold",
+                          day_outside: "text-[var(--text-muted)] opacity-50",
+                          day_disabled: "text-[var(--text-muted)] opacity-30 line-through",
+                          day_hidden: "invisible",
+                        }}
+                      />
+                    </div>
+                  )}
                 </motion.div>
               )}
 

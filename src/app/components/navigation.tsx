@@ -32,7 +32,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
   const isRTL = language === 'ar';
 
   const navItems = useMemo(() => [
-    { label: t("nav.home"), href: "#home" },
+    { label: t("nav.home"), href: "#hero" },
     { label: t("nav.about"), href: "#about" },
     { label: t("nav.experience"), href: "#experience" },
     { label: t("nav.projects"), href: "#projects" },
@@ -578,148 +578,8 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
 
             {/* Desktop Controls */}
             <div className="hidden lg:flex items-center gap-1 xl:gap-2 flex-1 justify-end">
-              {/* User Menu / Auth Button */}
-              <div className="relative user-menu">
-                {loading ? (
-                  <div className="w-9 h-9 rounded-full bg-white/5 animate-pulse" />
-                ) : user ? (
-                  <>
-                    <motion.button
-                      onClick={() => setShowUserMenu(!showUserMenu)}
-                      className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-[#00d9ff]/30 hover:border-[#00d9ff] transition-all duration-300"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {user.user_metadata?.avatar_url ? (
-                        <img
-                          src={user.user_metadata.avatar_url}
-                          alt={user.user_metadata?.name || 'User'}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-[#00d9ff] to-purple-500 flex items-center justify-center">
-                          <User className="w-5 h-5 text-white" />
-                        </div>
-                      )}
-                      <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-[var(--bg-primary)] shadow-lg ${
-                        isAvailable ? 'bg-green-500' : 'bg-orange-500'
-                      }`} />
-                    </motion.button>
-
-                    {showUserMenu && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        className="absolute right-0 mt-3 w-64 bg-[var(--bg-primary)] border-2 border-[#00d9ff]/30 rounded-2xl shadow-[0_0_30px_rgba(0,217,255,0.2)] overflow-hidden z-[100000]"
-                      >
-                        <div className="p-4 border-b border-white/10 bg-gradient-to-br from-[#00d9ff]/10 to-purple-500/10">
-                          <div className="flex items-center gap-3">
-                            {user.user_metadata?.avatar_url ? (
-                              <img
-                                src={user.user_metadata.avatar_url}
-                                alt={user.user_metadata?.name || 'User'}
-                                className="w-12 h-12 rounded-full object-cover border-2 border-[#00d9ff]/50"
-                              />
-                            ) : (
-                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#00d9ff] to-purple-500 flex items-center justify-center">
-                                <User className="w-6 h-6 text-white" />
-                              </div>
-                            )}
-                            <div className="flex-1 min-w-0">
-                              <p className="font-semibold text-[var(--text-primary)] truncate">
-                                {user.user_metadata?.name || 'User'}
-                              </p>
-                              <p className="text-xs text-[var(--text-secondary)] truncate">
-                                {user.email}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="p-2">
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              onOpenProfile();
-                              setShowUserMenu(false);
-                            }}
-                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-colors group"
-                          >
-                            <User className="w-5 h-5 text-[#00d9ff] group-hover:scale-110 transition-transform" />
-                            <span className="text-sm font-medium text-[var(--text-primary)]">{t("auth.myProfile")}</span>
-                          </button>
-
-                          <button
-                            onClick={handleSignOut}
-                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-500/10 transition-colors group"
-                          >
-                            <LogIn className="w-5 h-5 text-red-400 group-hover:scale-110 transition-transform rotate-180" />
-                            <span className="text-sm font-medium text-red-400">{t("auth.signOut")}</span>
-                          </button>
-                        </div>
-
-                        <div className="p-3 border-t border-white/10 bg-white/5">
-                          <p className="text-xs text-[var(--text-secondary)] text-center">
-                            Signed in with Google
-                          </p>
-                        </div>
-                      </motion.div>
-                    )}
-                  </>
-                ) : (
-                  <motion.button
-                    onClick={() => setShowAuthModal(true)}
-                    className="relative px-4 xl:px-5 py-2 xl:py-2.5 bg-gradient-to-r from-[#00d9ff] via-cyan-400 to-[#00d9ff] bg-[length:200%_100%] hover:bg-[position:100%_0] text-black font-bold text-sm rounded-xl shadow-[0_0_20px_rgba(0,217,255,0.4)] hover:shadow-[0_0_40px_rgba(0,217,255,0.7)] transition-all duration-500 flex items-center gap-2 overflow-hidden group"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    animate={{
-                      backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                    }}
-                    transition={{
-                      backgroundPosition: {
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: 'linear'
-                      }
-                    }}
-                  >
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                      animate={{
-                        x: ['-100%', '200%'],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: 'linear',
-                        repeatDelay: 1,
-                      }}
-                    />
-                    
-                    <motion.div
-                      animate={{ rotate: [0, 10, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      <LogIn className="w-4 h-4 relative z-10" />
-                    </motion.div>
-                    
-                    <span className="relative z-10 whitespace-nowrap hidden xl:inline">{t("auth.signIn")}</span>
-                    
-                    <motion.div
-                      className="absolute inset-0 rounded-xl bg-[#00d9ff] opacity-0 group-hover:opacity-20"
-                      animate={{
-                        scale: [1, 1.1, 1],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                      }}
-                    />
-                  </motion.button>
-                )}
-              </div>
-
+              {/* User Menu / Auth Button - HIDDEN PER REDESIGN PLAN */}
+              
               {/* Language Selector */}
               <div id="language-selector" className="relative language-selector">
                 <motion.button

@@ -5,7 +5,7 @@
 
 export const smoothScrollToSection = (sectionId: string) => {
   const targetId = sectionId.replace('#', '');
-  const element = targetId === 'home' ? document.body : document.getElementById(targetId);
+  const element = (targetId === 'home' || targetId === 'hero') ? document.body : document.getElementById(targetId);
   
   if (element) {
     // Get header height dynamically with additional padding
@@ -23,7 +23,7 @@ export const smoothScrollToSection = (sectionId: string) => {
 
     // Smooth scroll
     window.scrollTo({
-      top: targetId === 'home' ? 0 : offsetPosition,
+      top: (targetId === 'home' || targetId === 'hero') ? 0 : offsetPosition,
       behavior: 'smooth'
     });
   }

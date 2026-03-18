@@ -188,7 +188,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
 
       {/* Modals */}
       {isBookCallOpen && (
-        <BookCallModal onClose={() => setIsBookCallOpen(false)} />
+        <BookCallModal isOpen={isBookCallOpen} onClose={() => setIsBookCallOpen(false)} />
       )}
     </>
   );

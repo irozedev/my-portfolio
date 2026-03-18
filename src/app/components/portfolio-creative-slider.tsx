@@ -637,46 +637,7 @@ export function PortfolioCreativeSlider() {
                     onTouchEnd={handleTouchEnd}
                     style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
                   >
-                    {/* 🔥 TAP/CLICK INDICATOR - DEVELOPER STYLE - TOP POSITION */}
-                    {isActive && (
-                      <motion.div
-                        className="absolute top-4 left-4 z-30 flex items-center gap-2 px-3 py-2 bg-purple-500 text-white rounded-lg font-mono font-bold text-xs shadow-[0_0_30px_rgba(168,85,247,0.9)] md:hidden"
-                        animate={{
-                          boxShadow: [
-                            "0 0 20px rgba(168,85,247,0.9)",
-                            "0 0 40px rgba(168,85,247,1)",
-                            "0 0 20px rgba(168,85,247,0.9)",
-                          ],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                        }}
-                      >
-                        <Hand className="w-4 h-4" />
-                        <span>TAP TO OPEN</span>
-                      </motion.div>
-                    )}
-                    
-                    {isActive && (
-                      <motion.div
-                        className="hidden md:flex absolute top-4 left-4 z-30 items-center gap-2 px-3 py-2 bg-purple-500 text-white rounded-lg font-mono font-bold text-xs shadow-[0_0_30px_rgba(168,85,247,0.9)]"
-                        animate={{
-                          boxShadow: [
-                            "0 0 20px rgba(168,85,247,0.9)",
-                            "0 0 40px rgba(168,85,247,1)",
-                            "0 0 20px rgba(168,85,247,0.9)",
-                          ],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                        }}
-                      >
-                        <Hand className="w-4 h-4" />
-                        <span>CLICK TO OPEN</span>
-                      </motion.div>
-                    )}
+                    {/* TAP/CLICK indicators removed per redesign plan */}
 
                     {/* SIDE CARDS INDICATOR - TOP POSITION */}
                     {!isActive && (

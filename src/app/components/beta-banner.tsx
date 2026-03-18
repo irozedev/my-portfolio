@@ -3,11 +3,11 @@ import { AlertTriangle } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 
 const betaTranslations = {
-  en: "BETA VERSION   ●   WORK IN PROGRESS   ●   This portfolio is under active development   ●   Some features may not work as expected   ●   ",
-  uk: "БЕТА ВЕРСІЯ   ●   У РОЗРОБЦІ   ●   Це портфоліо активно розробляється   ●   Деякі функції можуть працювати некоректно   ●   ",
-  nl: "BETA VERSIE   ●   IN ONTWIKKELING   ●   Deze portfolio is in actieve ontwikkeling   ●   Sommige functies werken mogelijk niet zoals verwacht   ●   ",
-  ar: "نسخة تجريبية   ●   قيد التطوير   ●   هذا الملف الشخصي قيد التطوير النشط   ●   قد لا تعمل بعض الميزات كما هو متوقع   ●   ",
-  es: "VERSIÓN BETA   ●   EN DESARROLLO   ●   Este portafolio está en desarrollo activo   ●   Algunas funciones pueden no funcionar como se espera   ●   "
+  en: "🚀 NEW VERSION   ●   Fresh Design   ●   Improved Performance   ●   Better UX   ●   ",
+  uk: "🚀 НОВА ВЕРСІЯ   ●   Свіжий Дизайн   ●   Покращена Продуктивність   ●   Кращий UX   ●   ",
+  nl: "🚀 NIEUWE VERSIE   ●   Nieuw Design   ●   Verbeterde Prestaties   ●   Betere UX   ●   ",
+  ar: "🚀 نسخة جديدة   ●   تصميم جديد   ●   أداء محسن   ●   تجربة أفضل   ●   ",
+  es: "🚀 NUEVA VERSIÓN   ●   Diseño Nuevo   ●   Mejor Rendimiento   ●   Mejor UX   ●   "
 };
 
 export function BetaBanner() {

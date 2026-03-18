@@ -12,76 +12,86 @@ import { useLanguage } from "../contexts/language-context";
 const services = [
   {
     id: 1,
-    key: 'website',
+    key: 'landing',
     icon: Globe,
-    title: "Web Development",
-    description: "Custom websites that convert visitors into customers with modern design and best practices",
+    title: "Landing Page",
+    description: "Single page website optimized for conversions and fast loading",
     color: "#00d9ff",
     gradient: "from-[#00d9ff] to-cyan-500",
-    price: 2500,
-    priceWithTax: 3025,
-    features: ["Responsive Design", "SEO Optimized", "CMS Integration", "Analytics Setup", "Fast Loading", "Cross-browser Compatible"],
+    priceRange: "€500 – €800",
+    price: 500,
+    priceMax: 800,
+    priceWithTax: 605,
+    priceMaxWithTax: 968,
+    features: ["1 page design", "mobile responsive", "fast loading", "basic SEO"],
   },
   {
     id: 2,
-    key: 'ecommerce',
-    icon: ShoppingCart,
-    title: "E-Commerce Solutions",
-    description: "Full-featured online stores with seamless checkout and inventory management",
+    key: 'business',
+    icon: Code,
+    title: "Business Website",
+    description: "Multi-page website with CMS for easy content management",
     color: "#a78bfa",
     gradient: "from-purple-500 to-indigo-500",
     popular: true,
-    price: 5000,
-    priceWithTax: 6050,
-    features: ["Payment Gateway Integration", "Inventory Management", "Admin Dashboard", "Order Tracking", "Email Notifications", "Customer Reviews"],
+    priceRange: "€800 – €1500",
+    price: 800,
+    priceMax: 1500,
+    priceWithTax: 968,
+    priceMaxWithTax: 1815,
+    features: ["multi-page", "CMS", "SEO", "analytics"],
   },
   {
     id: 3,
-    key: 'webapp',
-    icon: Code,
-    title: "Web Applications",
-    description: "Scalable apps built with modern frameworks like React, Next.js and TypeScript",
+    key: 'custom',
+    icon: Bot,
+    title: "Custom / AI",
+    description: "SaaS platforms, dashboards, and AI-powered solutions",
     color: "#ec4899",
     gradient: "from-pink-500 to-rose-500",
-    price: 4000,
-    priceWithTax: 4840,
-    features: ["React/Vue.js Development", "Real-time Features", "API Development", "Cloud Hosting", "Database Design", "User Authentication"],
+    priceRange: "from €2000",
+    price: 2000,
+    priceWithTax: 2420,
+    features: ["SaaS / dashboards", "AI integrations", "automation", "custom development"],
   },
   {
     id: 4,
-    key: 'automation',
-    icon: Workflow,
-    title: "Process Automation",
-    description: "Streamline workflows and boost productivity with intelligent automation solutions",
+    key: 'ecommerce',
+    icon: ShoppingCart,
+    title: "E-Commerce",
+    description: "Full-featured online stores with payment processing",
     color: "#22c55e",
     gradient: "from-green-500 to-emerald-500",
-    price: 1500,
-    priceWithTax: 1815,
-    features: ["API Integration", "Data Sync", "Custom Scripts", "Workflow Design", "Task Scheduling", "Reporting Tools"],
+    priceRange: "from €3000",
+    price: 3000,
+    priceWithTax: 3630,
+    features: ["Payment Gateway", "Inventory Management", "Admin Dashboard", "Order Tracking"],
   },
   {
     id: 5,
-    key: 'chatbot',
-    icon: Bot,
-    title: "AI Chatbots",
-    description: "Intelligent bots powered by GPT technology for customer support and engagement",
+    key: 'automation',
+    icon: Workflow,
+    title: "Process Automation",
+    description: "Workflow automation and business process optimization",
     color: "#f59e0b",
     gradient: "from-orange-500 to-yellow-500",
-    price: 2000,
-    priceWithTax: 2420,
-    features: ["WhatsApp/Telegram Integration", "Multi-language Support", "AI-Powered Responses", "24/7 Availability", "Analytics Dashboard", "Custom Training"],
+    priceRange: "from €1000",
+    price: 1000,
+    priceWithTax: 1210,
+    features: ["API Integration", "Data Sync", "Workflow Design", "Custom Scripts"],
   },
   {
     id: 6,
     key: 'consulting',
     icon: TrendingUp,
     title: "Tech Consulting",
-    description: "Expert advice for your technical challenges and architecture decisions",
+    description: "Expert technical advice and architecture planning",
     color: "#8b5cf6",
     gradient: "from-violet-500 to-purple-500",
-    price: 500,
-    priceWithTax: 605,
-    features: ["Code Review", "Architecture Design", "Performance Audit", "Best Practices", "Team Training", "Technical Documentation"],
+    priceRange: "€100/hour",
+    price: 100,
+    priceWithTax: 121,
+    features: ["Code Review", "Architecture Design", "Performance Audit", "Best Practices"],
   },
 ];
 
@@ -553,47 +563,8 @@ export function ServicesCreativeSlider() {
                       className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-purple-500/50 transition-all duration-500 group cursor-pointer overflow-visible"
                       whileHover={!isMobile ? { y: -10 } : undefined}
                     >
-                      {/* 🔥 TAP/CLICK INDICATOR - DEVELOPER STYLE - PURPLE THEME - TOP */}
-                      {isActive && (
-                        <motion.div
-                          className="absolute top-4 left-4 z-30 flex items-center gap-2 px-3 py-2 bg-purple-500 text-white rounded-lg font-mono font-bold text-xs shadow-[0_0_30px_rgba(168,85,247,0.9)] md:hidden"
-                          animate={{
-                            boxShadow: [
-                              "0 0 20px rgba(168,85,247,0.9)",
-                              "0 0 40px rgba(168,85,247,1)",
-                              "0 0 20px rgba(168,85,247,0.9)",
-                            ],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                          }}
-                        >
-                          <Hand className="w-4 h-4" />
-                          <span>TAP TO OPEN</span>
-                        </motion.div>
-                      )}
+                      {/* TAP/CLICK indicators removed per redesign plan */}
                       
-                      {isActive && (
-                        <motion.div
-                          className="hidden md:flex absolute top-4 left-4 z-30 items-center gap-2 px-3 py-2 bg-purple-500 text-white rounded-lg font-mono font-bold text-xs shadow-[0_0_30px_rgba(168,85,247,0.9)]"
-                          animate={{
-                            boxShadow: [
-                              "0 0 20px rgba(168,85,247,0.9)",
-                              "0 0 40px rgba(168,85,247,1)",
-                              "0 0 20px rgba(168,85,247,0.9)",
-                            ],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                          }}
-                        >
-                          <Hand className="w-4 h-4" />
-                          <span>CLICK TO OPEN</span>
-                        </motion.div>
-                      )}
-
                       {/* SIDE CARDS INDICATOR - TOP */}
                       {!isActive && (
                         <motion.div
@@ -690,14 +661,11 @@ export function ServicesCreativeSlider() {
 
                       {/* Price */}
                       <div className="mb-6 pb-6 border-b border-white/10">
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-sm text-[var(--text-muted)]">Starting at</span>
-                          <span className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#00d9ff] to-cyan-400 bg-clip-text text-transparent">
-                            €{service.priceWithTax}
-                          </span>
+                        <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#00d9ff] to-cyan-400 bg-clip-text text-transparent mb-1">
+                          {service.priceRange}
                         </div>
-                        <p className="text-xs text-[var(--text-muted)] mt-1">
-                          (€{service.price} + 21% BTW)
+                        <p className="text-xs text-[var(--text-muted)]">
+                          (incl. 21% VAT)
                         </p>
                       </div>
 
@@ -735,7 +703,7 @@ export function ServicesCreativeSlider() {
                         whileTap={{ scale: 0.98 }}
                       >
                         <Zap className="w-5 h-5 group-hover/btn:rotate-12 transition-transform" />
-                        Book Now
+                        Start project
                         <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                       </motion.button>
                     </motion.div>

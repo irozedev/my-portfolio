@@ -467,11 +467,57 @@ export function SiteTour() {
 
       {/* TOOLTIP CARD */}
       <div
-        className="fixed z-[10000] bg-[var(--card-bg)] border-2 border-[var(--accent-primary)] rounded-2xl shadow-2xl p-5 md:p-6 max-w-[calc(100vw-2rem)] w-full md:max-w-md backdrop-blur-xl"
+        className="fixed z-[10000] bg-[var(--card-bg)] border-2 border-[var(--accent-primary)] rounded-2xl shadow-2xl p-4 md:p-6 max-w-[calc(100vw-2rem)] w-full md:max-w-md backdrop-blur-xl"
         style={{
-          bottom: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
+          // SMART POSITIONING - адаптивне для мобілі
+          ...((() => {
+            const isMobile = window.innerWidth < 768;
+            if (!isMobile) {
+              // Desktop - внизу по центру
+              return {
+                bottom: '20px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+              };
+            } else {
+              // Mobile - розумне позиціонування відносно елемента
+              if (highlightRects.length > 0 && isElementVisible) {
+                const firstRect = highlightRects[0];
+                const elementCenterY = firstRect.top + firstRect.height / 2;
+                const screenHeight = window.innerHeight;
+                const isElementInTopHalf = elementCenterY < screenHeight / 2;
+                
+                if (isElementInTopHalf) {
+                  // Елемент вгорі - popover знизу
+                  return {
+                    bottom: '16px',
+                    left: '1rem',
+                    right: '1rem',
+                    width: 'auto',
+                    maxWidth: 'calc(100vw - 2rem)',
+                  };
+                } else {
+                  // Елемент внизу - popover вгорі
+                  return {
+                    top: '16px',
+                    left: '1rem',
+                    right: '1rem',
+                    width: 'auto',
+                    maxWidth: 'calc(100vw - 2rem)',
+                  };
+                }
+              } else {
+                // Fallback - внизу
+                return {
+                  bottom: '16px',
+                  left: '1rem',
+                  right: '1rem',
+                  width: 'auto',
+                  maxWidth: 'calc(100vw - 2rem)',
+                };
+              }
+            }
+          })())
         }}
       >
         {/* Header */}
@@ -491,7 +537,7 @@ export function SiteTour() {
           </div>
           <button
             onClick={closeTour}
-            className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors shrink-0 active:scale-95"
+            className="p-3 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors shrink-0 active:scale-95 min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label="Close tour"
           >
             <X className="w-5 h-5 text-[var(--text-muted)]" />

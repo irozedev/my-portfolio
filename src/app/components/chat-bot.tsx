@@ -28,14 +28,11 @@ export function ChatBot() {
   // Rate limit: max 8 messages per session
   const MAX_REQUESTS = 8;
 
-  // 🎯 Quick question buttons
+  // 🎯 Quick question buttons - REDESIGNED FOR SALES
   const quickQuestions = [
-    { emoji: "💰", text: "What are your rates?", label: "Rates" },
-    { emoji: "🛠️", text: "What technologies do you use?", label: "Tech Stack" },
-    { emoji: "📧", text: "How can I contact you?", label: "Contact" },
-    { emoji: "⏱️", text: "How long does a project take?", label: "Timeline" },
-    { emoji: "🚀", text: "Tell me about your services", label: "Services" },
-    { emoji: "👋", text: "Who are you?", label: "About Me" },
+    { emoji: "💰", text: "Estimate price", label: "Estimate price" },
+    { emoji: "🚀", text: "Start project", label: "Start project" },
+    { emoji: "📩", text: "Contact", label: "Contact" },
   ];
 
   // 🔥 SCROLL LOCK - Lock scroll when chat is open
@@ -52,7 +49,7 @@ export function ChatBot() {
 
   // Listen for service selection event
   useEffect(() => {
-    const handleOpenChatBot = (event?: CustomEvent) => {
+    const handleOpenChatBot = (event: Event) => {
       const serviceName = sessionStorage.getItem('chatbotServiceName');
       const experience = sessionStorage.getItem('chatbotExperience');
       const experienceRole = sessionStorage.getItem('chatbotExperienceRole');
@@ -65,7 +62,7 @@ export function ChatBot() {
           setMessages([
             {
               id: Date.now(),
-              text: `👋 Hi! I'm Stepan's AI assistant. I'm here to answer your questions about my services, experience, and projects. How can I help you today?`,
+              text: `Hey 👋\nI can estimate your project price & timeline in seconds.\nWhat do you want to build?`,
               sender: "bot",
               timestamp: new Date(),
             },
@@ -102,7 +99,7 @@ export function ChatBot() {
           setMessages([
             {
               id: Date.now(),
-              text: `👋 Hi! I noticed you're interested in my work at ${experience} as ${experienceRole} (${experiencePeriod}).\n\nI'd be happy to share more details about:\n\n• 🚀 Projects I worked on\n• ��� Technologies I used\n• 📈 Challenges I solved\n• 🎯 What I learned\n\nWhat would you like to know?`,
+              text: `👋 Hi! I noticed you're interested in my work at ${experience} as ${experienceRole} (${experiencePeriod}).\n\nI'd be happy to share more details about:\n\n• 🚀 Projects I worked on\n•  Technologies I used\n• 📈 Challenges I solved\n• 🎯 What I learned\n\nWhat would you like to know?`,
               sender: "bot",
               timestamp: new Date(),
             },
@@ -562,7 +559,7 @@ export function ChatBot() {
                   </div>
                   <div>
                     <h3 className="font-bold text-white">Stepan's AI Assistant</h3>
-                    <p className="text-xs text-white/80">Online • Typically replies instantly</p>
+                    <p className="text-xs text-white/80">Online �� Typically replies instantly</p>
                   </div>
                 </div>
                 <button
