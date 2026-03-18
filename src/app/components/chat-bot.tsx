@@ -246,10 +246,12 @@ export function ChatBot() {
       })
     })
     .then(async res => {
+      console.log('🤖 Response status:', res.status);
       const data = await res.json();
       console.log('🤖 AI Response:', data);
       
       if (!res.ok) {
+        console.error('❌ AI API Error:', data);
         throw new Error(data.error || 'API request failed');
       }
       
@@ -264,9 +266,11 @@ export function ChatBot() {
       };
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
+      setRequestCount(prev => prev + 1);
     })
     .catch(error => {
       console.error('❌ AI Chat error:', error);
+      console.error('❌ Error details:', error.message);
       // Fallback to static responses
       const botResponse = getBotResponse(trimmedValue.toLowerCase());
       const botMessage: Message = {
@@ -277,6 +281,7 @@ export function ChatBot() {
       };
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
+      setRequestCount(prev => prev + 1);
     });
   };
 
@@ -559,7 +564,7 @@ export function ChatBot() {
                   </div>
                   <div>
                     <h3 className="font-bold text-white">Stepan's AI Assistant</h3>
-                    <p className="text-xs text-white/80">Online �� Typically replies instantly</p>
+                    <p className="text-xs text-white/80">Online  Typically replies instantly</p>
                   </div>
                 </div>
                 <button
@@ -602,7 +607,15 @@ export function ChatBot() {
                       }`}
                       dir={language === 'ar' ? 'rtl' : 'ltr'}
                     >
-                      <p className="text-sm md:text-base leading-relaxed" style={{ fontFamily: "system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif" }}>{message.text}</p>
+                      <p 
+                        className="text-sm md:text-base leading-relaxed" 
+                        style={{ 
+                          fontFamily: "system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
+                          whiteSpace: 'pre-line'
+                        }}
+                      >
+                        {message.text}
+                      </p>
                       <p
                         className={`text-xs mt-1 ${
                           message.sender === "user"

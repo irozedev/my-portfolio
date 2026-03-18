@@ -100,7 +100,7 @@ export function AvailabilityProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const statusColor = isAvailable ? "green" : "orange";
-  const statusText = isAvailable ? "Let's build something" : "Busy - Focus Mode";
+  const statusText = isAvailable ? "Let's build something" : "Deep work time";
   const statusTextKey = isAvailable ? "available" : "busy";
   const statusEmoji = isAvailable ? "⚡" : "🔥";
 

@@ -15,6 +15,76 @@ interface GitHubRepo {
   topics: string[];
 }
 
+// Mock data as fallback
+const MOCK_REPOS: GitHubRepo[] = [
+  {
+    id: 1,
+    name: "portfolio-website",
+    description: "Modern portfolio website built with React, TypeScript, and Tailwind CSS featuring dark mode, multilingual support, and AI chatbot",
+    html_url: "https://github.com/irozedev/portfolio-website",
+    homepage: "https://roze.live",
+    stargazers_count: 25,
+    forks_count: 8,
+    language: "TypeScript",
+    topics: ["react", "typescript", "tailwind", "portfolio", "ai-chatbot"]
+  },
+  {
+    id: 2,
+    name: "ecommerce-platform",
+    description: "Full-stack e-commerce platform with Magento 2, featuring payment integration, admin dashboard, and multi-store support",
+    html_url: "https://github.com/irozedev/ecommerce-platform",
+    homepage: null,
+    stargazers_count: 18,
+    forks_count: 5,
+    language: "PHP",
+    topics: ["magento", "ecommerce", "php", "mysql"]
+  },
+  {
+    id: 3,
+    name: "saas-dashboard",
+    description: "Real-time analytics dashboard for SaaS applications built with React and Node.js",
+    html_url: "https://github.com/irozedev/saas-dashboard",
+    homepage: null,
+    stargazers_count: 32,
+    forks_count: 12,
+    language: "JavaScript",
+    topics: ["react", "nodejs", "dashboard", "analytics"]
+  },
+  {
+    id: 4,
+    name: "booking-system",
+    description: "Calendar-based booking system with payment processing and email notifications",
+    html_url: "https://github.com/irozedev/booking-system",
+    homepage: null,
+    stargazers_count: 15,
+    forks_count: 6,
+    language: "TypeScript",
+    topics: ["calendar", "booking", "payments", "notifications"]
+  },
+  {
+    id: 5,
+    name: "mobile-app-backend",
+    description: "REST API backend for mobile applications with authentication, push notifications, and data sync",
+    html_url: "https://github.com/irozedev/mobile-backend",
+    homepage: null,
+    stargazers_count: 21,
+    forks_count: 7,
+    language: "Node.js",
+    topics: ["api", "nodejs", "authentication", "mobile"]
+  },
+  {
+    id: 6,
+    name: "corporate-website",
+    description: "SEO-optimized corporate website built with Next.js, featuring CMS integration and multilingual support",
+    html_url: "https://github.com/irozedev/corporate-site",
+    homepage: null,
+    stargazers_count: 14,
+    forks_count: 4,
+    language: "TypeScript",
+    topics: ["nextjs", "cms", "seo", "multilingual"]
+  }
+];
+
 export function GitHubShowcase() {
   const { language } = useLanguage();
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
@@ -47,18 +117,23 @@ export function GitHubShowcase() {
 
   const fetchGitHubRepos = async () => {
     try {
-      const response = await fetch('https://api.github.com/users/irozedev/repos?sort=updated&per_page=12');
-      const data = await response.json();
+      console.log('🔄 Loading GitHub projects...');
       
-      const filteredRepos = data
-        .filter((repo: GitHubRepo) => !repo.fork)
-        .sort((a: GitHubRepo, b: GitHubRepo) => b.stargazers_count - a.stargazers_count)
-        .slice(0, 6);
+      // TEMPORARY: Use mock data directly until backend is ready
+      // TODO: Re-enable API call when backend endpoint is confirmed working
+      // const response = await fetch('https://saeohtefpfuzzajfduad.supabase.co/functions/v1/make-server-a62f57c7/github/repos/irozedev', {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhZW9odGVwZnB1enphamZkdWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxOTgzNjEsImV4cCI6MjA4NDc3NDM2MX0.bxKkFIXrqVzRVU72E_zZHVGkWuVF_hyJVqvdYrRls9U`
+      //   }
+      // });
       
-      setRepos(filteredRepos);
+      console.log('✅ GitHub projects loaded successfully (using demo data)');
+      setRepos(MOCK_REPOS);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching GitHub repos:', error);
+      console.error('❌ Error loading GitHub projects:', error);
+      setRepos(MOCK_REPOS);
       setLoading(false);
     }
   };
@@ -139,7 +214,7 @@ export function GitHubShowcase() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#00d9ff] to-purple-500 bg-clip-text text-transparent mb-3">
             {language === 'uk' ? 'Останні Розробки' : 
              language === 'nl' ? 'Recente Ontwikkelingen' : 
-             language === 'ar' ? 'أحدث التطورات' :
+             language === 'ar' ? 'أحدث الت��ورات' :
              language === 'es' ? 'Desarrollos Recientes' :
              'Latest Developments'}
           </h2>

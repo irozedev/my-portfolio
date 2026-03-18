@@ -13,6 +13,9 @@ import { AboutSection } from "./about-section";
 import { ExperienceTimelinePremium } from "./experience-timeline-premium";
 import { PortfolioCreativeSlider } from "./portfolio-creative-slider";
 import { ServicesCreativeSlider } from "./services-creative-slider";
+import { GitHubShowcase } from "./github-showcase";
+import { ScrollToTopButton } from "./scroll-to-top-button";
+import { ViewModeToggle } from "./view-mode-toggle";
 import { useViewMode } from "../contexts/view-mode-context";
 import { useState } from "react";
 
@@ -53,6 +56,11 @@ export function MainPage() {
           
           <div className="h-4 sm:h-6 md:h-8 lg:h-10" />
           
+          {/* GitHub Showcase */}
+          <GitHubShowcase />
+          
+          <div className="h-4 sm:h-6 md:h-8 lg:h-10" />
+          
           {/* Why me / About */}
           <AboutSection />
           
@@ -86,6 +94,11 @@ export function MainPage() {
           
           <div className="h-4 sm:h-6 md:h-8 lg:h-10" />
           
+          {/* GitHub Showcase */}
+          <GitHubShowcase />
+          
+          <div className="h-4 sm:h-6 md:h-8 lg:h-10" />
+          
           {/* Contact (no chat bot) */}
           <ContactSection />
         </>
@@ -106,6 +119,12 @@ export function MainPage() {
       
       {/* ChatBot only in CLIENT mode */}
       {isClientMode && <ChatBot />}
+      
+      {/* Scroll to Top Button */}
+      <ScrollToTopButton />
+      
+      {/* View Mode Toggle */}
+      <ViewModeToggle />
     </div>
   );
 }

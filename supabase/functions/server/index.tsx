@@ -1341,4 +1341,48 @@ app.post("/make-server-a62f57c7/book-call", async (c) => {
   }
 });
 
+// ============================================================
+// GITHUB REPOS PROXY ENDPOINT
+// ============================================================
+
+// Proxy GitHub API to avoid CORS and rate limiting issues
+app.get("/make-server-a62f57c7/github/repos/:username", async (c) => {
+  try {
+    const username = c.req.param('username');
+    
+    if (!username) {
+      return c.json({ error: 'Username is required' }, 400);
+    }
+
+    console.log(`Fetching GitHub repos for: ${username}`);
+
+    // Fetch from GitHub API with proper headers
+    const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=12`, {
+      headers: {
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'Roze-Portfolio-App'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('GitHub API error:', response.status, response.statusText);
+      return c.json({ error: 'Failed to fetch GitHub repos', status: response.status }, response.status);
+    }
+
+    const data = await response.json();
+    console.log(`Successfully fetched ${data.length} repos for ${username}`);
+
+    // Filter and sort repos
+    const filteredRepos = data
+      .filter((repo: any) => !repo.fork)
+      .sort((a: any, b: any) => b.stargazers_count - a.stargazers_count)
+      .slice(0, 6);
+
+    return c.json(filteredRepos);
+  } catch (error) {
+    console.error('GitHub proxy exception:', error);
+    return c.json({ error: 'Failed to fetch GitHub repos' }, 500);
+  }
+});
+
 Deno.serve(app.fetch);
