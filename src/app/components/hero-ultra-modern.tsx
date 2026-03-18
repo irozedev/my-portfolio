@@ -1,12 +1,10 @@
 import { useLanguage } from "../contexts/language-context";
 import { useAvailability } from "../contexts/availability-context";
-import { Button } from "./ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BookCallModal } from "./book-call-fixed";
-import { AvailabilityScheduleModal } from "./availability-schedule-modal";
 import { getFormattedStats } from "../../utils/stats-calculator";
 import { StatsAirport } from "./stats-airport";
-import { Github, Linkedin, Briefcase, Mail, Sparkles, Code2, Rocket } from "lucide-react";
+import { Github, Linkedin, Briefcase, Mail, Rocket, Code2 } from "lucide-react";
 import { motion } from "motion/react";
 
 interface HeroUltraModernProps {
@@ -21,25 +19,22 @@ const socialLinks = [
 ];
 
 const techStack = [
-  { name: "React", color: "#61dafb", icon: "⚛️" },
-  { name: "TypeScript", color: "#3178c6", icon: "📘" },
-  { name: "Node.js", color: "#68a063", icon: "🟢" },
-  { name: "Next.js", color: "#000000", icon: "▲" },
-  { name: "Python", color: "#3572A5", icon: "🐍" },
-  { name: "PostgreSQL", color: "#336791", icon: "🐘" },
-  { name: "Docker", color: "#2496ED", icon: "🐳" },
-  { name: "AWS", color: "#FF9900", icon: "☁️" },
-  { name: "GraphQL", color: "#E10098", icon: "◆" },
-  { name: "Tailwind", color: "#06B6D4", icon: "🎨" },
+  { name: "React", icon: "⚛️" },
+  { name: "TypeScript", icon: "📘" },
+  { name: "Node.js", icon: "🟢" },
+  { name: "Next.js", icon: "▲" },
+  { name: "Python", icon: "🐍" },
+  { name: "PostgreSQL", icon: "🐘" },
+  { name: "Docker", icon: "🐳" },
+  { name: "AWS", icon: "☁️" },
+  { name: "GraphQL", icon: "◆" },
+  { name: "Tailwind", icon: "🎨" },
 ];
-
-const dynamicStats = getFormattedStats();
 
 export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
   const { t, language } = useLanguage();
-  const { isAvailable, statusText, statusEmoji } = useAvailability();
+  const { statusText, statusEmoji } = useAvailability();
   const [isBookCallOpen, setIsBookCallOpen] = useState(false);
-  const [isAvailabilityScheduleOpen, setIsAvailabilityScheduleOpen] = useState(false);
 
   return (
     <>
@@ -108,7 +103,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
               </span>
             </h1>
 
-            {/* Role with Rotating Text */}
+            {/* Role */}
             <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--text-secondary)] mb-4">
               {t('hero.role')}
             </div>
@@ -119,38 +114,20 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
             </p>
           </motion.div>
 
-          {/* Infinite Tech Marquee - FIXED FOR ARABIC */}
-          <div className="relative overflow-hidden py-4 mb-8">
-            <div className={`flex gap-4 ${language === 'ar' ? 'animate-marquee-rtl' : 'animate-marquee'}`}>
-              {/* First set */}
-              {techStack.map((tech, i) => (
-                <div
-                  key={`tech-1-${i}`}
-                  className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg whitespace-nowrap flex-shrink-0"
-                >
-                  <span className="text-xl">{tech.icon}</span>
-                  <span className="text-sm font-mono text-[var(--text-primary)]">{tech.name}</span>
-                </div>
-              ))}
-              {/* Duplicate for seamless loop */}
-              {techStack.map((tech, i) => (
-                <div
-                  key={`tech-2-${i}`}
-                  className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg whitespace-nowrap flex-shrink-0"
-                >
-                  <span className="text-xl">{tech.icon}</span>
-                  <span className="text-sm font-mono text-[var(--text-primary)]">{tech.name}</span>
-                </div>
-              ))}
-              {/* Triple for extra safety */}
-              {techStack.map((tech, i) => (
-                <div
-                  key={`tech-3-${i}`}
-                  className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg whitespace-nowrap flex-shrink-0"
-                >
-                  <span className="text-xl">{tech.icon}</span>
-                  <span className="text-sm font-mono text-[var(--text-primary)]">{tech.name}</span>
-                </div>
+          {/* Tech Stack Marquee - FIXED */}
+          <div className="relative overflow-hidden py-6 mb-10 bg-[var(--bg-secondary)]/30 rounded-xl border border-[var(--border-color)]">
+            <div className={`flex gap-4 ${language === 'ar' ? 'animate-marquee-rtl' : 'animate-marquee'} will-change-transform`}>
+              {/* Triple repetition for seamless loop */}
+              {[...Array(3)].map((_, setIndex) => (
+                techStack.map((tech, i) => (
+                  <div
+                    key={`tech-${setIndex}-${i}`}
+                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg whitespace-nowrap flex-shrink-0"
+                  >
+                    <span className="text-xl">{tech.icon}</span>
+                    <span className="text-sm font-mono text-[var(--text-primary)]">{tech.name}</span>
+                  </div>
+                ))
               ))}
             </div>
           </div>
@@ -212,9 +189,6 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
       {/* Modals */}
       {isBookCallOpen && (
         <BookCallModal onClose={() => setIsBookCallOpen(false)} />
-      )}
-      {isAvailabilityScheduleOpen && (
-        <AvailabilityScheduleModal onClose={() => setIsAvailabilityScheduleOpen(false)} />
       )}
     </>
   );

@@ -67,7 +67,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           transition={{ type: "spring", duration: 0.5 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-md"
+          className="relative w-full max-w-[95vw] sm:max-w-md md:max-w-lg lg:max-w-xl"
         >
           {/* Glow Effects */}
           <div className="absolute -inset-1 bg-gradient-to-r from-[#00d9ff] via-purple-500 to-pink-500 rounded-3xl blur-2xl opacity-20 animate-pulse" />
@@ -111,21 +111,21 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
             )}
 
             {/* Header */}
-            <div className="relative p-8 pb-6 text-center">
+            <div className="relative p-6 sm:p-8 md:p-10 lg:p-12 pb-4 sm:pb-6 md:pb-8 text-center">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="inline-flex items-center justify-center w-20 h-20 mb-4 bg-gradient-to-br from-[#00d9ff]/20 to-purple-500/20 rounded-2xl"
+                className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mb-3 sm:mb-4 md:mb-6 bg-gradient-to-br from-[#00d9ff]/20 to-purple-500/20 rounded-2xl"
               >
-                <Sparkles className="w-10 h-10 text-[#00d9ff]" />
+                <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#00d9ff]" />
               </motion.div>
 
               <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-3xl font-bold text-[var(--text-primary)] mb-2"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] mb-2"
               >
                 {t("auth.welcome")}! 👋
               </motion.h2>
@@ -134,7 +134,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-[var(--text-muted)] text-lg"
+                className="text-[var(--text-muted)] text-base sm:text-lg md:text-xl"
               >
                 {t("auth.unlockFeatures")}
               </motion.p>
@@ -145,7 +145,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="relative px-8 pb-6 space-y-3"
+              className="relative px-6 sm:px-8 md:px-10 lg:px-12 pb-4 sm:pb-6 space-y-3 sm:space-y-4"
             >
               {[
                 { icon: Zap, text: t("auth.premiumProjects") },
@@ -157,12 +157,12 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + index * 0.1 }}
-                  className="flex items-center gap-3 text-[var(--text-secondary)]"
+                  className="flex items-center gap-3 sm:gap-4 text-[var(--text-secondary)]"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-[#00d9ff]/10 flex items-center justify-center">
-                    <feature.icon className="w-4 h-4 text-[#00d9ff]" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-[#00d9ff]/10 flex items-center justify-center flex-shrink-0">
+                    <feature.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-[#00d9ff]" />
                   </div>
-                  <span className="text-sm">{feature.text}</span>
+                  <span className="text-sm sm:text-base md:text-lg">{feature.text}</span>
                 </motion.div>
               ))}
             </motion.div>
@@ -172,7 +172,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
-              className="relative p-8 pt-4 space-y-3"
+              className="relative p-6 sm:p-8 md:p-10 lg:p-12 pt-4 sm:pt-4 space-y-3 sm:space-y-4"
             >
               {/* Google Login */}
               <motion.button
@@ -180,7 +180,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 disabled={loading}
                 whileHover={{ scale: loading ? 1 : 1.02, y: loading ? 0 : -2 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="relative w-full py-4 bg-white hover:bg-gray-50 text-gray-800 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group overflow-hidden"
+                className="relative w-full py-3 sm:py-4 md:py-5 lg:py-6 bg-white hover:bg-gray-50 text-gray-800 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group overflow-hidden"
               >
                 {/* Animated shine effect */}
                 {!loading && (
@@ -234,7 +234,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 disabled={loading}
                 whileHover={{ scale: loading ? 1 : 1.02, y: loading ? 0 : -2 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="relative w-full py-4 bg-[#24292e] hover:bg-[#1a1e22] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group overflow-hidden"
+                className="relative w-full py-3 sm:py-4 md:py-5 lg:py-6 bg-[#24292e] hover:bg-[#1a1e22] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group overflow-hidden"
               >
                 {/* Animated shine effect */}
                 {!loading && (
