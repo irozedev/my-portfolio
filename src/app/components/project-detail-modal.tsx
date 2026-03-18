@@ -74,7 +74,7 @@ export function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps
         <motion.div
           initial={{ y: 50 }}
           animate={{ y: 0 }}
-          className="relative bg-[var(--bg-primary)] border-0 sm:border-2 border-[var(--accent-primary)]/30 rounded-none sm:rounded-2xl md:rounded-3xl w-full h-full sm:h-auto sm:max-w-xl md:max-w-2xl shadow-[0_20px_80px_rgba(0,217,255,0.4)] flex flex-col sm:max-h-[90vh]"
+          className="relative bg-[var(--bg-primary)] border-0 sm:border-2 border-[var(--accent-primary)]/30 rounded-none sm:rounded-2xl md:rounded-3xl w-full h-full sm:h-auto sm:max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl shadow-[0_20px_80px_rgba(0,217,255,0.4)] flex flex-col sm:max-h-[90vh]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Ambient Glow */}

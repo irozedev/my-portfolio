@@ -102,7 +102,7 @@ export function ChatBot() {
           setMessages([
             {
               id: Date.now(),
-              text: `👋 Hi! I noticed you're interested in my work at ${experience} as ${experienceRole} (${experiencePeriod}).\n\nI'd be happy to share more details about:\n\n• 🚀 Projects I worked on\n• 💡 Technologies I used\n• 📈 Challenges I solved\n• 🎯 What I learned\n\nWhat would you like to know?`,
+              text: `👋 Hi! I noticed you're interested in my work at ${experience} as ${experienceRole} (${experiencePeriod}).\n\nI'd be happy to share more details about:\n\n• 🚀 Projects I worked on\n• ��� Technologies I used\n• 📈 Challenges I solved\n• 🎯 What I learned\n\nWhat would you like to know?`,
               sender: "bot",
               timestamp: new Date(),
             },
@@ -226,6 +226,7 @@ export function ChatBot() {
 
     // Call AI endpoint
     setIsTyping(true);
+    setShowQuickQuestions(false); // Hide quick questions after first message
     
     // Determine user's language for AI context
     const userLanguage = language === 'uk' ? 'Ukrainian' : 
@@ -233,7 +234,9 @@ export function ChatBot() {
                         language === 'ar' ? 'Arabic' : 
                         language === 'es' ? 'Spanish' : 'English';
     
-    fetch(`https://saeohtefpfuzzajfduad.supabase.co/functions/v1/server/make-server-a62f57c7/ai/chat`, {
+    console.log('🤖 Sending AI request:', { message: trimmedValue, language: userLanguage });
+    
+    fetch(`https://saeohtefpfuzzajfduad.supabase.co/functions/v1/make-server-a62f57c7/ai/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -245,11 +248,20 @@ export function ChatBot() {
         language: userLanguage
       })
     })
-    .then(res => res.json())
+    .then(async res => {
+      const data = await res.json();
+      console.log('🤖 AI Response:', data);
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'API request failed');
+      }
+      
+      return data;
+    })
     .then(data => {
       const botMessage: Message = {
         id: Date.now() + 1,
-        text: data.message || data.error || t.errorMessage || 'Sorry, I encountered an error. Please try again.',
+        text: data.message || data.error || 'Sorry, I encountered an error. Please try again.',
         sender: "bot",
         timestamp: new Date(),
       };
@@ -257,7 +269,7 @@ export function ChatBot() {
       setIsTyping(false);
     })
     .catch(error => {
-      console.error('AI Chat error:', error);
+      console.error('❌ AI Chat error:', error);
       // Fallback to static responses
       const botResponse = getBotResponse(trimmedValue.toLowerCase());
       const botMessage: Message = {
@@ -591,6 +603,7 @@ export function ChatBot() {
                           ? "bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black"
                           : "bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-color)]"
                       }`}
+                      dir={language === 'ar' ? 'rtl' : 'ltr'}
                     >
                       <p className="text-sm md:text-base leading-relaxed" style={{ fontFamily: "system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif" }}>{message.text}</p>
                       <p

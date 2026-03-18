@@ -121,7 +121,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
 
           {/* Infinite Tech Marquee - FIXED FOR ARABIC */}
           <div className="relative overflow-hidden py-4 mb-8">
-            <div className="flex gap-4 animate-marquee">
+            <div className={`flex gap-4 ${language === 'ar' ? 'animate-marquee-rtl' : 'animate-marquee'}`}>
               {/* First set */}
               {techStack.map((tech, i) => (
                 <div

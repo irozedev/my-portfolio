@@ -115,7 +115,7 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.85, y: 10 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] sm:w-[400px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/40 rounded-xl shadow-[0_20px_50px_rgba(0,217,255,0.3)] z-[100000] overflow-hidden"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] sm:w-[420px] md:w-[480px] lg:w-[540px] xl:w-[600px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/40 rounded-xl shadow-[0_20px_50px_rgba(0,217,255,0.3)] z-[100000] overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Ambient gradient */}

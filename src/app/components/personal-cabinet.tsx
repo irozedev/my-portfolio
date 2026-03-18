@@ -1,11 +1,12 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Heart, MessageSquare, Clock, TrendingUp, Sparkles, Star, Calendar, CheckCircle2, AlertCircle, Package, Code, ShoppingBag, Settings } from 'lucide-react';
+import { X, Heart, MessageSquare, Clock, TrendingUp, Sparkles, Star, Calendar, CheckCircle2, AlertCircle, Package, Code, ShoppingBag, Settings, FileText, CreditCard, Inbox, Briefcase, Download, Eye, Send } from 'lucide-react';
 import { useAuth } from '@/app/contexts/auth-context';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
 import { ProfileSettings } from './profile-settings';
+import { ProjectsTab, InvoicesTab, DocumentsTab, MessagesTab, CalendarTab } from './cabinet-tabs-extended';
 
 interface PersonalCabinetProps {
   isOpen: boolean;
@@ -35,14 +36,78 @@ interface QuoteRequest {
   createdAt: string;
 }
 
+interface ClientProject {
+  id: string;
+  name: string;
+  description: string;
+  status: 'active' | 'completed' | 'on-hold' | 'cancelled';
+  progress: number; // 0-100
+  startDate: string;
+  deadline: string;
+  budget: string;
+  milestones: {
+    id: string;
+    name: string;
+    completed: boolean;
+    dueDate: string;
+  }[];
+}
+
+interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  projectName: string;
+  amount: number;
+  tax: number;
+  total: number;
+  status: 'paid' | 'pending' | 'overdue';
+  issueDate: string;
+  dueDate: string;
+  pdfUrl?: string;
+}
+
+interface Document {
+  id: string;
+  name: string;
+  type: 'contract' | 'nda' | 'brief' | 'technical' | 'other';
+  uploadDate: string;
+  fileUrl: string;
+  fileSize: string;
+}
+
+interface ChatMessage {
+  id: string;
+  text: string;
+  sender: 'client' | 'stepan';
+  timestamp: string;
+  read: boolean;
+}
+
+interface Meeting {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  duration: string; // e.g., "30 min"
+  type: 'discovery' | 'review' | 'demo' | 'planning';
+  status: 'scheduled' | 'completed' | 'cancelled';
+  meetLink?: string;
+}
+
 export function PersonalCabinet({ isOpen, onClose }: PersonalCabinetProps) {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'overview' | 'favorites' | 'quotes' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'invoices' | 'documents' | 'messages' | 'calendar' | 'favorites' | 'quotes' | 'settings'>('overview');
   const [favorites, setFavorites] = useState<FavoriteProject[]>([]);
   const [quotes, setQuotes] = useState<QuoteRequest[]>([]);
+  const [projects, setProjects] = useState<ClientProject[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [loading, setLoading] = useState(true);
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const [favoriteFilter, setFavoriteFilter] = useState<'all' | 'project' | 'product'>('all');
+  const [newMessage, setNewMessage] = useState('');
 
   // Quote form state
   const [quoteForm, setQuoteForm] = useState({
@@ -81,6 +146,61 @@ export function PersonalCabinet({ isOpen, onClose }: PersonalCabinetProps) {
 
       if (quotesData?.value) {
         setQuotes(JSON.parse(quotesData.value));
+      }
+
+      // Load projects
+      const { data: projectsData } = await supabase
+        .from('kv_store_a62f57c7')
+        .select('value')
+        .eq('key', `user_projects_${user?.id}`)
+        .single();
+
+      if (projectsData?.value) {
+        setProjects(JSON.parse(projectsData.value));
+      }
+
+      // Load invoices
+      const { data: invoicesData } = await supabase
+        .from('kv_store_a62f57c7')
+        .select('value')
+        .eq('key', `user_invoices_${user?.id}`)
+        .single();
+
+      if (invoicesData?.value) {
+        setInvoices(JSON.parse(invoicesData.value));
+      }
+
+      // Load documents
+      const { data: documentsData } = await supabase
+        .from('kv_store_a62f57c7')
+        .select('value')
+        .eq('key', `user_documents_${user?.id}`)
+        .single();
+
+      if (documentsData?.value) {
+        setDocuments(JSON.parse(documentsData.value));
+      }
+
+      // Load messages
+      const { data: messagesData } = await supabase
+        .from('kv_store_a62f57c7')
+        .select('value')
+        .eq('key', `user_messages_${user?.id}`)
+        .single();
+
+      if (messagesData?.value) {
+        setMessages(JSON.parse(messagesData.value));
+      }
+
+      // Load meetings
+      const { data: meetingsData } = await supabase
+        .from('kv_store_a62f57c7')
+        .select('value')
+        .eq('key', `user_meetings_${user?.id}`)
+        .single();
+
+      if (meetingsData?.value) {
+        setMeetings(JSON.parse(meetingsData.value));
       }
     } catch (error) {
       console.error('Error loading user data:', error);
@@ -217,6 +337,11 @@ export function PersonalCabinet({ isOpen, onClose }: PersonalCabinetProps) {
               <div className="flex px-2 sm:px-6 min-w-max">
                 {[
                   { id: 'overview', label: 'Overview', icon: TrendingUp },
+                  { id: 'projects', label: 'Projects', icon: Briefcase },
+                  { id: 'invoices', label: 'Invoices', icon: CreditCard },
+                  { id: 'documents', label: 'Docs', icon: FileText },
+                  { id: 'messages', label: 'Chat', icon: Inbox },
+                  { id: 'calendar', label: 'Calendar', icon: Calendar },
                   { id: 'favorites', label: 'Wishlist', icon: Heart },
                   { id: 'quotes', label: 'Quotes', icon: MessageSquare },
                   { id: 'settings', label: 'Settings', icon: Settings },
@@ -594,6 +719,28 @@ export function PersonalCabinet({ isOpen, onClose }: PersonalCabinetProps) {
                       )}
                     </motion.div>
                   )}
+
+                  {/* Projects Tab */}
+                  {activeTab === 'projects' && <ProjectsTab projects={projects} />}
+
+                  {/* Invoices Tab */}
+                  {activeTab === 'invoices' && <InvoicesTab invoices={invoices} />}
+
+                  {/* Documents Tab */}
+                  {activeTab === 'documents' && <DocumentsTab documents={documents} />}
+
+                  {/* Messages Tab */}
+                  {activeTab === 'messages' && (
+                    <MessagesTab 
+                      messages={messages} 
+                      newMessage={newMessage}
+                      setNewMessage={setNewMessage}
+                      setMessages={setMessages}
+                    />
+                  )}
+
+                  {/* Calendar Tab */}
+                  {activeTab === 'calendar' && <CalendarTab meetings={meetings} />}
 
                   {/* Settings Tab */}
                   {activeTab === 'settings' && (

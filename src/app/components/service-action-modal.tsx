@@ -130,13 +130,13 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
       />
 
       {/* Modal */}
-      <div key="service-modal-container" className="fixed inset-0 flex items-center justify-center z-[999999] p-4 pt-20 md:pt-24">
+      <div key="service-modal-container" className="fixed inset-0 flex items-center justify-center z-[999999] p-4 sm:p-6 md:p-8 pt-20 md:pt-24">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 30 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="relative w-full max-w-2xl bg-gradient-to-br from-[var(--bg-primary)] via-[var(--bg-secondary)] to-[var(--bg-primary)] backdrop-blur-xl border-2 border-[var(--accent-primary)]/30 rounded-3xl shadow-[0_0_80px_rgba(0,217,255,0.3)]"
+          className="relative bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/30 rounded-3xl w-full max-w-[95vw] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] max-h-[85vh] overflow-y-auto shadow-[0_20px_80px_rgba(0,217,255,0.4)]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Animated Background Orbs */}

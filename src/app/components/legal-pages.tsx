@@ -31,12 +31,15 @@ export function LegalPage({ page, onClose }: LegalPageProps) {
 
   return (
     <div
-      className="fixed inset-0 z-[100000] bg-white/95 dark:bg-black/95 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4"
+      className="fixed inset-0 z-[100000] bg-white/95 dark:bg-black/95 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4 sm:p-6 md:p-8"
       onClick={handleClose}
     >
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 30 }}
+        className="bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/30 rounded-3xl w-full max-w-[95vw] sm:max-w-[700px] md:max-w-[900px] lg:max-w-[1000px] xl:max-w-[1200px] my-8 p-6 sm:p-8 md:p-10 lg:p-12 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-4xl bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)] rounded-3xl shadow-2xl my-8"
       >
         {/* Header */}
         <div className="sticky top-0 z-10 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 p-6 flex items-center justify-between rounded-t-3xl">
@@ -113,7 +116,7 @@ export function LegalPage({ page, onClose }: LegalPageProps) {
           </button>
           <p className="text-xs text-[var(--text-muted)]">🇪🇺 GDPR Compliant</p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
