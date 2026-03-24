@@ -455,7 +455,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* Smooth color transitions for theme switching */
-body * {
+:root {
   transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               color 0.3s cubic-bezier(0.4, 0, 0.2, 1);

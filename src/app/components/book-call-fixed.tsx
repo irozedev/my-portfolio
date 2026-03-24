@@ -1,96 +1,207 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Calendar, Clock, Video, Phone, X, Check, ChevronLeft, Loader2, ArrowRight, CheckCircle } from "lucide-react";
-import { DayPicker } from "react-day-picker";
-import { format, addDays, startOfDay, isBefore, isWeekend, setHours, setMinutes } from "date-fns";
+import { Calendar, Clock, Video, Phone, X, ChevronLeft, Loader2, ArrowRight, CheckCircle, Sparkles, Mail, User as UserIcon, MessageSquare, Zap } from "lucide-react";
+import { format, addDays, startOfDay, isWeekend } from "date-fns";
 import { useLanguage } from "../contexts/language-context";
 import { useAuth } from "../contexts/auth-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
-import "react-day-picker/dist/style.css";
 
 interface BookCallModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface TimeSlot {
-  time: string;
-  available: boolean;
-}
+const translations = {
+  en: {
+    title: "Book a Call",
+    subtitle: "Schedule a free consultation",
+    step1: "Pick a Date",
+    step2: "Choose Time",
+    step3: "Your Details",
+    step4: "Confirmed!",
+    weekdaysOnly: "Available Mon-Fri",
+    timezone: "Europe/Brussels (CET)",
+    changeDate: "Change",
+    callType: "Call Type",
+    videoCall: "Video Call",
+    phoneCall: "Phone Call",
+    name: "Your Name",
+    email: "Your Email",
+    purpose: "What's your project about?",
+    purposePlaceholder: "Brief description of your project...",
+    back: "Back",
+    confirm: "Confirm Booking",
+    booking: "Booking...",
+    confirmed: "Booking Confirmed!",
+    confirmMsg: "You'll receive a calendar invite at",
+    reschedule: "Need to reschedule? Email stepan@roze.live",
+    morning: "Morning",
+    afternoon: "Afternoon",
+    free: "30 min • Free",
+  },
+  uk: {
+    title: "Забронювати дзвінок",
+    subtitle: "Безкоштовна консультація",
+    step1: "Оберіть дату",
+    step2: "Оберіть час",
+    step3: "Ваші дані",
+    step4: "Підтверджено!",
+    weekdaysOnly: "Пн-Пт",
+    timezone: "Європа/Брюссель (CET)",
+    changeDate: "Змінити",
+    callType: "Тип дзвінка",
+    videoCall: "Відеодзвінок",
+    phoneCall: "Телефон",
+    name: "Ваше ім'я",
+    email: "Ваш Email",
+    purpose: "Про що ваш проект?",
+    purposePlaceholder: "Коротко опишіть ваш проект...",
+    back: "Назад",
+    confirm: "Підтвердити",
+    booking: "Бронюємо...",
+    confirmed: "Заброньовано!",
+    confirmMsg: "Запрошення на календар надіслано на",
+    reschedule: "Потрібно перенести? stepan@roze.live",
+    morning: "Ранок",
+    afternoon: "День",
+    free: "30 хв • Безкоштовно",
+  },
+  nl: {
+    title: "Gesprek Boeken",
+    subtitle: "Gratis consultatie plannen",
+    step1: "Kies een Datum",
+    step2: "Kies een Tijd",
+    step3: "Uw Gegevens",
+    step4: "Bevestigd!",
+    weekdaysOnly: "Ma-Vr beschikbaar",
+    timezone: "Europa/Brussel (CET)",
+    changeDate: "Wijzigen",
+    callType: "Gesprekstype",
+    videoCall: "Videogesprek",
+    phoneCall: "Telefoongesprek",
+    name: "Uw Naam",
+    email: "Uw Email",
+    purpose: "Waar gaat uw project over?",
+    purposePlaceholder: "Korte beschrijving van uw project...",
+    back: "Terug",
+    confirm: "Bevestigen",
+    booking: "Bezig met boeken...",
+    confirmed: "Bevestigd!",
+    confirmMsg: "U ontvangt een agenda-uitnodiging op",
+    reschedule: "Verplaatsen? Mail stepan@roze.live",
+    morning: "Ochtend",
+    afternoon: "Middag",
+    free: "30 min • Gratis",
+  },
+  ar: {
+    title: "احجز مكالمة",
+    subtitle: "استشارة مجانية",
+    step1: "اختر تاريخ",
+    step2: "اختر وقت",
+    step3: "بياناتك",
+    step4: "تم التأكيد!",
+    weekdaysOnly: "الاثنين - الجمعة",
+    timezone: "أوروبا/بروكسل (CET)",
+    changeDate: "تغيير",
+    callType: "نوع المكالمة",
+    videoCall: "مكالمة فيديو",
+    phoneCall: "مكالمة هاتفية",
+    name: "اسمك",
+    email: "بريدك الإلكتروني",
+    purpose: "ما هو مشروعك؟",
+    purposePlaceholder: "وصف مختصر لمشروعك...",
+    back: "رجوع",
+    confirm: "تأكيد الحجز",
+    booking: "جاري الحجز...",
+    confirmed: "تم التأكيد!",
+    confirmMsg: "ستتلقى دعوة تقويم على",
+    reschedule: "تحتاج إعادة جدولة؟ stepan@roze.live",
+    morning: "صباحاً",
+    afternoon: "بعد الظهر",
+    free: "30 دقيقة • مجاناً",
+  },
+  es: {
+    title: "Reservar Llamada",
+    subtitle: "Consulta gratuita",
+    step1: "Elige una Fecha",
+    step2: "Elige una Hora",
+    step3: "Tus Datos",
+    step4: "¡Confirmado!",
+    weekdaysOnly: "Lun-Vie disponible",
+    timezone: "Europa/Bruselas (CET)",
+    changeDate: "Cambiar",
+    callType: "Tipo de Llamada",
+    videoCall: "Videollamada",
+    phoneCall: "Llamada telefónica",
+    name: "Tu Nombre",
+    email: "Tu Email",
+    purpose: "¿De qué trata tu proyecto?",
+    purposePlaceholder: "Breve descripción de tu proyecto...",
+    back: "Atrás",
+    confirm: "Confirmar Reserva",
+    booking: "Reservando...",
+    confirmed: "¡Confirmado!",
+    confirmMsg: "Recibirás una invitación de calendario en",
+    reschedule: "¿Necesitas reprogramar? stepan@roze.live",
+    morning: "Mañana",
+    afternoon: "Tarde",
+    free: "30 min • Gratis",
+  },
+};
+
+const morningSlots = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
+const afternoonSlots = ["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"];
 
 export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
-  const { t } = useLanguage();
-  const { user, accessToken } = useAuth();
-  const [step, setStep] = useState<'date' | 'time' | 'details' | 'success'>('date');
+  const { language } = useLanguage();
+  const { user } = useAuth();
+  const t = translations[language as keyof typeof translations] || translations.en;
+
+  const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  const [selectedTime, setSelectedTime] = useState<string>("");
-  const [callType, setCallType] = useState<'video' | 'phone'>('video');
+  const [selectedTime, setSelectedTime] = useState("");
+  const [callType, setCallType] = useState<"video" | "phone">("video");
+  const [name, setName] = useState(user?.user_metadata?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
   const [purpose, setPurpose] = useState("");
-  const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
-  // Detect mobile for native date/time picker
-  const [isMobile, setIsMobile] = useState(false);
-  
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
-  // Time slots (9 AM - 6 PM, excluding lunch 12-1 PM)
-  const timeSlots: TimeSlot[] = [
-    { time: "09:00", available: true },
-    { time: "09:30", available: true },
-    { time: "10:00", available: true },
-    { time: "10:30", available: true },
-    { time: "11:00", available: true },
-    { time: "11:30", available: true },
-    { time: "13:00", available: true },
-    { time: "13:30", available: true },
-    { time: "14:00", available: true },
-    { time: "14:30", available: true },
-    { time: "15:00", available: true },
-    { time: "15:30", available: true },
-    { time: "16:00", available: true },
-    { time: "16:30", available: true },
-    { time: "17:00", available: true },
-    { time: "17:30", available: true },
-  ];
-
-  // Auto-select first available date when modal opens
-  useEffect(() => {
-    if (!selectedDate) {
-      const tomorrow = addDays(startOfDay(new Date()), 1);
-      const firstAvailable = isWeekend(tomorrow) ? addDays(tomorrow, 1) : tomorrow;
-      setSelectedDate(firstAvailable);
+  // Generate next 14 weekdays
+  const availableDates = useCallback(() => {
+    const dates: Date[] = [];
+    let current = addDays(startOfDay(new Date()), 1);
+    while (dates.length < 14) {
+      if (!isWeekend(current)) dates.push(current);
+      current = addDays(current, 1);
     }
+    return dates;
   }, []);
 
-  // Reset state when modal closes
+  // Reset on close
   useEffect(() => {
-    setTimeout(() => {
-      setStep('date');
-      setSelectedDate(undefined);
-      setSelectedTime("");
-      setPurpose("");
-      setNotes("");
-      setError("");
-    }, 300);
-  }, []);
+    if (!isOpen) {
+      setTimeout(() => {
+        setStep(1);
+        setSelectedDate(undefined);
+        setSelectedTime("");
+        setPurpose("");
+        setError("");
+      }, 300);
+    }
+  }, [isOpen]);
 
-  const handleTimeSelect = (time: string) => {
-    setSelectedTime(time);
-    setStep('details');
-  };
+  // Update user info
+  useEffect(() => {
+    if (user) {
+      if (!name) setName(user.user_metadata?.name || "");
+      if (!email) setEmail(user.email || "");
+    }
+  }, [user]);
 
   const handleSubmit = async () => {
-    if (!selectedDate || !selectedTime) {
-      setError("Please select date and time");
+    if (!selectedDate || !selectedTime || !email) {
+      setError("Please fill all required fields");
       return;
     }
 
@@ -98,421 +209,403 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
     setError("");
 
     try {
-      const [hours, minutes] = selectedTime.split(':').map(Number);
-      const bookingDateTime = setMinutes(setHours(selectedDate, hours), minutes);
-
       const booking = {
-        userId: user?.id || 'guest',
-        userName: user?.user_metadata?.name || 'Guest User',
-        userEmail: user?.email || 'Not provided',
-        date: format(bookingDateTime, 'yyyy-MM-dd'),
+        userId: user?.id || "guest",
+        userName: name || "Guest",
+        userEmail: email,
+        date: format(selectedDate, "yyyy-MM-dd"),
         time: selectedTime,
         callType,
         purpose,
-        notes,
-        timezone: 'Europe/Brussels',
+        timezone: "Europe/Brussels",
         createdAt: new Date().toISOString(),
       };
-
-      console.log('Booking data:', booking);
 
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/book-call`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${publicAnonKey}`,
           },
           body: JSON.stringify(booking),
         }
       );
 
-      console.log('Booking response:', response.status, response.statusText);
-
       if (!response.ok) {
         const errorData = await response.text();
-        console.error('Booking error:', errorData);
-        throw new Error(`Failed to book call: ${errorData}`);
+        throw new Error(errorData);
       }
 
-      setStep('success');
-      setTimeout(() => {
-        onClose();
-      }, 3000);
+      setStep(4);
+      setTimeout(onClose, 4000);
     } catch (err: any) {
-      console.error('Error booking call:', err);
-      setError(err.message || 'Failed to book call. Please try again.');
+      console.error("Booking error:", err);
+      setError(err.message || "Failed to book. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Disable past dates and weekends
-  const disabledDays = (date: Date) => {
-    const today = startOfDay(new Date());
-    const maxDate = addDays(today, 30); // Only allow booking up to 30 days ahead
-    return isBefore(date, today) || isWeekend(date) || isBefore(maxDate, date);
-  };
+  const stepLabels = [t.step1, t.step2, t.step3, t.step4];
+  const isRTL = language === "ar";
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100000] flex items-end sm:items-center justify-center p-0 sm:p-6 md:p-8"
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100000] flex items-end sm:items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
         >
           <motion.div
-            className="bg-gradient-to-br from-[var(--bg-primary)] to-[var(--bg-secondary)] border-t-2 sm:border-2 border-[#00d9ff]/30 rounded-t-3xl sm:rounded-3xl w-full sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] max-h-[92vh] sm:max-h-[90vh] overflow-y-auto shadow-[0_-10px_60px_rgba(0,217,255,0.3)] sm:shadow-2xl"
-            initial={{ scale: 0.95, y: 100 }}
-            animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.95, y: 100 }}
+            className="bg-[var(--bg-primary)] border-t-2 sm:border-2 border-[#00d9ff]/30 rounded-t-3xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90dvh] overflow-hidden shadow-[0_0_80px_rgba(0,217,255,0.15)] flex flex-col"
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "100%", opacity: 0 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
             onClick={(e) => e.stopPropagation()}
+            dir={isRTL ? "rtl" : "ltr"}
           >
-            {/* Drag Handle (mobile) */}
+            {/* Drag handle mobile */}
             <div className="sm:hidden flex justify-center pt-3 pb-1">
-              <div className="w-10 h-1 bg-white/20 rounded-full" />
+              <div className="w-10 h-1.5 bg-[var(--text-muted)]/30 rounded-full" />
             </div>
 
             {/* Header */}
-            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-[var(--border-color)]">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-color)]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00d9ff] to-purple-500 flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-gradient-to-br from-[#00d9ff] to-cyan-400 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,217,255,0.3)]">
+                  <Calendar className="w-5 h-5 text-black" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-[var(--text-primary)]">
-                    {step === 'success' ? t('bookCall.bookingConfirmed') : t('bookCall.title')}
-                  </h2>
-                  <p className="text-sm text-[var(--text-secondary)]">
-                    {step === 'date' && t('bookCall.subtitle')}
-                    {step === 'time' && t('bookCall.selectTime')}
-                    {step === 'details' && 'Add details'}
-                    {step === 'success' && t('bookCall.lookingForward')}
-                  </p>
+                  <h2 className="text-lg font-black text-[var(--text-primary)] font-mono tracking-tight">{t.title}</h2>
+                  <p className="text-xs text-[var(--text-muted)] font-mono">{t.free}</p>
                 </div>
               </div>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-white/10 rounded-full transition-colors"
-              >
-                <X className="w-5 h-5 text-[var(--text-secondary)]" />
+              <button onClick={onClose} className="p-2.5 hover:bg-[var(--bg-secondary)] rounded-xl transition-colors active:scale-90">
+                <X className="w-5 h-5 text-[var(--text-muted)]" />
               </button>
             </div>
 
-            {/* Availability Notice */}
-            <div className="mx-6 mt-4 p-4 bg-gradient-to-r from-[#00d9ff]/10 to-purple-500/10 border border-[#00d9ff]/30 rounded-xl">
-              <div className="flex items-start gap-3">
-                <Clock className="w-5 h-5 text-[#00d9ff] mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-semibold text-[var(--text-primary)] mb-1">
-                    Available Working Hours
-                  </p>
-                  <p className="text-xs text-[var(--text-secondary)]">
-                    📅 Until February 14: Available <span className="font-bold text-[#00d9ff]">06:00 - 12:00 CET</span>
-                    <br />
-                    📅 After February 14: Regular schedule resumes
-                  </p>
+            {/* Step indicator */}
+            <div className="px-5 py-3 flex items-center gap-2">
+              {[1, 2, 3, 4].map((s) => (
+                <div key={s} className="flex-1 flex items-center gap-1.5">
+                  <div className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
+                    s <= step ? "bg-gradient-to-r from-[#00d9ff] to-cyan-400" : "bg-[var(--bg-secondary)]"
+                  }`} />
                 </div>
-              </div>
+              ))}
+              <span className="text-[10px] font-mono text-[var(--text-muted)] ml-1">{step}/4</span>
             </div>
 
             {/* Content */}
-            <div className="p-6">
-              {/* Step 1: Date Selection */}
-              {step === 'date' && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="space-y-4"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <p className="text-[var(--text-secondary)]">
-                      {t('bookCall.availableWeekdays')}
-                    </p>
-                  </div>
-                  
-                  {/* NATIVE DATE INPUT FOR MOBILE */}
-                  {isMobile ? (
-                    <div className="space-y-4">
-                      <label className="block">
-                        <span className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                          Select Date
-                        </span>
-                        <input
-                          type="date"
-                          min={format(addDays(new Date(), 1), 'yyyy-MM-dd')}
-                          max={format(addDays(new Date(), 30), 'yyyy-MM-dd')}
-                          value={selectedDate ? format(selectedDate, 'yyyy-MM-dd') : ''}
-                          onChange={(e) => {
-                            const newDate = new Date(e.target.value);
-                            if (!isWeekend(newDate)) {
-                              setSelectedDate(newDate);
-                              setStep('time');
-                            } else {
-                              alert('Weekends are not available. Please select a weekday.');
-                            }
-                          }}
-                          className="w-full h-16 px-4 text-lg bg-white/5 border-2 border-white/10 rounded-xl text-[var(--text-primary)] focus:border-[#00d9ff]/50 focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
-                        />
-                      </label>
-                      <p className="text-xs text-[var(--text-muted)]">
-                        ℹ️ Only weekdays are available. Weekends will be rejected.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="calendar-wrapper">
-                      <DayPicker
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={(date) => {
-                          setSelectedDate(date);
-                          if (date) setStep('time');
-                        }}
-                        disabled={disabledDays}
-                        fromDate={addDays(new Date(), 1)}
-                        toDate={addDays(new Date(), 30)}
-                        className="bg-white/5 rounded-2xl p-4"
-                        classNames={{
-                          months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-                          month: "space-y-4",
-                          caption: "flex justify-center pt-1 relative items-center text-[var(--text-primary)]",
-                          caption_label: "text-lg font-bold",
-                          nav: "space-x-1 flex items-center",
-                          nav_button: "h-7 w-7 bg-transparent p-0 hover:bg-white/10 rounded-lg transition-colors",
-                          nav_button_previous: "absolute left-1",
-                          nav_button_next: "absolute right-1",
-                          table: "w-full border-collapse space-y-1",
-                          head_row: "flex",
-                          head_cell: "text-[var(--text-muted)] rounded-md w-9 font-normal text-[0.8rem]",
-                          row: "flex w-full mt-2",
-                          cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-[#00d9ff]/20 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                          day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-white/10 rounded-md transition-colors text-[var(--text-primary)]",
-                          day_selected: "bg-[#00d9ff] text-black hover:bg-[#00d9ff] hover:text-black focus:bg-[#00d9ff] focus:text-black font-bold",
-                          day_today: "bg-white/5 text-[#00d9ff] font-bold",
-                          day_outside: "text-[var(--text-muted)] opacity-50",
-                          day_disabled: "text-[var(--text-muted)] opacity-30 line-through",
-                          day_hidden: "invisible",
-                        }}
-                      />
-                    </div>
-                  )}
-                </motion.div>
-              )}
-
-              {/* Step 2: Time Selection */}
-              {step === 'time' && selectedDate && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="space-y-4"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <p className="text-[var(--text-primary)] font-semibold">
-                        {format(selectedDate, 'EEEE, MMMM d, yyyy')}
-                      </p>
-                      <p className="text-sm text-[var(--text-secondary)]">
-                        Europe/Brussels timezone (CET)
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => setStep('date')}
-                      className="text-sm text-[#00d9ff] hover:underline"
-                    >
-                      {t('bookCall.changeDate')}
-                    </button>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3">
-                    {timeSlots.map((slot) => (
-                      <motion.button
-                        key={slot.time}
-                        onClick={() => handleTimeSelect(slot.time)}
-                        disabled={!slot.available}
-                        className={`p-4 rounded-xl border-2 transition-all ${
-                          slot.available
-                            ? 'border-white/10 hover:border-[#00d9ff]/50 hover:bg-[#00d9ff]/10'
-                            : 'border-white/5 opacity-30 cursor-not-allowed'
-                        }`}
-                        whileHover={slot.available ? { scale: 1.05 } : {}}
-                        whileTap={slot.available ? { scale: 0.95 } : {}}
-                      >
-                        <Clock className="w-5 h-5 mx-auto mb-2 text-[#00d9ff]" />
-                        <div className="font-semibold text-[var(--text-primary)]">{slot.time}</div>
-                      </motion.button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Step 3: Details */}
-              {step === 'details' && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="space-y-6"
-                >
-                  <div className="p-4 bg-[#00d9ff]/10 border border-[#00d9ff]/30 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <Calendar className="w-5 h-5 text-[#00d9ff]" />
-                      <div>
-                        <div className="font-semibold text-[var(--text-primary)]">
-                          {selectedDate && format(selectedDate, 'EEEE, MMMM d, yyyy')}
-                        </div>
-                        <div className="text-sm text-[var(--text-secondary)]">
-                          {selectedTime} (CET)
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Call Type */}
-                  <div>
-                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-3">
-                      Call Type
-                    </label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => setCallType('video')}
-                        className={`p-4 rounded-xl border-2 transition-all ${
-                          callType === 'video'
-                            ? 'border-[#00d9ff] bg-[#00d9ff]/10'
-                            : 'border-white/10 hover:border-white/20'
-                        }`}
-                      >
-                        <Video className="w-6 h-6 mx-auto mb-2 text-[#00d9ff]" />
-                        <div className="font-semibold text-[var(--text-primary)]">Video Call</div>
-                      </button>
-                      <button
-                        onClick={() => setCallType('phone')}
-                        className={`p-4 rounded-xl border-2 transition-all ${
-                          callType === 'phone'
-                            ? 'border-[#00d9ff] bg-[#00d9ff]/10'
-                            : 'border-white/10 hover:border-white/20'
-                        }`}
-                      >
-                        <Phone className="w-6 h-6 mx-auto mb-2 text-[#00d9ff]" />
-                        <div className="font-semibold text-[var(--text-primary)]">Phone Call</div>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Purpose */}
-                  <div>
-                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                      Purpose of Call
-                    </label>
-                    <textarea
-                      value={purpose}
-                      onChange={(e) => setPurpose(e.target.value)}
-                      placeholder="Tell me about your project..."
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#00d9ff]/50 focus:ring-2 focus:ring-[#00d9ff]/20 transition-all resize-none"
-                      rows={4}
-                    />
-                  </div>
-
-                  {/* Notes */}
-                  <div>
-                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                      Additional Notes (Optional)
-                    </label>
-                    <textarea
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      placeholder="Tell me about your project..."
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#00d9ff]/50 focus:ring-2 focus:ring-[#00d9ff]/20 transition-all resize-none"
-                      rows={4}
-                    />
-                  </div>
-
-                  {error && (
-                    <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
-                      {error}
-                    </div>
-                  )}
-
-                  {/* Actions */}
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => setStep('time')}
-                      className="flex-1 px-6 py-4 bg-white/5 border-2 border-white/10 rounded-xl text-[var(--text-secondary)] hover:bg-white/10 transition-all"
-                    >
-                      Back
-                    </button>
-                    <motion.button
-                      onClick={handleSubmit}
-                      disabled={loading}
-                      className="flex-1 px-6 py-4 bg-gradient-to-r from-[#00d9ff] to-cyan-400 text-black font-bold rounded-xl hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                      whileHover={{ scale: loading ? 1 : 1.02 }}
-                      whileTap={{ scale: loading ? 1 : 0.98 }}
-                    >
-                      {loading ? (
-                        <>
-                          <Loader2 className="w-5 h-5 animate-spin" />
-                          Booking...
-                        </>
-                      ) : (
-                        <>
-                          Confirm Booking
-                          <ArrowRight className="w-5 h-5" />
-                        </>
-                      )}
-                    </motion.button>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Step 4: Success */}
-              {step === 'success' && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-8"
-                >
+            <div className="flex-1 overflow-y-auto px-5 pb-5">
+              <AnimatePresence mode="wait">
+                {/* STEP 1: Date */}
+                {step === 1 && (
                   <motion.div
-                    className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center"
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 0.6 }}
+                    key="step1"
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -30 }}
+                    className="space-y-4 pt-2"
                   >
-                    <CheckCircle className="w-10 h-10 text-white" />
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-[var(--text-primary)] font-mono">{t.step1}</h3>
+                      <span className="text-xs text-[var(--text-muted)] font-mono">{t.weekdaysOnly}</span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {availableDates().map((date) => {
+                        const isSelected = selectedDate?.getTime() === date.getTime();
+                        const dayName = format(date, "EEE");
+                        const dayNum = format(date, "d");
+                        const monthName = format(date, "MMM");
+
+                        return (
+                          <motion.button
+                            key={date.toISOString()}
+                            onClick={() => {
+                              setSelectedDate(date);
+                              setStep(2);
+                            }}
+                            className={`relative p-3.5 rounded-xl border-2 transition-all text-left active:scale-95 ${
+                              isSelected
+                                ? "border-[#00d9ff] bg-[#00d9ff]/10 shadow-[0_0_20px_rgba(0,217,255,0.15)]"
+                                : "border-[var(--border-color)] hover:border-[#00d9ff]/40 bg-[var(--bg-secondary)]/30"
+                            }`}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <div className="flex items-baseline gap-2">
+                              <span className={`text-2xl font-black font-mono ${isSelected ? "text-[#00d9ff]" : "text-[var(--text-primary)]"}`}>
+                                {dayNum}
+                              </span>
+                              <div>
+                                <span className={`text-xs font-bold uppercase block ${isSelected ? "text-[#00d9ff]" : "text-[var(--text-secondary)]"}`}>
+                                  {dayName}
+                                </span>
+                                <span className="text-[10px] text-[var(--text-muted)]">{monthName}</span>
+                              </div>
+                            </div>
+                          </motion.button>
+                        );
+                      })}
+                    </div>
                   </motion.div>
+                )}
 
-                  <h3 className="text-3xl font-bold mb-3 bg-gradient-to-r from-[#00d9ff] via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    {t('bookCall.bookingConfirmed')}
-                  </h3>
-
-                  <p className="text-[var(--text-secondary)] mb-6">
-                    {t('bookCall.calendarInvitation')} <span className="text-[#00d9ff] font-semibold">{user?.email}</span>
-                  </p>
-
-                  <div className="p-4 bg-[#00d9ff]/10 border border-[#00d9ff]/30 rounded-xl mb-6">
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[var(--text-muted)]">{t('bookCall.date')}:</span>
-                        <span className="text-[var(--text-primary)] font-semibold">
-                          {selectedDate && format(selectedDate, 'MMMM d, yyyy')}
-                        </span>
+                {/* STEP 2: Time */}
+                {step === 2 && selectedDate && (
+                  <motion.div
+                    key="step2"
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -30 }}
+                    className="space-y-4 pt-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-sm font-bold text-[var(--text-primary)] font-mono">{t.step2}</h3>
+                        <p className="text-xs text-[var(--text-muted)] font-mono mt-0.5">
+                          {format(selectedDate, "EEEE, MMM d")} • {t.timezone}
+                        </p>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[var(--text-muted)]">{t('bookCall.time')}:</span>
-                        <span className="text-[var(--text-primary)] font-semibold">{selectedTime} CET</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[var(--text-muted)]">{t('bookCall.type')}:</span>
-                        <span className="text-[var(--text-primary)] font-semibold capitalize">{t(`bookCall.${callType}`)}</span>
+                      <button
+                        onClick={() => setStep(1)}
+                        className="text-xs text-[#00d9ff] font-mono font-bold hover:underline active:scale-95"
+                      >
+                        {t.changeDate}
+                      </button>
+                    </div>
+
+                    {/* Morning */}
+                    <div>
+                      <p className="text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">
+                        {t.morning}
+                      </p>
+                      <div className="grid grid-cols-3 gap-2">
+                        {morningSlots.map((time) => (
+                          <motion.button
+                            key={time}
+                            onClick={() => { setSelectedTime(time); setStep(3); }}
+                            className={`py-3 px-2 rounded-xl border-2 font-mono font-bold text-sm transition-all active:scale-90 ${
+                              selectedTime === time
+                                ? "border-[#00d9ff] bg-[#00d9ff]/10 text-[#00d9ff]"
+                                : "border-[var(--border-color)] hover:border-[#00d9ff]/40 text-[var(--text-primary)] bg-[var(--bg-secondary)]/20"
+                            }`}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            {time}
+                          </motion.button>
+                        ))}
                       </div>
                     </div>
-                  </div>
 
-                  <p className="text-xs text-[var(--text-muted)]">
-                    Need to reschedule? Email me at rozedev095@gmail.com
-                  </p>
-                </motion.div>
-              )}
+                    {/* Afternoon */}
+                    <div>
+                      <p className="text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">
+                        {t.afternoon}
+                      </p>
+                      <div className="grid grid-cols-3 gap-2">
+                        {afternoonSlots.map((time) => (
+                          <motion.button
+                            key={time}
+                            onClick={() => { setSelectedTime(time); setStep(3); }}
+                            className={`py-3 px-2 rounded-xl border-2 font-mono font-bold text-sm transition-all active:scale-90 ${
+                              selectedTime === time
+                                ? "border-[#00d9ff] bg-[#00d9ff]/10 text-[#00d9ff]"
+                                : "border-[var(--border-color)] hover:border-[#00d9ff]/40 text-[var(--text-primary)] bg-[var(--bg-secondary)]/20"
+                            }`}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            {time}
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Back */}
+                    <button
+                      onClick={() => setStep(1)}
+                      className="flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] font-mono active:scale-95 mt-2"
+                    >
+                      <ChevronLeft className="w-4 h-4" /> {t.back}
+                    </button>
+                  </motion.div>
+                )}
+
+                {/* STEP 3: Details */}
+                {step === 3 && (
+                  <motion.div
+                    key="step3"
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -30 }}
+                    className="space-y-4 pt-2"
+                  >
+                    {/* Summary chip */}
+                    <div className="flex items-center gap-2 p-3 bg-[#00d9ff]/8 border border-[#00d9ff]/20 rounded-xl">
+                      <Calendar className="w-4 h-4 text-[#00d9ff] flex-shrink-0" />
+                      <span className="text-sm font-mono text-[var(--text-primary)]">
+                        {selectedDate && format(selectedDate, "EEE, MMM d")} • {selectedTime} CET
+                      </span>
+                      <button onClick={() => setStep(1)} className="ml-auto text-[10px] text-[#00d9ff] font-mono hover:underline">{t.changeDate}</button>
+                    </div>
+
+                    {/* Call Type */}
+                    <div>
+                      <label className="text-xs font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest block mb-2">{t.callType}</label>
+                      <div className="grid grid-cols-2 gap-2.5">
+                        {([
+                          { type: "video" as const, icon: Video, label: t.videoCall },
+                          { type: "phone" as const, icon: Phone, label: t.phoneCall },
+                        ]).map(({ type, icon: Icon, label }) => (
+                          <motion.button
+                            key={type}
+                            onClick={() => setCallType(type)}
+                            className={`p-3.5 rounded-xl border-2 flex items-center gap-3 transition-all active:scale-95 ${
+                              callType === type
+                                ? "border-[#00d9ff] bg-[#00d9ff]/10"
+                                : "border-[var(--border-color)] hover:border-[#00d9ff]/30"
+                            }`}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <Icon className={`w-5 h-5 ${callType === type ? "text-[#00d9ff]" : "text-[var(--text-muted)]"}`} />
+                            <span className={`text-sm font-bold ${callType === type ? "text-[#00d9ff]" : "text-[var(--text-primary)]"}`}>{label}</span>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Name */}
+                    <div>
+                      <label className="text-xs font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest block mb-1.5">{t.name}</label>
+                      <div className="relative">
+                        <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          className="w-full pl-10 pr-4 py-3 bg-[var(--bg-secondary)]/50 border-2 border-[var(--border-color)] rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#00d9ff]/50 focus:ring-0 text-sm font-mono"
+                          placeholder="John Doe"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Email */}
+                    <div>
+                      <label className="text-xs font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest block mb-1.5">{t.email} *</label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          className="w-full pl-10 pr-4 py-3 bg-[var(--bg-secondary)]/50 border-2 border-[var(--border-color)] rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#00d9ff]/50 focus:ring-0 text-sm font-mono"
+                          placeholder="you@example.com"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Purpose */}
+                    <div>
+                      <label className="text-xs font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest block mb-1.5">{t.purpose}</label>
+                      <div className="relative">
+                        <MessageSquare className="absolute left-3 top-3 w-4 h-4 text-[var(--text-muted)]" />
+                        <textarea
+                          value={purpose}
+                          onChange={(e) => setPurpose(e.target.value)}
+                          className="w-full pl-10 pr-4 py-3 bg-[var(--bg-secondary)]/50 border-2 border-[var(--border-color)] rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#00d9ff]/50 focus:ring-0 text-sm font-mono resize-none"
+                          rows={3}
+                          placeholder={t.purposePlaceholder}
+                        />
+                      </div>
+                    </div>
+
+                    {error && (
+                      <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-mono">
+                        {error}
+                      </div>
+                    )}
+
+                    {/* Actions */}
+                    <div className="flex gap-2.5 pt-2 pb-2">
+                      <button
+                        onClick={() => setStep(2)}
+                        className="px-5 py-3.5 bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] rounded-xl text-[var(--text-secondary)] text-sm font-mono font-bold active:scale-95"
+                      >
+                        {t.back}
+                      </button>
+                      <motion.button
+                        onClick={handleSubmit}
+                        disabled={loading || !email}
+                        className="flex-1 py-3.5 bg-gradient-to-r from-[#00d9ff] to-cyan-400 text-black font-black rounded-xl text-sm font-mono disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,217,255,0.3)] hover:shadow-[0_0_30px_rgba(0,217,255,0.5)]"
+                        whileTap={{ scale: loading ? 1 : 0.95 }}
+                      >
+                        {loading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            {t.booking}
+                          </>
+                        ) : (
+                          <>
+                            <Zap className="w-4 h-4" />
+                            {t.confirm}
+                            <ArrowRight className="w-4 h-4" />
+                          </>
+                        )}
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* STEP 4: Success */}
+                {step === 4 && (
+                  <motion.div
+                    key="step4"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-10 space-y-5"
+                  >
+                    <motion.div
+                      className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-[0_0_40px_rgba(34,197,94,0.4)]"
+                      initial={{ rotate: -180, scale: 0 }}
+                      animate={{ rotate: 0, scale: 1 }}
+                      transition={{ type: "spring", damping: 15 }}
+                    >
+                      <CheckCircle className="w-10 h-10 text-white" />
+                    </motion.div>
+
+                    <div>
+                      <h3 className="text-2xl font-black font-mono bg-gradient-to-r from-[#00d9ff] to-green-400 bg-clip-text text-transparent">
+                        {t.confirmed}
+                      </h3>
+                      <p className="text-sm text-[var(--text-secondary)] mt-2 font-mono">
+                        {t.confirmMsg} <span className="text-[#00d9ff] font-bold">{email}</span>
+                      </p>
+                    </div>
+
+                    <div className="inline-flex items-center gap-3 px-4 py-3 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)]">
+                      <Calendar className="w-4 h-4 text-[#00d9ff]" />
+                      <span className="text-sm font-mono text-[var(--text-primary)]">
+                        {selectedDate && format(selectedDate, "MMM d")} • {selectedTime} CET
+                      </span>
+                      <span className="text-xs text-[var(--text-muted)]">•</span>
+                      <span className="text-sm text-[var(--text-primary)] capitalize">{callType === "video" ? t.videoCall : t.phoneCall}</span>
+                    </div>
+
+                    <p className="text-xs text-[var(--text-muted)] font-mono">
+                      {t.reschedule}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         </motion.div>

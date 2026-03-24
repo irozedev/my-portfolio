@@ -31,9 +31,9 @@ export function ScrollToTopButton() {
   const MAX_REQUESTS = 8;
 
   const quickQuestions = [
-    { emoji: "💰", text: "Estimate price", label: "Estimate price" },
-    { emoji: "🚀", text: "Start project", label: "Start project" },
-    { emoji: "📩", text: "Contact", label: "Contact" },
+    { emoji: "💰", text: language === 'uk' ? "Оцінити ціну" : language === 'nl' ? "Prijs schatten" : language === 'ar' ? "تقدير السعر" : language === 'es' ? "Estimar precio" : "Estimate price", label: language === 'uk' ? "Ціна" : language === 'nl' ? "Prijs" : language === 'ar' ? "السعر" : language === 'es' ? "Precio" : "Price" },
+    { emoji: "🚀", text: language === 'uk' ? "Почати проект" : language === 'nl' ? "Start project" : language === 'ar' ? "بدء مشروع" : language === 'es' ? "Iniciar proyecto" : "Start project", label: language === 'uk' ? "Старт" : language === 'nl' ? "Start" : language === 'ar' ? "بدء" : language === 'es' ? "Inicio" : "Start" },
+    { emoji: "📩", text: language === 'uk' ? "Контакт" : language === 'nl' ? "Contact" : language === 'ar' ? "تواصل" : language === 'es' ? "Contacto" : "Contact", label: language === 'uk' ? "Контакт" : language === 'nl' ? "Contact" : language === 'ar' ? "تواصل" : language === 'es' ? "Contacto" : "Contact" },
   ];
 
   // Scroll tracking
@@ -117,17 +117,24 @@ export function ScrollToTopButton() {
   // Default welcome message
   useEffect(() => {
     if (isChatOpen && messages.length === 0 && !hasServiceContext) {
+      const welcomeMessages: Record<string, string> = {
+        en: "👋 Hey there! I'm Roze Bot — Stepan's AI assistant.\n\nI can help you with:\n💰 Project rates & pricing\n🛠️ Technical skills & expertise\n🚀 Portfolio & past projects\n⏰ Availability & timelines\n📧 Contact information\n\nWhat would you like to know? 👇",
+        uk: "👋 Привіт! Я Roze Bot — AI асистент Степана.\n\nМожу допомогти з:\n💰 Ціни та тарифи\n🛠️ Технічні навички\n🚀 Портфоліо та проекти\n⏰ Доступність та терміни\n📧 Контактна інформація\n\nЩо вас цікавить? 👇",
+        nl: "👋 Hallo! Ik ben Roze Bot — Stepan's AI-assistent.\n\nIk kan helpen met:\n💰 Tarieven & prijzen\n🛠️ Technische vaardigheden\n🚀 Portfolio & projecten\n⏰ Beschikbaarheid & tijdlijnen\n📧 Contactgegevens\n\nWat wilt u weten? 👇",
+        ar: "👋 مرحباً! أنا Roze Bot — مساعد ستيبان الذكي.\n\nيمكنني المساعدة في:\n💰 الأسعار والتكاليف\n🛠️ المهارات التقنية\n🚀 المشاريع السابقة\n⏰ التوفر والجداول الزمنية\n📧 معلومات الاتصال\n\nماذا تريد أن تعرف؟ 👇",
+        es: "👋 ¡Hola! Soy Roze Bot — asistente AI de Stepan.\n\nPuedo ayudarte con:\n💰 Tarifas y precios\n🛠️ Habilidades técnicas\n🚀 Portfolio y proyectos\n⏰ Disponibilidad y plazos\n📧 Información de contacto\n\n¿Qué te gustaría saber? 👇",
+      };
       setTimeout(() => {
         setMessages([{
           id: Date.now(),
-          text: `👋 Hey there! I'm Roze Bot — Stepan's AI assistant.\n\nI can help you with:\n💰 Project rates & pricing\n🛠️ Technical skills & expertise\n🚀 Portfolio & past projects\n⏰ Availability & timelines\n📧 Contact information\n\nWhat would you like to know? 👇`,
+          text: welcomeMessages[language] || welcomeMessages.en,
           sender: "bot",
           timestamp: new Date(),
         }]);
         setShowQuickQuestions(true);
       }, 500);
     }
-  }, [isChatOpen, messages.length, hasServiceContext]);
+  }, [isChatOpen, messages.length, hasServiceContext, language]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

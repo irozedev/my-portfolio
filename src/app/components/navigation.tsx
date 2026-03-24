@@ -518,17 +518,17 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                     isAvailable ? 'text-green-400' : 'text-orange-400'
                   }`}>
                     {isAvailable ? (
-                      language === 'uk' ? 'ОН' : 
-                      language === 'nl' ? 'ON' : 
-                      language === 'ar' ? 'نشط' :
-                      language === 'es' ? 'ON' :
-                      'ON'
+                      language === 'uk' ? 'Онлайн' : 
+                      language === 'nl' ? 'Online' : 
+                      language === 'ar' ? 'متصل' :
+                      language === 'es' ? 'En línea' :
+                      'Online'
                     ) : (
-                      language === 'uk' ? 'ЗАЙ' : 
-                      language === 'nl' ? 'BEZ' : 
-                      language === 'ar' ? 'مش' :
-                      language === 'es' ? 'OCU' :
-                      'BSY'
+                      language === 'uk' ? 'Зайнятий' : 
+                      language === 'nl' ? 'Bezet' : 
+                      language === 'ar' ? 'مشغول' :
+                      language === 'es' ? 'Ocupado' :
+                      'Busy'
                     )}
                   </span>
                 </motion.button>

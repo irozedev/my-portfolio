@@ -137,7 +137,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
 
           {/* CTA Buttons */}
           <motion.div 
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-12 px-2 sm:px-0"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
@@ -146,7 +146,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
             {viewMode === 'client' && (
               <button
                 onClick={() => setIsBookCallOpen(true)}
-                className="group relative px-8 py-4 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black font-bold rounded-lg overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] w-full sm:w-auto"
+                className="group relative px-8 py-4 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black font-bold rounded-lg overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] active:scale-95"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <Rocket className="w-5 h-5" />
@@ -157,7 +157,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
 
             <button
               onClick={onViewWork}
-              className="px-8 py-4 bg-[var(--bg-secondary)] text-[var(--text-primary)] font-bold rounded-lg border-2 border-[var(--accent-primary)]/30 hover:border-[var(--accent-primary)] transition-all w-full sm:w-auto"
+              className="px-8 py-4 bg-[var(--bg-secondary)] text-[var(--text-primary)] font-bold rounded-lg border-2 border-[var(--accent-primary)]/30 hover:border-[var(--accent-primary)] transition-all active:scale-95"
             >
               <span className="flex items-center justify-center gap-2">
                 <Code2 className="w-5 h-5" />
