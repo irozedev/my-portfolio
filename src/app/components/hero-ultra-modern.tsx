@@ -41,7 +41,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
 
   return (
     <>
-      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--bg-primary)] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 pt-32 md:pt-36 pb-12 scroll-mt-32 md:scroll-mt-36">
+      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--bg-primary)] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 pt-40 md:pt-44 pb-12 scroll-mt-40 md:scroll-mt-44">
         {/* Animated Background Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#00d9ff08_1px,transparent_1px),linear-gradient(to_bottom,#00d9ff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000,transparent)]" />
         

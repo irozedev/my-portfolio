@@ -173,12 +173,18 @@ export function ServicesCreativeSlider() {
 
   // 🔥 FIX: Debounced click handler to prevent multiple triggers
   const handleBookService = (service: typeof services[0]) => {
-    if (isProcessingClick) return; // Prevent multiple clicks
+    if (isProcessingClick) return;
     
     setIsProcessingClick(true);
-    setSelectedService(service);
     
-    // Reset flag after 300ms (reduced from 500ms)
+    // Skip modal — go directly to chat with service context
+    sessionStorage.setItem('chatbotServiceName', service.title);
+    sessionStorage.setItem('chatbotService', service.key);
+    const event = new CustomEvent('openChatBot', { 
+      detail: { service: service.key, serviceName: service.title }
+    });
+    window.dispatchEvent(event);
+    
     setTimeout(() => {
       setIsProcessingClick(false);
     }, 300);

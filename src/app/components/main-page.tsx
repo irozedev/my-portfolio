@@ -7,7 +7,6 @@ import { PersonalCabinet } from "./personal-cabinet";
 import { Navigation } from "./navigation";
 import { BetaBanner } from "./beta-banner";
 import { SiteTour } from "./site-tour";
-import { ChatBot } from "./chat-bot";
 import { HeroUltraModern } from "./hero-ultra-modern";
 import { AboutSection } from "./about-section";
 import { ExperienceTimelinePremium } from "./experience-timeline-premium";
@@ -117,10 +116,7 @@ export function MainPage() {
       
       <SiteTour />
       
-      {/* ChatBot only in CLIENT mode */}
-      {isClientMode && <ChatBot />}
-      
-      {/* Scroll to Top Button */}
+      {/* Unified Scroll-to-Top + ChatBot */}
       <ScrollToTopButton />
       
       {/* View Mode Toggle */}

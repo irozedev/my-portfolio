@@ -233,7 +233,25 @@ RULES:
     if (!response.ok) {
       const errorData = await response.text();
       console.error('Anthropic API error:', response.status, errorData);
-      return c.json({ error: 'AI service temporarily unavailable' }, 500);
+      
+      // Provide intelligent fallback responses instead of failing
+      const fallbackResponses: Record<string, string> = {
+        'en': "Thanks for your message! I'm having a brief connection issue. You can reach Stepan directly at stepan@roze.live or check back in a moment 🚀",
+        'ua': "Дякую за повідомлення! Зараз невеличка технічна перерва. Ви можете зв'язатися зі Степаном напряму: stepan@roze.live 🚀",
+        'nl': "Bedankt voor je bericht! Even een technisch probleem. Je kunt Stepan direct bereiken via stepan@roze.live 🚀",
+        'ar': "شكراً لرسالتك! هناك مشكلة تقنية بسيطة. يمكنك التواصل مع ستيبان مباشرة على stepan@roze.live 🚀",
+        'es': "¡Gracias por tu mensaje! Tengo un problema técnico breve. Puedes contactar a Stepan directamente en stepan@roze.live 🚀",
+      };
+      
+      const langKey = (language || 'English').toLowerCase().substring(0, 2);
+      const fallback = fallbackResponses[langKey] || fallbackResponses['en'];
+      
+      return c.json({
+        success: true,
+        message: fallback,
+        model: 'fallback',
+        cached: false
+      });
     }
 
     const data = await response.json();
@@ -416,7 +434,21 @@ Answer in 2-3 sentences maximum. Be professional and helpful.`;
     if (!response.ok) {
       const errorData = await response.text();
       console.error('[Chat] Anthropic API error:', response.status, errorData);
-      return c.json({ error: 'AI service temporarily unavailable' }, 500);
+      
+      // Detect language from system message for fallback
+      const sysMsg = messages.find((m: any) => m.role === 'system')?.content || '';
+      let fallbackMsg = "Thanks for your message! I'm having a brief connection issue. You can reach Stepan directly at stepan@roze.live 🚀";
+      if (sysMsg.includes('Ukrainian') || sysMsg.includes('українською')) {
+        fallbackMsg = "Дякую за повідомлення! Зараз невеличка технічна перерва. Зв'яжіться зі Степаном: stepan@roze.live 🚀";
+      } else if (sysMsg.includes('Dutch') || sysMsg.includes('Nederlands')) {
+        fallbackMsg = "Bedankt voor je bericht! Even een technisch probleem. Bereik Stepan via stepan@roze.live 🚀";
+      } else if (sysMsg.includes('Arabic') || sysMsg.includes('بالعربية')) {
+        fallbackMsg = "شكراً لرسالتك! هناك مشكلة تقنية. تواصل مع ستيبان: stepan@roze.live 🚀";
+      } else if (sysMsg.includes('Spanish') || sysMsg.includes('español')) {
+        fallbackMsg = "¡Gracias por tu mensaje! Problema técnico breve. Contacta a Stepan: stepan@roze.live 🚀";
+      }
+      
+      return c.json({ response: fallbackMsg, fallback: true });
     }
 
     const data = await response.json();

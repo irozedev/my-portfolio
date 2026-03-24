@@ -159,21 +159,26 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100000] flex items-center justify-center p-4 sm:p-6 md:p-8"
+          className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100000] flex items-end sm:items-center justify-center p-0 sm:p-6 md:p-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
         >
           <motion.div
-            className="bg-gradient-to-br from-[var(--bg-primary)] to-[var(--bg-secondary)] border-2 border-[#00d9ff]/30 rounded-3xl w-full max-w-[95vw] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] max-h-[90vh] overflow-y-auto shadow-2xl"
-            initial={{ scale: 0.8, y: 50 }}
+            className="bg-gradient-to-br from-[var(--bg-primary)] to-[var(--bg-secondary)] border-t-2 sm:border-2 border-[#00d9ff]/30 rounded-t-3xl sm:rounded-3xl w-full sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] max-h-[92vh] sm:max-h-[90vh] overflow-y-auto shadow-[0_-10px_60px_rgba(0,217,255,0.3)] sm:shadow-2xl"
+            initial={{ scale: 0.95, y: 100 }}
             animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.8, y: 50 }}
+            exit={{ scale: 0.95, y: 100 }}
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Drag Handle (mobile) */}
+            <div className="sm:hidden flex justify-center pt-3 pb-1">
+              <div className="w-10 h-1 bg-white/20 rounded-full" />
+            </div>
+
             {/* Header */}
-            <div className="flex items-center justify-between p-4 sm:p-5 md:p-6 lg:p-7 xl:p-8 border-b border-[var(--border-color)]">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-[var(--border-color)]">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00d9ff] to-purple-500 flex items-center justify-center">
                   <Calendar className="w-5 h-5 text-white" />

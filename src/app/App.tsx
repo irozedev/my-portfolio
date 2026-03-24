@@ -11,7 +11,6 @@ import { Dashboard } from "./components/dashboard";
 import { UserProfilePage } from "./components/user-profile-page";
 import { BetaBanner } from "./components/beta-banner";
 import { ViewModeToggle } from "./components/view-mode-toggle";
-import { ScrollToTopButton } from "./components/scroll-to-top-button";
 import { Toaster } from "sonner";
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "motion/react";
@@ -136,7 +135,6 @@ export default function App() {
                 <BetaBanner />
                 <ViewModeToggle />
                 <Toaster position="top-right" richColors />
-                <ScrollToTopButton />
               </ViewModeProvider>
             </CartProvider>
           </AvailabilityProvider>
