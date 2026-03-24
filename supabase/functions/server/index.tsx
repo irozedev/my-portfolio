@@ -159,7 +159,7 @@ EXPERIENCE (10+ years):
 • Freelance Full-Stack Developer (2015-2019): Web apps, e-commerce, custom solutions
 • Ronis - Full-Stack Developer (2019-2022): Enterprise apps, team collaboration
 • eConsulting - Lead Developer (2022-2024): Client projects, technical leadership
-• Currently: Senior Full-Stack Developer & Freelancer
+• Currently: Senior Full-Stack Developer & Freelancer, configuring OpenClaw (open-source AI claw machine platform)
 
 SKILLS & STACK:
 Frontend: React, Vue.js, TypeScript, Tailwind CSS, Next.js, HTML5, CSS3, responsive design

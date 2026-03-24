@@ -43,7 +43,7 @@ export function ScrollToTopButton() {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setScrollProgress(progress);
-      setIsVisible(scrollTop > 400);
+      setIsVisible(scrollTop > 200);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -387,7 +387,7 @@ export function ScrollToTopButton() {
       </AnimatePresence>
 
       {/* Floating Action Buttons */}
-      <div className="fixed bottom-6 right-6 z-[9900] flex flex-col gap-3 items-center">
+      <div className="fixed bottom-[140px] sm:bottom-[100px] right-4 sm:right-6 z-[99900] flex flex-col gap-3 items-center">
         {/* Scroll to Top with Progress Ring */}
         <AnimatePresence>
           {isVisible && (

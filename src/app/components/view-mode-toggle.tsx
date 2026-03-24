@@ -193,7 +193,7 @@ export function ViewModeToggle() {
 
       {/* MOBILE: Bottom center (above scroll-to-top) */}
       <motion.div 
-        className="flex md:hidden fixed bottom-24 left-1/2 -translate-x-1/2 z-[9995] gap-2"
+        className="flex md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[9995] gap-2"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}

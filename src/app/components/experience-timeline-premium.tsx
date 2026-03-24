@@ -12,14 +12,15 @@ const experiences = [
     company: "Independent Study",
     location: "Remote",
     type: "Learning",
-    description: "Improving skills and studying AI technologies, machine learning, and modern development practices",
+    description: "Improving skills and studying AI technologies, machine learning, and modern development practices. Currently configuring and customizing OpenClaw — an open-source AI-powered claw machine platform.",
     achievements: [
       "Deep diving into AI/ML technologies",
+      "Configuring OpenClaw platform",
       "Building AI-powered applications",
       "Exploring LLMs and neural networks",
       "Enhancing full-stack expertise"
     ],
-    tech: ["AI/ML", "Python", "TensorFlow", "LLMs", "React", "Next.js"],
+    tech: ["AI/ML", "Python", "TensorFlow", "LLMs", "OpenClaw", "React", "Next.js"],
     icon: Rocket,
     gradient: "from-cyan-500 via-blue-500 to-purple-500",
     color: "#00d9ff"
