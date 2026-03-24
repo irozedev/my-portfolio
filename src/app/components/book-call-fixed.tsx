@@ -251,7 +251,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                               alert('Weekends are not available. Please select a weekday.');
                             }
                           }}
-                          className="w-full h-14 px-4 bg-white/5 border-2 border-white/10 rounded-xl text-[var(--text-primary)] focus:border-[#00d9ff]/50 focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
+                          className="w-full h-16 px-4 text-lg bg-white/5 border-2 border-white/10 rounded-xl text-[var(--text-primary)] focus:border-[#00d9ff]/50 focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
                         />
                       </label>
                       <p className="text-xs text-[var(--text-muted)]">

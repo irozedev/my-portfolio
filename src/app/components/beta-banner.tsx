@@ -71,14 +71,15 @@ export function BetaBanner() {
         </div>
 
         {/* Scrolling text container - with proper padding to avoid icons */}
-        <div className="absolute inset-0 flex items-center overflow-hidden" dir={isRTL ? 'rtl' : 'ltr'}>
+        <div className="absolute inset-0 flex items-center overflow-hidden">
           <motion.div
             className="flex items-center whitespace-nowrap"
             style={{ 
               paddingLeft: '4rem',
               paddingRight: '4rem',
+              direction: 'ltr', // Force LTR for animation direction
             }}
-            animate={{ x: [0, '-50%'] }}
+            animate={{ x: isRTL ? ['0%', '50%'] : [0, '-50%'] }}
             transition={{
               duration: 60,
               repeat: Infinity,
@@ -97,6 +98,7 @@ export function BetaBanner() {
                 letterSpacing: isRTL ? '0' : '0.2em',
                 fontFamily: 'monospace',
                 fontWeight: '700',
+                direction: isRTL ? 'rtl' : 'ltr', // Text direction only
               }}
             >
               {repeatedMessage}

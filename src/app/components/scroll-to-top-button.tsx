@@ -32,7 +32,7 @@ export function ScrollToTopButton() {
       {isVisible && (
         <motion.button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 md:right-8 z-[9990] w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#00d9ff] via-cyan-400 to-[#00d9ff] rounded-xl flex items-center justify-center shadow-[0_0_30px_rgba(0,217,255,0.6)] hover:shadow-[0_0_40px_rgba(0,217,255,0.9)] transition-all group border-2 border-white/20"
+          className="fixed bottom-8 right-8 md:right-8 z-[9900] w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#00d9ff] via-cyan-400 to-[#00d9ff] rounded-xl flex items-center justify-center shadow-[0_0_30px_rgba(0,217,255,0.6)] hover:shadow-[0_0_40px_rgba(0,217,255,0.9)] transition-all group border-2 border-white/20"
           initial={{ opacity: 0, scale: 0, rotate: -180 }}
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           exit={{ opacity: 0, scale: 0, rotate: 180 }}

@@ -108,12 +108,12 @@ export function HeroSplit({ onViewWork }: HeroSplitProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
             >
-              {/* Availability Badge - FUNCTIONAL */}
+              {/* Availability Badge - Clickable with tooltip */}
               <motion.div
-                initial={{ opacity: 0, y: -20 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="group relative"
+                transition={{ delay: 0.1 }}
+                className="group relative z-10"
               >
                 <button
                   onClick={() => setIsAvailabilityModalOpen(true)}
@@ -130,7 +130,7 @@ export function HeroSplit({ onViewWork }: HeroSplitProps) {
                   </span>
                 </button>
                 {/* Tooltip with click hint */}
-                <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-[100]">
                   <p className="text-xs text-[var(--text-secondary)] mb-1">{nextAvailable}</p>
                   <p className="text-xs text-[#00d9ff]">👆 Click for detailed availability</p>
                 </div>
