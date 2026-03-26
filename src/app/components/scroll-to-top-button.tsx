@@ -27,6 +27,7 @@ export function ScrollToTopButton() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { t, language, setLanguage } = useLanguage();
   const { isClientMode } = useViewMode();
+  const rafRef = useRef<number>(0);
 
   const MAX_REQUESTS = 8;
 
@@ -36,17 +37,27 @@ export function ScrollToTopButton() {
     { emoji: "📩", text: language === 'uk' ? "Контакт" : language === 'nl' ? "Contact" : language === 'ar' ? "تواصل" : language === 'es' ? "Contacto" : "Contact", label: language === 'uk' ? "Контакт" : language === 'nl' ? "Contact" : language === 'ar' ? "تواصل" : language === 'es' ? "Contacto" : "Contact" },
   ];
 
-  // Scroll tracking
+  // Scroll tracking - optimized with rAF
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      setScrollProgress(progress);
-      setIsVisible(scrollTop > 200);
+      if (!ticking) {
+        ticking = true;
+        rafRef.current = requestAnimationFrame(() => {
+          const scrollTop = window.scrollY;
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+          setScrollProgress(progress);
+          setIsVisible(scrollTop > 200);
+          ticking = false;
+        });
+      }
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   // Lock scroll when chat open
@@ -394,7 +405,7 @@ export function ScrollToTopButton() {
       </AnimatePresence>
 
       {/* Floating Action Buttons */}
-      <div className="fixed bottom-[140px] sm:bottom-[100px] right-4 sm:right-6 z-[99900] flex flex-col gap-3 items-center">
+      <div className="fixed bottom-6 right-4 sm:right-6 z-[99900] flex flex-col gap-3 items-center">
         {/* Scroll to Top with Progress Ring */}
         <AnimatePresence>
           {isVisible && (
@@ -432,52 +443,50 @@ export function ScrollToTopButton() {
           )}
         </AnimatePresence>
 
-        {/* Chat Bot Button - only in client mode */}
-        {isClientMode && (
-          <motion.button
-            id="chat-bot-button"
-            onClick={() => setIsChatOpen(!isChatOpen)}
-            className="relative w-14 h-14 bg-gradient-to-br from-[var(--accent-primary)] to-cyan-400 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,217,255,0.4)] hover:shadow-[0_0_40px_rgba(0,217,255,0.6)] transition-all"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1 }}
-          >
-            <AnimatePresence mode="wait">
-              {isChatOpen ? (
-                <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
-                  <X className="w-6 h-6 text-black" />
-                </motion.div>
-              ) : (
-                <motion.div key="open" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
-                  <MessageCircle className="w-6 h-6 text-black" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Notification Badge */}
-            {!isChatOpen && messages.length === 0 && (
-              <motion.div
-                className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 2 }}
-              >
-                <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }}>
-                  1
-                </motion.span>
+        {/* Chat Bot Button - visible in all modes */}
+        <motion.button
+          id="chat-bot-button"
+          onClick={() => setIsChatOpen(!isChatOpen)}
+          className="relative w-14 h-14 bg-gradient-to-br from-[var(--accent-primary)] to-cyan-400 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,217,255,0.4)] hover:shadow-[0_0_40px_rgba(0,217,255,0.6)] transition-all"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1 }}
+        >
+          <AnimatePresence mode="wait">
+            {isChatOpen ? (
+              <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
+                <X className="w-6 h-6 text-black" />
+              </motion.div>
+            ) : (
+              <motion.div key="open" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
+                <MessageCircle className="w-6 h-6 text-black" />
               </motion.div>
             )}
+          </AnimatePresence>
 
-            {/* Pulse */}
+          {/* Notification Badge */}
+          {!isChatOpen && messages.length === 0 && (
             <motion.div
-              className="absolute inset-0 rounded-full bg-[var(--accent-primary)]"
-              animate={{ scale: [1, 1.4], opacity: [0.4, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </motion.button>
-        )}
+              className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 2 }}
+            >
+              <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }}>
+                1
+              </motion.span>
+            </motion.div>
+          )}
+
+          {/* Pulse */}
+          <motion.div
+            className="absolute inset-0 rounded-full bg-[var(--accent-primary)]"
+            animate={{ scale: [1, 1.4], opacity: [0.4, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        </motion.button>
       </div>
     </>
   );

@@ -14,7 +14,7 @@ export const smoothScrollToSection = (sectionId: string) => {
     
     // Add beta banner height + view mode toggle
     const isMobile = window.innerWidth < 768;
-    const betaBannerHeight = isMobile ? 56 : 64; // Beta banner h-14 = 56px, h-16 = 64px
+    const betaBannerHeight = isMobile ? 40 : 48; // Beta banner h-10 = 40px, h-12 = 48px
     const viewModeToggleHeight = 56; // Toggle height
     const extraPadding = isMobile ? 20 : 30;
     

@@ -1,5 +1,4 @@
-import { motion } from "motion/react";
-import { AlertTriangle, Wrench } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 
 // ✅ ОНОВЛЕНО: Повідомлення про роботи на сайті + очікування реєстрації
@@ -22,118 +21,52 @@ export function BetaBanner() {
   
   return (
     <div id="beta-banner" className="fixed top-0 left-0 right-0 z-[10000] bg-[#1a1a1a] border-b-2 border-[#ff9500] overflow-hidden">
-      {/* Horizontal scanlines effect */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-20"
-        style={{
-          backgroundImage: `repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(0, 0, 0, 0.4) 2px,
-            rgba(0, 0, 0, 0.4) 4px
-          )`
-        }}
-      />
-
       {/* Main content container */}
-      <div className="relative h-14 md:h-16 flex items-center overflow-hidden bg-gradient-to-b from-[#252525] to-[#1a1a1a]">
-        {/* Left warning indicator - WRENCH замість warning */}
-        <div className="absolute left-0 top-0 bottom-0 w-12 md:w-16 bg-[#ff9500] flex items-center justify-center border-r-2 border-black z-20 shadow-lg">
-          <motion.div
-            animate={{
-              rotate: [0, 15, -15, 15, 0],
-            }}
-            transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <Wrench className="w-6 h-6 md:w-7 md:h-7 text-black" strokeWidth={2.5} />
-          </motion.div>
+      <div className="relative h-10 md:h-12 flex items-center overflow-hidden bg-gradient-to-b from-[#252525] to-[#1a1a1a]">
+        {/* Left warning indicator */}
+        <div className="absolute left-0 top-0 bottom-0 w-10 md:w-14 bg-[#ff9500] flex items-center justify-center border-r-2 border-black z-20">
+          <Wrench className="w-5 h-5 md:w-6 md:h-6 text-black" strokeWidth={2.5} />
         </div>
 
-        {/* Right warning indicator - WRENCH замість warning */}
-        <div className="absolute right-0 top-0 bottom-0 w-12 md:w-16 bg-[#ff9500] flex items-center justify-center border-l-2 border-black z-20 shadow-lg">
-          <motion.div
-            animate={{
-              rotate: [0, -15, 15, -15, 0],
-            }}
-            transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1.2,
-            }}
-          >
-            <Wrench className="w-6 h-6 md:w-7 md:h-7 text-black" strokeWidth={2.5} />
-          </motion.div>
+        {/* Right warning indicator */}
+        <div className="absolute right-0 top-0 bottom-0 w-10 md:w-14 bg-[#ff9500] flex items-center justify-center border-l-2 border-black z-20">
+          <Wrench className="w-5 h-5 md:w-6 md:h-6 text-black" strokeWidth={2.5} />
         </div>
 
-        {/* Scrolling text container - with proper padding to avoid icons */}
-        <div className="absolute inset-0 flex items-center overflow-hidden">
-          <motion.div
-            className="flex items-center whitespace-nowrap"
+        {/* Scrolling text - CSS animation instead of motion for performance */}
+        <div className="absolute inset-0 flex items-center overflow-hidden" style={{ direction: 'ltr' }}>
+          <div
+            className="flex items-center whitespace-nowrap banner-scroll"
             style={{ 
               paddingLeft: '4rem',
               paddingRight: '4rem',
-              direction: 'ltr', // Force LTR for animation direction
-            }}
-            animate={{ x: isRTL ? ['0%', '50%'] : [0, '-50%'] }}
-            transition={{
-              duration: 60,
-              repeat: Infinity,
-              ease: "linear",
             }}
           >
             <span 
-              className="font-mono text-base md:text-lg font-bold uppercase"
+              className="font-mono text-sm md:text-base font-bold uppercase"
               style={{
                 color: '#ff9500',
-                textShadow: `
-                  0 0 10px rgba(255, 149, 0, 0.6),
-                  0 1px 0 rgba(0, 0, 0, 0.9),
-                  0 2px 4px rgba(0, 0, 0, 0.7)
-                `,
-                letterSpacing: isRTL ? '0' : '0.2em',
+                textShadow: '0 0 10px rgba(255, 149, 0, 0.6)',
+                letterSpacing: '0.15em',
                 fontFamily: 'monospace',
-                fontWeight: '700',
-                direction: isRTL ? 'rtl' : 'ltr', // Text direction only
               }}
             >
               {repeatedMessage}
             </span>
-          </motion.div>
+          </div>
         </div>
-
-        {/* Top highlight strip */}
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#ff9500]/60 to-transparent" />
-        
-        {/* Bottom shadow strip */}
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-b from-black/40 to-transparent" />
-
-        {/* Subtle flicker overlay */}
-        <motion.div
-          className="absolute inset-0 bg-[#ff9500]/5 pointer-events-none mix-blend-overlay"
-          animate={{
-            opacity: [0, 0.15, 0, 0.1, 0],
-          }}
-          transition={{
-            duration: 0.2,
-            repeat: Infinity,
-            repeatDelay: 4,
-            ease: "easeInOut",
-          }}
-        />
       </div>
 
-      {/* Bottom border with dots pattern */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 flex items-center justify-center gap-1 bg-black/40">
-        {Array(50).fill(null).map((_, i) => (
-          <div key={i} className="w-1 h-0.5 bg-[#ff9500]/30 rounded-full" />
-        ))}
-      </div>
+      <style>{`
+        @keyframes banner-scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .banner-scroll {
+          animation: banner-scroll 80s linear infinite;
+          will-change: transform;
+        }
+      `}</style>
     </div>
   );
 }

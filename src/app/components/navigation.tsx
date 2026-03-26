@@ -78,7 +78,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
       const nav = document.querySelector('nav');
       const navHeight = nav ? nav.offsetHeight : 80;
       const isMobile = window.innerWidth < 768;
-      const betaBannerHeight = isMobile ? 56 : 64; // Beta banner height (h-14 = 56px, h-16 = 64px)
+      const betaBannerHeight = isMobile ? 40 : 48; // Beta banner height (h-10 = 40px, h-12 = 48px)
       const extraPadding = isMobile ? 20 : 30;
       const totalOffset = betaBannerHeight + navHeight + extraPadding;
       
@@ -167,7 +167,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
     <>
       <motion.nav
         id="navigation"
-        className={`fixed top-14 md:top-16 left-0 right-0 w-full z-[9999] transition-all duration-500 ease-in-out border-b ${
+        className={`fixed top-10 md:top-12 left-0 right-0 w-full z-[9999] transition-all duration-500 ease-in-out border-b ${
           scrolled
             ? 'bg-[var(--bg-primary)] backdrop-blur-xl shadow-lg border-[var(--border-color)]'
             : 'bg-[var(--bg-primary)]/95 backdrop-blur-md border-transparent'
@@ -866,8 +866,10 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               transition={{ duration: 0.2 }}
               className="lg:hidden fixed left-0 right-0 bg-[var(--bg-primary)]/98 backdrop-blur-2xl z-[10001] border-b border-[var(--border-color)] shadow-2xl"
               style={{ 
-                top: scrolled ? '120px' : '128px',
-                maxHeight: 'calc(100vh - 128px)',
+                top: '0',
+                paddingTop: scrolled ? '100px' : '108px',
+                maxHeight: '100vh',
+                height: '100vh',
               }}
             >
               <div className="min-h-full flex flex-col px-4 sm:px-6 py-4 sm:py-6 overflow-y-auto">

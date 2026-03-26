@@ -9,7 +9,7 @@ export function smoothScrollToSection(href: string) {
   if (!element) return;
 
   // Calculate offsets
-  const betaBannerHeight = window.innerWidth < 768 ? 56 : 64; // h-14 = 56px (mobile), h-16 = 64px (desktop)
+  const betaBannerHeight = window.innerWidth < 768 ? 40 : 48; // h-10 = 40px (mobile), h-12 = 48px (desktop)
   const navHeight = 80; // Approximate navigation height
   const extraPadding = window.innerWidth < 768 ? 20 : 30;
   const totalOffset = betaBannerHeight + navHeight + extraPadding;
