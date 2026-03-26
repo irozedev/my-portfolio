@@ -266,15 +266,21 @@ export function SiteTour() {
     setHighlightRects(rects);
     setIsElementVisible(rects.length > 0);
 
-    // Smooth scroll to element with better positioning
-    const headerOffset = 100;
-    const elementPosition = rects[0]?.top + window.pageYOffset;
-    const offsetPosition = elementPosition ? elementPosition - headerOffset : 0;
+    // ✅ ПОКРАЩЕНО: Більш розумна прокрутка для мобільних
+    if (rects.length > 0) {
+      const firstRect = rects[0];
+      const isMobile = window.innerWidth < 768;
+      
+      // На мобільних - менший offset, на десктопі - більший
+      const headerOffset = isMobile ? 120 : 150;
+      const elementPosition = firstRect.top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerOffset;
 
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    });
+      window.scrollTo({
+        top: Math.max(0, offsetPosition), // Не прокручуємо вище 0
+        behavior: 'smooth'
+      });
+    }
   }, [isActive, currentStep, getTourSteps]);
 
   const startTour = () => {
@@ -301,11 +307,41 @@ export function SiteTour() {
     }
   };
 
+  // ✅ ДОДАНО: Автоматичний skip кроків з відсутніми елементами
+  useEffect(() => {
+    if (!isActive) return;
+
+    const steps = getTourSteps();
+    const step = steps[currentStep];
+    if (!step) return;
+
+    const elementIds = Array.isArray(step.elementId) ? step.elementId : [step.elementId];
+    const foundElements = elementIds.some(id => document.getElementById(id) !== null);
+
+    // Якщо жоден елемент не знайдено - автоматично переходимо далі (але не більше 3 разів підряд)
+    if (!foundElements && currentStep < steps.length - 1) {
+      const skipAttempts = Number(sessionStorage.getItem('tourSkipAttempts') || '0');
+      if (skipAttempts < 3) {
+        sessionStorage.setItem('tourSkipAttempts', String(skipAttempts + 1));
+        console.warn(`⏭️ Skipping step ${currentStep + 1} - element not found`);
+        setTimeout(() => {
+          setCurrentStep(prev => prev + 1);
+        }, 500);
+      } else {
+        // Скинути лічильник якщо знайдено хоча б один елемент
+        sessionStorage.setItem('tourSkipAttempts', '0');
+      }
+    } else {
+      sessionStorage.setItem('tourSkipAttempts', '0');
+    }
+  }, [isActive, currentStep, getTourSteps]);
+
   const closeTour = () => {
     setIsActive(false);
     setCurrentStep(0);
     setHighlightRects([]);
     setIsElementVisible(false);
+    sessionStorage.removeItem('tourSkipAttempts'); // ✅ Очищаємо лічильник
   };
 
   // Update highlight when step changes

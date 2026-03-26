@@ -16,6 +16,12 @@ export function Footer() {
   const { t } = useLanguage();
   const { statusText, statusEmoji, isAvailable, detailedStatus } = useAvailability();
 
+  // ✅ ВИПРАВЛЕННЯ: Обробник кліка для якірних посилань
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    smoothScrollToSection(href);
+  };
+
   const footerLinks = [
     {
       title: t("footer.navigation"),
@@ -103,7 +109,7 @@ export function Footer() {
               <div>
                 <motion.a 
                   href="#contact"
-                  onClick={(e) => { e.preventDefault(); smoothScrollToSection("#contact"); }}
+                  onClick={(e) => handleAnchorClick(e, "#contact")}
                   className="text-base md:text-lg font-semibold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors cursor-pointer whitespace-nowrap"
                   whileHover={{ scale: 1.05 }}
                 >
@@ -111,7 +117,7 @@ export function Footer() {
                 </motion.a>
                 <motion.a 
                   href="#services"
-                  onClick={(e) => { e.preventDefault(); smoothScrollToSection("#services"); }}
+                  onClick={(e) => handleAnchorClick(e, "#services")}
                   className="text-sm md:text-base text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors cursor-pointer block whitespace-nowrap"
                   whileHover={{ scale: 1.05 }}
                 >
@@ -136,7 +142,7 @@ export function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      onClick={(e) => { e.preventDefault(); smoothScrollToSection(link.href); }}
+                      onClick={(e) => handleAnchorClick(e, link.href)}
                       className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors duration-300 flex items-center gap-2 group cursor-pointer"
                     >
                       <span className="w-0 h-px bg-[var(--accent-primary)] group-hover:w-4 transition-all duration-300" />
