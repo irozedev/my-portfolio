@@ -1,6 +1,5 @@
-import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
-import { Menu, X, Sun, Moon, LogIn, User, ChevronDown, Globe } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
+import { Menu, X, Sun, Moon, LogIn, User, ChevronDown, Terminal } from "lucide-react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useLanguage, Language } from "../contexts/language-context";
 import { useTheme } from "../contexts/theme-context";
 import { smoothScrollToSection } from "../../utils/scroll-utils";
@@ -24,17 +23,16 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showBookCallModal, setShowBookCallModal] = useState(false);
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
-  const { scrollYProgress } = useScroll();
+  const [scrollProgress, setScrollProgress] = useState(0);
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   const { user, signOut, loading } = useAuth();
   const { isAvailable } = useAvailability();
   const { isClientMode } = useViewMode();
+  const rafRef = useRef(0);
 
   const isRTL = language === 'ar';
 
-  // CLIENT MODE: Hero → Services → Projects → About → Contact
-  // CV MODE: Hero → Experience → About → Projects → Contact
   const navItems = useMemo(() => {
     if (isClientMode) {
       return [
@@ -66,1023 +64,455 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
   const currentLang = languages.find(l => l.code === language) || languages[0];
   const displayLang = currentLang.code.toUpperCase() === 'UK' ? 'UA' : currentLang.code.toUpperCase();
 
+  // Throttled scroll handler with rAF
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      
-      // Update active section based on scroll position
-      const sections = navItems.map(item => item.href.replace('#', '') || 'home');
-      let found = false;
-      
-      // Get navigation height for consistent offset calculation
-      const nav = document.querySelector('nav');
-      const navHeight = nav ? nav.offsetHeight : 80;
-      const isMobile = window.innerWidth < 768;
-      const betaBannerHeight = isMobile ? 40 : 48; // Beta banner height (h-10 = 40px, h-12 = 48px)
-      const extraPadding = isMobile ? 20 : 30;
-      const totalOffset = betaBannerHeight + navHeight + extraPadding;
-      
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // Check if section top is within the navigation offset zone
-          // This matches the scroll offset used in smoothScrollToSection
-          if (rect.top <= totalOffset + 50 && rect.bottom >= totalOffset) {
-            setActiveSection(section);
-            found = true;
-            break;
+      if (ticking) return;
+      ticking = true;
+
+      rafRef.current = requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        setScrolled(scrollY > 50);
+
+        // Scroll progress
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        setScrollProgress(docHeight > 0 ? (scrollY / docHeight) * 100 : 0);
+
+        // Active section
+        const sections = navItems.map(item => item.href.replace('#', '') || 'home');
+        const nav = document.querySelector('nav');
+        const navHeight = nav ? nav.offsetHeight : 80;
+        const isMobile = window.innerWidth < 768;
+        const bannerH = isMobile ? 40 : 48;
+        const totalOffset = bannerH + navHeight + (isMobile ? 20 : 30);
+        let found = false;
+
+        for (const section of sections) {
+          const el = document.getElementById(section);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= totalOffset + 50 && rect.bottom >= totalOffset) {
+              setActiveSection(section);
+              found = true;
+              break;
+            }
           }
         }
-      }
-      
-      // Default to home if at top of page
-      if (!found && window.scrollY < 100) {
-        setActiveSection('home');
-      }
+        if (!found && scrollY < 100) setActiveSection('home');
+
+        ticking = false;
+      });
     };
 
-    // Run immediately on mount
     handleScroll();
-    
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, [navItems]);
 
-  // Block body scroll when mobile menu is open
+  // Lock body scroll when mobile menu open
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
-      // Close all other menus when mobile menu opens
       setShowLangMenu(false);
       setShowUserMenu(false);
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
     }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    return () => { document.body.style.overflow = ''; };
   }, [isMobileMenuOpen]);
 
-  // Close language menu on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (showLangMenu && !target.closest('.language-selector')) {
-        setShowLangMenu(false);
-      }
-      if (showUserMenu && !target.closest('.user-menu')) {
-        setShowUserMenu(false);
-      }
+    if (!showLangMenu && !showUserMenu) return;
+    const handler = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (showLangMenu && !t.closest('.language-selector')) setShowLangMenu(false);
+      if (showUserMenu && !t.closest('.user-menu')) setShowUserMenu(false);
     };
-
-    if (showLangMenu || showUserMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, [showLangMenu, showUserMenu]);
 
   const handleSignOut = async () => {
-    try {
-      await signOut();
-      setShowUserMenu(false);
-      setIsMobileMenuOpen(false);
-    } catch (error) {
-      console.error('Failed to sign out:', error);
-    }
-  };
-
-  // Smooth scroll with header offset
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    smoothScrollToSection(href);
+    try { await signOut(); } catch {}
+    setShowUserMenu(false);
     setIsMobileMenuOpen(false);
   };
 
+  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    smoothScrollToSection(href);
+    setIsMobileMenuOpen(false);
+  }, []);
+
+  const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
+
   return (
     <>
-      <motion.nav
+      <nav
         id="navigation"
-        className={`fixed top-10 md:top-12 left-0 right-0 w-full z-[9999] transition-all duration-500 ease-in-out border-b ${
+        className={`fixed top-10 md:top-12 left-0 right-0 w-full z-[9999] transition-all duration-300 border-b ${
           scrolled
-            ? 'bg-[var(--bg-primary)] backdrop-blur-xl shadow-lg border-[var(--border-color)]'
-            : 'bg-[var(--bg-primary)]/95 backdrop-blur-md border-transparent'
+            ? 'bg-[var(--bg-primary)]/95 backdrop-blur-md shadow-lg border-[var(--border-color)]'
+            : 'bg-[var(--bg-primary)]/90 backdrop-blur-sm border-transparent'
         }`}
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        {/* Scroll Progress Bar */}
-        <motion.div
-          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-[var(--accent-primary)] via-purple-500 to-pink-500 shadow-lg shadow-[var(--accent-primary)]/50"
-          style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
+        {/* Scroll Progress Bar — pure CSS driven */}
+        <div
+          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-[var(--accent-primary)] via-purple-500 to-pink-500"
+          style={{ width: `${scrollProgress}%`, transition: 'width 0.1s linear' }}
         />
 
-        <motion.div 
-          className="w-full px-3 sm:px-4 lg:px-6"
-          animate={{ 
-            paddingTop: scrolled ? '0.75rem' : '1.25rem',
-            paddingBottom: scrolled ? '0.75rem' : '1.25rem'
-          }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-        >
+        <div className={`w-full px-3 sm:px-4 lg:px-6 ${scrolled ? 'py-2.5' : 'py-3 lg:py-4'} transition-all duration-300`}>
           <div className={`flex items-center w-full gap-2 sm:gap-3 lg:gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-            {/* Logo - Left Side (Right in RTL due to flex-row-reverse) */}
-            <div className="flex-1 flex items-center gap-3 justify-start min-w-0">
-              <motion.a
+            
+            {/* Logo — Lightweight */}
+            <div className="flex-1 flex items-center gap-2 justify-start min-w-0">
+              <a
                 href="#home"
                 onClick={(e) => handleNavClick(e, "#home")}
-                className="flex items-center gap-3 group relative"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-2 group"
               >
-                <div className="relative">
-                  {/* Particle Effects Container */}
-                  <div className="absolute inset-0 overflow-visible pointer-events-none">
-                    {[...Array(6)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        className="absolute w-1 h-1 bg-[var(--accent-primary)] rounded-full"
-                        animate={{
-                          x: [0, Math.cos(i * 60 * Math.PI / 180) * 25],
-                          y: [0, Math.sin(i * 60 * Math.PI / 180) * 25],
-                          opacity: [0, 0.8, 0],
-                          scale: [0, 1.2, 0],
-                        }}
-                        transition={{
-                          duration: 2.5,
-                          repeat: Infinity,
-                          delay: i * 0.4,
-                          ease: "easeOut"
-                        }}
-                        style={{
-                          left: '50%',
-                          top: '50%',
-                        }}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Holographic Background Glow - Enhanced */}
-                  <motion.div 
-                    className="absolute -inset-3 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-40 group-hover:opacity-70"
-                    animate={{ 
-                      rotate: [0, 360],
-                      scale: [1, 1.15, 1]
-                    }}
-                    transition={{ 
-                      rotate: { duration: 10, repeat: Infinity, ease: "linear" },
-                      scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }
-                    }}
+                {/* Simple hexagon logo */}
+                <div className="relative w-10 h-10 flex items-center justify-center flex-shrink-0">
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br from-[var(--accent-primary)] to-cyan-400"
+                    style={{ clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)" }}
                   />
-
-                  {/* Secondary Rotating Ring */}
-                  <motion.div
-                    className="absolute -inset-2 rounded-2xl"
-                    style={{
-                      background: "conic-gradient(from 0deg, transparent, var(--accent-primary), transparent)",
-                      opacity: 0.3
-                    }}
-                    animate={{ rotate: [0, -360] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                  />
-                  
-                  {/* Hexagon Logo Container - Enhanced */}
-                  <div className="relative w-14 h-14 flex items-center justify-center">
-                    {/* Outer Hexagon Glow */}
-                    <motion.div 
-                      className="absolute -inset-1 opacity-50"
-                      style={{
-                        clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)"
-                      }}
-                      animate={{
-                        boxShadow: [
-                          "0 0 20px rgba(0, 217, 255, 0.5)",
-                          "0 0 40px rgba(147, 51, 234, 0.5)",
-                          "0 0 20px rgba(236, 72, 153, 0.5)",
-                          "0 0 20px rgba(0, 217, 255, 0.5)",
-                        ]
-                      }}
-                      transition={{ duration: 4, repeat: Infinity }}
-                    />
-
-                    {/* Hexagon Background with Animated Gradient Border */}
-                    <div className="absolute inset-0" style={{
-                      clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)"
-                    }}>
-                      <motion.div 
-                        className="w-full h-full"
-                        style={{
-                          background: "linear-gradient(135deg, #00d9ff, #9333ea, #ec4899, #00d9ff)",
-                          backgroundSize: "300% 300%"
-                        }}
-                        animate={{ 
-                          backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
-                        }}
-                        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                      />
-                    </div>
-                    
-                    {/* Inner Hexagon with Dynamic Background */}
-                    <div className="absolute inset-[3px]" style={{
-                      clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)"
-                    }}>
-                      <motion.div 
-                        className="w-full h-full bg-[var(--bg-primary)] flex items-center justify-center relative overflow-hidden"
-                      >
-                        {/* Animated Scan Line */}
-                        <motion.div
-                          className="absolute inset-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent"
-                          animate={{
-                            y: ['-100%', '200%']
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "linear"
-                          }}
-                        />
-
-                        {/* "S" Letter with Enhanced Animation */}
-                        <motion.span 
-                          className="text-3xl font-black relative z-10"
-                          style={{
-                            background: "linear-gradient(135deg, #00d9ff, #9333ea, #ec4899)",
-                            backgroundClip: "text",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent"
-                          }}
-                          animate={{ 
-                            scale: [1, 1.08, 1]
-                          }}
-                          transition={{ 
-                            duration: 3, 
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                          }}
-                        >
-                          S
-                        </motion.span>
-
-                        {/* Animated Glow Behind Letter */}
-                        <motion.div
-                          className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                          animate={{
-                            opacity: [0.5, 1, 0.5]
-                          }}
-                          transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                          }}
-                        >
-                          <div className="text-3xl font-black text-[#00d9ff] blur-md opacity-70">S</div>
-                        </motion.div>
-                      </motion.div>
-                    </div>
-
-                    {/* Multiple Animated Rings */}
-                    <motion.div
-                      className="absolute inset-0 rounded-full border-2 border-[var(--accent-primary)]/50"
-                      animate={{
-                        rotate: [0, 360],
-                        scale: [1, 1.3, 1],
-                        opacity: [0.5, 0, 0.5]
-                      }}
-                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                    
-                    <motion.div
-                      className="absolute inset-0 rounded-full border border-purple-500/50"
-                      animate={{
-                        rotate: [360, 0],
-                        scale: [1, 1.4, 1],
-                        opacity: [0.3, 0, 0.3]
-                      }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                    />
-
-                    {/* Enhanced Status Indicator with Multiple Pulses */}
-                    <motion.div 
-                      className={`absolute -top-1 -right-1 w-5 h-5 rounded-full border-2 border-[var(--bg-primary)] shadow-lg z-10 ${
-                        isAvailable ? 'bg-green-500' : 'bg-orange-500'
-                      }`}
-                      animate={{
-                        scale: [1, 1.2, 1],
-                        boxShadow: isAvailable 
-                          ? [
-                              '0 0 0 0 rgba(34, 197, 94, 0.7)',
-                              '0 0 0 10px rgba(34, 197, 94, 0)',
-                              '0 0 0 0 rgba(34, 197, 94, 0)'
-                            ]
-                          : [
-                              '0 0 0 0 rgba(249, 115, 22, 0.7)',
-                              '0 0 0 10px rgba(249, 115, 22, 0)',
-                              '0 0 0 0 rgba(249, 115, 22, 0)'
-                            ]
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
+                  <div
+                    className="absolute inset-[2px] bg-[var(--bg-primary)] flex items-center justify-center"
+                    style={{ clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)" }}
+                  >
+                    <span
+                      className="text-xl font-black bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 bg-clip-text text-transparent"
                     >
-                      {/* Inner Glow */}
-                      <motion.div
-                        className="absolute inset-0.5 rounded-full bg-white"
-                        animate={{
-                          opacity: [0.8, 0.3, 0.8]
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          repeat: Infinity
-                        }}
-                      />
-                    </motion.div>
+                      S
+                    </span>
                   </div>
+                  {/* Availability dot */}
+                  <div className={`absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-[var(--bg-primary)] ${
+                    isAvailable ? 'bg-green-500' : 'bg-orange-500'
+                  }`} />
                 </div>
-                
-                {/* Live Status Badge - Desktop Only */}
-                <motion.button
+
+                {/* Status Badge — desktop only, clickable */}
+                <button
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     setShowAvailabilityModal(true);
                   }}
-                  className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--bg-secondary)]/60 backdrop-blur-md border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 transition-all relative overflow-hidden cursor-pointer"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  title="Click to view availability schedule"
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 transition-colors cursor-pointer"
                 >
-                  {/* Shimmer Effect */}
-                  <motion.div
-                    className="absolute inset-0 w-full h-full pointer-events-none"
-                    style={{
-                      background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)"
-                    }}
-                    animate={{
-                      x: ['-100%', '200%']
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                  />
-
-                  <motion.div
-                    className={`relative w-2.5 h-2.5 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
-                    animate={{
-                      scale: [1, 1.5, 1],
-                      opacity: [1, 0.6, 1]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  <span className={`relative text-sm font-bold tracking-wide uppercase ${
-                    isAvailable ? 'text-green-500' : 'text-orange-500'
-                  }`}>
+                  <div className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-green-500 animate-pulse' : 'bg-orange-500'}`} />
+                  <span className={`text-xs font-bold uppercase ${isAvailable ? 'text-green-500' : 'text-orange-500'}`}>
                     {isAvailable ? (
-                      language === 'uk' ? 'Онлайн' : 
-                      language === 'nl' ? 'Online' : 
-                      language === 'ar' ? 'متصل' :
-                      language === 'es' ? 'En línea' :
-                      'Online'
+                      language === 'uk' ? 'Онлайн' : language === 'nl' ? 'Online' : language === 'ar' ? 'متصل' : language === 'es' ? 'En línea' : 'Online'
                     ) : (
-                      language === 'uk' ? 'Зайнятий' : 
-                      language === 'nl' ? 'Bezet' : 
-                      language === 'ar' ? 'مشغول' :
-                      language === 'es' ? 'Ocupado' :
-                      'Busy'
+                      language === 'uk' ? 'Зайнятий' : language === 'nl' ? 'Bezet' : language === 'ar' ? 'مشغول' : language === 'es' ? 'Ocupado' : 'Busy'
                     )}
                   </span>
-                </motion.button>
-
-                {/* Compact Status - Mobile Only - MINIMAL DEVELOPER STYLE */}
-                <motion.button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowAvailabilityModal(true);
-                  }}
-                  className="sm:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[var(--bg-secondary)]/80 backdrop-blur-sm border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 transition-all relative overflow-hidden cursor-pointer active:scale-95"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 }}
-                  whileTap={{ scale: 0.95 }}
-                  title={isAvailable ? 'Online - Click for schedule' : 'Busy - Click for schedule'}
-                >
-                  {/* Glow Effect */}
-                  <motion.div
-                    className={`absolute inset-0 blur-xl opacity-20 ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
-                    animate={{
-                      opacity: [0.2, 0.4, 0.2]
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  />
-                  
-                  {/* Status Dot */}
-                  <div className="relative flex items-center justify-center">
-                    <motion.div
-                      className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-orange-500'}`}
-                      animate={{
-                        scale: [1, 1.3, 1],
-                        boxShadow: isAvailable 
-                          ? [
-                              '0 0 0 0 rgba(34, 197, 94, 0.7)',
-                              '0 0 0 4px rgba(34, 197, 94, 0)',
-                              '0 0 0 0 rgba(34, 197, 94, 0)'
-                            ]
-                          : [
-                              '0 0 0 0 rgba(249, 115, 22, 0.7)',
-                              '0 0 0 4px rgba(249, 115, 22, 0)',
-                              '0 0 0 0 rgba(249, 115, 22, 0)'
-                            ]
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    />
-                  </div>
-                  
-                  {/* Status Text - Very Short */}
-                  <span className={`relative text-[10px] font-mono font-extrabold tracking-wider uppercase ${
-                    isAvailable ? 'text-green-400' : 'text-orange-400'
-                  }`}>
-                    {isAvailable ? (
-                      language === 'uk' ? 'Онлайн' : 
-                      language === 'nl' ? 'Online' : 
-                      language === 'ar' ? 'متصل' :
-                      language === 'es' ? 'En línea' :
-                      'Online'
-                    ) : (
-                      language === 'uk' ? 'Зайнятий' : 
-                      language === 'nl' ? 'Bezet' : 
-                      language === 'ar' ? 'مشغول' :
-                      language === 'es' ? 'Ocupado' :
-                      'Busy'
-                    )}
-                  </span>
-                </motion.button>
-              </motion.a>
+                </button>
+              </a>
             </div>
 
-            {/* Desktop Navigation - Center */}
-            <div className="hidden lg:flex items-center gap-2 xl:gap-3 flex-1 justify-center relative">
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center gap-1 xl:gap-2 flex-1 justify-center">
               {navItems.map((item, index) => {
                 const isActive = activeSection === item.href.replace('#', '') || (item.href === '#home' && activeSection === '');
                 return (
-                  <motion.a
+                  <a
                     key={`${item.href}-${index}`}
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className={`relative px-2 md:px-2.5 xl:px-3 py-2 text-xs md:text-[11px] lg:text-xs xl:text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                    className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-md whitespace-nowrap ${
                       isActive
-                        ? "text-[var(--accent-primary)]"
-                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                        ? "text-[var(--accent-primary)] bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30"
+                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]/60"
                     }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                   >
-                    <span className="relative z-10">{item.label}</span>
-                    
-                    {/* Active indicator with smooth transition */}
-                    {isActive && (
-                      <motion.div
-                        layoutId="navIndicator"
-                        className="absolute inset-0 bg-gradient-to-r from-[var(--accent-primary)]/10 via-[var(--accent-primary)]/20 to-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/40 rounded-lg shadow-lg shadow-[var(--accent-primary)]/20"
-                        transition={{ 
-                          type: "spring", 
-                          bounce: 0.2, 
-                          duration: 0.6,
-                          stiffness: 200,
-                          damping: 25
-                        }}
-                      />
-                    )}
-                    
-                    {/* Hover background - Only when NOT active */}
-                    {!isActive && (
-                      <motion.div
-                        className="absolute inset-0 bg-[var(--bg-secondary)]/80 rounded-lg"
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                    )}
-                    
-                    {/* Bottom highlight line */}
-                    <motion.div
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent"
-                      initial={{ width: 0, opacity: 0 }}
-                      whileHover={{ width: "80%", opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </motion.a>
+                    {item.label}
+                  </a>
                 );
               })}
             </div>
 
             {/* Desktop Controls */}
-            <div className="hidden lg:flex items-center gap-1 xl:gap-2 flex-1 justify-end">
-              {/* User Menu / Auth Button - HIDDEN PER REDESIGN PLAN */}
-              
+            <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-end">
               {/* Language Selector */}
               <div id="language-selector" className="relative language-selector">
-                <motion.button
+                <button
                   onClick={() => setShowLangMenu(!showLangMenu)}
-                  className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors flex items-center gap-2"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  className="p-2 hover:bg-[var(--bg-secondary)] rounded-md transition-colors flex items-center gap-1.5"
                 >
-                  <span className="text-xl">{currentLang.flag}</span>
-                  <span className="text-xs font-medium text-[var(--text-secondary)] uppercase">
-                    {displayLang}
-                  </span>
-                  <ChevronDown className="w-4 h-4 text-[var(--text-secondary)]" />
-                </motion.button>
+                  <span className="text-lg">{currentLang.flag}</span>
+                  <span className="text-xs font-medium text-[var(--text-secondary)] uppercase">{displayLang}</span>
+                  <ChevronDown className={`w-3.5 h-3.5 text-[var(--text-muted)] transition-transform ${showLangMenu ? 'rotate-180' : ''}`} />
+                </button>
                 
                 {showLangMenu && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`absolute ${isRTL ? 'left-0' : 'right-0'} mt-2 w-48 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl shadow-xl overflow-hidden z-[100000]`}
-                  >
+                  <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} mt-2 w-44 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg shadow-xl overflow-hidden z-[100000]`}>
                     {languages.map((lang) => (
                       <button
                         key={lang.code}
-                        onClick={() => {
-                          setLanguage(lang.code);
-                          setShowLangMenu(false);
-                        }}
-                        className={`w-full px-4 py-2 ${isRTL ? 'text-right' : 'text-left'} hover:bg-[var(--bg-secondary)] transition-colors flex items-center gap-3 ${
+                        onClick={() => { setLanguage(lang.code); setShowLangMenu(false); }}
+                        className={`w-full px-3 py-2 ${isRTL ? 'text-right' : 'text-left'} hover:bg-[var(--bg-secondary)] transition-colors flex items-center gap-2.5 text-sm ${
                           language === lang.code ? "bg-[var(--accent-primary)]/10 text-[var(--accent-primary)]" : "text-[var(--text-primary)]"
                         }`}
                       >
-                        <span className="text-xl">{lang.flag}</span>
+                        <span className="text-lg">{lang.flag}</span>
                         <span>{lang.label}</span>
                       </button>
                     ))}
-                  </motion.div>
+                  </div>
                 )}
               </div>
 
               {/* Theme Toggle */}
-              <motion.button
+              <button
                 id="theme-toggle"
                 onClick={toggleTheme}
-                className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="p-2 hover:bg-[var(--bg-secondary)] rounded-md transition-colors"
+                aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
               >
-                {theme === "dark" ? (
-                  <Sun className="w-5 h-5 text-[var(--text-secondary)]" />
-                ) : (
-                  <Moon className="w-5 h-5 text-[var(--text-secondary)]" />
-                )}
-              </motion.button>
+                {theme === "dark" ? <Sun className="w-5 h-5 text-[var(--text-secondary)]" /> : <Moon className="w-5 h-5 text-[var(--text-secondary)]" />}
+              </button>
 
-              {/* Enhanced CTA Button */}
-              <motion.a
+              {/* CTA — Terminal-style "Start Project" */}
+              <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, "#contact")}
-                className="ml-2 relative px-5 py-2.5 overflow-hidden group rounded-2xl shadow-lg hover:shadow-xl transition-all"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
+                className="ml-2 group relative flex items-center gap-2 px-4 py-2.5 bg-[var(--bg-secondary)] border border-[var(--accent-primary)]/40 rounded-md font-mono text-sm text-[var(--accent-primary)] hover:bg-[var(--accent-primary)]/10 hover:border-[var(--accent-primary)] hover:shadow-[0_0_15px_rgba(0,217,255,0.2)] transition-all active:scale-95"
               >
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 rounded-2xl"
-                  animate={{
-                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                />
-                
-                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-2xl blur opacity-40 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-                
-                <span className="relative z-10 text-white font-bold text-sm flex items-center gap-2">
-                  <motion.span
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
-                  >
-                    👋
-                  </motion.span>
-                  {t("nav.hireMe")}
-                  <motion.span
-                    className="text-lg"
-                    animate={{ x: [0, 3, 0] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                  >
-                    →
-                  </motion.span>
+                <Terminal className="w-4 h-4" />
+                <span className="text-[var(--text-muted)] group-hover:text-[var(--accent-primary)] transition-colors">$</span>
+                <span>
+                  {language === 'uk' ? 'запустити проєкт' :
+                   language === 'nl' ? 'start project' :
+                   language === 'ar' ? 'ابدأ مشروع' :
+                   language === 'es' ? 'iniciar proyecto' :
+                   'start project'}
                 </span>
-              </motion.a>
+                <span className="w-[2px] h-4 bg-[var(--accent-primary)] animate-blink" />
+              </a>
             </div>
 
-            {/* Tablet/Mobile Menu Button + Controls */}
-            <div className="lg:hidden flex items-center gap-2">
-              {/* Language Selector for Mobile/Tablet - DEVELOPER-STYLE MINIMAL */}
+            {/* Mobile Controls */}
+            <div className="lg:hidden flex items-center gap-1.5">
+              {/* Language — compact */}
               <div className="relative language-selector">
-                <motion.button
-                  onClick={() => {
-                    setShowLangMenu(!showLangMenu);
-                    setShowUserMenu(false);
-                  }}
-                  className="relative p-2 bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg hover:border-[var(--accent-primary)]/50 transition-all flex items-center gap-1.5 active:scale-95 min-w-[64px]"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <button
+                  onClick={() => { setShowLangMenu(!showLangMenu); setShowUserMenu(false); }}
+                  className="p-2 bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] rounded-md flex items-center gap-1 active:scale-95 transition-transform"
                 >
-                  {/* Flag */}
-                  <span className="text-base">
-                    {currentLang.flag}
-                  </span>
-                  
-                  {/* Language Code - Developer Style */}
-                  <span className="text-xs font-mono font-bold text-[var(--text-primary)]">
-                    {displayLang}
-                  </span>
-                  
-                  {/* Chevron indicator */}
-                  <motion.div
-                    animate={{ rotate: showLangMenu ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <ChevronDown className="w-3 h-3 text-[var(--text-muted)]" />
-                  </motion.div>
-                </motion.button>
-                
-                <AnimatePresence>
-                  {showLangMenu && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                      className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-2 w-48 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg shadow-[0_8px_24px_rgba(0,0,0,0.4)] overflow-hidden z-[100001]`}
-                    >
-                      {/* Header - Developer Style */}
-                      <div className="px-3 py-2 bg-[var(--bg-secondary)]/30 border-b border-[var(--border-color)]">
-                        <p className="text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest">
-                          SELECT LANG
-                        </p>
-                      </div>
-                      
-                      {/* Language Options - Clean List */}
-                      <div className="py-1">
-                        {languages.map((lang) => (
-                          <motion.button
-                            key={lang.code}
-                            onClick={() => {
-                              setLanguage(lang.code);
-                              setShowLangMenu(false);
-                            }}
-                            className={`w-full px-3 py-2.5 text-sm font-medium transition-all flex items-center gap-3 ${
-                              language === lang.code
-                                ? "bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] border-l-2 border-[var(--accent-primary)]"
-                                : "text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]/50 border-l-2 border-transparent"
-                            }`}
-                            whileTap={{ scale: 0.98 }}
-                          >
-                            {/* Flag */}
-                            <span className="text-lg">
-                              {lang.flag}
-                            </span>
-                            
-                            {/* Label */}
-                            <span className={`flex-1 text-left font-mono text-xs ${ 
-                              language === lang.code ? "font-bold" : "font-normal"
-                            }`}>
-                              {lang.label}
-                            </span>
-                            
-                            {/* Active Indicator - Minimalistic */}
-                            {language === lang.code && (
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]"
-                              />
-                            )}
-                          </motion.button>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                  <span className="text-sm">{currentLang.flag}</span>
+                  <span className="text-[10px] font-mono font-bold text-[var(--text-primary)]">{displayLang}</span>
+                </button>
+
+                {showLangMenu && (
+                  <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-1.5 w-44 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg shadow-2xl overflow-hidden z-[100001]`}>
+                    <div className="px-3 py-1.5 bg-[var(--bg-secondary)]/30 border-b border-[var(--border-color)]">
+                      <p className="text-[9px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest">SELECT LANG</p>
+                    </div>
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => { setLanguage(lang.code); setShowLangMenu(false); }}
+                        className={`w-full px-3 py-2.5 text-sm flex items-center gap-2.5 active:bg-[var(--accent-primary)]/20 transition-colors ${
+                          language === lang.code
+                            ? "bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] border-l-2 border-[var(--accent-primary)]"
+                            : "text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]/50 border-l-2 border-transparent"
+                        }`}
+                      >
+                        <span className="text-lg">{lang.flag}</span>
+                        <span className="flex-1 text-left font-mono text-xs">{lang.label}</span>
+                        {language === lang.code && <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              {/* Theme Toggle for Mobile/Tablet */}
-              <motion.button
+              {/* Theme */}
+              <button
                 onClick={toggleTheme}
-                className="p-2 bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg hover:bg-[var(--accent-primary)]/10 transition-colors flex items-center justify-center"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="p-2 bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] rounded-md active:scale-95 transition-transform"
+                aria-label="Toggle theme"
               >
-                {theme === "dark" ? (
-                  <Sun className="w-5 h-5 text-[var(--text-secondary)]" />
-                ) : (
-                  <Moon className="w-5 h-5 text-[var(--text-secondary)]" />
-                )}
-              </motion.button>
+                {theme === "dark" ? <Sun className="w-5 h-5 text-[var(--text-secondary)]" /> : <Moon className="w-5 h-5 text-[var(--text-secondary)]" />}
+              </button>
 
-              {/* Login Button for Mobile/Tablet (only when not logged in) */}
+              {/* Login (not logged in) */}
               {!user && !loading && (
-                <motion.button
+                <button
                   onClick={() => setShowAuthModal(true)}
-                  className="p-2 bg-gradient-to-r from-[#00d9ff] to-cyan-400 rounded-lg hover:shadow-[0_0_20px_rgba(0,217,255,0.5)] transition-all flex items-center justify-center"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  className="p-2 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 rounded-md active:scale-95 transition-transform"
                   title="Sign In"
                 >
                   <LogIn className="w-5 h-5 text-black" />
-                </motion.button>
+                </button>
               )}
 
-              {/* User Avatar for Mobile/Tablet (only when logged in) */}
+              {/* Avatar (logged in) */}
               {user && !loading && (
-                <motion.button
-                  onClick={() => {
-                    setIsMobileMenuOpen(true);
-                  }}
-                  className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-[#00d9ff]/30 hover:border-[#00d9ff] transition-all flex items-center justify-center"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  title="Profile"
+                <button
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-[var(--accent-primary)]/30 active:scale-95 transition-transform"
                 >
                   {user.user_metadata?.avatar_url || user.user_metadata?.picture ? (
-                    <img
-                      src={user.user_metadata.avatar_url || user.user_metadata.picture}
-                      alt={user.user_metadata?.name || 'User'}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={user.user_metadata.avatar_url || user.user_metadata.picture} alt="" className="w-full h-full object-cover" loading="lazy" />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#00d9ff] to-purple-500 flex items-center justify-center">
+                    <div className="w-full h-full bg-gradient-to-br from-[var(--accent-primary)] to-purple-500 flex items-center justify-center">
                       <User className="w-5 h-5 text-white" />
                     </div>
                   )}
-                  <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-[var(--bg-primary)] shadow-lg ${
-                    isAvailable ? 'bg-green-500' : 'bg-orange-500'
-                  }`} />
-                </motion.button>
+                </button>
               )}
 
-              {/* Mobile Menu Button */}
-              <motion.button
-                onClick={() => {
-                  setIsMobileMenuOpen(!isMobileMenuOpen);
-                  setShowLangMenu(false);
-                  setShowUserMenu(false);
-                }}
-                className="relative p-2 text-[var(--text-primary)] bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-lg"
+              {/* Burger */}
+              <button
+                onClick={() => { setIsMobileMenuOpen(!isMobileMenuOpen); setShowLangMenu(false); }}
+                className="p-2 text-[var(--text-primary)] bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] rounded-md active:scale-90 transition-transform"
                 aria-label="Toggle menu"
-                whileTap={{ scale: 0.9 }}
               >
-                <motion.div
-                  animate={{ rotate: isMobileMenuOpen ? 90 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                </motion.div>
-              </motion.button>
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Mobile/Tablet Navigation */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="lg:hidden fixed left-0 right-0 bg-[var(--bg-primary)]/98 backdrop-blur-2xl z-[10001] border-b border-[var(--border-color)] shadow-2xl"
-              style={{ 
-                top: '0',
-                paddingTop: scrolled ? '100px' : '108px',
-                maxHeight: '100vh',
-                height: '100vh',
-              }}
-            >
-              <div className="min-h-full flex flex-col px-4 sm:px-6 py-4 sm:py-6 overflow-y-auto">
-                {/* User Profile Section */}
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-8 p-4 sm:p-6 bg-gradient-to-br from-[#00d9ff]/10 to-purple-500/10 rounded-2xl border-2 border-[#00d9ff]/30"
-                >
-                  {loading ? (
-                    <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 rounded-full bg-white/5 animate-pulse" />
-                      <div className="flex-1 space-y-2">
-                        <div className="h-4 bg-white/5 rounded animate-pulse" />
-                        <div className="h-3 bg-white/5 rounded w-2/3 animate-pulse" />
-                      </div>
-                    </div>
-                  ) : user ? (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-4">
-                        {user.user_metadata?.avatar_url ? (
-                          <img
-                            src={user.user_metadata.avatar_url}
-                            alt={user.user_metadata?.name || 'User'}
-                            className="w-16 h-16 rounded-full object-cover border-2 border-[#00d9ff]/50"
-                          />
-                        ) : (
-                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#00d9ff] to-purple-500 flex items-center justify-center">
-                            <User className="w-8 h-8 text-white" />
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <p className="font-bold text-lg text-[var(--text-primary)] truncate">
-                            {user.user_metadata?.name || 'User'}
-                          </p>
-                          <p className="text-sm text-[var(--text-secondary)] truncate">
-                            {user.email}
-                          </p>
-                        </div>
-                      </div>
+        {/* ===== Mobile Menu — CSS-only transitions, no motion ===== */}
+        <div
+          className={`lg:hidden fixed inset-0 z-[10001] transition-all duration-300 ease-out ${
+            isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+          }`}
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/60" onClick={closeMobileMenu} />
 
-                      <div className="grid grid-cols-2 gap-3">
-                        <motion.button
-                          onClick={() => {
-                            onOpenProfile();
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="px-4 py-3 bg-[#00d9ff]/20 hover:bg-[#00d9ff]/30 rounded-xl transition-colors flex items-center justify-center gap-2"
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <User className="w-5 h-5 text-[#00d9ff]" />
-                          <span className="text-sm font-semibold text-[#00d9ff]">Profile</span>
-                        </motion.button>
+          {/* Panel */}
+          <div
+            className={`absolute top-0 right-0 h-full w-full max-w-sm bg-[var(--bg-primary)] border-l border-[var(--border-color)] shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
+              isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
+          >
+            {/* Menu Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-color)]">
+              <span className="font-mono text-sm text-[var(--text-muted)]">// menu</span>
+              <button onClick={closeMobileMenu} className="p-2 hover:bg-[var(--bg-secondary)] rounded-md active:scale-90 transition-transform">
+                <X className="w-5 h-5 text-[var(--text-primary)]" />
+              </button>
+            </div>
 
-                        <motion.button
-                          onClick={handleSignOut}
-                          className="px-4 py-3 bg-red-500/20 hover:bg-red-500/30 rounded-xl transition-colors flex items-center justify-center gap-2"
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <LogIn className="w-5 h-5 text-red-400 rotate-180" />
-                          <span className="text-sm font-semibold text-red-400">Sign Out</span>
-                        </motion.button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#00d9ff] to-purple-500 flex items-center justify-center shrink-0">
-                          <LogIn className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="text-left flex-1 min-w-0">
-                          <h3 className="font-bold text-base text-[var(--text-primary)] leading-tight">
-                            {t('nav.hello')}
-                          </h3>
-                          <p className="text-xs text-[var(--text-secondary)] leading-tight">
-                            {t('nav.signInMessage')}
-                          </p>
-                        </div>
-                      </div>
-                      
-                      {/* Sign In Button - Opens Modal */}
-                      <motion.button
-                        onClick={() => {
-                          setShowAuthModal(true);
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="w-full py-3 bg-gradient-to-r from-[#00d9ff] to-cyan-400 hover:from-[#00b8dd] hover:to-cyan-300 text-black font-bold rounded-xl shadow-[0_0_20px_rgba(0,217,255,0.3)] flex items-center justify-center gap-2 text-sm"
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <LogIn className="w-4 h-4" />
-                        {t('nav.signIn')}
-                      </motion.button>
-                    </div>
-                  )}
-                </motion.div>
-
-                {/* Navigation Links */}
-                <div className="flex-1 flex flex-col justify-center space-y-3 mb-8">
-                  {navItems.map((item, index) => {
-                    const sectionId = item.href.replace('#', '') || 'home';
-                    const isActive = activeSection === sectionId;
-                    
-                    return (
-                      <motion.a
-                        key={`mobile-nav-${item.href}-${index}`}
-                        href={item.href}
-                        onClick={() => handleNavClick(event, item.href)}
-                        className={`relative py-5 px-5 sm:py-6 sm:px-6 rounded-2xl transition-all group overflow-hidden ${
-                          isActive 
-                            ? "bg-gradient-to-r from-[#00d9ff]/20 to-cyan-400/10 border-2 border-[#00d9ff]/50" 
-                            : "bg-white/5 backdrop-blur-sm border-2 border-white/10 hover:border-[#00d9ff]/30"
-                        }`}
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1, type: "spring", stiffness: 100 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-[#00d9ff]/0 via-[#00d9ff]/10 to-[#00d9ff]/0"
-                          initial={{ x: "-100%" }}
-                          whileHover={{ x: "100%" }}
-                          transition={{ duration: 0.6 }}
-                        />
-                        
-                        <div className="flex items-center justify-between relative z-10">
-                          <div className="flex items-center gap-3 sm:gap-4">
-                            {isActive && (
-                              <motion.div
-                                layoutId="mobileActiveDot"
-                                className="w-3 h-3 bg-[#00d9ff] rounded-full shadow-[0_0_12px_rgba(0,217,255,0.8)]"
-                                transition={{ type: "spring", bounce: 0.4, duration: 0.6 }}
-                              />
-                            )}
-                            <span className={`font-bold text-xl sm:text-2xl ${
-                              isActive ? "text-[#00d9ff]" : "text-[var(--text-primary)]"
-                            }`}>
-                              {item.label}
-                            </span>
-                          </div>
-                          
-                          <motion.div
-                            animate={{ x: isActive ? 0 : -10 }}
-                            whileHover={{ x: 5 }}
-                            className="text-[#00d9ff] text-xl"
-                          >
-                            →
-                          </motion.div>
-                        </div>
-                      </motion.a>
-                    );
-                  })}
+            {/* User Section */}
+            <div className="px-5 py-4 border-b border-[var(--border-color)]">
+              {loading ? (
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-[var(--bg-secondary)] animate-pulse" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-[var(--bg-secondary)] rounded animate-pulse" />
+                    <div className="h-3 bg-[var(--bg-secondary)] rounded w-2/3 animate-pulse" />
+                  </div>
                 </div>
-
-                {/* CTA Button */}
-                <motion.a
-                  href="#contact"
-                  onClick={(e) => { e.preventDefault(); smoothScrollToSection("#contact"); setIsMobileMenuOpen(false); }}
-                  className="relative flex items-center justify-center gap-3 w-full py-5 sm:py-6 bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 rounded-2xl font-bold text-lg sm:text-xl shadow-[0_0_30px_rgba(0,217,255,0.5)] overflow-hidden group"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  whileTap={{ scale: 0.98 }}
-                  whileHover={{ scale: 1.02 }}
+              ) : user ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    {user.user_metadata?.avatar_url ? (
+                      <img src={user.user_metadata.avatar_url} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-[var(--accent-primary)]/40" loading="lazy" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--accent-primary)] to-purple-500 flex items-center justify-center">
+                        <User className="w-6 h-6 text-white" />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-[var(--text-primary)] truncate">{user.user_metadata?.name || 'User'}</p>
+                      <p className="text-xs text-[var(--text-muted)] truncate">{user.email}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => { onOpenProfile(); closeMobileMenu(); }}
+                      className="py-2.5 bg-[var(--accent-primary)]/10 rounded-md text-sm font-medium text-[var(--accent-primary)] active:scale-95 transition-transform"
+                    >
+                      Profile
+                    </button>
+                    <button
+                      onClick={handleSignOut}
+                      className="py-2.5 bg-red-500/10 rounded-md text-sm font-medium text-red-400 active:scale-95 transition-transform"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => { setShowAuthModal(true); closeMobileMenu(); }}
+                  className="w-full py-3 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black font-bold rounded-md flex items-center justify-center gap-2 text-sm active:scale-98 transition-transform"
                 >
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                    animate={{ x: ['-100%', '200%'] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-                  />
-                  
-                  <span className="relative z-10 text-white flex items-center gap-3">
-                    <motion.span
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
-                    >
-                      👋
-                    </motion.span>
-                    {t("nav.hireMe")}
-                    <motion.span
-                      className="text-2xl"
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                    >
-                      →
-                    </motion.span>
-                  </span>
-                </motion.a>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
+                  <LogIn className="w-4 h-4" />
+                  {t('nav.signIn')}
+                </button>
+              )}
+            </div>
 
-      {/* Enhanced Auth Modal */}
-      <ModernAuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-      />
+            {/* Nav Links */}
+            <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4 space-y-1">
+              {navItems.map((item) => {
+                const sectionId = item.href.replace('#', '') || 'home';
+                const isActive = activeSection === sectionId;
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className={`flex items-center justify-between py-4 px-4 rounded-lg text-lg font-semibold transition-colors active:scale-[0.98] ${
+                      isActive
+                        ? "bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] border-l-2 border-[var(--accent-primary)]"
+                        : "text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] border-l-2 border-transparent"
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    <span className="text-[var(--text-muted)] text-sm">→</span>
+                  </a>
+                );
+              })}
+            </div>
 
-      {/* Book Call Modal */}
-      <BookCallModal
-        isOpen={showBookCallModal}
-        onClose={() => setShowBookCallModal(false)}
-      />
+            {/* CTA at bottom */}
+            <div className="px-5 py-4 border-t border-[var(--border-color)]">
+              <a
+                href="#contact"
+                onClick={(e) => handleNavClick(e, "#contact")}
+                className="flex items-center justify-center gap-2 w-full py-4 bg-[var(--bg-secondary)] border border-[var(--accent-primary)]/40 rounded-md font-mono text-sm text-[var(--accent-primary)] active:scale-95 transition-transform"
+              >
+                <Terminal className="w-4 h-4" />
+                <span className="text-[var(--text-muted)]">$</span>
+                <span>
+                  {language === 'uk' ? 'запустити проєкт' :
+                   language === 'nl' ? 'start project' :
+                   language === 'ar' ? 'ابدأ مشروع' :
+                   language === 'es' ? 'iniciar proyecto' :
+                   'start project'}
+                </span>
+                <span className="w-[2px] h-4 bg-[var(--accent-primary)] animate-blink" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-      {/* Availability Schedule Modal */}
+      {/* Modals */}
+      <ModernAuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <BookCallModal isOpen={showBookCallModal} onClose={() => setShowBookCallModal(false)} />
       <AvailabilityScheduleModal
         isOpen={showAvailabilityModal}
         onClose={() => setShowAvailabilityModal(false)}
-        onBookCall={() => {
-          setShowAvailabilityModal(false);
-          setShowBookCallModal(true);
-        }}
+        onBookCall={() => { setShowAvailabilityModal(false); setShowBookCallModal(true); }}
       />
     </>
   );

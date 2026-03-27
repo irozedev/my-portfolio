@@ -127,7 +127,7 @@ app.post("/make-server-a62f57c7/ai/chat", async (c) => {
       return c.json({
         success: true,
         message: cached.response,
-        model: 'claude-3-5-haiku',
+        model: 'claude-3-haiku-20240307',
         cached: true
       });
     }
@@ -217,7 +217,7 @@ RULES:
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-5-haiku-latest', // Latest Haiku model
+        model: 'claude-3-haiku-20240307', // Latest Haiku model
         max_tokens: 150, // Reduced from 512 to 150 (save 72% tokens!)
         system: systemPrompt,
         messages: [
@@ -269,7 +269,7 @@ RULES:
     return c.json({
       success: true,
       message: aiMessage,
-      model: 'claude-3-5-haiku',
+      model: 'claude-3-haiku-20240307',
       cached: false
     });
 
@@ -423,7 +423,7 @@ Answer in 2-3 sentences maximum. Be professional and helpful.`;
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-5-haiku-latest', // Latest Haiku model
+        model: 'claude-3-haiku-20240307', // Latest Haiku model
         max_tokens: 200,
         system: systemPrompt,
         messages: messages.filter((m: any) => m.role !== 'system').slice(-5), // Keep last 5 messages only

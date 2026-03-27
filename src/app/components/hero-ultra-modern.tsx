@@ -7,7 +7,6 @@ import { DownloadCVButton } from "./download-cv-button";
 import { getFormattedStats } from "../../utils/stats-calculator";
 import { StatsAirport } from "./stats-airport";
 import { Github, Linkedin, Briefcase, Mail, Rocket, Code2 } from "lucide-react";
-import { motion } from "motion/react";
 
 interface HeroUltraModernProps {
   onViewWork: () => void;
@@ -42,62 +41,22 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
   return (
     <>
       <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--bg-primary)] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 pt-40 md:pt-44 pb-12 scroll-mt-40 md:scroll-mt-44">
-        {/* Animated Background Grid */}
+        {/* Lightweight Background Grid — pure CSS */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#00d9ff08_1px,transparent_1px),linear-gradient(to_bottom,#00d9ff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000,transparent)]" />
         
-        {/* Gradient Orbs */}
-        <motion.div 
-          className="absolute top-1/4 -left-48 w-96 h-96 bg-[var(--accent-primary)] rounded-full mix-blend-multiply filter blur-[128px] opacity-20"
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-1/4 -right-48 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-20"
-          animate={{
-            x: [0, -100, 0],
-            y: [0, 50, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
+        {/* Static gradient orbs — no JS animation, GPU-friendly */}
+        <div className="absolute top-1/4 -left-48 w-96 h-96 bg-[var(--accent-primary)] rounded-full mix-blend-multiply filter blur-[128px] opacity-15" />
+        <div className="absolute bottom-1/4 -right-48 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-15" />
 
         {/* Main Content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto">
           {/* Header */}
-          <motion.div 
-            className="text-center mb-8 sm:mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <div className="text-center mb-8 sm:mb-12">
             {/* Status Badge */}
-            <motion.div 
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/80 backdrop-blur-sm border border-[var(--accent-primary)]/30 rounded-full mb-6"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              <motion.span
-                className="text-lg"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                {statusEmoji}
-              </motion.span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/80 border border-[var(--accent-primary)]/30 rounded-full mb-6">
+              <span className="text-lg">{statusEmoji}</span>
               <span className="text-sm font-mono text-[var(--text-secondary)]">{statusText}</span>
-            </motion.div>
+            </div>
 
             {/* Name */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 sm:mb-6">
@@ -107,15 +66,15 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
             </h1>
 
             {/* Role */}
-            <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--text-secondary)] mb-4">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--text-secondary)] mb-4">
               {t('hero.role')}
-            </div>
+            </h2>
 
             {/* Description */}
             <p className="text-base sm:text-lg md:text-xl text-[var(--text-muted)] max-w-3xl mx-auto px-4">
               {t('hero.description')}
             </p>
-          </motion.div>
+          </div>
 
           {/* Tech Stack Marquee - FIXED */}
           <div className="relative overflow-hidden py-6 mb-10 bg-[var(--bg-secondary)]/30 rounded-xl border border-[var(--border-color)]">
@@ -136,12 +95,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
           </div>
 
           {/* CTA Buttons */}
-          <motion.div 
-            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-12 px-2 sm:px-0"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-12 px-2 sm:px-0">
             {/* Show Book Call button ONLY in CLIENT MODE */}
             {viewMode === 'client' && (
               <button
@@ -167,18 +121,13 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
 
             {/* Show Download CV button ONLY in CV MODE */}
             {viewMode === 'cv' && <DownloadCVButton />}
-          </motion.div>
+          </div>
 
           {/* Stats */}
           <StatsAirport />
 
           {/* Social Links */}
-          <motion.div 
-            className="flex items-center justify-center gap-4 mt-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
+          <div className="flex items-center justify-center gap-4 mt-8">
             {socialLinks.map((link) => (
               <a
                 key={link.label}
@@ -191,7 +140,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                 <link.icon className="w-5 h-5 text-[var(--accent-primary)]" />
               </a>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 

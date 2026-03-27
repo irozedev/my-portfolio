@@ -31,7 +31,7 @@ export function MainPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
+    <main className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
       <SEOHead />
       
       {/* Navigation */}
@@ -121,6 +121,6 @@ export function MainPage() {
       
       {/* View Mode Toggle */}
       <ViewModeToggle />
-    </div>
+    </main>
   );
 }
