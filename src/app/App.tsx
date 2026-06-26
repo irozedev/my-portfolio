@@ -14,6 +14,7 @@ import { ViewModeToggle } from "./components/view-mode-toggle";
 import { Toaster } from "sonner";
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "motion/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 
 export default function App() {
@@ -80,6 +81,7 @@ export default function App() {
         <LanguageProvider>
           <AvailabilityProvider>
             <AdminPage />
+            <SpeedInsights />
           </AvailabilityProvider>
         </LanguageProvider>
       </ThemeProvider>
@@ -94,6 +96,7 @@ export default function App() {
             <AvailabilityProvider>
               <Dashboard />
               <Toaster position="top-right" richColors />
+              <SpeedInsights />
             </AvailabilityProvider>
           </AuthProvider>
         </LanguageProvider>
@@ -108,6 +111,7 @@ export default function App() {
           <AuthProvider>
             <UserProfilePage />
             <Toaster position="top-right" richColors />
+            <SpeedInsights />
           </AuthProvider>
         </LanguageProvider>
       </ThemeProvider>
@@ -135,6 +139,7 @@ export default function App() {
                 <BetaBanner />
                 <ViewModeToggle />
                 <Toaster position="top-right" richColors />
+                <SpeedInsights />
               </ViewModeProvider>
             </CartProvider>
           </AvailabilityProvider>
