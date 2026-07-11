@@ -191,7 +191,7 @@ export function AIAssistant() {
       en: {
         intro: "I'm Stepan's AI assistant",
         availability: "Currently open for new projects and collaborations",
-        contact: "Best ways to reach: Email (stepan@roze.live), LinkedIn, GitHub, or Upwork",
+        contact: "Best ways to reach: Email (rozedev095@gmail.com), LinkedIn, GitHub, or Upwork",
         experience: "5+ years in Frontend Development, 50+ successful projects, specializing in modern web applications with React, Vue.js, and AI integration"
       },
       uk: {
@@ -199,7 +199,7 @@ export function AIAssistant() {
         skills: "Експерт у React, TypeScript, Vue.js, Node.js, Python та веб-дизайні",
         projects: "50+ успішних проектів: e-commerce, SaaS, корпоративні вебсайти, додатки з AI",
         availability: "Зараз відкритий для нових проектів та співпраці",
-        contact: "Кращі способи зв'язку: Email (stepan@roze.live), LinkedIn, GitHub, або Upwork",
+        contact: "Кращі способи зв'язку: Email (rozedev095@gmail.com), LinkedIn, GitHub, або Upwork",
         pricing: "Тарифи: Frontend розробка €45/год, E-commerce €60/год, JavaScript консультації €55/год, Full-stack €75/год (всі ціни включають бельгійський ПДВ)"
       },
       nl: {
@@ -207,7 +207,7 @@ export function AIAssistant() {
         skills: "Expert in React, TypeScript, Vue.js, Node.js, Python en webdesign",
         projects: "50+ succesvolle projecten: e-commerce, SaaS, zakelijke websites, AI-applicaties",
         availability: "Momenteel open voor nieuwe projecten en samenwerkingen",
-        contact: "Beste manieren om contact op te nemen: Email (stepan@roze.live), LinkedIn, GitHub, of Upwork",
+        contact: "Beste manieren om contact op te nemen: Email (rozedev095@gmail.com), LinkedIn, GitHub, of Upwork",
         experience: "8+ jaar in Software Development, 150+ succesvolle projecten, gespecialiseerd in moderne webapplicaties met React, Vue.js en AI-integratie"
       }
     };

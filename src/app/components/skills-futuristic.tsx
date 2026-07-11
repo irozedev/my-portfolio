@@ -21,7 +21,7 @@ const skills: Skill[] = [
   
   // Backend
   { name: "Node.js", icon: Cpu, category: "Backend", level: 85, color: "#68a063", glow: "shadow-[0_0_30px_rgba(104,160,99,0.6)]", years: "4+ yrs" },
-  { name: "MongoDB", icon: Database, category: "Backend", level: 80, color: "#47a248", glow: "shadow-[0_0_30px_rgba(71,162,72,0.6)]", years: "3+ yrs" },
+  { name: "Knockout.js", icon: Database, category: "Frontend", level: 80, color: "#c73635", glow: "shadow-[0_0_30px_rgba(199,54,53,0.6)]", years: "3+ yrs" },
   { name: "PHP", icon: Terminal, category: "Backend", level: 75, color: "#8993be", glow: "shadow-[0_0_30px_rgba(137,147,190,0.6)]", years: "5+ yrs" },
   
   // Tools & Others
@@ -213,8 +213,8 @@ export function SkillsFuturistic() {
         {[
           { label: "Technologies", value: skills.length, color: "#00d9ff" },
           { label: "Avg Expertise", value: `${Math.round(skills.reduce((sum, s) => sum + s.level, 0) / skills.length)}%`, color: "#22c55e" },
-          { label: "Total Experience", value: "10+ yrs", color: "#a78bfa" },
-          { label: "Active Projects", value: "150+", color: "#f59e0b" }
+          { label: "Total Experience", value: "8+ yrs", color: "#a78bfa" },
+          { label: "Categories", value: categories.length - 1, color: "#f59e0b" }
         ].map((stat, i) => (
           <motion.div
             key={stat.label}

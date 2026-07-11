@@ -23,8 +23,8 @@ const contactLinks = [
   {
     icon: Mail,
     key: 'email',
-    value: "stepan@roze.live",
-    href: "mailto:stepan@roze.live",
+    value: "rozedev095@gmail.com",
+    href: "mailto:rozedev095@gmail.com",
     color: "#00d9ff",
   },
   {
@@ -139,7 +139,7 @@ export function ContactSection() {
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      toast.error("Failed to send message. Please try emailing stepan@roze.live directly.");
+      toast.error("Failed to send message. Please try emailing rozedev095@gmail.com directly.");
     } finally {
       setIsSubmitting(false);
     }

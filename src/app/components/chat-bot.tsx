@@ -213,7 +213,7 @@ export function ChatBot() {
       setIsRateLimited(true);
       const rateLimitMessage: Message = {
         id: Date.now() + 1,
-        text: t.rateLimitMessage || "You've reached the message limit. Please try again later or contact me directly at stepan@roze.live",
+        text: t.rateLimitMessage || "You've reached the message limit. Please try again later or contact me directly at rozedev095@gmail.com",
         sender: "bot",
         timestamp: new Date(),
       };
@@ -308,7 +308,7 @@ export function ChatBot() {
     // Contact info - Enhanced
     if (lowerInput.match(/\b(contact|email|reach|call|message|telegram|whatsapp|phone|write)\b/)) {
       return "📧 **Get in Touch:**\n\n" +
-        "• Email: stepan@roze.live\n" +
+        "• Email: rozedev095@gmail.com\n" +
         "• Response time: Within 24 hours\n" +
         "• LinkedIn: linkedin.com/in/rozestepan\n" +
         "• GitHub: github.com/irozedev\n\n" +
@@ -345,7 +345,7 @@ export function ChatBot() {
         `• Full-time contracts\n` +
         `• Freelance projects\n` +
         `• Consulting & code reviews\n\n` +
-        `Ready to start your project? Book a call or send me an email at stepan@roze.live!`;
+        `Ready to start your project? Book a call or send me an email at rozedev095@gmail.com!`;
     }
 
     // Portfolio & Projects - More engaging
@@ -416,7 +416,7 @@ export function ChatBot() {
     if (lowerInput.match(/\b(thank|thanks|appreciate|grateful)\b/)) {
       return "You're very welcome! 😊\n\n" +
         "Feel free to ask anything else, or:\n" +
-        "• 📧 Send me an email at stepan@roze.live\n" +
+        "• 📧 Send me an email at rozedev095@gmail.com\n" +
         "• 📞 Book a call\n" +
         "• 📝 Use the contact form below\n\n" +
         "Looking forward to working together! 🚀";
@@ -527,7 +527,7 @@ export function ChatBot() {
       "• 🚀 Portfolio & projects\n" +
       "• ⏰ Availability\n" +
       "• 📧 Contact info\n\n" +
-      "Try asking about any of these, or **email me directly** at stepan@roze.live for detailed answers!";
+      "Try asking about any of these, or **email me directly** at rozedev095@gmail.com for detailed answers!";
   };
 
   return (

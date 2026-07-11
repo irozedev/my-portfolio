@@ -3,9 +3,8 @@ import { Star, Globe, Award, TrendingUp } from "lucide-react";
 
 const languages = [
   { name: "Ukrainian", level: "Native", stars: 5, color: "#0057B7", flag: "🇺🇦", description: "Mother tongue" },
-  { name: "English", level: "Professional", stars: 4, color: "#012169", flag: "🇬🇧", description: "C1 Level" },
-  { name: "Dutch", level: "Elementary", stars: 2, color: "#FF4F00", flag: "🇳🇱", description: "A2 Level" },
-  { name: "Spanish", level: "Elementary", stars: 2, color: "#AA151B", flag: "🇪🇸", description: "A2 Level" },
+  { name: "English", level: "Working", stars: 3, color: "#012169", flag: "🇬🇧", description: "B1 Level" },
+  { name: "Dutch", level: "Elementary", stars: 2, color: "#FF4F00", flag: "🇳🇱", description: "A2 · NT2 1.2, certified" },
 ];
 
 export function LanguagesModern() {

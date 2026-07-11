@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage - All Languages -->
+  <url>
+    <loc>https://roze.live/</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://roze.live/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://roze.live/?lang=ua" />
+    <xhtml:link rel="alternate" hreflang="nl" href="https://roze.live/?lang=nl" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://roze.live/?lang=ar" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://roze.live/?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://roze.live/" />
+  </url>
+  
+  <!-- English Version -->
+  <url>
+    <loc>https://roze.live/?lang=en</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Ukrainian Version -->
+  <url>
+    <loc>https://roze.live/?lang=ua</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Dutch Version -->
+  <url>
+    <loc>https://roze.live/?lang=nl</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Dutch - Belgium Version -->
+  <url>
+    <loc>https://roze.live/?lang=nl&amp;region=be</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Dutch - Netherlands Version -->
+  <url>
+    <loc>https://roze.live/?lang=nl&amp;region=nl</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Arabic Version -->
+  <url>
+    <loc>https://roze.live/?lang=ar</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Spanish Version -->
+  <url>
+    <loc>https://roze.live/?lang=es</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Projects Section -->
+  <url>
+    <loc>https://roze.live/#projects</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- About Section -->
+  <url>
+    <loc>https://roze.live/#about</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Skills Section -->
+  <url>
+    <loc>https://roze.live/#skills</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Contact Section -->
+  <url>
+    <loc>https://roze.live/#contact</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Merch Shop -->
+  <url>
+    <loc>https://roze.live/#merch</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+</urlset>

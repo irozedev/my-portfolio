@@ -113,26 +113,38 @@ export function StatsAirport() {
     },
     {
       icon: Award,
-      value: `10+`,
+      value: `8+`,
       label: t("hero.yearsExperience") || "Years",
       color: "#FFD700",
     },
     {
       icon: CheckCircle2,
-      value: `150+`,
-      label: t("hero.projectsCompleted") || "Projects",
+      value: `3`,
+      label: language === 'uk' ? 'Бренди' :
+             language === 'nl' ? 'Merken' :
+             language === 'ar' ? 'علامات' :
+             language === 'es' ? 'Marcas' :
+             'Brands',
       color: "#00d9ff",
     },
     {
       icon: Users,
-      value: `150+`,
-      label: t("hero.happyClients") || "Clients",
+      value: `3`,
+      label: language === 'uk' ? 'Мови' :
+             language === 'nl' ? 'Talen' :
+             language === 'ar' ? 'لغات' :
+             language === 'es' ? 'Idiomas' :
+             'Languages',
       color: "#9333ea",
     },
     {
       icon: TrendingUp,
-      value: `100%`,
-      label: t("hero.successRate") || "Success",
+      value: `AI`,
+      label: language === 'uk' ? 'з 2022' :
+             language === 'nl' ? 'sinds 2022' :
+             language === 'ar' ? 'منذ 2022' :
+             language === 'es' ? 'desde 2022' :
+             'since 2022',
       color: "#10b981",
     },
   ];

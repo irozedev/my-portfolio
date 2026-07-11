@@ -244,10 +244,10 @@ export function AIAssistantSmart() {
     // CONTACT
     if (lower.includes('contact') || lower.includes('email') || lower.includes('контакт')) {
       return language === 'uk'
-        ? '📧 Зв\'яжіться зі мною:\n\n• Email: stepan@roze.live\n• LinkedIn: /in/stepanroze\n• GitHub: /stepanroze\n\nАбо заповніть форму - прокручую до контактів! 📬'
+        ? '📧 Зв\'яжіться зі мною:\n\n• Email: rozedev095@gmail.com\n• LinkedIn: /in/rozestepan\n• GitHub: /irozedev\n\nАбо заповніть форму - прокручую до контактів! 📬'
         : language === 'nl'
-        ? '📧 Neem contact op:\n\n• Email: stepan@roze.live\n• LinkedIn: /in/stepanroze\n• GitHub: /stepanroze\n\nOf vul het formulier in - scrollen naar contact! 📬'
-        : '📧 Get in touch:\n\n• Email: stepan@roze.live\n• LinkedIn: /in/stepanroze\n• GitHub: /stepanroze\n\nOr fill the form - scrolling to contacts! 📬';
+        ? '📧 Neem contact op:\n\n• Email: rozedev095@gmail.com\n• LinkedIn: /in/rozestepan\n• GitHub: /irozedev\n\nOf vul het formulier in - scrollen naar contact! 📬'
+        : '📧 Get in touch:\n\n• Email: rozedev095@gmail.com\n• LinkedIn: /in/rozestepan\n• GitHub: /irozedev\n\nOr fill the form - scrolling to contacts! 📬';
     }
     
     // DEFAULT - HELPFUL
@@ -288,10 +288,10 @@ export function AIAssistantSmart() {
       const limitMsg: Message = {
         id: `limit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         text: language === 'uk'
-          ? '⚠️ Ви досягли ліміту безкоштовних повідомлень (10).\n\nДля продовження роботи з AI, будь ласка:\n• Заповніть форму контактів\n• Або напишіть на stepan@roze.live\n\nЯ з радістю допоможу вам особисто! 🚀'
+          ? '⚠️ Ви досягли ліміту безкоштовних повідомлень (10).\n\nДля продовження роботи з AI, будь ласка:\n• Заповніть форму контактів\n• Або напишіть на rozedev095@gmail.com\n\nЯ з радістю допоможу вам особисто! 🚀'
           : language === 'nl'
-          ? '⚠️ Je hebt de limiet van gratis berichten bereikt (10).\n\nOm door te gaan met AI:\n• Vul contactformulier in\n• Of email stepan@roze.live\n\nIk help je graag persoonlijk! 🚀'
-          : '⚠️ You\'ve reached the free message limit (10).\n\nTo continue with AI:\n• Fill contact form\n• Or email stepan@roze.live\n\nI\'ll be happy to help you personally! 🚀',
+          ? '⚠️ Je hebt de limiet van gratis berichten bereikt (10).\n\nOm door te gaan met AI:\n• Vul contactformulier in\n• Of email rozedev095@gmail.com\n\nIk help je graag persoonlijk! 🚀'
+          : '⚠️ You\'ve reached the free message limit (10).\n\nTo continue with AI:\n• Fill contact form\n• Or email rozedev095@gmail.com\n\nI\'ll be happy to help you personally! 🚀',
         isBot: true
       };
       setMessages(prev => [...prev, limitMsg]);

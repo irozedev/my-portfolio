@@ -95,7 +95,7 @@ export function HeroStatsVariant3() {
                       {stat.commit}
                     </p>
                     <p className="text-xs text-[var(--text-muted)] font-mono">
-                      Author: Stepan Roze &lt;hello@roze.live&gt;
+                      Author: Stepan Roze &lt;rozedev095@gmail.com&gt;
                     </p>
                   </div>
                 </div>

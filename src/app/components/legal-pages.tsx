@@ -98,7 +98,7 @@ export function LegalPage({ page, onClose }: LegalPageProps) {
               If you have any questions about this {content.title.toLowerCase()}, please contact me:
             </p>
             <div className="space-y-2 text-sm">
-              <p><strong>Email:</strong> hello@roze.live</p>
+              <p><strong>Email:</strong> rozedev095@gmail.com</p>
               <p><strong>Location:</strong> Belgium, European Union</p>
               <p className="opacity-50"><strong>VAT:</strong> Registration pending</p>
             </div>
@@ -170,7 +170,7 @@ function getLegalContent(type: "privacy" | "terms" | "imprint") {
               "Right to Restrict Processing: You can request limitation of how I use your data.",
               "Right to Data Portability: You can request transfer of your data to another service.",
               "Right to Object: You can object to processing of your data for certain purposes.",
-              "To exercise any of these rights, please contact me at hello@roze.live.",
+              "To exercise any of these rights, please contact me at rozedev095@gmail.com.",
             ],
           },
           {
@@ -323,7 +323,7 @@ function getLegalContent(type: "privacy" | "terms" | "imprint") {
           {
             heading: "3. Contact Information",
             content: [
-              "Email: hello@roze.live",
+              "Email: rozedev095@gmail.com",
               "Website: https://roze.live",
               "GitHub: https://github.com/irozedev",
               "LinkedIn: https://linkedin.com/in/rozestepan",

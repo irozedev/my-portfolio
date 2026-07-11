@@ -26,7 +26,7 @@ const socialLinks = [
   { icon: Github, href: "https://github.com/irozedev", label: "GitHub" },
   { icon: Linkedin, href: "https://linkedin.com/in/rozestepan", label: "LinkedIn" },
   { icon: Briefcase, href: "https://www.upwork.com/freelancers/rozestepan", label: "Upwork" },
-  { icon: Mail, href: "mailto:hello@roze.live", label: "Email" },
+  { icon: Mail, href: "mailto:rozedev095@gmail.com", label: "Email" },
 ];
 
 const dynamicStats = getFormattedStats();

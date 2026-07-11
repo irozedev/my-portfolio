@@ -12,7 +12,7 @@ interface HeroSectionProps {
 const socialLinks = [
   { icon: Github, href: "https://github.com/irozedev", label: "GitHub", color: "#333333" },
   { icon: Linkedin, href: "https://linkedin.com/in/rozestepan", label: "LinkedIn", color: "#0077b5" },
-  { icon: Mail, href: "mailto:stepan@roze.live", label: "Email", color: "#00d9ff" },
+  { icon: Mail, href: "mailto:rozedev095@gmail.com", label: "Email", color: "#00d9ff" },
 ];
 
 export function Hero({ onViewWork }: HeroSectionProps) {

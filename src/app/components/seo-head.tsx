@@ -3,29 +3,29 @@ import { useLanguage } from "../contexts/language-context";
 
 const seoData: Record<string, { title: string; description: string; keywords: string }> = {
   en: {
-    title: "Stepan Roze | Senior Full-Stack Developer — React, TypeScript, Node.js | Belgium",
-    description: "Senior Full-Stack Developer with 10+ years experience. Specializing in React, TypeScript, Node.js, Next.js, Magento 2 & e-commerce. 150+ projects delivered. Based in Belgium. Available for freelance.",
-    keywords: "Full-Stack Developer, React Developer, TypeScript Expert, Node.js Developer, Magento 2, E-commerce Developer, Freelance Developer Belgium, Web Developer, Next.js, PostgreSQL, Docker, SaaS Development, Frontend Engineer",
+    title: "Stepan Roze | Front-End & JavaScript Developer — React, TypeScript, Next.js | Belgium",
+    description: "Front-End / JavaScript Developer with 8+ years of commercial experience building e-commerce and enterprise web apps (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js & Magento. Based in Lommel, Belgium. Available for freelance.",
+    keywords: "Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Freelance Developer Belgium, Web Developer, Knockout.js, Node.js",
   },
   uk: {
-    title: "Степан Розе | Senior Full-Stack Розробник — React, TypeScript, Node.js | Бельгія",
-    description: "Senior Full-Stack розробник з 10+ роками досвіду. React, TypeScript, Node.js, Next.js, Magento 2 та e-commerce. 150+ проектів. Бельгія. Доступний для фрілансу.",
-    keywords: "Full-Stack розробник, React розробник, TypeScript, Node.js, Magento 2, E-commerce розробник, Фріланс Бельгія, Веб-розробник",
+    title: "Степан Розе | Front-End та JavaScript розробник — React, TypeScript, Next.js | Бельгія",
+    description: "Front-End / JavaScript розробник з 8+ роками комерційного досвіду в e-commerce та enterprise (childrensalon.com, vogacloset.com, Ощадбанк). React, TypeScript, Vue, Next.js та Magento. Ломмель, Бельгія. Доступний для фрілансу.",
+    keywords: "Front-End розробник, JavaScript розробник, React, TypeScript, Vue.js, Next.js, Magento, E-commerce розробник, Фріланс Бельгія, Веб-розробник",
   },
   nl: {
-    title: "Stepan Roze | Senior Full-Stack Developer — React, TypeScript, Node.js | België",
-    description: "Senior Full-Stack Developer met 10+ jaar ervaring. Gespecialiseerd in React, TypeScript, Node.js, Next.js, Magento 2 & e-commerce. 150+ projecten. België. Beschikbaar als freelancer.",
-    keywords: "Full-Stack Developer, React Developer, TypeScript, Node.js, Magento 2, E-commerce Developer, Freelance Developer België, Webontwikkelaar",
+    title: "Stepan Roze | Front-End & JavaScript Developer — React, TypeScript, Next.js | België",
+    description: "Front-End / JavaScript Developer met 8+ jaar commerciële ervaring in e-commerce en enterprise webapps (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js & Magento. Lommel, België. Beschikbaar als freelancer.",
+    keywords: "Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Freelance Developer België, Webontwikkelaar",
   },
   ar: {
-    title: "ستيبان روز | مطور Full-Stack كبير — React, TypeScript, Node.js | بلجيكا",
-    description: "مطور Full-Stack كبير مع أكثر من 10 سنوات خبرة. React, TypeScript, Node.js, Next.js, Magento 2. أكثر من 150 مشروع. بلجيكا.",
-    keywords: "مطور Full-Stack, مطور React, TypeScript, Node.js, Magento 2, مطور مستقل بلجيكا",
+    title: "ستيبان روز | مطور Front-End و JavaScript — React, TypeScript, Next.js | بلجيكا",
+    description: "مطور Front-End / JavaScript مع أكثر من 8 سنوات خبرة تجارية في التجارة الإلكترونية وتطبيقات المؤسسات. React, TypeScript, Vue, Next.js و Magento. لوميل، بلجيكا.",
+    keywords: "مطور Front-End, مطور JavaScript, مطور React, TypeScript, Vue.js, Next.js, Magento, مطور مستقل بلجيكا",
   },
   es: {
-    title: "Stepan Roze | Senior Full-Stack Developer — React, TypeScript, Node.js | Bélgica",
-    description: "Desarrollador Senior Full-Stack con 10+ años de experiencia. React, TypeScript, Node.js, Next.js, Magento 2 y e-commerce. 150+ proyectos. Bélgica. Disponible como freelance.",
-    keywords: "Desarrollador Full-Stack, Desarrollador React, TypeScript, Node.js, Magento 2, Desarrollador Freelance Bélgica",
+    title: "Stepan Roze | Front-End & JavaScript Developer — React, TypeScript, Next.js | Bélgica",
+    description: "Desarrollador Front-End / JavaScript con 8+ años de experiencia comercial en e-commerce y aplicaciones enterprise (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js y Magento. Lommel, Bélgica. Disponible como freelance.",
+    keywords: "Desarrollador Front-End, Desarrollador JavaScript, Desarrollador React, TypeScript, Vue.js, Next.js, Magento, Desarrollador Freelance Bélgica",
   },
 };
 
@@ -34,20 +34,21 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Stepan Roze",
-  jobTitle: "Senior Full-Stack Developer",
+  jobTitle: "Front-End / JavaScript Developer",
   url: "https://roze.live",
   image: "https://roze.live/og-image.jpg",
-  email: "stepan@roze.live",
-  address: { "@type": "PostalAddress", addressCountry: "BE" },
+  email: "rozedev095@gmail.com",
+  telephone: "+32469631424",
+  address: { "@type": "PostalAddress", addressLocality: "Lommel", addressCountry: "BE" },
   sameAs: [
     "https://github.com/irozedev",
     "https://linkedin.com/in/rozestepan",
     "https://www.upwork.com/freelancers/rozestepan",
   ],
-  knowsAbout: ["React", "TypeScript", "Node.js", "Next.js", "Magento 2", "PostgreSQL", "Docker", "GraphQL", "Tailwind CSS", "E-commerce"],
+  knowsAbout: ["JavaScript", "TypeScript", "React", "Next.js", "Vue.js", "Node.js", "Knockout.js", "Magento", "E-commerce", "Web Performance"],
   worksFor: { "@type": "Organization", name: "Freelance" },
-  alumniOf: [],
-  description: "Senior Full-Stack Developer with 10+ years of experience building high-performance web applications, e-commerce platforms, and SaaS solutions.",
+  alumniOf: [{ "@type": "CollegeOrUniversity", name: "V.N. Karazin Kharkiv National University" }],
+  description: "Front-End / JavaScript Developer with 8+ years of commercial experience building e-commerce and enterprise web applications, from large-scale luxury retail platforms to banking systems.",
 };
 
 const websiteData = {

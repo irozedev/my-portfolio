@@ -185,7 +185,7 @@ export function ScrollToTopButton() {
       setIsRateLimited(true);
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
-        text: "You've reached the message limit. Please contact me directly at stepan@roze.live",
+        text: "You've reached the message limit. Please contact me directly at rozedev095@gmail.com",
         sender: "bot",
         timestamp: new Date(),
       }]);
@@ -230,7 +230,7 @@ export function ScrollToTopButton() {
       console.error('AI Chat error:', error);
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
-        text: "⚠️ AI service temporarily unavailable. Please email stepan@roze.live directly.",
+        text: "⚠️ AI service temporarily unavailable. Please email rozedev095@gmail.com directly.",
         sender: "bot",
         timestamp: new Date(),
       }]);

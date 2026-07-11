@@ -44,35 +44,35 @@ export const translations = {
     },
     about: {
       title: 'About Me',
-      subtitle: 'Passionate about creating exceptional digital experiences',
-      intro: 'I\'m a passionate Full-Stack Developer specialized in creating beautiful, functional, and user-friendly web applications.',
-      description: 'With expertise in modern web technologies and an eye for design, I transform ideas into elegant, performant applications.',
+      subtitle: 'Front-End / JavaScript Developer with 8+ years of commercial experience',
+      intro: 'I\'m a Front-End / JavaScript Developer with 8+ years of commercial experience building e-commerce and enterprise web applications.',
+      description: 'From large-scale luxury retail platforms (childrensalon.com, vogacloset.com) to banking systems (Oschadbank), I build fast, maintainable interfaces with JavaScript, TypeScript, React, Vue and Next.js — and I\'ve shipped a commercial Next.js 14 product end-to-end.',
       skillsTitle: 'Technical Skills',
       downloadCV: 'Download CV',
       contactMe: 'Contact Me',
       basedIn: 'Based in',
       forWork: 'For work',
       open: 'Open',
-      location: 'Europe',
+      location: 'Lommel, BE',
       educationTitle: 'Education',
       highlights: {
-        experience: '8+ years Software Development',
-        projects: '150+ Successful Projects',
-        satisfaction: '100% Client Satisfaction',
-        fullstack: 'Full-Stack Capable',
+        experience: '8+ years commercial experience',
+        projects: 'Luxury retail & banking platforms',
+        satisfaction: 'AI-assisted development since 2022',
+        fullstack: 'Front-End & JavaScript focus',
       },
       education: {
         step: {
-          name: 'Computer Academy STEP',
+          name: 'Web Studio — Front-End Training',
           location: 'Kharkiv, Ukraine',
-          period: '2006 - 2010',
-          description: 'Completed Junior Computer Academy program with comprehensive focus on programming fundamentals, algorithms, and web development basics. Gained foundational knowledge in software engineering principles and problem-solving methodologies.'
+          period: '2015',
+          description: 'Started with formal HTML/CSS training in a web studio, then delivered freelance projects with jQuery, Bootstrap, vanilla JS and PHP basics — the foundation of my front-end career.'
         },
         karazin: {
           name: 'V.N. Karazin Kharkiv National University',
           location: 'Kharkiv, Ukraine',
           period: '2012 - 2015',
-          description: 'Faculty of Computer Science, Department of System Engineering. Studied C, C++, C#, HTML fundamentals, data structures, and algorithms. Had to leave due to family circumstances before completion.'
+          description: 'Completed coursework in Computer Science — programming fundamentals, data structures and algorithms.'
         }
       }
     },
@@ -386,35 +386,35 @@ export const translations = {
     },
     about: {
       title: 'Про мене',
-      subtitle: 'Захоплений створенням виняткових цифрових рішень',
-      intro: 'Я Full-Stack Developer із пристрастю до створення красивих, функціональних та зручних веб-додатків.',
-      description: 'Маючи експертизу в сучасних веб-технологіях та увагу до дизайну, я перетворюю ідеї в елегантні, продуктивні додатки.',
+      subtitle: 'Front-End / JavaScript розробник з 8+ роками комерційного досвіду',
+      intro: 'Я Front-End / JavaScript розробник з 8+ роками комерційного досвіду у створенні e-commerce та enterprise веб-додатків.',
+      description: 'Від масштабних платформ люксового рітейлу (childrensalon.com, vogacloset.com) до банківських систем (Ощадбанк) — створюю швидкі, підтримувані інтерфейси на JavaScript, TypeScript, React, Vue та Next.js, і запустив комерційний продукт на Next.js 14 «під ключ».',
       skillsTitle: 'Технічні Навички',
       downloadCV: 'Завантажити CV',
       contactMe: 'Зв\'язатися зі мною',
       basedIn: 'Базується в',
       forWork: 'Для роботи',
       open: 'Відкрито',
-      location: 'Європа',
+      location: 'Ломмель, Бельгія',
       educationTitle: 'Освіта',
       highlights: {
-        experience: '8+ років Розробки Програмного Забезпечення',
-        projects: '150+ Успішних Проектів',
-        satisfaction: '100% Задоволення Клієнтів',
-        fullstack: 'Здатний до Full-Stack Розробки',
+        experience: '8+ років комерційного досвіду',
+        projects: 'Платформи рітейлу та банкінгу',
+        satisfaction: 'AI-assisted розробка з 2022',
+        fullstack: 'Фокус на Front-End та JavaScript',
       },
       education: {
         step: {
-          name: 'Комп\'ютерна Академія АГ',
+          name: 'Веб-студія — Front-End навчання',
           location: 'Харків, Україна',
-          period: '2006 - 2010',
-          description: 'Закінчив курс Малої Комп\'ютерної Академії з фокусом на основи програмування, алгоритми та базові принципи веб-розробки. Отримав фундаментальні знання з принципів інженерії програмного забезпечення та методологій розв\'язання проблем.'
+          period: '2015',
+          description: 'Почав із формального навчання HTML/CSS у веб-студії, потім виконував фріланс-проекти на jQuery, Bootstrap, vanilla JS та основах PHP — фундамент моєї front-end кар\'єри.'
         },
         karazin: {
           name: 'ХНУ імені В.Н. Каразіна',
           location: 'Харків, Україна',
           period: '2012 - 2015',
-          description: 'Факультет Комп\'ютерних наук, кафедра системної нженерії. Навчався C, C++, C#, основам HTML, структурам даних та алгоритмам. Вимушений був залишити через сімейні обставини перед завершенням.'
+          description: 'Пройшов курс з комп\'ютерних наук — основи програмування, структури даних та алгоритми.'
         }
       }
     },
@@ -728,35 +728,35 @@ export const translations = {
     },
     about: {
       title: 'Over mij',
-      subtitle: 'Gepassioneererd over het creëren van uitzonderlijke digitale ervaringen',
-      intro: 'Ik ben een gepassioneerde Full-Stack Developer gespecialiseerd in het maken van mooie, functionele en gebruiksvriendelijke webapplicaties.',
-      description: 'Met expertise in moderne webtechnologieën en een oog voor design, transformeer ik ideeën in elegante, performante applicaties.',
+      subtitle: 'Front-End / JavaScript Developer met 8+ jaar commerciële ervaring',
+      intro: 'Ik ben een Front-End / JavaScript Developer met 8+ jaar commerciële ervaring in het bouwen van e-commerce en enterprise webapplicaties.',
+      description: 'Van grootschalige luxe retailplatforms (childrensalon.com, vogacloset.com) tot banksystemen (Oschadbank) bouw ik snelle, onderhoudbare interfaces met JavaScript, TypeScript, React, Vue en Next.js — en ik heb een commercieel Next.js 14-product end-to-end gelanceerd.',
       skillsTitle: 'Technische Vaardigheden',
       downloadCV: 'Download CV',
       contactMe: 'Neem contact met mij op',
       basedIn: 'Gevestigd in',
       forWork: 'Voor werk',
       open: 'Open',
-      location: 'Europa',
+      location: 'Lommel, België',
       educationTitle: 'Opleiding',
       highlights: {
-        experience: '8+ jaar Software Ontwikkeling',
-        projects: '150+ Succesvolle Projecten',
-        satisfaction: '100% Klanttevredenheid',
-        fullstack: 'Full-Stack Vaardig',
+        experience: '8+ jaar commerciële ervaring',
+        projects: 'Retail- & bankplatforms',
+        satisfaction: 'AI-assisted development sinds 2022',
+        fullstack: 'Focus op Front-End & JavaScript',
       },
       education: {
         step: {
-          name: 'Computer Academie STEP',
+          name: 'Webstudio — Front-End training',
           location: 'Kharkiv, Oekraïne',
-          period: '2006 - 2010',
-          description: 'Voltooide Junior Computer Academie programma met grondige focus op programmeerprincipes, algoritmen en basisprincipes van webontwikkeling. Kreeg fundamentele kennis van principes van software engineering en probleemoplossingsmethodologieën.'
+          period: '2015',
+          description: 'Begonnen met formele HTML/CSS-training in een webstudio en daarna freelanceprojecten geleverd met jQuery, Bootstrap, vanilla JS en PHP-basis — de basis van mijn front-end carrière.'
         },
         karazin: {
           name: 'V.N. Karazin Kharkiv Nationale Universiteit',
           location: 'Kharkiv, Oekraïne',
           period: '2012 - 2015',
-          description: 'Faculteit Computerwetenschappen, Afdeling Systeemingenieurswetenschappen. Studieerde C, C++, C#, HTML-basisprincipes, gegevensstructuren en algoritmen. Moest stoppen vanwege familie-omstandigheden voordat ik de studie voltooide.'
+          description: 'Voltooide vakken in Computerwetenschappen — programmeerprincipes, gegevensstructuren en algoritmen.'
         }
       }
     },
@@ -1071,34 +1071,34 @@ export const translations = {
     about: {
       title: 'عني',
       subtitle: 'شغوف بإنشاء تجارب رقمية استثنائية',
-      intro: 'أنا مطور Full-Stack شغوف متخصص في إنشاء تطبيقات ويب جميلة ووظيفية وسهلة الاستخدام.',
-      description: 'بخبرتي في تقنيات الويب الحديثة وعيني للتصميم، أحول الأفكار إلى تطبيقات أنيقة وعالية الأداء.',
+      intro: 'أنا مطور Front-End / JavaScript مع أكثر من 8 سنوات خبرة تجارية في بناء تطبيقات التجارة الإلكترونية وتطبيقات المؤسسات.',
+      description: 'من منصات البيع بالتجزئة الفاخرة واسعة النطاق (childrensalon.com، vogacloset.com) إلى الأنظمة المصرفية (Oschadbank)، أبني واجهات سريعة وقابلة للصيانة باستخدام JavaScript وTypeScript وReact وVue وNext.js — وأطلقت منتج Next.js 14 تجارياً من البداية إلى النهاية.',
       skillsTitle: 'المهارات التقنية',
       downloadCV: 'تحميل السيرة الذاتي',
       contactMe: 'تواصل معي',
       basedIn: 'مقيم في',
       forWork: 'للعمل',
       open: 'مفتوح',
-      location: 'أوروبا',
+      location: 'لوميل، بلجيكا',
       educationTitle: 'التعليم',
       highlights: {
-        experience: '+5 سنوات في تطوير الواجهة الأمامية',
-        projects: '+50 مشروعاً ناجحاً',
-        satisfaction: '100% رضا العملاء',
-        fullstack: 'قادر على العمل الكامل',
+        experience: '+8 سنوات خبرة تجارية',
+        projects: 'منصات التجزئة والبنوك',
+        satisfaction: 'تطوير بمساعدة الذكاء الاصطناعي منذ 2022',
+        fullstack: 'تركيز على Front-End و JavaScript',
       },
       education: {
         step: {
-          name: 'أكاديمية الكمبيوتر STEP',
+          name: 'استوديو ويب — تدريب Front-End',
           location: 'خاركيف، أوكرانيا',
-          period: '2006 - 2010',
-          description: 'أكملت برنامج أكاديمية الكمبيوتر للمبتدئين مع التركيز الشامل على أساسيات البرمجة والخوارزميات وأساسيات تطوير الويب. اكتسبت معرفة أساسية في مبادئ هندسة البرمجيات ومنهجيات حل المشكلات.'
+          period: '2015',
+          description: 'بدأت بتدريب رسمي على HTML/CSS في استوديو ويب، ثم نفذت مشاريع حرة باستخدام jQuery وBootstrap وvanilla JS وأساسيات PHP — أساس مسيرتي في الواجهة الأمامية.'
         },
         karazin: {
           name: 'جامعة خاركيف الوطنية V.N. Karazin',
           location: 'خاركيف، أوكرانيا',
           period: '2012 - 2015',
-          description: 'كلية علوم الكمبيو��ر، قسم هندسة الأنظمة. درست C و C++ و C# وأساسيات HTML وهياكل البيانات والخوارزميات. اضطررت للمغادرة بسبب روف عائلية قبل الانتهاء.'
+          description: 'أكملت مقررات في علوم الكمبيوتر — أساسيات البرمجة وهياكل البيانات والخوارزميات.'
         }
       }
     },
@@ -1280,7 +1280,7 @@ export const translations = {
         success: 'تم إرسال الرسالة!',
         successMessage: 'شكراً لتواصلك. سأرد عليك قريباً.',
         error: 'خطأ في الإرسال',
-        errorMessage: 'حدث خطأ ما. يرجى المحاولة مرة أخرى أو إرسال بريد إلكتروني مباشرة إلى hello@ro3e.io'
+        errorMessage: 'حدث خطأ ما. يرجى المحاولة مرة أخرى أو إرسال بريد إلكتروني مباشرة إلى rozedev095@gmail.com'
       },
       formNote: 'بإرسال هذا النموذج، فإنك توافق على الاتصال عبر البريد الإلكتروني.'
     },
@@ -1391,35 +1391,35 @@ export const translations = {
     },
     about: {
       title: 'Sobre mí',
-      subtitle: 'Apasionado por crear experiencias digitales excepcionales',
-      intro: 'Soy un Desarrollador Full-Stack apasionado especializado en crear aplicaciones web hermosas, funcionales y fáciles de usar.',
-      description: 'Con experiencia en tecnologías web modernas y un ojo para el diseño, transformo ideas en aplicaciones elegantes y eficientes.',
+      subtitle: 'Desarrollador Front-End / JavaScript con 8+ años de experiencia comercial',
+      intro: 'Soy un Desarrollador Front-End / JavaScript con 8+ años de experiencia comercial construyendo aplicaciones web de e-commerce y enterprise.',
+      description: 'Desde plataformas de retail de lujo a gran escala (childrensalon.com, vogacloset.com) hasta sistemas bancarios (Oschadbank), construyo interfaces rápidas y mantenibles con JavaScript, TypeScript, React, Vue y Next.js — y he lanzado un producto comercial en Next.js 14 de principio a fin.',
       skillsTitle: 'Habilidades técnicas',
       downloadCV: 'Descargar CV',
       contactMe: 'Contáctame',
       basedIn: 'Ubicado en',
       forWork: 'Para trabajo',
       open: 'Abierto',
-      location: 'Europa',
+      location: 'Lommel, Bélgica',
       educationTitle: 'Educación',
       highlights: {
-        experience: '8+ años de Desarrollo de Software',
-        projects: '150+ Proyectos exitosos',
-        satisfaction: '100% Satisfacción del cliente',
-        fullstack: 'Capacidad Full-Stack',
+        experience: '8+ años de experiencia comercial',
+        projects: 'Plataformas de retail y banca',
+        satisfaction: 'Desarrollo asistido por IA desde 2022',
+        fullstack: 'Enfoque en Front-End & JavaScript',
       },
       education: {
         step: {
-          name: 'Academia de Computación STEP',
+          name: 'Estudio Web — Formación Front-End',
           location: 'Járkov, Ucrania',
-          period: '2006 - 2010',
-          description: 'Completé el programa Junior Computer Academy con un enfoque integral en fundamentos de programación, algoritmos y desarrollo web básico.'
+          period: '2015',
+          description: 'Comencé con formación formal en HTML/CSS en un estudio web y luego entregué proyectos freelance con jQuery, Bootstrap, vanilla JS y bases de PHP — la base de mi carrera front-end.'
         },
         karazin: {
           name: 'Universidad Nacional V.N. Karazin de Járkov',
           location: 'Járkov, Ucrania',
           period: '2012 - 2015',
-          description: 'Facultad de Ciencias de la Computación. Estudié C, C++, C#, fundamentos de HTML, estructuras de datos y algoritmos.'
+          description: 'Completé cursos en Ciencias de la Computación — fundamentos de programación, estructuras de datos y algoritmos.'
         }
       }
     },
@@ -1594,7 +1594,7 @@ export const translations = {
         success: '¡Mensaje enviado!',
         successMessage: 'Gracias por contactarme. Te responderé pronto.',
         error: 'Error al enviar',
-        errorMessage: 'Algo salió mal. Por favor intenta de nuevo o envía un correo directamente a hello@ro3e.io'
+        errorMessage: 'Algo salió mal. Por favor intenta de nuevo o envía un correo directamente a rozedev095@gmail.com'
       },
       formNote: 'Al enviar este formulario, aceptas ser contactado por correo electrónico.'
     },

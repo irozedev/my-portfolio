@@ -4,7 +4,6 @@ import { useViewMode } from "../contexts/view-mode-context";
 import { useState } from "react";
 import { BookCallModal } from "./book-call-fixed";
 import { DownloadCVButton } from "./download-cv-button";
-import { getFormattedStats } from "../../utils/stats-calculator";
 import { StatsAirport } from "./stats-airport";
 import { Github, Linkedin, Briefcase, Mail, Rocket, Code2 } from "lucide-react";
 
@@ -16,20 +15,20 @@ const socialLinks = [
   { icon: Github, href: "https://github.com/irozedev", label: "GitHub", color: "#00d9ff" },
   { icon: Linkedin, href: "https://linkedin.com/in/rozestepan", label: "LinkedIn", color: "#0077b5" },
   { icon: Briefcase, href: "https://www.upwork.com/freelancers/rozestepan", label: "Upwork", color: "#6fda44" },
-  { icon: Mail, href: "mailto:hello@roze.live", label: "Email", color: "#00d9ff" },
+  { icon: Mail, href: "mailto:rozedev095@gmail.com", label: "Email", color: "#00d9ff" },
 ];
 
 const techStack = [
-  { name: "React", icon: "⚛️" },
+  { name: "JavaScript", icon: "🟨" },
   { name: "TypeScript", icon: "📘" },
-  { name: "Node.js", icon: "🟢" },
+  { name: "React", icon: "⚛️" },
   { name: "Next.js", icon: "▲" },
-  { name: "Python", icon: "🐍" },
-  { name: "PostgreSQL", icon: "🐘" },
-  { name: "Docker", icon: "🐳" },
-  { name: "AWS", icon: "☁️" },
-  { name: "GraphQL", icon: "◆" },
+  { name: "Vue.js", icon: "💚" },
+  { name: "Node.js", icon: "🟢" },
+  { name: "Knockout.js", icon: "🧩" },
+  { name: "Magento", icon: "🛒" },
   { name: "Tailwind", icon: "🎨" },
+  { name: "Git", icon: "🌿" },
 ];
 
 export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {

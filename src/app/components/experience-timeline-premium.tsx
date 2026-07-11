@@ -6,21 +6,21 @@ import { useLanguage } from "../contexts/language-context";
 const experiences = [
   {
     id: 1,
-    year: "2025",
-    period: "Jan 2025 - Present",
-    title: "Self-Development & AI Learning",
-    company: "Independent Study",
-    location: "Remote",
-    type: "Learning",
-    description: "Improving skills and studying AI technologies, machine learning, and modern development practices. Currently configuring and customizing OpenClaw — an open-source AI-powered claw machine platform.",
+    year: "2026",
+    period: "2026 - Present",
+    title: "Freelance Web Developer",
+    company: "Self-Employed",
+    location: "Belgium (Remote)",
+    type: "Freelance",
+    description: "Designing, building and launching commercial web products end-to-end with an AI-assisted workflow. Delivered marinek.store — a Next.js 14 landing site for a fitness coaching program with three pricing tiers, payments, analytics and automated access delivery.",
     achievements: [
-      "Deep diving into AI/ML technologies",
-      "Configuring OpenClaw platform",
-      "Building AI-powered applications",
-      "Exploring LLMs and neural networks",
-      "Enhancing full-stack expertise"
+      "Launched marinek.store to production (Next.js 14) in July 2026",
+      "Integrated WayForPay payments and GA4 analytics",
+      "Built serverless payment webhooks on Cloudflare Workers",
+      "Automated post-payment onboarding via a Telegram bot",
+      "Owned the full cycle: requirements, design, build, launch & support"
     ],
-    tech: ["AI/ML", "Python", "TensorFlow", "LLMs", "OpenClaw", "React", "Next.js"],
+    tech: ["Next.js 14", "TypeScript", "React", "Cloudflare Workers", "Telegram Bot API", "WayForPay", "GA4"],
     icon: Rocket,
     gradient: "from-cyan-500 via-blue-500 to-purple-500",
     color: "#00d9ff"
@@ -33,14 +33,14 @@ const experiences = [
     company: "E-Consulting",
     location: "Remote, Ukraine",
     type: "Full-time",
-    description: "Created and customized web resources for MS Dynamics 365 XRM using pure functional JavaScript. Configured fields and integrated REST API by collaborating with back-end developers. Worked on a Vue.js project with Canvas, implementing interactive features.",
+    description: "Built and customized CRM web resources for Oschadbank — Ukraine's state savings bank — on MS Dynamics 365 XRM in pure functional JavaScript. Developed a Vue.js electronic document-signing application for bank workflows and integrated REST APIs with back-end teams.",
     achievements: [
-      "Built 10+ MS Dynamics 365 web resources",
-      "Optimized web app efficiency by 40%",
-      "Collaborated with back-end teams on REST API integration",
-      "Implemented Vue.js Canvas features"
+      "Developed CRM web resources for Oschadbank on MS Dynamics 365 XRM",
+      "Built a Vue.js document-signing app (async requests, canvas-based UI)",
+      "Configured entity fields and integrated REST APIs with back-end teams",
+      "Introduced GPT-based tooling into daily development (since 2022)"
     ],
-    tech: ["JavaScript (ES6)", "MS Dynamics 365", "Vue.js", "Canvas", "REST API"],
+    tech: ["JavaScript (ES6+)", "MS Dynamics 365 XRM", "Vue.js", "Canvas", "REST API"],
     icon: Code2,
     gradient: "from-purple-500 via-pink-500 to-rose-500",
     color: "#a78bfa"
@@ -49,18 +49,18 @@ const experiences = [
     id: 3,
     year: "2022",
     period: "May 2019 - Sep 2022",
-    title: "Junior/Middle Front-End Developer",
+    title: "Front-End Developer (Junior → Middle)",
     company: "Ronis BT",
-    location: "Kharkiv, Ukraine",
+    location: "Kharkiv, Ukraine (Hybrid)",
     type: "Full-time",
-    description: "Translated UI/UX wireframes into dynamic web pages using HTML, CSS (SCSS, LESS), and JavaScript (ES6). Developed and maintained eCommerce platforms with Magento 1 & 2, React, Knockout.js, and jQuery. Built reusable front-end components and improved performance and SEO practices.",
+    description: "Core team member on childrensalon.com — one of the world's largest luxury children's fashion retailers — and vogacloset.com (MENA fashion marketplace). Rewrote the Product Detail Page front-end during a Magento 1.9 → custom Symfony re-platforming.",
     achievements: [
-      "Delivered 25+ eCommerce projects",
-      "Improved website performance by 50%",
-      "Built scalable component libraries",
-      "Enhanced SEO rankings for major clients"
+      "Migrated legacy jQuery to a modular vanilla JS architecture for the PDP",
+      "Integrated payment providers (Stripe, Klarna) into checkout & order flows",
+      "Built reusable components with Magento 1 & 2, React and Knockout.js",
+      "Improved performance & SEO for high-traffic retail pages"
     ],
-    tech: ["React", "Magento 1/2", "Knockout.js", "jQuery", "HTML/CSS (SCSS, LESS)", "JavaScript (ES6)"],
+    tech: ["Magento 1 & 2", "React", "Knockout.js", "jQuery", "SCSS / LESS", "JavaScript (ES6+)"],
     icon: Users,
     gradient: "from-green-500 via-emerald-500 to-teal-500",
     color: "#10b981"
@@ -68,22 +68,41 @@ const experiences = [
   {
     id: 4,
     year: "2015",
-    period: "Sep 2012 - Jan 2015",
-    title: "Computer Science Studies",
-    company: "V.N. Karazin Kharkiv National University",
+    period: "2015 - 2019",
+    title: "Front-End Developer (in-house & freelance)",
+    company: "Web Studio & Freelance",
     location: "Kharkiv, Ukraine",
-    type: "Education",
-    description: "Completed coursework in Computer Science, studying fundamental programming, algorithms, data structures, and software development principles.",
+    type: "Full-time",
+    description: "Started in a web studio with formal HTML/CSS training, then delivered freelance projects: responsive websites with jQuery, Bootstrap, vanilla JS and PHP basics, with exposure to .NET project structure.",
     achievements: [
-      "Studied programming fundamentals",
-      "Learned algorithms and data structures",
-      "Completed software development projects",
-      "Built strong technical foundation"
+      "Completed formal HTML/CSS training in a web studio (2015)",
+      "Delivered responsive freelance websites for local businesses",
+      "Worked with jQuery, Bootstrap, vanilla JS and PHP basics",
+      "Gained exposure to .NET project structure"
     ],
-    tech: ["C++", "Algorithms", "Data Structures", "Software Engineering"],
+    tech: ["HTML5", "CSS3", "JavaScript", "jQuery", "Bootstrap", "PHP"],
     icon: Building2,
     gradient: "from-amber-500 via-orange-500 to-red-500",
     color: "#f59e0b"
+  },
+  {
+    id: 5,
+    year: "2012",
+    period: "2012 - 2015",
+    title: "Computer Science (coursework)",
+    company: "V.N. Karazin Kharkiv National University",
+    location: "Kharkiv, Ukraine",
+    type: "Education",
+    description: "Completed coursework in Computer Science, building a foundation in programming, algorithms, data structures and software development principles.",
+    achievements: [
+      "Studied programming fundamentals and algorithms",
+      "Learned data structures and software engineering principles",
+      "Built a strong technical foundation for a front-end career"
+    ],
+    tech: ["Computer Science", "Algorithms", "Data Structures"],
+    icon: Building2,
+    gradient: "from-slate-500 via-gray-500 to-zinc-500",
+    color: "#94a3b8"
   },
 ];
 
@@ -140,7 +159,7 @@ export function ExperienceTimelinePremium() {
             {t("experience.title") || "Work Experience"}
           </h2>
           <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
-            {t("experience.subtitle") || "9+ years building exceptional digital products"}
+            {t("experience.subtitle") || "8+ years building e-commerce & enterprise web applications"}
           </p>
         </motion.div>
 
@@ -350,10 +369,10 @@ export function ExperienceTimelinePremium() {
           className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
         >
           {[
-            { icon: Code2, value: "100+", label: "Projects" },
-            { icon: Users, value: "50+", label: "Clients" },
-            { icon: Award, value: "9+", label: "Years" },
-            { icon: Target, value: "98%", label: "Success" },
+            { icon: Award, value: "8+", label: "Years" },
+            { icon: Building2, value: "3", label: "Enterprise Brands" },
+            { icon: Code2, value: "5", label: "Roles" },
+            { icon: Target, value: "2026", label: "Latest Launch" },
           ].map((stat, index) => {
             const Icon = stat.icon;
             return (

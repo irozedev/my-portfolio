@@ -385,9 +385,11 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
             </div>
           </div>
         </div>
+      </nav>
 
-        {/* ===== Mobile Menu — CSS-only transitions, no motion ===== */}
-        <div
+      {/* ===== Mobile Menu — rendered OUTSIDE <nav> so backdrop-blur on the nav
+           doesn't become the containing block and trap this fixed overlay ===== */}
+      <div
           className={`lg:hidden fixed inset-0 z-[10001] transition-all duration-300 ease-out ${
             isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
           }`}
@@ -455,7 +457,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                   className="w-full py-3 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black font-bold rounded-md flex items-center justify-center gap-2 text-sm active:scale-98 transition-transform"
                 >
                   <LogIn className="w-4 h-4" />
-                  {t('nav.signIn')}
+                  {t('auth.signIn')}
                 </button>
               )}
             </div>
@@ -504,7 +506,6 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
             </div>
           </div>
         </div>
-      </nav>
 
       {/* Modals */}
       <ModernAuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
