@@ -15,6 +15,7 @@ import { Toaster } from "sonner";
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "motion/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "./components/analytics";
 
 
 export default function App() {
@@ -82,6 +83,7 @@ export default function App() {
           <AvailabilityProvider>
             <AdminPage />
             <SpeedInsights />
+            <Analytics />
           </AvailabilityProvider>
         </LanguageProvider>
       </ThemeProvider>
@@ -97,6 +99,7 @@ export default function App() {
               <Dashboard />
               <Toaster position="top-right" richColors />
               <SpeedInsights />
+            <Analytics />
             </AvailabilityProvider>
           </AuthProvider>
         </LanguageProvider>
@@ -112,6 +115,7 @@ export default function App() {
             <UserProfilePage />
             <Toaster position="top-right" richColors />
             <SpeedInsights />
+            <Analytics />
           </AuthProvider>
         </LanguageProvider>
       </ThemeProvider>
@@ -140,6 +144,7 @@ export default function App() {
                 <ViewModeToggle />
                 <Toaster position="top-right" richColors />
                 <SpeedInsights />
+            <Analytics />
               </ViewModeProvider>
             </CartProvider>
           </AvailabilityProvider>

@@ -198,8 +198,8 @@ export function ProjectFullscreenView({
         </motion.div>
 
         {/* 🔥 SCROLLABLE CONTENT */}
-        <div 
-          className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent pt-20"
+        <div
+          className="h-full overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent pt-20"
           onScroll={handleScroll}
         >
           {/* 🔥 HERO IMAGE - PARALLAX EFFECT */}
@@ -292,7 +292,7 @@ export function ProjectFullscreenView({
             {/* Background Glow */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[var(--accent-primary)]/5 rounded-full blur-3xl pointer-events-none" />
             
-            <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+            <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 pb-28 sm:pb-16">
               
               {/* 🔥 TITLE SECTION */}
               <motion.div

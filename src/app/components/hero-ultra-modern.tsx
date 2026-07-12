@@ -5,7 +5,7 @@ import { useState } from "react";
 import { BookCallModal } from "./book-call-fixed";
 import { DownloadCVButton } from "./download-cv-button";
 import { StatsAirport } from "./stats-airport";
-import { Github, Linkedin, Briefcase, Mail, Rocket, Code2, ArrowRight } from "lucide-react";
+import { Github, Linkedin, Briefcase, Mail, Rocket, Code2, ArrowRight, Building2, ShieldCheck } from "lucide-react";
 
 interface HeroUltraModernProps {
   onViewWork: () => void;
@@ -31,16 +31,6 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
   const [isBookCallOpen, setIsBookCallOpen] = useState(false);
 
   const isClient = viewMode === "client";
-
-  // Localized terminal values for company/CV mode
-  const term = {
-    whoami: language === "uk" ? "хто я" : language === "nl" ? "wie ben ik" : language === "ar" ? "من أنا" : language === "es" ? "quién soy" : "whoami",
-    roleLabel: language === "uk" ? "роль" : language === "nl" ? "rol" : language === "ar" ? "الدور" : language === "es" ? "rol" : "role",
-    expLabel: language === "uk" ? "досвід" : language === "nl" ? "ervaring" : language === "ar" ? "الخبرة" : language === "es" ? "experiencia" : "experience",
-    locLabel: language === "uk" ? "локація" : language === "nl" ? "locatie" : language === "ar" ? "الموقع" : language === "es" ? "ubicación" : "location",
-    expValue: language === "uk" ? "8+ років · e-commerce та enterprise" : language === "nl" ? "8+ jaar · e-commerce & enterprise" : language === "ar" ? "+8 سنوات · التجارة الإلكترونية والمؤسسات" : language === "es" ? "8+ años · e-commerce y enterprise" : "8+ years · e-commerce & enterprise",
-    locValue: language === "uk" ? "Ломмель, Бельгія · відкритий до роботи" : language === "nl" ? "Lommel, België · open voor werk" : language === "ar" ? "لوميل، بلجيكا · منفتح للعمل" : language === "es" ? "Lommel, Bélgica · abierto a trabajar" : "Lommel, Belgium · open to work",
-  };
 
   const viewWorkLabel = t("hero.viewWork");
   const roleTitle =
@@ -145,47 +135,63 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
               </div>
             </div>
           ) : (
-            /* ============ COMPANY / CV MODE — terminal ============ */
+            /* ============ COMPANY / CV MODE — professional profile ============ */
             <div className="mb-10 sm:mb-12">
               <div className="flex justify-center mb-6">{availabilityBadge}</div>
-              <div className="max-w-2xl mx-auto bg-[var(--bg-secondary)]/70 backdrop-blur-md border border-[var(--border-color)] rounded-xl overflow-hidden shadow-2xl">
-                {/* Terminal title bar */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--border-color)] bg-[var(--bg-primary)]/40">
-                  <span className="w-3 h-3 rounded-full bg-red-500/80" />
-                  <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                  <span className="w-3 h-3 rounded-full bg-green-500/80" />
-                  <span className="ml-3 text-xs font-mono text-[var(--text-muted)]">stepan@roze: ~</span>
-                </div>
 
-                {/* Terminal body */}
-                <div className="p-5 sm:p-7 font-mono text-sm sm:text-base text-left space-y-2.5">
-                  <p className="text-[var(--text-muted)]">
-                    <span className="text-[var(--accent-primary)]">$</span> {term.whoami}
-                  </p>
-                  <h1 className="text-2xl sm:text-4xl font-black bg-gradient-to-r from-[var(--accent-primary)] via-cyan-300 to-[var(--accent-primary)] bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
+              {/* Identity */}
+              <div className="text-center max-w-3xl mx-auto mb-8">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-3">
+                  <span className="bg-gradient-to-r from-[var(--accent-primary)] via-cyan-300 to-[var(--accent-primary)] bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
                     Stepan Roze
-                  </h1>
-                  <p className="text-[var(--text-muted)] pt-2">
-                    <span className="text-[var(--accent-primary)]">$</span> {term.roleLabel}
-                  </p>
-                  <p className="text-[var(--text-primary)] font-semibold">{roleTitle}</p>
-                  <p className="text-[var(--text-muted)] pt-2">
-                    <span className="text-[var(--accent-primary)]">$</span> {term.expLabel}
-                  </p>
-                  <p className="text-[var(--text-secondary)]">{term.expValue}</p>
-                  <p className="text-[var(--text-muted)] pt-2">
-                    <span className="text-[var(--accent-primary)]">$</span> {term.locLabel}
-                  </p>
-                  <p className="text-[var(--text-secondary)]">{term.locValue}</p>
-                  <p className="text-[var(--text-primary)] pt-2 flex items-center">
-                    <span className="text-[var(--accent-primary)]">$</span>
-                    <span className="ml-2 w-2.5 h-5 bg-[var(--accent-primary)] animate-blink" />
-                  </p>
+                  </span>
+                </h1>
+                <p className="text-lg sm:text-2xl font-bold text-[var(--text-primary)] mb-4">{roleTitle}</p>
+                <p className="text-base sm:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto mb-6">
+                  {L(
+                    "8+ years of commercial experience building e-commerce and enterprise web applications — from luxury retail platforms to banking systems.",
+                    "8+ років комерційного досвіду в e-commerce та enterprise — від люксового рітейлу до банківських систем.",
+                    "8+ jaar commerciële ervaring in e-commerce en enterprise webapps — van luxe retail tot banksystemen.",
+                    "أكثر من 8 سنوات خبرة تجارية في بناء تطبيقات التجارة الإلكترونية والمؤسسات — من التجزئة الفاخرة إلى الأنظمة المصرفية.",
+                    "8+ años de experiencia comercial en e-commerce y enterprise — desde retail de lujo hasta sistemas bancarios."
+                  )}
+                </p>
+
+                {/* Credential chips */}
+                <div className="flex flex-wrap items-center justify-center gap-2.5">
+                  {[
+                    L("8+ years", "8+ років", "8+ jaar", "+8 سنوات", "8+ años"),
+                    "React · TypeScript · Vue · Next.js",
+                    L("E-commerce & enterprise", "E-commerce та enterprise", "E-commerce & enterprise", "تجارة إلكترونية ومؤسسات", "E-commerce y enterprise"),
+                    L("Belgium · remote", "Бельгія · remote", "België · remote", "بلجيكا · عن بُعد", "Bélgica · remoto"),
+                  ].map((c) => (
+                    <span key={c} className="px-3.5 py-1.5 bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] rounded-full text-xs sm:text-sm font-mono text-[var(--text-secondary)]">
+                      {c}
+                    </span>
+                  ))}
                 </div>
               </div>
 
+              {/* Career highlights */}
+              <div className="grid sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mb-8">
+                {[
+                  { icon: Building2, k: L("Luxury retail", "Люкс-рітейл", "Luxe retail", "تجزئة فاخرة", "Retail de lujo"), v: "childrensalon · vogacloset" },
+                  { icon: ShieldCheck, k: L("Banking systems", "Банківські системи", "Banksystemen", "أنظمة مصرفية", "Sistemas bancarios"), v: "Oschadbank CRM" },
+                  { icon: Rocket, k: L("Shipped 2026", "Запуск 2026", "Gelanceerd 2026", "إطلاق 2026", "Lanzado 2026"), v: "Next.js 14 · marinek.store" },
+                ].map((h) => {
+                  const Icon = h.icon;
+                  return (
+                    <div key={h.v} className="bg-[var(--bg-secondary)]/50 border border-[var(--border-color)] rounded-2xl p-5 text-left hover:border-[var(--accent-primary)]/50 transition-colors">
+                      <Icon className="w-5 h-5 text-[var(--accent-primary)] mb-2" />
+                      <div className="text-sm font-bold text-[var(--text-primary)]">{h.k}</div>
+                      <div className="text-xs text-[var(--text-muted)] font-mono mt-0.5 truncate">{h.v}</div>
+                    </div>
+                  );
+                })}
+              </div>
+
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mt-8 px-2 sm:px-0">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 px-2 sm:px-0">
                 <button
                   onClick={onViewWork}
                   className="group px-8 py-4 bg-[var(--bg-secondary)] text-[var(--text-primary)] font-bold rounded-xl border-2 border-[var(--accent-primary)]/30 hover:border-[var(--accent-primary)] transition-all active:scale-95"
