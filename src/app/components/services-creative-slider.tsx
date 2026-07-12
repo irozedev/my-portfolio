@@ -32,9 +32,9 @@ const services = [
     description: "Fast, modern sites that turn visitors into customers — built with Next.js / React",
     color: "#00d9ff",
     gradient: "from-[#00d9ff] to-cyan-500",
-    priceRange: "from €500",
-    price: 500,
-    priceWithTax: 500,
+    priceRange: "from €650",
+    price: 650,
+    priceWithTax: 650,
     features: ["Responsive & fast", "Payments (Stripe/WayForPay)", "GA4 analytics", "SEO-ready"],
   },
   {
@@ -45,9 +45,9 @@ const services = [
     description: "Modern interface design and pixel-perfect build in one — AI-assisted, delivered fast",
     color: "#ec4899",
     gradient: "from-pink-500 to-rose-500",
-    priceRange: "from €300",
-    price: 300,
-    priceWithTax: 300,
+    priceRange: "from €400",
+    price: 400,
+    priceWithTax: 400,
     features: ["UI / UX design", "Design-to-code", "Responsive layouts", "Reusable components"],
   },
   {
@@ -58,9 +58,9 @@ const services = [
     description: "Custom tools, dashboards and integrations for your business processes",
     color: "#a78bfa",
     gradient: "from-purple-500 to-indigo-500",
-    priceRange: "from €55/hr",
-    price: 55,
-    priceWithTax: 55,
+    priceRange: "from €60/hr",
+    price: 60,
+    priceWithTax: 60,
     features: ["Custom dashboards", "Internal tools", "REST API integration", "Admin panels"],
   },
   {
@@ -71,9 +71,9 @@ const services = [
     description: "Online stores and storefronts with payment and shipping — Magento or custom",
     color: "#22c55e",
     gradient: "from-green-500 to-emerald-500",
-    priceRange: "from €900",
-    price: 900,
-    priceWithTax: 900,
+    priceRange: "from €1200",
+    price: 1200,
+    priceWithTax: 1200,
     features: ["Magento 1 & 2 / custom", "Payment gateways", "Shipping integrations", "Product pages & SEO"],
   },
   {
@@ -84,9 +84,9 @@ const services = [
     description: "Front-end & automation advice, code review and hands-on help by the hour",
     color: "#8b5cf6",
     gradient: "from-violet-500 to-purple-500",
-    priceRange: "€50/hr",
-    price: 50,
-    priceWithTax: 50,
+    priceRange: "€55/hr",
+    price: 55,
+    priceWithTax: 55,
     features: ["Code review & audits", "Architecture advice", "Automation strategy", "Pair programming"],
   },
 ];
@@ -666,6 +666,11 @@ export function ServicesCreativeSlider() {
                         <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#00d9ff] to-cyan-400 bg-clip-text text-transparent mb-1">
                           {service.priceRange}
                         </div>
+                        {service.key === 'automation' && (
+                          <p className="text-xs text-[var(--accent-primary)] font-mono mb-1">
+                            or fixed from €350/bot
+                          </p>
+                        )}
                         <p className="text-xs text-[var(--text-muted)]">
                           {t("services.priceNote")}
                         </p>

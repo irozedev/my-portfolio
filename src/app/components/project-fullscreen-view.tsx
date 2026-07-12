@@ -42,7 +42,7 @@ export function ProjectFullscreenView({
   hasNext = false,
   hasPrev = false 
 }: ProjectFullscreenViewProps) {
-  const [scrollY, setScrollY] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
 
   if (!project) return null;
@@ -86,10 +86,17 @@ export function ProjectFullscreenView({
     };
   }, [onClose, onNext, onPrev, hasNext, hasPrev]);
 
+  // Only update state when crossing thresholds — avoids a re-render of this
+  // large modal on every scroll frame (which made mobile scrolling janky).
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const scrollTop = e.currentTarget.scrollTop;
-    setScrollY(scrollTop);
-    if (scrollTop > 100) setShowScrollHint(false);
+    setScrolled((prev) => {
+      const next = scrollTop > 50;
+      return prev === next ? prev : next;
+    });
+    if (scrollTop > 100) {
+      setShowScrollHint((prev) => (prev ? false : prev));
+    }
   };
 
   return (
@@ -123,8 +130,8 @@ export function ProjectFullscreenView({
           initial={{ y: -100 }}
           animate={{ y: 0 }}
           className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-            scrollY > 50 
-              ? 'bg-[var(--bg-primary)]/95 backdrop-blur-xl border-b border-[var(--border-color)] shadow-lg' 
+            scrolled
+              ? 'bg-[var(--bg-primary)]/95 backdrop-blur-xl border-b border-[var(--border-color)] shadow-lg'
               : 'bg-transparent'
           }`}
         >
@@ -143,7 +150,7 @@ export function ProjectFullscreenView({
             {/* Project Title - Hidden on scroll down */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: scrollY > 50 ? 1 : 0, y: scrollY > 50 ? 0 : -10 }}
+              animate={{ opacity: scrolled ? 1 : 0, y: scrolled ? 0 : -10 }}
               className="flex-1 text-center hidden md:block"
             >
               <h3 className="text-lg font-black text-[var(--text-primary)] font-mono truncate">
@@ -202,16 +209,13 @@ export function ProjectFullscreenView({
           className="h-full overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent pt-20"
           onScroll={handleScroll}
         >
-          {/* 🔥 HERO IMAGE - PARALLAX EFFECT */}
-          <div className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden" style={{ position: 'relative' }}>
-            <motion.img
-              style={{
-                y: scrollY * 0.5,
-                scale: 1 + scrollY * 0.0005,
-              }}
+          {/* 🔥 HERO IMAGE — full screenshot, anchored to top, no parallax gap */}
+          <div className="relative h-[38vh] sm:h-[46vh] md:h-[54vh] lg:h-[62vh] overflow-hidden bg-[var(--bg-secondary)]">
+            <img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-top"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
             />
             
             {/* Gradient Overlays */}
