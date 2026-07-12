@@ -15,75 +15,13 @@ interface GitHubRepo {
   topics: string[];
 }
 
-// Mock data as fallback
-const MOCK_REPOS: GitHubRepo[] = [
-  {
-    id: 1,
-    name: "portfolio-website",
-    description: "Modern portfolio website built with React, TypeScript, and Tailwind CSS featuring dark mode, multilingual support, and AI chatbot",
-    html_url: "https://github.com/irozedev/portfolio-website",
-    homepage: "https://roze.live",
-    stargazers_count: 25,
-    forks_count: 8,
-    language: "TypeScript",
-    topics: ["react", "typescript", "tailwind", "portfolio", "ai-chatbot"]
-  },
-  {
-    id: 2,
-    name: "ecommerce-platform",
-    description: "Full-stack e-commerce platform with Magento 2, featuring payment integration, admin dashboard, and multi-store support",
-    html_url: "https://github.com/irozedev/ecommerce-platform",
-    homepage: null,
-    stargazers_count: 18,
-    forks_count: 5,
-    language: "PHP",
-    topics: ["magento", "ecommerce", "php", "mysql"]
-  },
-  {
-    id: 3,
-    name: "saas-dashboard",
-    description: "Real-time analytics dashboard for SaaS applications built with React and Node.js",
-    html_url: "https://github.com/irozedev/saas-dashboard",
-    homepage: null,
-    stargazers_count: 32,
-    forks_count: 12,
-    language: "JavaScript",
-    topics: ["react", "nodejs", "dashboard", "analytics"]
-  },
-  {
-    id: 4,
-    name: "booking-system",
-    description: "Calendar-based booking system with payment processing and email notifications",
-    html_url: "https://github.com/irozedev/booking-system",
-    homepage: null,
-    stargazers_count: 15,
-    forks_count: 6,
-    language: "TypeScript",
-    topics: ["calendar", "booking", "payments", "notifications"]
-  },
-  {
-    id: 5,
-    name: "mobile-app-backend",
-    description: "REST API backend for mobile applications with authentication, push notifications, and data sync",
-    html_url: "https://github.com/irozedev/mobile-backend",
-    homepage: null,
-    stargazers_count: 21,
-    forks_count: 7,
-    language: "Node.js",
-    topics: ["api", "nodejs", "authentication", "mobile"]
-  },
-  {
-    id: 6,
-    name: "corporate-website",
-    description: "SEO-optimized corporate website built with Next.js, featuring CMS integration and multilingual support",
-    html_url: "https://github.com/irozedev/corporate-site",
-    homepage: null,
-    stargazers_count: 14,
-    forks_count: 4,
-    language: "TypeScript",
-    topics: ["nextjs", "cms", "seo", "multilingual"]
-  }
-];
+const GITHUB_USER = "irozedev";
+const CACHE_KEY = "gh_repos_v2";
+const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
+
+// Repos we never want to surface (profile config, private tooling, etc.)
+const EXCLUDED_NAMES = new Set<string>(["irozedev"]);
+const EXCLUDED_TOPICS = new Set<string>(["github-config"]);
 
 export function GitHubShowcase() {
   const { language } = useLanguage();
@@ -116,24 +54,56 @@ export function GitHubShowcase() {
   }, [repos.length]);
 
   const fetchGitHubRepos = async () => {
+    // Serve from cache first to avoid GitHub's unauthenticated rate limit (60/h per IP)
     try {
-      console.log('🔄 Loading GitHub projects...');
-      
-      // TEMPORARY: Use mock data directly until backend is ready
-      // TODO: Re-enable API call when backend endpoint is confirmed working
-      // const response = await fetch('https://saeohtefpfuzzajfduad.supabase.co/functions/v1/make-server-a62f57c7/github/repos/irozedev', {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhZW9odGVwZnB1enphamZkdWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxOTgzNjEsImV4cCI6MjA4NDc3NDM2MX0.bxKkFIXrqVzRVU72E_zZHVGkWuVF_hyJVqvdYrRls9U`
-      //   }
-      // });
-      
-      console.log('✅ GitHub projects loaded successfully (using demo data)');
-      setRepos(MOCK_REPOS);
-      setLoading(false);
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const { ts, data } = JSON.parse(cached);
+        if (Date.now() - ts < CACHE_TTL && Array.isArray(data)) {
+          setRepos(data);
+          setLoading(false);
+          return;
+        }
+      }
+    } catch { /* ignore cache errors */ }
+
+    try {
+      const res = await fetch(
+        `https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=100&type=owner`,
+        { headers: { Accept: "application/vnd.github+json" } }
+      );
+      if (!res.ok) throw new Error(`GitHub API responded ${res.status}`);
+      const raw = await res.json();
+
+      const cleaned: GitHubRepo[] = (Array.isArray(raw) ? raw : [])
+        .filter((r: any) =>
+          r && !r.fork && !r.archived && !r.private &&
+          !EXCLUDED_NAMES.has(r.name) &&
+          !(r.topics || []).some((t: string) => EXCLUDED_TOPICS.has(t))
+        )
+        .sort((a: any, b: any) =>
+          (b.stargazers_count - a.stargazers_count) ||
+          (new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
+        )
+        .slice(0, 12)
+        .map((r: any) => ({
+          id: r.id,
+          name: r.name,
+          description: r.description,
+          html_url: r.html_url,
+          homepage: r.homepage,
+          stargazers_count: r.stargazers_count,
+          forks_count: r.forks_count,
+          language: r.language,
+          topics: r.topics || [],
+        }));
+
+      setRepos(cleaned);
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: cleaned })); } catch { /* ignore */ }
     } catch (error) {
-      console.error('❌ Error loading GitHub projects:', error);
-      setRepos(MOCK_REPOS);
+      console.error('Error loading GitHub projects:', error);
+      setRepos([]);
+    } finally {
       setLoading(false);
     }
   };
@@ -180,7 +150,49 @@ export function GitHubShowcase() {
     );
   }
 
-  if (repos.length === 0) return null;
+  // No public repos yet (or API/rate-limit failure) — show an honest CTA instead of fake data
+  if (repos.length === 0) {
+    return (
+      <section id="github" className="py-12 md:py-20 px-4 sm:px-6 relative overflow-hidden">
+        <div className="container mx-auto max-w-3xl relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/60 backdrop-blur-xl border border-[var(--border-color)] rounded-full mb-6">
+            <Github className="w-4 h-4 text-[var(--accent-primary)]" />
+            <span className="text-sm font-bold text-[var(--text-secondary)]">
+              {language === 'uk' ? 'GitHub Проекти' :
+               language === 'nl' ? 'GitHub Projecten' :
+               language === 'ar' ? 'مشاريع GitHub' :
+               language === 'es' ? 'Proyectos GitHub' :
+               'GitHub Projects'}
+            </span>
+          </div>
+          <h2 className="text-2xl md:text-4xl font-black bg-gradient-to-r from-[#00d9ff] to-purple-500 bg-clip-text text-transparent mb-3">
+            {language === 'uk' ? 'Скоро тут з’являться проекти' :
+             language === 'nl' ? 'Projecten binnenkort beschikbaar' :
+             language === 'ar' ? 'المشاريع قادمة قريباً' :
+             language === 'es' ? 'Proyectos próximamente' :
+             'Projects coming soon'}
+          </h2>
+          <p className="text-base text-[var(--text-secondary)] max-w-xl mx-auto mb-8">
+            {language === 'uk' ? 'Мої репозиторії відкриваються поступово. Тим часом — загляньте на мій GitHub.' :
+             language === 'nl' ? 'Mijn repositories worden geleidelijk openbaar. Bekijk intussen mijn GitHub.' :
+             language === 'ar' ? 'يتم فتح مستودعاتي تدريجياً. في هذه الأثناء، تفضل بزيارة GitHub الخاص بي.' :
+             language === 'es' ? 'Mis repositorios se están abriendo poco a poco. Mientras tanto, visita mi GitHub.' :
+             'My repositories are going public gradually. In the meantime, take a look at my GitHub.'}
+          </p>
+          <a
+            href={`https://github.com/${GITHUB_USER}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--accent-primary)] hover:bg-[var(--accent-primary)]/80 text-black font-bold rounded-xl transition-all"
+          >
+            <Github className="w-5 h-5" />
+            github.com/{GITHUB_USER}
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        </div>
+      </section>
+    );
+  }
 
   const featuredRepo = repos[featuredIndex];
 

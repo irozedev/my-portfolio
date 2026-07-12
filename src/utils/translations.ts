@@ -244,6 +244,8 @@ export const translations = {
         name: 'Your Name',
         email: 'Your Email',
         service: 'Service Interested In',
+        budget: 'Project Budget',
+        timeline: 'Timeline',
         message: 'Your Message',
         messagePlaceholder: 'Tell me about your project...'
       },
@@ -586,6 +588,8 @@ export const translations = {
         name: 'Ваше ім\'я',
         email: 'Ваш Email',
         service: 'Послуга, в якій ви зацікавлені',
+        budget: 'Бюджет проекту',
+        timeline: 'Терміни',
         message: 'Ваше повідомлення',
         messagePlaceholder: 'Розкажіть мені про ваш проект...'
       },
@@ -928,6 +932,8 @@ export const translations = {
         name: 'Uw Naam',
         email: 'Uw Email',
         service: 'Geïnteresseerde Service',
+        budget: 'Projectbudget',
+        timeline: 'Tijdlijn',
         message: 'Uw Bericht',
         messagePlaceholder: 'Vertel me over uw project...'
       },
@@ -1234,6 +1240,8 @@ export const translations = {
         name: 'اسمك',
         email: 'بريدك الإلكتروني',
         service: 'الخدمة المهتم بها',
+        budget: 'ميزانية المشروع',
+        timeline: 'الجدول الزمني',
         message: 'رسالتك',
         messagePlaceholder: 'أخبرني عن مشروعك...'
       },
@@ -1548,6 +1556,8 @@ export const translations = {
         name: 'Tu Nombre',
         email: 'Tu Correo Electrónico',
         service: 'Servicio de Interés',
+        budget: 'Presupuesto del proyecto',
+        timeline: 'Plazo',
         message: 'Tu Mensaje',
         messagePlaceholder: 'Cuéntame sobre tu proyecto...'
       },

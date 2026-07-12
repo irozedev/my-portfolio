@@ -9,31 +9,31 @@ const translations = {
     client: "For Clients",
     cv: "For Companies",
     clientShort: "Client",
-    cvShort: "CV",
+    cvShort: "Company",
   },
   uk: {
     client: "Для Клієнтів",
     cv: "Для Компаній",
     clientShort: "Клієнт",
-    cvShort: "CV",
+    cvShort: "Компанія",
   },
   nl: {
     client: "Voor Klanten",
     cv: "Voor Bedrijven",
     clientShort: "Klant",
-    cvShort: "CV",
+    cvShort: "Bedrijf",
   },
   ar: {
     client: "للعملاء",
     cv: "للشركات",
     clientShort: "عميل",
-    cvShort: "سيرة",
+    cvShort: "شركة",
   },
   es: {
     client: "Para Clientes",
     cv: "Para Empresas",
     clientShort: "Cliente",
-    cvShort: "CV",
+    cvShort: "Empresa",
   },
 };
 

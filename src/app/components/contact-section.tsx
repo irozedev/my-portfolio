@@ -316,43 +316,46 @@ export function ContactSection() {
                 {/* Light Theme Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#00d9ff]/5 to-purple-500/5 rounded-3xl opacity-50" />
                 
-                <div className="relative space-y-6">
-                  <div>
-                    <label htmlFor="name" className="block text-base sm:text-lg font-semibold mb-3 text-[var(--text-primary)]">
-                      {t("contact.form.name")}
-                    </label>
-                    <Input
-                      id="name"
-                      type="text"
-                      placeholder="John Doe"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      required
-                      className="w-full h-14 px-5 text-base sm:text-lg bg-white dark:bg-[var(--bg-primary)] border-2 border-[var(--border-color)] rounded-xl
-                        text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
-                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
-                    />
+                <div className="relative space-y-5">
+                  {/* Name + Email */}
+                  <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+                    <div>
+                      <label htmlFor="name" className="block text-xs font-semibold uppercase tracking-wider mb-2 text-[var(--text-muted)]">
+                        {t("contact.form.name")}
+                      </label>
+                      <Input
+                        id="name"
+                        type="text"
+                        placeholder="John Doe"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        required
+                        className="w-full h-12 px-4 text-base bg-white dark:bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl
+                          text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
+                          focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 focus:outline-none transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider mb-2 text-[var(--text-muted)]">
+                        {t("contact.form.email")}
+                      </label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="john@example.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        required
+                        className="w-full h-12 px-4 text-base bg-white dark:bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl
+                          text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
+                          focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 focus:outline-none transition-all"
+                      />
+                    </div>
                   </div>
 
+                  {/* Service */}
                   <div>
-                    <label htmlFor="email" className="block text-base sm:text-lg font-semibold mb-3 text-[var(--text-primary)]">
-                      {t("contact.form.email")}
-                    </label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="john@example.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      required
-                      className="w-full h-14 px-5 text-base sm:text-lg bg-white dark:bg-[var(--bg-primary)] border-2 border-[var(--border-color)] rounded-xl
-                        text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
-                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="service" className="block text-base sm:text-lg font-semibold mb-3 text-[var(--text-primary)]">
+                    <label htmlFor="service" className="block text-xs font-semibold uppercase tracking-wider mb-2 text-[var(--text-muted)]">
                       {t("contact.form.service")}
                     </label>
                     <select
@@ -360,9 +363,9 @@ export function ContactSection() {
                       value={formData.service}
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                       required
-                      className="w-full h-14 px-5 text-base sm:text-lg bg-white dark:bg-[var(--bg-primary)] border-2 border-[var(--border-color)] rounded-xl
+                      className="w-full h-12 px-4 text-base bg-white dark:bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl
                         text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
-                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 transition-all cursor-pointer"
+                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 focus:outline-none transition-all cursor-pointer"
                     >
                       <option value="">Select a service</option>
                       <option value="Web Development">Web Development</option>
@@ -375,42 +378,45 @@ export function ContactSection() {
                     </select>
                   </div>
 
-                  <div>
-                    <label htmlFor="budget" className="block text-base sm:text-lg font-semibold mb-3 text-[var(--text-primary)]">
-                      {t("contact.form.budget")}
-                    </label>
-                    <Input
-                      id="budget"
-                      type="text"
-                      placeholder="e.g., $5000 - $10000"
-                      value={formData.budget}
-                      onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                      required
-                      className="w-full h-14 px-5 text-base sm:text-lg bg-white dark:bg-[var(--bg-primary)] border-2 border-[var(--border-color)] rounded-xl
-                        text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
-                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
-                    />
+                  {/* Budget + Timeline */}
+                  <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+                    <div>
+                      <label htmlFor="budget" className="block text-xs font-semibold uppercase tracking-wider mb-2 text-[var(--text-muted)]">
+                        {t("contact.form.budget")}
+                      </label>
+                      <Input
+                        id="budget"
+                        type="text"
+                        placeholder="€5,000 - €10,000"
+                        value={formData.budget}
+                        onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                        required
+                        className="w-full h-12 px-4 text-base bg-white dark:bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl
+                          text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
+                          focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 focus:outline-none transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="timeline" className="block text-xs font-semibold uppercase tracking-wider mb-2 text-[var(--text-muted)]">
+                        {t("contact.form.timeline")}
+                      </label>
+                      <Input
+                        id="timeline"
+                        type="text"
+                        placeholder="1-3 months"
+                        value={formData.timeline}
+                        onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
+                        required
+                        className="w-full h-12 px-4 text-base bg-white dark:bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl
+                          text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
+                          focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 focus:outline-none transition-all"
+                      />
+                    </div>
                   </div>
 
+                  {/* Message */}
                   <div>
-                    <label htmlFor="timeline" className="block text-base sm:text-lg font-semibold mb-3 text-[var(--text-primary)]">
-                      {t("contact.form.timeline")}
-                    </label>
-                    <Input
-                      id="timeline"
-                      type="text"
-                      placeholder="e.g., 1-3 months"
-                      value={formData.timeline}
-                      onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                      required
-                      className="w-full h-14 px-5 text-base sm:text-lg bg-white dark:bg-[var(--bg-primary)] border-2 border-[var(--border-color)] rounded-xl
-                        text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
-                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-base sm:text-lg font-semibold mb-3 text-[var(--text-primary)]">
+                    <label htmlFor="message" className="block text-xs font-semibold uppercase tracking-wider mb-2 text-[var(--text-muted)]">
                       {t("contact.form.message")}
                     </label>
                     <Textarea
@@ -419,17 +425,17 @@ export function ContactSection() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       required
-                      rows={8}
-                      className="w-full px-5 py-4 text-base sm:text-lg bg-white dark:bg-[var(--bg-primary)] border-2 border-[var(--border-color)] rounded-xl
-                        text-[var(--text-primary)] placeholder:text-[var(--text-muted)] min-h-[150px] md:min-h-[200px]
-                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 transition-all resize-y"
+                      rows={6}
+                      className="w-full px-4 py-3 text-base bg-white dark:bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl
+                        text-[var(--text-primary)] placeholder:text-[var(--text-muted)] min-h-[130px] md:min-h-[160px]
+                        focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 focus:outline-none transition-all resize-y"
                     />
                   </div>
 
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-14 text-base sm:text-lg font-bold bg-gradient-to-r from-[#00d9ff] to-cyan-400 
+                    className="w-full h-14 text-base sm:text-lg font-bold bg-gradient-to-r from-[#00d9ff] to-cyan-400
                       hover:from-cyan-400 hover:to-[#00d9ff] text-black
                       shadow-[0_4px_20px_rgba(0,217,255,0.3)] hover:shadow-[0_8px_30px_rgba(0,217,255,0.5)]
                       transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl"

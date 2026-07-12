@@ -26,141 +26,53 @@ import { useSliderNavigation } from "../hooks/use-slider-navigation";
 import { ProjectFullscreenView } from "./project-fullscreen-view";
 import { AnimatePresence } from "motion/react";
 
-// Portfolio Projects
+// Real, curated projects. Screenshots are captured once and served as static
+// assets from /public/projects (no runtime API dependency, no rate limits).
+// A gradient fallback shows if an image ever fails to load.
 const projects = [
   {
-    id: 'project-1',
-    title: "AI SaaS Platform",
-    category: "Full-Stack Development",
-    description: "Enterprise-grade AI automation platform with real-time analytics and ML integration",
-    fullDescription: "Built a comprehensive AI-powered SaaS platform that helps businesses automate workflows using GPT-4 integration. Features include real-time analytics dashboard, custom AI model training, and seamless API integration.",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
-    tech: ["React", "Node.js", "OpenAI GPT-4", "PostgreSQL", "Redis", "Docker"],
+    id: 'marinek-store',
+    title: "marinek.store",
+    category: "Freelance · Landing & Payments",
+    description: "Commercial Next.js 14 landing for a fitness coaching program — payments, analytics and automated access delivery.",
+    fullDescription: "Designed, built and launched marinek.store end-to-end: a Next.js 14 landing site with three pricing tiers, WayForPay payment integration, GA4 analytics and automated post-payment access delivery via a Telegram bot. Payment webhooks run on Cloudflare Workers. Shipped to production in July 2026 with an AI-assisted workflow.",
+    image: "/projects/marinek.webp",
+    tech: ["Next.js 14", "TypeScript", "WayForPay", "Cloudflare Workers", "Telegram Bot", "GA4"],
     gradient: "from-cyan-500 to-blue-600",
-    stats: { 
-      users: "10K+", 
-      growth: "+250%", 
-      rating: 4.9,
-      uptime: "99.9%"
+    stats: {
+      launched: "2026",
+      stack: "Next 14",
+      payments: "WayForPay",
+      automation: "Telegram",
     },
-    year: "2024",
-    duration: "6 months",
-    team: "5 developers",
-    role: "Lead Full-Stack Developer",
-    liveUrl: "#",
-    githubUrl: "#",
+    year: "2026",
+    duration: "Freelance",
+    team: "Solo",
+    role: "Full ownership (design → launch)",
+    liveUrl: "https://marinek.store",
     featured: true,
   },
   {
-    id: 'project-2',
-    title: "E-Commerce Platform",
-    category: "Frontend Development",
-    description: "Modern e-commerce solution with seamless checkout and inventory management",
-    fullDescription: "Developed a high-performance e-commerce platform with advanced features including real-time inventory tracking, AI-powered product recommendations, and optimized checkout flow that increased conversion by 45%.",
-    image: "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80",
-    tech: ["Next.js", "TypeScript", "Stripe", "Tailwind CSS", "Vercel", "Prisma"],
-    gradient: "from-purple-500 to-pink-600",
-    stats: { 
-      conversion: "+45%", 
-      revenue: "€500K",
-      orders: "15K+",
-      rating: 4.8
-    },
-    year: "2024",
-    duration: "4 months",
-    team: "3 developers",
-    role: "Frontend Lead",
-    liveUrl: "#",
-    githubUrl: "#",
-    featured: true,
-  },
-  {
-    id: 'project-3',
-    title: "Healthcare Portal",
-    category: "Enterprise Solution",
-    description: "HIPAA-compliant patient management system with real-time collaboration",
-    fullDescription: "Created a secure healthcare management platform compliant with HIPAA regulations. Includes patient records management, appointment scheduling, telemedicine integration, and real-time notifications.",
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
-    tech: ["Angular", "AWS", "PostgreSQL", "Socket.io", "Redis", "Docker"],
+    id: 'roze-live',
+    title: "roze.live",
+    category: "Personal · Portfolio",
+    description: "This portfolio — a multilingual React/TypeScript site with dark mode, view modes and live GitHub data.",
+    fullDescription: "My personal portfolio built with React, TypeScript, Tailwind and Vite. Features five languages, light/dark theming, client & company view modes, motion-based animations, a contact pipeline and a live GitHub projects feed.",
+    image: "/projects/roze.webp",
+    tech: ["React", "TypeScript", "Tailwind", "Vite", "Motion"],
     gradient: "from-teal-500 to-cyan-600",
-    stats: { 
-      patients: "50K+", 
-      uptime: "99.9%",
-      hospitals: "12",
-      rating: 4.7
+    stats: {
+      stack: "React",
+      lang: "TypeScript",
+      i18n: "5 langs",
+      type: "Portfolio",
     },
-    year: "2023",
-    duration: "8 months",
-    team: "8 developers",
-    role: "Senior Developer",
-    liveUrl: "#",
-    featured: true,
-  },
-  {
-    id: 'project-4',
-    title: "DeFi Dashboard",
-    category: "Web3 Development",
-    description: "Real-time cryptocurrency portfolio tracker with advanced analytics",
-    fullDescription: "Built a comprehensive DeFi dashboard for tracking cryptocurrency portfolios across multiple blockchains. Features real-time price updates, advanced charting, and automated trading strategies.",
-    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80",
-    tech: ["React", "Web3.js", "Ethers.js", "The Graph", "TailwindCSS"],
-    gradient: "from-amber-500 to-orange-600",
-    stats: { 
-      transactions: "1M+", 
-      volume: "$50M",
-      chains: "5",
-      rating: 4.9
-    },
-    year: "2024",
-    duration: "5 months",
-    team: "4 developers",
-    role: "Web3 Specialist",
-    liveUrl: "#",
-    githubUrl: "#",
-    featured: false,
-  },
-  {
-    id: 'project-5',
-    title: "Social Media App",
-    category: "Mobile-First Web",
-    description: "Instagram-like social platform with real-time messaging and stories",
-    fullDescription: "Created a modern social media application with real-time features, including instant messaging, story sharing, and content discovery algorithms. Built with performance and scalability in mind.",
-    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80",
-    tech: ["React Native Web", "Firebase", "Node.js", "MongoDB", "Socket.io"],
-    gradient: "from-pink-500 to-rose-600",
-    stats: { 
-      users: "100K+", 
-      engagement: "+180%",
-      posts: "2M+",
-      rating: 4.6
-    },
-    year: "2023",
-    duration: "7 months",
-    team: "6 developers",
-    role: "Frontend Architect",
-    liveUrl: "#",
-    featured: false,
-  },
-  {
-    id: 'project-6',
-    title: "Learning Management System",
-    category: "EdTech Platform",
-    description: "Comprehensive LMS with video courses, quizzes, and certification",
-    fullDescription: "Developed an educational platform featuring video courses, interactive quizzes, progress tracking, and automated certification. Includes instructor dashboard and student analytics.",
-    image: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&q=80",
-    tech: ["Vue.js", "Laravel", "MySQL", "AWS", "Vimeo API"],
-    gradient: "from-green-500 to-emerald-600",
-    stats: { 
-      students: "25K+", 
-      courses: "500+",
-      completion: "78%",
-      rating: 4.8
-    },
-    year: "2023",
-    duration: "6 months",
-    team: "5 developers",
-    role: "Full-Stack Developer",
-    liveUrl: "#",
+    year: "2026",
+    duration: "Personal",
+    team: "Solo",
+    role: "Design & Development",
+    liveUrl: "https://roze.live",
+    githubUrl: "https://github.com/irozedev",
     featured: false,
   },
 ];
@@ -295,14 +207,14 @@ export function PortfolioCreativeSlider() {
 
   // Dynamic initial settings based on screen size
   const settings = {
-    dots: true,
-    infinite: true,
+    dots: projects.length > 1,
+    infinite: isMobile ? projects.length > 1 : projects.length > 2,
     speed: 700,
-    slidesToShow: isMobile ? 1 : 3,
+    slidesToShow: isMobile ? 1 : Math.min(3, projects.length),
     slidesToScroll: 1,
-    centerMode: true,
+    centerMode: projects.length > 2,
     centerPadding: isMobile ? "40px" : "0px",
-    autoplay: true,
+    autoplay: projects.length > 2,
     autoplaySpeed: 6000,
     pauseOnHover: true,
     swipeToSlide: true,
@@ -320,8 +232,8 @@ export function PortfolioCreativeSlider() {
       {
         breakpoint: 1280,
         settings: {
-          slidesToShow: 3,
-          centerMode: true,
+          slidesToShow: Math.min(3, projects.length),
+          centerMode: projects.length > 2,
           centerPadding: "0px",
           swipeToSlide: true,
           variableWidth: false,
@@ -675,15 +587,17 @@ export function PortfolioCreativeSlider() {
                       />
                     </button>
 
-                    {/* Project Image */}
-                    <div className="relative h-64 md:h-80 overflow-hidden bg-black">
+                    {/* Project Image (live screenshot, gradient fallback) */}
+                    <div className={`relative h-64 md:h-80 overflow-hidden bg-gradient-to-br ${project.gradient}`}>
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700"
+                        loading="lazy"
+                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                         style={{ maxWidth: '100%' }}
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                       />
-                      <div className={`absolute inset-0 bg-gradient-to-t ${project.gradient} opacity-30 group-hover:opacity-40 transition-opacity`} />
+                      <div className={`absolute inset-0 bg-gradient-to-t ${project.gradient} opacity-20 group-hover:opacity-30 transition-opacity pointer-events-none`} />
                     </div>
 
                     {/* Content */}
