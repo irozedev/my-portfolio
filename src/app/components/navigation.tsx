@@ -38,6 +38,14 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
       return [
         { label: t("nav.home"), href: "#hero" },
         { label: t("nav.services"), href: "#services" },
+        {
+          label:
+            language === "uk" ? "Процес" :
+            language === "nl" ? "Werkwijze" :
+            language === "ar" ? "آلية العمل" :
+            language === "es" ? "Proceso" : "Process",
+          href: "#how-i-work",
+        },
         { label: t("nav.projects"), href: "#projects" },
         { label: t("nav.about"), href: "#about" },
         { label: t("nav.contact"), href: "#contact" },
@@ -51,7 +59,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
         { label: t("nav.contact"), href: "#contact" },
       ];
     }
-  }, [t, isClientMode]);
+  }, [t, isClientMode, language]);
 
   const languages: { code: Language; label: string; flag: string }[] = [
     { code: "en", label: "English", flag: "🇬🇧" },

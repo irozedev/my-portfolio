@@ -12,6 +12,7 @@ import { AboutSection } from "./about-section";
 import { ExperienceTimelinePremium } from "./experience-timeline-premium";
 import { PortfolioCreativeSlider } from "./portfolio-creative-slider";
 import { ServicesCreativeSlider } from "./services-creative-slider";
+import { HowIWork } from "./how-i-work";
 import { GitHubShowcase } from "./github-showcase";
 import { ScrollToTopButton } from "./scroll-to-top-button";
 import { ViewModeToggle } from "./view-mode-toggle";
@@ -47,9 +48,14 @@ export function MainPage() {
           
           {/* Services FIRST for clients */}
           <ServicesCreativeSlider />
-          
+
           <div className="h-4 sm:h-6 md:h-8 lg:h-10" />
-          
+
+          {/* How I work — process + honest timelines */}
+          <HowIWork />
+
+          <div className="h-4 sm:h-6 md:h-8 lg:h-10" />
+
           {/* Projects */}
           <PortfolioCreativeSlider />
           
@@ -95,9 +101,14 @@ export function MainPage() {
           
           {/* GitHub Showcase */}
           <GitHubShowcase />
-          
+
           <div className="h-4 sm:h-6 md:h-8 lg:h-10" />
-          
+
+          {/* How I work — process + honest timelines */}
+          <HowIWork />
+
+          <div className="h-4 sm:h-6 md:h-8 lg:h-10" />
+
           {/* Contact (no chat bot) */}
           <ContactSection />
         </>
