@@ -13,6 +13,86 @@ interface Message {
   timestamp: Date;
 }
 
+// Smart local fallback — keeps the chat useful (with current pricing, stack,
+// availability and contact) whenever the AI backend is unavailable or returns
+// its generic fallback (e.g. ANTHROPIC_API_KEY not configured on Supabase).
+function localAnswer(input: string, language: string): string {
+  const s = input.toLowerCase();
+  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
+    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+
+  if (/(^|\b)(hi|hello|hey|прив|hallo|hoi|hola|مرحبا|salut)/.test(s))
+    return L(
+      "Hi! 👋 I can help with pricing, timelines, my stack, availability or contact. What do you need?",
+      "Привіт! 👋 Допоможу з цінами, строками, стеком, доступністю чи контактами. Що цікавить?",
+      "Hoi! 👋 Ik help met prijzen, planning, stack, beschikbaarheid of contact. Wat heb je nodig?",
+      "مرحباً! 👋 أساعدك في الأسعار، المدة، الأدوات، التوفر أو التواصل. ماذا تريد؟",
+      "¡Hola! 👋 Puedo ayudarte con precios, plazos, stack, disponibilidad o contacto. ¿Qué necesitas?",
+    );
+
+  if (/(price|cost|rate|budget|pricing|quote|how much|цін|цена|скільки|prijs|kost|precio|cuánto|سعر|كم)/.test(s))
+    return L(
+      "💶 Starting prices (no VAT — small-business scheme):\n• Landing page — from €650\n• Website 4–6 pages — €1,500–2,500\n• Telegram bot — from €350\n• Automation — €45/h\n• Web app / dashboard — €60/h\n• E-commerce — from €1,200\n• Consulting — €55/h\n\nTell me what you need and I'll narrow it down.",
+      "💶 Стартові ціни (без ПДВ — спецрежим):\n• Лендінг — від €650\n• Сайт 4–6 стор. — €1 500–2 500\n• Telegram-бот — від €350\n• Автоматизація — €45/год\n• Веб-застосунок — €60/год\n• E-commerce — від €1 200\n• Консалтинг — €55/год\n\nОпишіть задачу — уточню.",
+      "💶 Vanafprijzen (geen btw — vrijstellingsregeling):\n• Landingspagina — vanaf €650\n• Website 4–6 pagina's — €1.500–2.500\n• Telegram-bot — vanaf €350\n• Automatisering — €45/u\n• Webapp — €60/u\n• E-commerce — vanaf €1.200\n• Consulting — €55/u\n\nVertel wat je nodig hebt.",
+      "💶 أسعار البداية (بدون ضريبة — نظام المنشآت الصغيرة):\n• صفحة هبوط — من €650\n• موقع 4–6 صفحات — €1,500–2,500\n• بوت تيليجرام — من €350\n• أتمتة — €45/س\n• تطبيق ويب — €60/س\n• متجر — من €1,200\n• استشارة — €55/س\n\nأخبرني بما تحتاج.",
+      "💶 Precios iniciales (sin IVA — régimen de pequeñas empresas):\n• Landing — desde €650\n• Web 4–6 páginas — €1.500–2.500\n• Bot de Telegram — desde €350\n• Automatización — €45/h\n• Web app — €60/h\n• E-commerce — desde €1.200\n• Consultoría — €55/h\n\nCuéntame qué necesitas.",
+    );
+
+  if (/(time|timeline|how long|deadline|deliver|строк|термін|скільки часу|termijn|hoelang|plazo|cuánto tiempo|مدة|وقت)/.test(s))
+    return L(
+      "⏱ Realistic timelines (I build mornings, ~20h/week):\n• Landing — 1–1.5 weeks\n• Website 4–6 pages — 2.5–3.5 weeks\n• Telegram bot — ~1 week\n• Automation — 3–5 mornings\n• Web app (MVP) — 4–6 weeks\n• E-commerce — 3–5 weeks",
+      "⏱ Реальні строки (працюю зранку, ~20 год/тиждень):\n• Лендінг — 1–1.5 тижня\n• Сайт 4–6 стор. — 2.5–3.5 тижня\n• Бот — ~1 тиждень\n• Автоматизація — 3–5 ранків\n• Веб-застосунок (MVP) — 4–6 тижнів\n• E-commerce — 3–5 тижнів",
+      "⏱ Realistische planning (ik bouw 's ochtends, ~20u/week):\n• Landing — 1–1.5 week\n• Website 4–6 pagina's — 2.5–3.5 week\n• Bot — ~1 week\n• Automatisering — 3–5 ochtenden\n• Webapp (MVP) — 4–6 weken\n• E-commerce — 3–5 weken",
+      "⏱ مواعيد واقعية (أعمل صباحاً، ~20 ساعة/أسبوع):\n• صفحة هبوط — 1–1.5 أسبوع\n• موقع 4–6 صفحات — 2.5–3.5 أسبوع\n• بوت — ~أسبوع\n• أتمتة — 3–5 صباحات\n• تطبيق (MVP) — 4–6 أسابيع\n• متجر — 3–5 أسابيع",
+      "⏱ Plazos realistas (trabajo por las mañanas, ~20h/semana):\n• Landing — 1–1.5 semanas\n• Web 4–6 páginas — 2.5–3.5 semanas\n• Bot — ~1 semana\n• Automatización — 3–5 mañanas\n• Web app (MVP) — 4–6 semanas\n• E-commerce — 3–5 semanas",
+    );
+
+  if (/(available|availability|when.*(free|start)|hire|busy|доступ|коли|beschikbaar|wanneer|disponible|cuándo|متاح|متوفر)/.test(s))
+    return L(
+      "🌅 I work on projects every morning, 06:00–12:00 CET (I have a main job too). I reply within the day and take only 1–2 projects at a time, so yours gets real attention.",
+      "🌅 Працюю над проектами щоранку, 06:00–12:00 CET (є й основна робота). Відповідаю того ж дня, беру лише 1–2 проекти водночас.",
+      "🌅 Ik werk elke ochtend aan projecten, 06:00–12:00 CET (ik heb ook een hoofdbaan). Ik reageer binnen de dag en neem 1–2 projecten tegelijk.",
+      "🌅 أعمل على المشاريع كل صباح، 06:00–12:00 بتوقيت وسط أوروبا. أرد خلال اليوم وأتولى مشروعين فقط في المرة.",
+      "🌅 Trabajo en proyectos cada mañana, 06:00–12:00 CET (también tengo trabajo principal). Respondo el mismo día y tomo solo 1–2 proyectos a la vez.",
+    );
+
+  if (/(contact|email|reach|mail|write|telegram|контакт|звʼяз|звяз|пошта|contacto|correo|تواصل|بريد)/.test(s))
+    return L(
+      "📧 Best way to reach me:\n• Email: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nOr use the contact form below — I reply within the day.",
+      "📧 Найкраще звʼязатися:\n• Email: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nАбо форма нижче — відповідаю того ж дня.",
+      "📧 Zo bereik je me:\n• E-mail: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nOf het formulier hieronder — ik reageer binnen de dag.",
+      "📧 أفضل طريقة للتواصل:\n• البريد: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nأو نموذج التواصل أدناه.",
+      "📧 Mejor forma de contactarme:\n• Email: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nO el formulario de abajo — respondo el mismo día.",
+    );
+
+  if (/(skill|tech|stack|experience|expertise|react|vue|next|typescript|magento|навич|досвід|стек|ervaring|vaardig|habilidad|experiencia|خبرة|مهارات)/.test(s))
+    return L(
+      "🛠 8+ years, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. Built e-commerce (childrensalon.com, vogacloset.com) and banking systems (Oschadbank CRM). Based in Belgium.",
+      "🛠 8+ років, front-end / JavaScript. Стек: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) та банкінг (CRM Ощадбанку). Бельгія.",
+      "🛠 8+ jaar, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) en banksystemen (Oschadbank). België.",
+      "🛠 خبرة 8+ سنوات، Front-End / JavaScript. الأدوات: React, Vue, Next.js, TypeScript, Node.js, Magento. تجارة إلكترونية وأنظمة مصرفية. مقيم في بلجيكا.",
+      "🛠 8+ años, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) y banca (Oschadbank). En Bélgica.",
+    );
+
+  if (/(start|begin|hire|work with|project|почати|проект|starten|beginnen|empezar|proyecto|بدء|مشروع)/.test(s))
+    return L(
+      "🚀 Great! Tell me briefly: what you want to build, rough budget and deadline. Then email rozedev095@gmail.com or use the form below — I'll send a fixed quote + timeline.",
+      "🚀 Чудово! Коротко: що потрібно, орієнтовний бюджет і дедлайн. Пишіть на rozedev095@gmail.com або форму нижче — надішлю фікс-ціну + строки.",
+      "🚀 Top! Vertel kort: wat je wil bouwen, budget en deadline. Mail rozedev095@gmail.com of gebruik het formulier — je krijgt een vaste offerte + planning.",
+      "🚀 رائع! أخبرني باختصار: ما تريد بناءه، الميزانية والموعد. راسلني على rozedev095@gmail.com أو عبر النموذج، وسأرسل عرضاً ثابتاً + جدولاً.",
+      "🚀 ¡Genial! Cuéntame: qué quieres construir, presupuesto y plazo. Escribe a rozedev095@gmail.com o usa el formulario y te envío presupuesto fijo + plazo.",
+    );
+
+  return L(
+    "I can help with pricing, timelines, my stack, availability or how to start. Ask away — or email rozedev095@gmail.com directly.",
+    "Допоможу з цінами, строками, стеком, доступністю чи стартом. Питайте — або пишіть на rozedev095@gmail.com.",
+    "Ik help met prijzen, planning, stack, beschikbaarheid of hoe te starten. Vraag maar — of mail rozedev095@gmail.com.",
+    "أساعدك في الأسعار، المدة، الأدوات، التوفر أو كيفية البدء. اسأل — أو راسل rozedev095@gmail.com.",
+    "Puedo ayudarte con precios, plazos, stack, disponibilidad o cómo empezar. Pregunta — o escribe a rozedev095@gmail.com.",
+  );
+}
+
 export function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -218,9 +298,13 @@ export function ScrollToTopButton() {
       return data;
     })
     .then(data => {
+      // Use the real AI answer only when it's genuine; otherwise fall back to
+      // the on-brand local knowledge base (backend returns model:"fallback"
+      // when ANTHROPIC_API_KEY isn't configured).
+      const isRealAI = data && data.message && data.model && data.model !== 'fallback';
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
-        text: data.message || 'Sorry, I encountered an error.',
+        text: isRealAI ? data.message : localAnswer(trimmedValue, language),
         sender: "bot",
         timestamp: new Date(),
       }]);
@@ -230,7 +314,7 @@ export function ScrollToTopButton() {
       console.error('AI Chat error:', error);
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
-        text: "⚠️ AI service temporarily unavailable. Please email rozedev095@gmail.com directly.",
+        text: localAnswer(trimmedValue, language),
         sender: "bot",
         timestamp: new Date(),
       }]);
