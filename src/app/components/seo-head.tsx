@@ -56,7 +56,7 @@ const websiteData = {
   "@type": "WebSite",
   name: "Stepan Roze Portfolio",
   url: "https://roze.live",
-  description: "Professional portfolio of Stepan Roze, Senior Full-Stack Developer",
+  description: "Professional portfolio of Stepan Roze, Front-End / JavaScript Developer specializing in React, Vue, Next.js and TypeScript",
   author: { "@type": "Person", name: "Stepan Roze" },
 };
 
