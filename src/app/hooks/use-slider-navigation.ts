@@ -24,6 +24,19 @@ export function useSliderNavigation({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!sliderRef.current) return;
 
+      // Never hijack keys while the user is typing in a field (chat input,
+      // contact form, comments) — otherwise Space/arrows get eaten.
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
       switch (e.key) {
         case 'ArrowLeft':
         case 'ArrowUp':

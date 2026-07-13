@@ -13,6 +13,64 @@ interface Message {
   timestamp: Date;
 }
 
+// Sales funnel: collect project → budget → timeline → name → email, then send
+// the lead to Stepan. 'qa' = free Q&A mode, 'done' = after a lead was sent.
+type Stage = 'intro' | 'qa' | 'budget' | 'timeline' | 'name' | 'email' | 'done';
+type Lead = { project?: string; budget?: string; timeline?: string; name?: string; email?: string };
+
+function funnelStrings(language: string) {
+  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
+    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+  return {
+    welcome: L(
+      "Hi! 👋 I'm Roze, Stepan's assistant. I'll get you a fast, honest quote in a few taps.\n\nWhat would you like to build?",
+      "Привіт! 👋 Я Roze, асистент Степана. За кілька кроків дам чесну оцінку.\n\nЩо хочете зробити?",
+      "Hoi! 👋 Ik ben Roze, Stepan's assistent. In een paar tikken geef ik je een eerlijke prijs.\n\nWat wil je bouwen?",
+      "مرحباً! 👋 أنا Roze، مساعد ستيبان. سأعطيك تقديراً صادقاً بسرعة.\n\nماذا تريد أن تبني؟",
+      "¡Hola! 👋 Soy Roze, asistente de Stepan. En unos toques te doy un presupuesto honesto.\n\n¿Qué quieres construir?",
+    ),
+    reask: L("Sure — what would you like to build? 👇", "Гаразд — що хочете зробити? 👇", "Prima — wat wil je bouwen? 👇", "تمام — ماذا تريد أن تبني؟ 👇", "Claro — ¿qué quieres construir? 👇"),
+    askBudget: L("Nice choice 👍 What's your rough budget?", "Гарний вибір 👍 Орієнтовний бюджет?", "Goede keuze 👍 Wat is je budget ongeveer?", "اختيار جيد 👍 ما ميزانيتك التقريبية؟", "¡Buena elección! 👍 ¿Presupuesto aproximado?"),
+    askTimeline: L("Got it ⏰ When do you need it?", "Зрозумів ⏰ Коли потрібно?", "Genoteerd ⏰ Wanneer heb je het nodig?", "تمام ⏰ متى تحتاجه؟", "Perfecto ⏰ ¿Para cuándo lo necesitas?"),
+    askName: L("Great 🙌 What's your name?", "Чудово 🙌 Як вас звати?", "Top 🙌 Wat is je naam?", "رائع 🙌 ما اسمك؟", "Genial 🙌 ¿Cómo te llamas?"),
+    askEmail: L("And your best email so Stepan can send the quote? 📧", "Ваш email, щоб Степан надіслав оцінку? 📧", "En je e-mail zodat Stepan de offerte kan sturen? 📧", "وبريدك ليرسل لك ستيبان العرض؟ 📧", "¿Tu email para que Stepan te envíe el presupuesto? 📧"),
+    badEmail: L("Hmm, that email looks off — mind trying again? 📧", "Хм, email виглядає дивно — спробуєте ще раз? 📧", "Dat e-mailadres klopt niet — nog een keer? 📧", "يبدو البريد غير صحيح — حاول مجدداً؟ 📧", "Ese email no parece válido — ¿otra vez? 📧"),
+    sending: L("Sending your request to Stepan… 🚀", "Надсилаю запит Степану… 🚀", "Ik stuur je aanvraag naar Stepan… 🚀", "أرسل طلبك إلى ستيبان… 🚀", "Enviando tu solicitud a Stepan… 🚀"),
+    thanks: (n: string, e: string) => L(
+      `Thanks, ${n}! ✅ Your request is with Stepan. He builds every morning (CET) and replies the same day at ${e}.\n\nWant a rough price now, or anything else?`,
+      `Дякую, ${n}! ✅ Запит у Степана. Він працює щоранку (CET) і відповість того ж дня на ${e}.\n\nПідказати орієнтовну ціну чи ще щось?`,
+      `Bedankt, ${n}! ✅ Je aanvraag staat bij Stepan. Hij bouwt elke ochtend (CET) en reageert dezelfde dag op ${e}.\n\nWil je nu een richtprijs of nog iets?`,
+      `شكراً، ${n}! ✅ طلبك عند ستيبان. يعمل كل صباح (CET) ويرد في نفس اليوم على ${e}.\n\nتريد سعراً تقريبياً الآن أو شيئاً آخر؟`,
+      `¡Gracias, ${n}! ✅ Tu solicitud está con Stepan. Trabaja cada mañana (CET) y responde el mismo día a ${e}.\n\n¿Quieres un precio aproximado ahora o algo más?`,
+    ),
+    failed: (e: string) => L(
+      `I couldn't send it automatically 😕 Please email Stepan directly at rozedev095@gmail.com — I noted your address (${e}).`,
+      `Не вдалося надіслати автоматично 😕 Напишіть Степану напряму: rozedev095@gmail.com (ваш email: ${e}).`,
+      `Kon het niet automatisch versturen 😕 Mail Stepan direct: rozedev095@gmail.com (jouw e-mail: ${e}).`,
+      `تعذّر الإرسال تلقائياً 😕 راسل ستيبان مباشرة: rozedev095@gmail.com (بريدك: ${e}).`,
+      `No pude enviarlo automáticamente 😕 Escribe a Stepan: rozedev095@gmail.com (tu email: ${e}).`,
+    ),
+    qaIntro: L("Sure — ask me about pricing, timelines, stack or availability. Or tap “Get a quote”. 👇", "Звісно — питайте про ціни, строки, стек чи доступність. Або тисніть «Оцінка». 👇", "Tuurlijk — vraag over prijzen, planning, stack of beschikbaarheid. Of tik “Offerte”. 👇", "بالتأكيد — اسأل عن الأسعار أو المدة أو الأدوات. أو اضغط «عرض سعر». 👇", "Claro — pregunta sobre precios, plazos o stack. O toca “Presupuesto”. 👇"),
+    labels: {
+      website: L("🌐 Website", "🌐 Сайт", "🌐 Website", "🌐 موقع", "🌐 Web"),
+      bot: L("🤖 Bot / Automation", "🤖 Бот / автоматизація", "🤖 Bot / automatisering", "🤖 بوت / أتمتة", "🤖 Bot / automatización"),
+      webapp: L("📱 Web app", "📱 Веб-застосунок", "📱 Webapp", "📱 تطبيق ويب", "📱 Web app"),
+      ecom: L("🛒 E-commerce", "🛒 Магазин", "🛒 Webshop", "🛒 متجر", "🛒 E-commerce"),
+      ask: L("💬 Just a question", "💬 Просто питання", "💬 Even een vraag", "💬 مجرد سؤال", "💬 Solo una pregunta"),
+      quote: L("🚀 Get a quote", "🚀 Оцінка", "🚀 Offerte", "🚀 عرض سعر", "🚀 Presupuesto"),
+      bUnder500: L("Under €500", "До €500", "Onder €500", "أقل من €500", "Menos de €500"),
+      b500: L("€500–1,500", "€500–1 500", "€500–1.500", "€500–1,500", "€500–1.500"),
+      b1500: L("€1,500–5,000", "€1 500–5 000", "€1.500–5.000", "€1,500–5,000", "€1.500–5.000"),
+      b5000: L("€5,000+", "€5 000+", "€5.000+", "€5,000+", "€5.000+"),
+      bNotSure: L("Not sure yet", "Ще не знаю", "Weet ik nog niet", "لست متأكداً بعد", "Aún no sé"),
+      tAsap: L("ASAP", "Якнайшвидше", "Zo snel mogelijk", "بأسرع وقت", "Cuanto antes"),
+      t24: L("2–4 weeks", "2–4 тижні", "2–4 weken", "2–4 أسابيع", "2–4 semanas"),
+      t13: L("1–3 months", "1–3 місяці", "1–3 maanden", "1–3 أشهر", "1–3 meses"),
+      tflex: L("Flexible", "Гнучко", "Flexibel", "مرن", "Flexible"),
+    },
+  };
+}
+
 // Smart local fallback — keeps the chat useful (with current pricing, stack,
 // availability and contact) whenever the AI backend is unavailable or returns
 // its generic fallback (e.g. ANTHROPIC_API_KEY not configured on Supabase).
@@ -104,18 +162,15 @@ export function ScrollToTopButton() {
   const [requestCount, setRequestCount] = useState(0);
   const [isRateLimited, setIsRateLimited] = useState(false);
   const [showQuickQuestions, setShowQuickQuestions] = useState(true);
+  const [stage, setStage] = useState<Stage>('intro');
+  const [lead, setLead] = useState<Lead>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { t, language, setLanguage } = useLanguage();
   const { isClientMode } = useViewMode();
   const rafRef = useRef<number>(0);
 
-  const MAX_REQUESTS = 8;
-
-  const quickQuestions = [
-    { emoji: "💰", text: language === 'uk' ? "Оцінити ціну" : language === 'nl' ? "Prijs schatten" : language === 'ar' ? "تقدير السعر" : language === 'es' ? "Estimar precio" : "Estimate price", label: language === 'uk' ? "Ціна" : language === 'nl' ? "Prijs" : language === 'ar' ? "السعر" : language === 'es' ? "Precio" : "Price" },
-    { emoji: "🚀", text: language === 'uk' ? "Почати проект" : language === 'nl' ? "Start project" : language === 'ar' ? "بدء مشروع" : language === 'es' ? "Iniciar proyecto" : "Start project", label: language === 'uk' ? "Старт" : language === 'nl' ? "Start" : language === 'ar' ? "بدء" : language === 'es' ? "Inicio" : "Start" },
-    { emoji: "📩", text: language === 'uk' ? "Контакт" : language === 'nl' ? "Contact" : language === 'ar' ? "تواصل" : language === 'es' ? "Contacto" : "Contact", label: language === 'uk' ? "Контакт" : language === 'nl' ? "Contact" : language === 'ar' ? "تواصل" : language === 'es' ? "Contacto" : "Contact" },
-  ];
+  const MAX_REQUESTS = 30;
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // Scroll tracking - optimized with rAF
   useEffect(() => {
@@ -158,26 +213,25 @@ export function ScrollToTopButton() {
       const experienceRole = sessionStorage.getItem('chatbotExperienceRole');
       const experiencePeriod = sessionStorage.getItem('chatbotExperiencePeriod');
 
+      const F = funnelStrings(language);
+
+      // Opened from hero / generic — let the default welcome effect run the funnel.
       if (event && !serviceName && !experience) {
         setIsChatOpen(true);
-        if (messages.length === 0) {
-          setMessages([{
-            id: Date.now(),
-            text: `Hey 👋\nI can estimate your project price & timeline in seconds.\nWhat do you want to build?`,
-            sender: "bot",
-            timestamp: new Date(),
-          }]);
-        }
         return;
       }
 
+      // Opened from a service card — pre-fill the project and jump to budget.
       if (serviceName) {
         setHasServiceContext(true);
         setIsChatOpen(true);
+        setLead({ project: serviceName });
+        setStage('budget');
+        setShowQuickQuestions(true);
         setTimeout(() => {
           setMessages([{
             id: Date.now(),
-            text: `👋 Hi! I see you're interested in **${serviceName}**.\n\nI can help you with:\n• 💰 Get a price estimate\n• ⏱️ Timeline & delivery\n• 🛠️ Technical details\n• 🚀 Start the project\n\nWhat would you like to know?`,
+            text: `👋 ${serviceName} — great choice!\n\n${F.askBudget}`,
             sender: "bot",
             timestamp: new Date(),
           }]);
@@ -185,12 +239,15 @@ export function ScrollToTopButton() {
           sessionStorage.removeItem('chatbotServiceName');
         }, 300);
       } else if (experience) {
+        // Opened from an experience card — free Q&A mode.
         setHasServiceContext(true);
         setIsChatOpen(true);
+        setStage('qa');
+        setShowQuickQuestions(true);
         setTimeout(() => {
           setMessages([{
             id: Date.now(),
-            text: `👋 Hi! I noticed you're interested in my work at ${experience} as ${experienceRole} (${experiencePeriod}).\n\nI'd be happy to share more details about:\n• 🚀 Projects I worked on\n• 🛠️ Technologies I used\n• 📈 Challenges I solved\n\nWhat would you like to know?`,
+            text: `👋 Hi! You're looking at my work at ${experience} as ${experienceRole} (${experiencePeriod}).\n\nAsk me anything about it — or tap “${F.labels.quote}” to start a project.`,
             sender: "bot",
             timestamp: new Date(),
           }]);
@@ -205,24 +262,18 @@ export function ScrollToTopButton() {
     return () => window.removeEventListener('openChatBot', handleOpenChatBot);
   }, [messages.length]);
 
-  // Default welcome message
+  // Default welcome — starts the sales funnel at the "what to build" step.
   useEffect(() => {
     if (isChatOpen && messages.length === 0 && !hasServiceContext) {
-      const welcomeMessages: Record<string, string> = {
-        en: "👋 Hey there! I'm Roze Bot — Stepan's AI assistant.\n\nI can help you with:\n💰 Project rates & pricing\n🛠️ Technical skills & expertise\n🚀 Portfolio & past projects\n⏰ Availability & timelines\n📧 Contact information\n\nWhat would you like to know? 👇",
-        uk: "👋 Привіт! Я Roze Bot — AI асистент Степана.\n\nМожу допомогти з:\n💰 Ціни та тарифи\n🛠️ Технічні навички\n🚀 Портфоліо та проекти\n⏰ Доступність та терміни\n📧 Контактна інформація\n\nЩо вас цікавить? 👇",
-        nl: "👋 Hallo! Ik ben Roze Bot — Stepan's AI-assistent.\n\nIk kan helpen met:\n💰 Tarieven & prijzen\n🛠️ Technische vaardigheden\n🚀 Portfolio & projecten\n⏰ Beschikbaarheid & tijdlijnen\n📧 Contactgegevens\n\nWat wilt u weten? 👇",
-        ar: "👋 مرحباً! أنا Roze Bot — مساعد ستيبان الذكي.\n\nيمكنني المساعدة في:\n💰 الأسعار والتكاليف\n🛠️ المهارات التقنية\n🚀 المشاريع السابقة\n⏰ التوفر والجداول الزمنية\n📧 معلومات الاتصال\n\nماذا تريد أن تعرف؟ 👇",
-        es: "👋 ¡Hola! Soy Roze Bot — asistente AI de Stepan.\n\nPuedo ayudarte con:\n💰 Tarifas y precios\n🛠️ Habilidades técnicas\n🚀 Portfolio y proyectos\n⏰ Disponibilidad y plazos\n📧 Información de contacto\n\n¿Qué te gustaría saber? 👇",
-      };
+      setStage('intro');
+      setShowQuickQuestions(true);
       setTimeout(() => {
         setMessages([{
           id: Date.now(),
-          text: welcomeMessages[language] || welcomeMessages.en,
+          text: funnelStrings(language).welcome,
           sender: "bot",
           timestamp: new Date(),
         }]);
-        setShowQuickQuestions(true);
       }, 500);
     }
   }, [isChatOpen, messages.length, hasServiceContext, language]);
@@ -240,86 +291,124 @@ export function ScrollToTopButton() {
     return 'en';
   };
 
-  const handleSend = (overrideMessage?: string) => {
-    const messageToSend = overrideMessage || inputValue;
-    if (!messageToSend || !messageToSend.trim()) return;
-    const trimmedValue = messageToSend.trim();
+  const pushMsg = (text: string, sender: "user" | "bot") =>
+    setMessages(prev => [...prev, { id: Date.now() + Math.random(), text, sender, timestamp: new Date() }]);
 
-    const detectedLang = detectLanguage(trimmedValue);
-    if (detectedLang !== language && ['en', 'uk', 'nl', 'ar', 'es'].includes(detectedLang)) {
-      setLanguage(detectedLang as any);
-    }
-
-    setRequestCount(prev => prev + 1);
-
-    const userMessage: Message = {
-      id: Date.now(),
-      text: messageToSend,
-      sender: "user",
-      timestamp: new Date(),
-    };
-    setMessages(prev => [...prev, userMessage]);
-    setInputValue("");
-
-    if (requestCount >= MAX_REQUESTS) {
-      setIsRateLimited(true);
-      setMessages(prev => [...prev, {
-        id: Date.now() + 1,
-        text: "You've reached the message limit. Please contact me directly at rozedev095@gmail.com",
-        sender: "bot",
-        timestamp: new Date(),
-      }]);
-      return;
-    }
-
+  const botSay = (text: string, delay = 450) => {
     setIsTyping(true);
-    setShowQuickQuestions(false);
+    window.setTimeout(() => {
+      setIsTyping(false);
+      pushMsg(text, "bot");
+    }, delay);
+  };
 
-    const userLanguage = language === 'uk' ? 'Ukrainian' :
-      language === 'nl' ? 'Dutch' :
-      language === 'ar' ? 'Arabic' :
-      language === 'es' ? 'Spanish' : 'English';
-
-    fetch(`https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/ai/chat`, {
+  // Send the collected lead to Stepan (saved server-side + emailed via Resend).
+  const submitLead = (finalLead: Lead) => {
+    const F = funnelStrings(language);
+    botSay(F.sending, 200);
+    fetch(`https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/contact`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${publicAnonKey}`
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
       body: JSON.stringify({
-        message: trimmedValue,
-        context: hasServiceContext ? 'service_selected' : 'general',
-        language: userLanguage
-      })
+        name: finalLead.name || 'Website visitor',
+        email: finalLead.email,
+        service: `Chat lead — ${finalLead.project || 'General'}`,
+        message:
+          `New lead from the site chat 🤖\n\n` +
+          `• Project: ${finalLead.project || '—'}\n` +
+          `• Budget: ${finalLead.budget || '—'}\n` +
+          `• Timeline: ${finalLead.timeline || '—'}\n` +
+          `• Name: ${finalLead.name || '—'}\n` +
+          `• Email: ${finalLead.email || '—'}\n` +
+          `• Language: ${language}`,
+      }),
     })
-    .then(async res => {
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'API request failed');
-      return data;
-    })
-    .then(data => {
-      // Use the real AI answer only when it's genuine; otherwise fall back to
-      // the on-brand local knowledge base (backend returns model:"fallback"
-      // when ANTHROPIC_API_KEY isn't configured).
-      const isRealAI = data && data.message && data.model && data.model !== 'fallback';
-      setMessages(prev => [...prev, {
-        id: Date.now() + 1,
-        text: isRealAI ? data.message : localAnswer(trimmedValue, language),
-        sender: "bot",
-        timestamp: new Date(),
-      }]);
-      setIsTyping(false);
-    })
-    .catch(error => {
-      console.error('AI Chat error:', error);
-      setMessages(prev => [...prev, {
-        id: Date.now() + 1,
-        text: localAnswer(trimmedValue, language),
-        sender: "bot",
-        timestamp: new Date(),
-      }]);
-      setIsTyping(false);
-    });
+      .then(async res => { const d = await res.json().catch(() => ({})); if (!res.ok) throw new Error(d.error || 'failed'); return d; })
+      .then(() => { setStage('done'); botSay(funnelStrings(language).thanks(finalLead.name || '', finalLead.email || ''), 600); })
+      .catch(err => { console.error('Lead submit error:', err); setStage('done'); botSay(funnelStrings(language).failed(finalLead.email || ''), 600); });
+  };
+
+  // One funnel step: record the answer for the current stage and ask the next.
+  const processAnswer = (raw: string) => {
+    const text = raw.trim();
+    if (!text) return;
+    const F = funnelStrings(language);
+
+    const detected = detectLanguage(text);
+    if (detected !== language && ['en', 'uk', 'nl', 'ar', 'es'].includes(detected)) setLanguage(detected as any);
+
+    switch (stage) {
+      case 'intro':
+        setLead(l => ({ ...l, project: text }));
+        setStage('budget');
+        botSay(F.askBudget);
+        break;
+      case 'budget':
+        setLead(l => ({ ...l, budget: text }));
+        setStage('timeline');
+        botSay(F.askTimeline);
+        break;
+      case 'timeline':
+        setLead(l => ({ ...l, timeline: text }));
+        setStage('name');
+        botSay(F.askName);
+        break;
+      case 'name':
+        setLead(l => ({ ...l, name: text }));
+        setStage('email');
+        botSay(F.askEmail);
+        break;
+      case 'email': {
+        if (!emailRe.test(text)) { botSay(F.badEmail, 250); return; }
+        const finalLead = { ...lead, email: text };
+        setLead(finalLead);
+        submitLead(finalLead);
+        break;
+      }
+      case 'qa':
+      case 'done':
+      default:
+        botSay(localAnswer(text, language));
+        break;
+    }
+  };
+
+  const handleSend = (overrideMessage?: string) => {
+    const messageToSend = overrideMessage ?? inputValue;
+    if (!messageToSend || !messageToSend.trim()) return;
+    setShowQuickQuestions(false);
+    pushMsg(messageToSend, "user");
+    setInputValue("");
+    setRequestCount(prev => prev + 1);
+    processAnswer(messageToSend);
+  };
+
+  // Quick-reply chip tap.
+  const handleChip = (chip: { label: string; value: string; special?: 'qa' | 'quote' }) => {
+    const F = funnelStrings(language);
+    pushMsg(chip.label, "user");
+    if (chip.special === 'qa') { setStage('qa'); botSay(F.qaIntro, 300); return; }
+    if (chip.special === 'quote') { setStage('intro'); botSay(F.reask, 300); return; }
+    processAnswer(chip.value);
+  };
+
+  // Quick-reply chips shown under the messages, driven by the current stage.
+  const chipsForStage = (): { label: string; value: string; special?: 'qa' | 'quote' }[] => {
+    const F = funnelStrings(language);
+    const one = (label: string) => ({ label, value: label });
+    switch (stage) {
+      case 'intro':
+        return [one(F.labels.website), one(F.labels.bot), one(F.labels.webapp), one(F.labels.ecom), { label: F.labels.ask, value: '', special: 'qa' }];
+      case 'budget':
+        return [F.labels.bUnder500, F.labels.b500, F.labels.b1500, F.labels.b5000, F.labels.bNotSure].map(one);
+      case 'timeline':
+        return [F.labels.tAsap, F.labels.t24, F.labels.t13, F.labels.tflex].map(one);
+      case 'qa':
+      case 'done':
+        return [{ label: F.labels.quote, value: '', special: 'quote' }];
+      default:
+        return [];
+    }
   };
 
   const scrollToTop = () => {
@@ -362,8 +451,8 @@ export function ScrollToTopButton() {
                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-white" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-black text-sm">Roze AI Assistant</h3>
-                    <p className="text-[10px] text-black/60 font-mono">POWERED BY CLAUDE • ONLINE</p>
+                    <h3 className="font-bold text-black text-sm">Roze — project assistant</h3>
+                    <p className="text-[10px] text-black/60 font-mono">ONLINE • FAST QUOTES</p>
                   </div>
                 </div>
                 <button
@@ -433,20 +522,17 @@ export function ScrollToTopButton() {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Quick Questions */}
-              {messages.length <= 1 && showQuickQuestions && (
+              {/* Quick-reply chips (stage-driven sales funnel) */}
+              {!isTyping && chipsForStage().length > 0 && (
                 <div className="p-3 border-t border-[var(--border-color)] bg-[var(--bg-primary)]">
-                  <div className="flex gap-2">
-                    {quickQuestions.map((q) => (
+                  <div className="flex flex-wrap gap-2" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+                    {chipsForStage().map((chip) => (
                       <button
-                        key={q.label}
-                        onClick={() => {
-                          setShowQuickQuestions(false);
-                          handleSend(q.text);
-                        }}
-                        className="flex-1 text-xs px-2 py-2 bg-[var(--bg-secondary)] hover:bg-[var(--accent-primary)]/10 border border-[var(--border-color)] hover:border-[var(--accent-primary)]/30 rounded-lg transition-all font-medium"
+                        key={chip.label}
+                        onClick={() => handleChip(chip)}
+                        className="text-xs px-3 py-2 bg-[var(--bg-secondary)] hover:bg-[var(--accent-primary)]/10 border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 rounded-lg transition-all font-medium"
                       >
-                        {q.emoji} {q.label}
+                        {chip.label}
                       </button>
                     ))}
                   </div>
@@ -466,8 +552,13 @@ export function ScrollToTopButton() {
                         handleSend();
                       }
                     }}
-                    placeholder="Ask about services, pricing, skills..."
+                    placeholder={
+                      stage === 'email' ? 'you@email.com' :
+                      stage === 'name' ? (language === 'uk' ? 'Ваше імʼя…' : language === 'nl' ? 'Je naam…' : language === 'es' ? 'Tu nombre…' : language === 'ar' ? 'اسمك…' : 'Your name…') :
+                      (language === 'uk' ? 'Напишіть повідомлення…' : language === 'nl' ? 'Typ een bericht…' : language === 'es' ? 'Escribe un mensaje…' : language === 'ar' ? 'اكتب رسالة…' : 'Type a message…')
+                    }
                     className="flex-1 px-4 py-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/30 text-sm"
+                    inputMode={stage === 'email' ? 'email' : 'text'}
                     disabled={isRateLimited}
                   />
                   <motion.button
@@ -480,7 +571,11 @@ export function ScrollToTopButton() {
                   </motion.button>
                 </div>
                 <p className="text-[9px] text-[var(--text-muted)] text-center mt-1.5 font-mono">
-                  AI-powered by Claude • {MAX_REQUESTS - requestCount} messages left
+                  {language === 'uk' ? 'Відповідь того ж дня • rozedev095@gmail.com' :
+                   language === 'nl' ? 'Reactie binnen de dag • rozedev095@gmail.com' :
+                   language === 'es' ? 'Respuesta el mismo día • rozedev095@gmail.com' :
+                   language === 'ar' ? 'رد خلال اليوم • rozedev095@gmail.com' :
+                   'Replies within the day • rozedev095@gmail.com'}
                 </p>
               </div>
             </motion.div>
