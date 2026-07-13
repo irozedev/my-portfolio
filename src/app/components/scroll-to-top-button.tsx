@@ -11,6 +11,7 @@ interface Message {
   text: string;
   sender: "user" | "bot";
   timestamp: Date;
+  action?: ChatAction;
 }
 
 // Sales funnel: collect project → budget → timeline → name → email, then send
@@ -142,13 +143,175 @@ function localAnswer(input: string, language: string): string {
       "🚀 ¡Genial! Cuéntame: qué quieres construir, presupuesto y plazo. Escribe a rozedev095@gmail.com o usa el formulario y te envío presupuesto fijo + plazo.",
     );
 
-  return L(
-    "I can help with pricing, timelines, my stack, availability or how to start. Ask away — or email rozedev095@gmail.com directly.",
-    "Допоможу з цінами, строками, стеком, доступністю чи стартом. Питайте — або пишіть на rozedev095@gmail.com.",
-    "Ik help met prijzen, planning, stack, beschikbaarheid of hoe te starten. Vraag maar — of mail rozedev095@gmail.com.",
-    "أساعدك في الأسعار، المدة، الأدوات، التوفر أو كيفية البدء. اسأل — أو راسل rozedev095@gmail.com.",
-    "Puedo ayudarte con precios, plazos, stack, disponibilidad o cómo empezar. Pregunta — o escribe a rozedev095@gmail.com.",
-  );
+  return ""; // no info match — the smart layer / funnel decides what to do
+}
+
+type ChatAction =
+  | { kind: 'nav'; target: string; label: string }
+  | { kind: 'view'; mode: 'client' | 'cv'; label: string }
+  | { kind: 'quote'; label: string }
+  | { kind: 'link'; href: string; label: string };
+
+// Smart in-browser assistant: site navigation, guidance and info answers — zero
+// API cost, instant, private. Returns matched=false only when nothing is
+// recognised, so the funnel can treat the text as a project description.
+function assistantReply(input: string, language: string): { text: string; action?: ChatAction; matched: boolean } {
+  const s = input.toLowerCase();
+  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
+    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+
+  const lblServices = L("Open Services", "До послуг", "Naar diensten", "الخدمات", "Ver servicios");
+  const lblWork = L("See my work", "Мої роботи", "Bekijk werk", "شاهد أعمالي", "Ver trabajo");
+  const lblProcess = L("How I work", "Як я працюю", "Werkwijze", "آلية العمل", "Cómo trabajo");
+  const lblAbout = L("About me", "Про мене", "Over mij", "نبذة عني", "Sobre mí");
+  const lblContact = L("Open contact", "До контактів", "Naar contact", "نموذج التواصل", "Ir a contacto");
+  const lblCompany = L("Company view", "Режим «Компанія»", "Bedrijfsweergave", "وضع الشركة", "Vista empresa");
+  const lblGithub = L("Open GitHub", "Відкрити GitHub", "Open GitHub", "فتح GitHub", "Abrir GitHub");
+  const lblCV = L("Download CV", "Завантажити CV", "CV downloaden", "تحميل السيرة", "Descargar CV");
+  const lblQuote = L("Get a quote", "Оцінка", "Offerte", "عرض سعر", "Presupuesto");
+
+  // Site guide / help
+  if (/(how (does|to use) (this|the)? ?(site|page|website)|what is this (site|page|website)|show me around|navigate|site ?guide|help me (find|navigate)|навігац|навигац|hoe werkt (deze|de) ?(site|website)|rondleiding|cómo funciona (este|el) ?(sitio|web)|guíame|كيف (يعمل|أستخدم) الموقع|جولة)/.test(s))
+    return { matched: true, text: L(
+      "🧭 Quick tour:\n• Services — what I build & prices\n• Process — how I work + honest timelines\n• Projects — real work\n• GitHub — live code\n• Contact — reach Stepan\n\nTwo modes (top toggle): Client (hire me) & Company (full CV). 5 languages, dark/light. Where to?",
+      "🧭 Коротка екскурсія:\n• Послуги — що роблю та ціни\n• Процес — як працюю + чесні строки\n• Проєкти — реальні роботи\n• GitHub — живий код\n• Контакт — звʼязатися\n\nДва режими (зверху): Клієнт і Компанія (повне CV). 5 мов, темна/світла. Куди?",
+      "🧭 Korte rondleiding:\n• Diensten — wat ik bouw & prijzen\n• Werkwijze — hoe ik werk + eerlijke planning\n• Projecten — echt werk\n• GitHub — live code\n• Contact — bereik Stepan\n\nTwee modi (boven): Client & Company (volledig cv). 5 talen, donker/licht. Waarheen?",
+      "🧭 جولة سريعة:\n• الخدمات — ما أبنيه والأسعار\n• آلية العمل — كيف أعمل + مواعيد صادقة\n• المشاريع — أعمال حقيقية\n• GitHub — كود مباشر\n• التواصل — الوصول لستيبان\n\nوضعان (بالأعلى): عميل وشركة. 5 لغات. إلى أين؟",
+      "🧭 Tour rápido:\n• Servicios — qué construyo y precios\n• Proceso — cómo trabajo + plazos honestos\n• Proyectos — trabajo real\n• GitHub — código en vivo\n• Contacto — contactar a Stepan\n\nDos modos (arriba): Cliente y Empresa. 5 idiomas. ¿A dónde?",
+    ) };
+
+  // View mode
+  if (/(view mode|client mode|company mode|cv mode|company view|switch.*(mode|view)|режим|weergave|modus|bedrijfsmodus|modo (empresa|cliente|cv))/.test(s))
+    return { matched: true, action: { kind: 'view', mode: 'cv', label: lblCompany }, text: L(
+      "This site has two modes (toggle at the top):\n• 👤 Client — services, prices, projects\n• 🏢 Company — full CV: experience & skills\n\nOpen the full CV view?",
+      "Два режими (перемикач зверху):\n• 👤 Клієнт — послуги, ціни, проєкти\n• 🏢 Компанія — повне CV: досвід і навички\n\nВідкрити «Компанію»?",
+      "Twee modi (schakelaar boven):\n• 👤 Client — diensten, prijzen, projecten\n• 🏢 Company — volledig cv: ervaring & skills\n\nCompany-weergave openen?",
+      "وضعان (بالأعلى):\n• 👤 عميل — خدمات وأسعار ومشاريع\n• 🏢 شركة — السيرة كاملة\n\nأفتح وضع الشركة؟",
+      "Dos modos (arriba):\n• 👤 Cliente — servicios, precios, proyectos\n• 🏢 Empresa — CV completo\n\n¿Abrir vista Empresa?",
+    ) };
+
+  // Process
+  if (/(how (do|does)( you| he| stepan)? ?work|your process|work process|workflow|how it works|steps|як (ти )?прац|процес|hoe werk je|werkwijze|stappen|cómo (trabajas|funciona el proceso)|pasos|كيف تعمل|آلية العمل|خطوات)/.test(s))
+    return { matched: true, action: { kind: 'nav', target: '#how-i-work', label: lblProcess }, text: L(
+      "⚙️ Simple: free intro → fixed quote & timeline → 30–50% deposit → build with live preview → 1–2 revisions → launch & handover. I build every morning (CET), steady daily progress.",
+      "⚙️ Просто: знайомство (безкоштовно) → фікс-ціна і строки → передоплата 30–50% → робота з превʼю → 1–2 правки → запуск. Працюю щоранку (CET).",
+      "⚙️ Simpel: gratis intro → vaste prijs & planning → 30–50% aanbetaling → bouwen met preview → 1–2 revisies → lancering. Ik bouw elke ochtend (CET).",
+      "⚙️ ببساطة: تعارف مجاني → سعر ثابت ومدة → دفعة 30–50% → بناء مع معاينة → تعديلان → إطلاق. أعمل كل صباح (CET).",
+      "⚙️ Simple: intro gratis → precio fijo y plazo → anticipo 30–50% → desarrollo con vista previa → 1–2 revisiones → lanzamiento. Trabajo cada mañana (CET).",
+    ) };
+
+  // Services
+  if (/(service|offering|what.*(can|do) you (do|offer)|послуг|що ти робиш|dienst|wat doe je|servicio|qué (haces|ofreces)|خدمات|ماذا تقدم)/.test(s))
+    return { matched: true, action: { kind: 'nav', target: '#services', label: lblServices }, text: L(
+      "🛠 Automation & bots, websites & landing pages, UI design & build, web apps & dashboards, e-commerce and consulting. Want the full list with prices?",
+      "🛠 Автоматизація та боти, сайти й лендінги, UI-дизайн і код, веб-застосунки та дашборди, e-commerce, консалтинг. Показати з цінами?",
+      "🛠 Automatisering & bots, websites & landingspagina's, UI-ontwerp & build, webapps & dashboards, e-commerce en consulting. Lijst met prijzen?",
+      "🛠 أتمتة وبوتات، مواقع وصفحات هبوط، تصميم وبناء واجهات، تطبيقات ولوحات، متاجر، واستشارات. أعرض القائمة بالأسعار؟",
+      "🛠 Automatización y bots, webs y landings, diseño UI y build, web apps y paneles, e-commerce y consultoría. ¿Ver la lista con precios?",
+    ) };
+
+  // CV / resume
+  if (/(\bcv\b|resume|curriculum|résumé|резюме|السيرة الذاتية|سيرة ذاتية)/.test(s))
+    return { matched: true, action: { kind: 'link', href: '/Stepan_Roze_CV.pdf', label: lblCV }, text: L(
+      "📄 Download Stepan's CV as PDF, or switch to Company view for the full interactive timeline.",
+      "📄 Завантажте CV Степана (PDF) або перемкніть на «Компанію» для повного досвіду.",
+      "📄 Download Stepans cv als PDF, of schakel naar Company-weergave voor de volledige tijdlijn.",
+      "📄 حمّل سيرة ستيبان PDF، أو بدّل لوضع الشركة للخبرة كاملة.",
+      "📄 Descarga el CV de Stepan en PDF, o cambia a vista Empresa para la trayectoria completa.",
+    ) };
+
+  // Experience / career
+  if (/(experience|career|work history|employment|\bjobs?\b|досвід|карʼєр|ervaring|loopbaan|experiencia|carrera|خبرة|مسيرة)/.test(s))
+    return { matched: true, action: { kind: 'view', mode: 'cv', label: lblCompany }, text: L(
+      "💼 8+ years: luxury e-commerce (childrensalon.com, vogacloset.com), banking systems (Oschadbank CRM), shipped 2026 projects. Full timeline is in Company view.",
+      "💼 8+ років: luxury e-commerce (childrensalon.com, vogacloset.com), банкінг (CRM Ощадбанку), проєкти 2026. Повний таймлайн — у «Компанії».",
+      "💼 8+ jaar: luxe e-commerce (childrensalon.com, vogacloset.com), banksystemen (Oschadbank CRM), 2026-projecten. Volledige tijdlijn in Company-weergave.",
+      "💼 8+ سنوات: تجارة فاخرة (childrensalon.com، vogacloset.com)، أنظمة مصرفية (Oschadbank)، مشاريع 2026. الخبرة كاملة في وضع الشركة.",
+      "💼 8+ años: e-commerce de lujo (childrensalon.com, vogacloset.com), banca (Oschadbank CRM), proyectos 2026. Trayectoria completa en vista Empresa.",
+    ) };
+
+  // GitHub
+  if (/(github|source ?code|repos?|repositor|исходник|broncode|código fuente|جيت ?هاب)/.test(s))
+    return { matched: true, action: { kind: 'link', href: 'https://github.com/irozedev', label: lblGithub }, text: L(
+      "💻 Stepan's public code is on GitHub (@irozedev). Open it?",
+      "💻 Публічний код Степана — на GitHub (@irozedev). Відкрити?",
+      "💻 Stepans publieke code staat op GitHub (@irozedev). Openen?",
+      "💻 كود ستيبان العام على GitHub (@irozedev). أفتحه؟",
+      "💻 El código público de Stepan está en GitHub (@irozedev). ¿Lo abro?",
+    ) };
+
+  // Projects / work
+  if (/(portfolio|projects?|your work|examples?|case ?stud|demo|роб(о|і)т|проєкт|портфоліо|приклад|\bwerk\b|voorbeeld|trabajos?|proyectos?|ejemplos?|أعمال|مشاريع|أمثلة)/.test(s))
+    return { matched: true, action: { kind: 'nav', target: '#projects', label: lblWork }, text: L(
+      "🚀 Featured: marinek.store (Next.js 14, payments + Telegram automation) and this portfolio. Want to see them?",
+      "🚀 Серед робіт: marinek.store (Next.js 14, оплати + Telegram) і це портфоліо. Показати?",
+      "🚀 Uitgelicht: marinek.store (Next.js 14, betalingen + Telegram) en dit portfolio. Bekijken?",
+      "🚀 من الأعمال: marinek.store (Next.js 14، مدفوعات + تيليجرام) وهذا الموقع. أعرضها؟",
+      "🚀 Destacado: marinek.store (Next.js 14, pagos + Telegram) y este portfolio. ¿Los ves?",
+    ) };
+
+  // About
+  if (/(about (you|stepan|him)|who are you|who is stepan|your background|про себе|про степан|хто ти|over (jou|stepan)|wie ben je|sobre (ti|stepan|él)|quién eres|من أنت|نبذة)/.test(s))
+    return { matched: true, action: { kind: 'nav', target: '#about', label: lblAbout }, text: L(
+      "👋 Stepan Roze — Front-End / JavaScript developer, 8+ years, Belgium. React, Vue, Next.js, TypeScript, Magento. More in the About section.",
+      "👋 Степан Розе — Front-End / JavaScript розробник, 8+ років, Бельгія. React, Vue, Next.js, TypeScript, Magento. Більше — у «Про мене».",
+      "👋 Stepan Roze — Front-End / JavaScript developer, 8+ jaar, België. React, Vue, Next.js, TypeScript, Magento. Meer in About.",
+      "👋 ستيبان روز — مطور Front-End / JavaScript، 8+ سنوات، بلجيكا. المزيد في قسم نبذة.",
+      "👋 Stepan Roze — desarrollador Front-End / JavaScript, 8+ años, Bélgica. Más en Sobre mí.",
+    ) };
+
+  // Contact
+  if (/(contact|reach (you|him|stepan)|get in touch|звʼяз|звяз|контакт|contacto|contact opnemen|اتصال|تواصل)/.test(s))
+    return { matched: true, action: { kind: 'nav', target: '#contact', label: lblContact }, text: L(
+      "📧 Reach Stepan at rozedev095@gmail.com — replies within the day. Or open the contact form 👇",
+      "📧 Пишіть Степану: rozedev095@gmail.com — відповідь того ж дня. Або форма 👇",
+      "📧 Mail Stepan: rozedev095@gmail.com — reactie binnen de dag. Of open het formulier 👇",
+      "📧 راسل ستيبان: rozedev095@gmail.com — رد خلال اليوم. أو افتح النموذج 👇",
+      "📧 Escribe a Stepan: rozedev095@gmail.com — respuesta el mismo día. O abre el formulario 👇",
+    ) };
+
+  // Hire / start → funnel
+  if (/(\bhire\b|let'?s (build|work|start)|start a project|work with (you|me)|найняти|почати проект|inhuren|samenwerken|contratar|trabajar contigo|empezar (un )?proyecto|توظيف|لنبدأ)/.test(s))
+    return { matched: true, action: { kind: 'quote', label: lblQuote }, text: L(
+      "🚀 Love it! I'll grab a few details for Stepan and get you a fast quote. Ready?",
+      "🚀 Чудово! Візьму кілька деталей для Степана — швидка оцінка. Готові?",
+      "🚀 Top! Ik verzamel wat details voor Stepan voor een snelle offerte. Klaar?",
+      "🚀 رائع! سآخذ بعض التفاصيل لستيبان لعرض سريع. جاهز؟",
+      "🚀 ¡Genial! Tomo unos datos para Stepan y te doy un presupuesto rápido. ¿Listo?",
+    ) };
+
+  // Spoken languages
+  if (/(languages? (do )?you speak|do you speak|fluent|native language|які мови|розмовляєш|talen spreek|welke talen|idiomas hablas|qué idiomas|تتحدث|لغات تتكلم)/.test(s))
+    return { matched: true, text: L(
+      "🗣 Stepan speaks Ukrainian (native) & English, and is learning Dutch. This site & chat work in English, Ukrainian, Dutch, Arabic and Spanish.",
+      "🗣 Степан: українська (рідна), англійська, вивчає нідерландську. Сайт і чат — 5 мов.",
+      "🗣 Stepan spreekt Oekraïens (moedertaal) & Engels, en leert Nederlands. Site & chat: 5 talen.",
+      "🗣 يتحدث ستيبان الأوكرانية (الأم) والإنجليزية ويتعلّم الهولندية. الموقع بخمس لغات.",
+      "🗣 Stepan habla ucraniano (nativo) e inglés, y aprende neerlandés. Sitio y chat en 5 idiomas.",
+    ) };
+
+  // Location
+  if (/(where.*(based|live|located|from)|your location|which country|\bcity\b|belgium|де ти|звідки|локац|waar.*(woon|gevestigd|zit)|locatie|dónde (estás|vives)|ubicación|país|أين (تقيم|تعيش)|بلد)/.test(s))
+    return { matched: true, text: L(
+      "📍 Based in Belgium (CET), working remotely with clients across Europe and beyond.",
+      "📍 Бельгія (CET), працюю віддалено з клієнтами Європи та світу.",
+      "📍 België (CET), werkt remote met klanten in heel Europa en daarbuiten.",
+      "📍 مقيم في بلجيكا (CET)، أعمل عن بُعد مع عملاء في أوروبا وخارجها.",
+      "📍 En Bélgica (CET), trabajo en remoto con clientes de Europa y más allá.",
+    ) };
+
+  // Info knowledge base (price / timeline / availability / stack / greeting …)
+  const info = localAnswer(input, language);
+  if (info) return { matched: true, text: info };
+
+  // Nothing recognised
+  return { matched: false, text: L(
+    "I can show you around (services, projects, process, contact), answer pricing/timeline/stack questions, or start a quick quote. What would you like?",
+    "Можу показати сайт (послуги, проєкти, процес, контакт), відповісти про ціни/строки/стек або почати оцінку. Що бажаєте?",
+    "Ik kan je rondleiden (diensten, projecten, werkwijze, contact), prijs/planning/stack beantwoorden of een offerte starten. Wat wil je?",
+    "يمكنني إرشادك (خدمات، مشاريع، آلية العمل، تواصل)، والإجابة عن الأسعار/المدة/الأدوات، أو بدء عرض سعر. ماذا تريد؟",
+    "Puedo guiarte (servicios, proyectos, proceso, contacto), responder sobre precio/plazo/stack o iniciar un presupuesto. ¿Qué quieres?",
+  ) };
 }
 
 export function ScrollToTopButton() {
@@ -166,7 +329,7 @@ export function ScrollToTopButton() {
   const [lead, setLead] = useState<Lead>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { t, language, setLanguage } = useLanguage();
-  const { isClientMode } = useViewMode();
+  const { isClientMode, setViewMode } = useViewMode();
   const rafRef = useRef<number>(0);
 
   const MAX_REQUESTS = 30;
@@ -291,15 +454,46 @@ export function ScrollToTopButton() {
     return 'en';
   };
 
-  const pushMsg = (text: string, sender: "user" | "bot") =>
-    setMessages(prev => [...prev, { id: Date.now() + Math.random(), text, sender, timestamp: new Date() }]);
+  const pushMsg = (text: string, sender: "user" | "bot", action?: ChatAction) =>
+    setMessages(prev => [...prev, { id: Date.now() + Math.random(), text, sender, timestamp: new Date(), action }]);
 
-  const botSay = (text: string, delay = 450) => {
+  const botSay = (text: string, delay = 450, action?: ChatAction) => {
     setIsTyping(true);
     window.setTimeout(() => {
       setIsTyping(false);
-      pushMsg(text, "bot");
+      pushMsg(text, "bot", action);
     }, delay);
+  };
+
+  // Execute an action button (navigate the site, switch view, start a quote…).
+  const runAction = (a: ChatAction) => {
+    if (a.kind === 'quote') {
+      setStage('intro');
+      botSay(funnelStrings(language).reask, 250);
+      return;
+    }
+    if (a.kind === 'link') {
+      window.open(a.href, a.href.startsWith('http') ? '_blank' : '_self', 'noopener,noreferrer');
+      return;
+    }
+    if (a.kind === 'view') {
+      setViewMode(a.mode);
+      setIsChatOpen(false);
+      return;
+    }
+    // nav — close chat, then scroll to the section (switching mode if needed)
+    setIsChatOpen(false);
+    const clientOnly = ['#services', '#how-i-work'].includes(a.target);
+    const cvOnly = ['#experience'].includes(a.target);
+    window.setTimeout(() => {
+      let el = document.querySelector(a.target);
+      if (!el && (clientOnly || cvOnly)) {
+        setViewMode(clientOnly ? 'client' : 'cv');
+        window.setTimeout(() => document.querySelector(a.target)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 450);
+        return;
+      }
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 350);
   };
 
   // Send the collected lead to Stepan (saved server-side + emailed via Resend).
@@ -338,11 +532,16 @@ export function ScrollToTopButton() {
     if (detected !== language && ['en', 'uk', 'nl', 'ar', 'es'].includes(detected)) setLanguage(detected as any);
 
     switch (stage) {
-      case 'intro':
+      case 'intro': {
+        // If it's a recognised question / navigation, answer it and stay here.
+        const r = assistantReply(text, language);
+        if (r.matched) { botSay(r.text, 450, r.action); return; }
+        // Otherwise treat the text as the project description and advance.
         setLead(l => ({ ...l, project: text }));
         setStage('budget');
         botSay(F.askBudget);
         break;
+      }
       case 'budget':
         setLead(l => ({ ...l, budget: text }));
         setStage('timeline');
@@ -367,9 +566,11 @@ export function ScrollToTopButton() {
       }
       case 'qa':
       case 'done':
-      default:
-        botSay(localAnswer(text, language));
+      default: {
+        const r = assistantReply(text, language);
+        botSay(r.text, 450, r.action);
         break;
+      }
     }
   };
 
@@ -492,6 +693,15 @@ export function ScrollToTopButton() {
                       <p className="text-sm leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
                         {message.text}
                       </p>
+                      {message.sender === "bot" && message.action && (
+                        <button
+                          onClick={() => runAction(message.action!)}
+                          className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-[var(--accent-primary)] text-black hover:brightness-110 active:scale-95 transition"
+                        >
+                          {message.action.label}
+                          <ArrowUp className="w-3.5 h-3.5 rotate-45" />
+                        </button>
+                      )}
                       <p className={`text-[10px] mt-1 ${
                         message.sender === "user" ? "text-black/50" : "text-[var(--text-muted)]"
                       }`}>
