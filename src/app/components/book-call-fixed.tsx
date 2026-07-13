@@ -32,8 +32,8 @@ const translations = {
     back: "Back",
     confirm: "Confirm Booking",
     booking: "Booking...",
-    confirmed: "Booking Confirmed!",
-    confirmMsg: "You'll receive a calendar invite at",
+    confirmed: "Request Sent!",
+    confirmMsg: "Stepan will confirm your call by email at",
     reschedule: "Need to reschedule? Email rozedev095@gmail.com",
     morning: "Morning",
     afternoon: "Afternoon",
@@ -59,8 +59,8 @@ const translations = {
     back: "Назад",
     confirm: "Підтвердити",
     booking: "Бронюємо...",
-    confirmed: "Заброньовано!",
-    confirmMsg: "Запрошення на календар надіслано на",
+    confirmed: "Запит надіслано!",
+    confirmMsg: "Степан підтвердить дзвінок на email",
     reschedule: "Потрібно перенести? rozedev095@gmail.com",
     morning: "Ранок",
     afternoon: "День",
@@ -86,8 +86,8 @@ const translations = {
     back: "Terug",
     confirm: "Bevestigen",
     booking: "Bezig met boeken...",
-    confirmed: "Bevestigd!",
-    confirmMsg: "U ontvangt een agenda-uitnodiging op",
+    confirmed: "Aanvraag verzonden!",
+    confirmMsg: "Stepan bevestigt je gesprek per e-mail op",
     reschedule: "Verplaatsen? Mail rozedev095@gmail.com",
     morning: "Ochtend",
     afternoon: "Middag",
@@ -113,8 +113,8 @@ const translations = {
     back: "رجوع",
     confirm: "تأكيد الحجز",
     booking: "جاري الحجز...",
-    confirmed: "تم التأكيد!",
-    confirmMsg: "ستتلقى دعوة تقويم على",
+    confirmed: "تم إرسال الطلب!",
+    confirmMsg: "سيؤكد ستيبان المكالمة عبر البريد على",
     reschedule: "تحتاج إعادة جدولة؟ rozedev095@gmail.com",
     morning: "صباحاً",
     afternoon: "بعد الظهر",
@@ -140,8 +140,8 @@ const translations = {
     back: "Atrás",
     confirm: "Confirmar Reserva",
     booking: "Reservando...",
-    confirmed: "¡Confirmado!",
-    confirmMsg: "Recibirás una invitación de calendario en",
+    confirmed: "¡Solicitud enviada!",
+    confirmMsg: "Stepan confirmará tu llamada por email a",
     reschedule: "¿Necesitas reprogramar? rozedev095@gmail.com",
     morning: "Mañana",
     afternoon: "Tarde",
@@ -149,8 +149,10 @@ const translations = {
   },
 };
 
-const morningSlots = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
-const afternoonSlots = ["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"];
+// Stepan is only free before his main job — mornings, 06:00–12:00 CET, weekdays.
+// (Weekend afternoon slots 13:00–18:00 can be added later once days-off are set.)
+const morningSlots = ["06:00", "06:30", "07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
+const afternoonSlots: string[] = [];
 
 export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
   const { language } = useLanguage();
@@ -209,27 +211,31 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
     setError("");
 
     try {
-      const booking = {
-        userId: user?.id || "guest",
-        userName: name || "Guest",
-        userEmail: email,
-        date: format(selectedDate, "yyyy-MM-dd"),
-        time: selectedTime,
-        callType,
-        purpose,
-        timezone: "Europe/Brussels",
-        createdAt: new Date().toISOString(),
-      };
-
+      // Submit through the /contact endpoint — it saves the request AND emails
+      // Stepan via Resend. (The /book-call endpoint only stored to KV and never
+      // sent any notification, so bookings silently went nowhere.)
+      const dateStr = format(selectedDate, "EEE, MMM d yyyy");
       const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/book-call`,
+        `https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/contact`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${publicAnonKey}`,
           },
-          body: JSON.stringify(booking),
+          body: JSON.stringify({
+            name: name || "Guest",
+            email,
+            service: `Call booking — ${callType === "video" ? "Video" : "Phone"}`,
+            message:
+              `📞 New call booking request\n\n` +
+              `• Date: ${dateStr}\n` +
+              `• Time: ${selectedTime} CET (Europe/Brussels)\n` +
+              `• Type: ${callType}\n` +
+              `• Name: ${name || "—"}\n` +
+              `• Email: ${email}\n` +
+              `• About: ${purpose || "—"}`,
+          }),
         }
       );
 
@@ -239,7 +245,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
       }
 
       setStep(4);
-      setTimeout(onClose, 4000);
+      setTimeout(onClose, 5000);
     } catch (err: any) {
       console.error("Booking error:", err);
       setError(err.message || "Failed to book. Please try again.");
@@ -406,7 +412,8 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                       </div>
                     </div>
 
-                    {/* Afternoon */}
+                    {/* Afternoon (hidden until weekend slots are enabled) */}
+                    {afternoonSlots.length > 0 && (
                     <div>
                       <p className="text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">
                         {t.afternoon}
@@ -428,6 +435,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                         ))}
                       </div>
                     </div>
+                    )}
 
                     {/* Back */}
                     <button
