@@ -821,16 +821,15 @@ select:focus-visible {
   margin-left: auto;
 }
 
-/* RTL Positioning */
-[dir="rtl"] .left-0 {
-  left: auto;
-  right: 0;
-}
-
-[dir="rtl"] .right-0 {
-  right: auto;
-  left: 0;
-}
+/* RTL Positioning — DELIBERATELY NOT MIRRORED.
+   There used to be a pair of rules here that rewrote `.left-0` to `right: 0`
+   and `.right-0` to `left: 0`. Any element carrying BOTH classes (the standard
+   `fixed top-0 left-0 right-0` full-bleed bar) ended up with `left: 0;
+   right: auto` — no width constraint at all — so in Arabic the whole element
+   collapsed to fit-content. That is what threw the top ticker off screen.
+   Tailwind already ships logical properties (`start-0` / `end-0`) for anything
+   that genuinely needs to flip; physical `left-0` / `right-0` must stay
+   physical. */
 
 /* RTL Border radius */
 [dir="rtl"] .rounded-l-lg {
@@ -911,12 +910,9 @@ select:focus-visible {
   display: inline-block;
 }
 
-/* RTL Arabic font optimization */
-[dir="rtl"] {
-  font-family: 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
-  font-weight: 400;
-}
-
+/* Arabic font selection lives in fonts.css (`*:lang(ar)`), which loads the real
+   Noto Arabic faces. The `font-family: 'Segoe UI', Tahoma` declaration that used
+   to sit here only fought it. */
 [dir="rtl"] h1,
 [dir="rtl"] h2,
 [dir="rtl"] h3,

@@ -89,17 +89,17 @@ const services = [
 // Carousel arrows. We render these ourselves now — they used to be handed to
 // react-slick, which injected the onClick and removed them at the ends.
 const arrowClass =
-  "absolute top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#00d9ff]/20 to-cyan-500/20 backdrop-blur-xl border-2 border-[#00d9ff]/30 rounded-full flex items-center justify-center hover:from-[#00d9ff]/30 hover:to-cyan-500/30 hover:scale-110 transition-all duration-300 shadow-[0_0_24px_rgba(0,217,255,0.18)] group disabled:opacity-25 disabled:pointer-events-none";
+  "absolute top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-10 md:h-10 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--accent-primary)]/30 rounded-full flex items-center justify-center hover:border-[var(--accent-primary)]/70 hover:scale-105 transition-all duration-300 group disabled:opacity-20 disabled:pointer-events-none";
 
 const PrevArrow = ({ onClick, disabled }: { onClick: () => void; disabled: boolean }) => (
   <button
     type="button"
     onClick={onClick}
     disabled={disabled}
-    className={`${arrowClass} left-0 md:-left-16`}
+    className={`${arrowClass} left-0 md:-left-12`}
     aria-label="Previous service"
   >
-    <ChevronLeft className="w-6 h-6 text-[#00d9ff] group-hover:scale-110 transition-transform" />
+    <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-[var(--accent-primary)]" />
   </button>
 );
 
@@ -108,10 +108,10 @@ const NextArrow = ({ onClick, disabled }: { onClick: () => void; disabled: boole
     type="button"
     onClick={onClick}
     disabled={disabled}
-    className={`${arrowClass} right-0 md:-right-16`}
+    className={`${arrowClass} right-0 md:-right-12`}
     aria-label="Next service"
   >
-    <ChevronRight className="w-6 h-6 text-[#00d9ff] group-hover:scale-110 transition-transform" />
+    <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-[var(--accent-primary)]" />
   </button>
 );
 
@@ -126,6 +126,9 @@ export function ServicesCreativeSlider() {
     return false;
   });
   const trackRef = useRef<HTMLDivElement>(null);
+  // Scroll extent, not slide index, drives the arrows — see the comment on
+  // `step` below.
+  const [edges, setEdges] = useState({ atStart: true, atEnd: false });
   const { t } = useLanguage();
   const [isProcessingClick, setIsProcessingClick] = useState(false);
 
@@ -143,38 +146,86 @@ export function ServicesCreativeSlider() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Centre a card in the track. Native smooth scrolling replaces react-slick's
-  // JS animation, so it honours prefers-reduced-motion for free.
+  // Centre a card in the track.
+  //
+  // `scrollLeft` is measured from the track's own inline-start, so
+  // `offsetLeft` (which is measured from the padding box, LTR-anchored) is the
+  // wrong reference in RTL, where scrollLeft runs negative. Deriving the delta
+  // from getBoundingClientRect keeps one formula correct in both directions.
   const scrollToIndex = useCallback((index: number) => {
     const track = trackRef.current;
     const card = track?.children[index] as HTMLElement | undefined;
     if (!track || !card) return;
-    track.scrollTo({
-      left: card.offsetLeft - (track.clientWidth - card.clientWidth) / 2,
-      behavior: "smooth",
-    });
+
+    const trackBox = track.getBoundingClientRect();
+    const cardBox = card.getBoundingClientRect();
+    const delta =
+      cardBox.left + cardBox.width / 2 - (trackBox.left + trackBox.width / 2);
+
+    track.scrollBy({ left: delta, behavior: "smooth" });
   }, []);
 
-  // Whichever card is closest to the middle of the track is the active one.
-  // An observer beats a scroll handler here: no work on frames where nothing
-  // crosses a boundary.
+  // Active card = whichever centre is nearest the track centre.
+  //
+  // This used to be an IntersectionObserver at threshold 0.6. With three cards
+  // visible on desktop, two or three of them clear 0.6 at once and the
+  // callback fires for each; whichever entry happened to be last in the batch
+  // won, so the dots and the arrows' disabled state flickered between
+  // neighbours while scrolling. Distance-to-centre has exactly one answer.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const index = Number((entry.target as HTMLElement).dataset.index);
-          if (!Number.isNaN(index)) setCurrentSlide(index);
-        });
-      },
-      { root: track, threshold: 0.6 },
-    );
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const trackCentre = track.getBoundingClientRect().left + track.clientWidth / 2;
+      let best = 0;
+      let bestDistance = Infinity;
 
-    Array.from(track.children).forEach((child) => observer.observe(child));
-    return () => observer.disconnect();
+      Array.from(track.children).forEach((child, index) => {
+        const box = (child as HTMLElement).getBoundingClientRect();
+        const distance = Math.abs(box.left + box.width / 2 - trackCentre);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = index;
+        }
+      });
+
+      setCurrentSlide(best);
+
+      // `scrollLeft` is negative in RTL; the magnitude is what matters.
+      const offset = Math.abs(track.scrollLeft);
+      const max = track.scrollWidth - track.clientWidth;
+      setEdges({ atStart: offset <= 1, atEnd: offset >= max - 1 });
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(measure);
+    };
+
+    measure();
+    track.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      track.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  // Move by one card. Deliberately NOT `scrollToIndex(currentSlide ± 1)`:
+  // with three cards visible, the last card can never reach the centre, so the
+  // "nearest to centre" index tops out at 4 of 6. Index-based arrows therefore
+  // stayed enabled but stopped moving anything. Stepping by one card width and
+  // gating on the scroll extent behaves correctly at both ends.
+  const step = useCallback((direction: 1 | -1) => {
+    const track = trackRef.current;
+    const card = track?.children[0] as HTMLElement | undefined;
+    if (!track || !card) return;
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    track.scrollBy({ left: direction * (card.offsetWidth + gap), behavior: "smooth" });
   }, []);
 
   // Arrow keys move the carousel, but ONLY while it has focus. The old global
@@ -183,8 +234,7 @@ export function ServicesCreativeSlider() {
   const handleTrackKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
     e.preventDefault();
-    const delta = e.key === "ArrowRight" ? 1 : -1;
-    scrollToIndex(Math.min(Math.max(currentSlide + delta, 0), services.length - 1));
+    step(e.key === "ArrowRight" ? 1 : -1);
   };
 
   // 🔥 FIX: Debounced click handler to prevent multiple triggers
@@ -266,7 +316,10 @@ export function ServicesCreativeSlider() {
               <span className="text-sm font-medium text-[#00d9ff]">{t("services.subtitle")}</span>
             </motion.div>
 
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-[#00d9ff] to-purple-400 bg-clip-text text-transparent">
+            {/* `from-white` was invisible in the light theme — the gradient
+                started at the page colour. Anchor it to the text token so it
+                inverts with the palette. */}
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-400 bg-clip-text text-transparent">
               {t("services.title")}
             </h2>
             <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
@@ -289,22 +342,36 @@ export function ServicesCreativeSlider() {
                    handles reduced-motion for us. */
                 .services-track {
                   display: flex;
+                  align-items: stretch;
                   gap: 1.5rem;
                   overflow-x: auto;
                   overflow-y: hidden;
-                  scroll-snap-type: x mandatory;
-                  scroll-behavior: smooth;
+                  /* proximity, not mandatory. Mandatory re-snaps on every
+                     scroll event, so a trackpad flick or a slow drag got
+                     yanked back to the nearest card mid-gesture — that was the
+                     "won't scroll properly" feel. Proximity snaps when you
+                     stop near a card and otherwise leaves the scroll alone. */
+                  scroll-snap-type: x proximity;
+                  /* Don't let an over-scroll at either end chain to the page */
+                  overscroll-behavior-x: contain;
                   -webkit-overflow-scrolling: touch;
                   padding: 1rem 0 1.5rem;
-                  /* Snap targets centre themselves inside the track */
-                  scroll-padding-inline: 50%;
                   scrollbar-width: none;
+                  /* NOTE: no scroll-padding-inline and no scroll-behavior
+                     here. scroll-padding-inline: 50% shifted every snap port
+                     by half the track ON TOP OF scroll-snap-align: center,
+                     double-counting the offset so cards snapped to a position
+                     nowhere near the middle. scroll-behavior: smooth on the
+                     element also made every wheel tick animate, which is what
+                     made the track feel laggy and rubbery; scrollTo/scrollBy
+                     pass behavior:"smooth" explicitly where it is wanted. */
                 }
                 .services-track::-webkit-scrollbar { display: none; }
 
                 .services-track > * {
                   scroll-snap-align: center;
                   flex: 0 0 min(100%, 22rem);
+                  display: flex;
                 }
 
                 /* Show three cards side by side once there is room */
@@ -312,25 +379,29 @@ export function ServicesCreativeSlider() {
                   .services-track > * { flex-basis: calc((100% - 3rem) / 3); }
                 }
 
-                /* Off-centre cards recede. Driven by a data attribute we set
-                   from the IntersectionObserver rather than react-slick's
-                   .slick-center class, which never appeared when centerMode
-                   was off and left every card dimmed. */
                 .service-card {
-                  height: 100%;
-                  transform: scale(0.94);
-                  opacity: 0.55;
-                  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  width: 100%;
+                  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                              opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
                               border-color 0.3s ease;
                 }
-                .service-card[data-active="true"] {
-                  transform: scale(1);
-                  opacity: 1;
+
+                /* Recede off-centre cards ONLY while a single card fills the
+                   track. Above 1024px three cards are visible at once, so
+                   dimming two of the three made a full-width row look broken
+                   rather than focused. */
+                @media (max-width: 1023px) {
+                  .service-card {
+                    transform: scale(0.96);
+                    opacity: 0.6;
+                  }
+                  .service-card[data-active="true"] {
+                    transform: scale(1);
+                    opacity: 1;
+                  }
                 }
 
                 @media (prefers-reduced-motion: reduce) {
-                  .services-track { scroll-behavior: auto; }
                   .service-card {
                     transition: none;
                     transform: none;
@@ -440,7 +511,7 @@ export function ServicesCreativeSlider() {
                       </motion.div>
 
                       {/* Title & Description */}
-                      <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-[#00d9ff] transition-colors">
+                      <h3 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-3 group-hover:text-[var(--accent-primary)] transition-colors">
                         {service.title}
                       </h3>
                       <p className="text-[var(--text-secondary)] mb-6 leading-relaxed min-h-[60px]">
@@ -449,7 +520,7 @@ export function ServicesCreativeSlider() {
 
                       {/* Price */}
                       <div className="mb-6 pb-6 border-b border-white/10">
-                        <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#00d9ff] to-cyan-400 bg-clip-text text-transparent mb-1">
+                        <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] bg-clip-text text-transparent mb-1">
                           {service.priceRange}
                         </div>
                         {service.key === 'automation' && (
@@ -491,13 +562,13 @@ export function ServicesCreativeSlider() {
                           e.stopPropagation();
                           handleBookService(service);
                         }}
-                        className={`w-full py-4 bg-gradient-to-r ${service.gradient} rounded-xl text-white font-semibold flex items-center justify-center gap-2 hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] transition-all duration-300 group/btn`}
+                        className={`w-full py-3 bg-gradient-to-r ${service.gradient} rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 hover:brightness-110 transition-all duration-300 group/btn`}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        <Zap className="w-5 h-5 group-hover/btn:rotate-12 transition-transform" />
+                        <Zap className="w-4 h-4 group-hover/btn:rotate-12 transition-transform" />
                         Start project
-                        <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                       </motion.button>
                     </motion.div>
                   </div>
@@ -505,11 +576,8 @@ export function ServicesCreativeSlider() {
               })}
             </div>
 
-            <PrevArrow onClick={() => scrollToIndex(currentSlide - 1)} disabled={currentSlide === 0} />
-            <NextArrow
-              onClick={() => scrollToIndex(currentSlide + 1)}
-              disabled={currentSlide === services.length - 1}
-            />
+            <PrevArrow onClick={() => step(-1)} disabled={edges.atStart} />
+            <NextArrow onClick={() => step(1)} disabled={edges.atEnd} />
           </motion.div>
 
           {/* Dots + counter */}
@@ -527,10 +595,10 @@ export function ServicesCreativeSlider() {
                   onClick={() => scrollToIndex(index)}
                   aria-label={`Go to ${service.title}`}
                   aria-current={currentSlide === index}
-                  className={`h-3 rounded-full transition-all duration-300 ${
+                  className={`h-2 rounded-full transition-all duration-300 ${
                     currentSlide === index
-                      ? "w-8 bg-[#00d9ff]"
-                      : "w-3 bg-white/20 hover:bg-[#00d9ff]/50"
+                      ? "w-6 bg-[var(--accent-primary)]"
+                      : "w-2 bg-[var(--text-muted)]/35 hover:bg-[var(--accent-primary)]/60"
                   }`}
                 />
               ))}

@@ -8,16 +8,18 @@
 
     <!-- One request for both faces, in the document head so it starts
          immediately instead of waiting on the CSS bundle to parse an @import.
-         Space Grotesk backs --font-display (headings); Inter backs body text.
-         Arabic faces load on demand, see language-context.tsx. -->
+         Inter Tight backs --font-display (headings); Inter backs body text.
+         Space Grotesk was dropped — it is a wide geometric face and read as
+         stretched at heading sizes. Arabic faces load on demand, see
+         language-context.tsx. -->
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Inter+Tight:wght@500;600;700&display=swap"
     />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Inter+Tight:wght@500;600;700&display=swap"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     

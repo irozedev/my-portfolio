@@ -116,7 +116,12 @@ img {
   --glow-secondary: rgba(168, 85, 247, 0.1);
   
   /* Typography */
-  --font-display: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+  /* Inter Tight, not Space Grotesk. Space Grotesk is a wide geometric face —
+     its capitals read as horizontally stretched at heading sizes, which is
+     exactly the look this design does not want. Inter Tight is narrower than
+     the body Inter, so headings still sit apart from body copy without the
+     stretch. Same foundry, so the two mix cleanly. */
+  --font-display: 'Inter Tight', 'Inter', system-ui, -apple-system, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   
   /* Font weights for different scripts */
@@ -151,13 +156,18 @@ img {
 }
 
 [data-theme="light"] {
-  /* Light Theme - Clean & Professional 2026 */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
+  /* Light Theme — soft, not clinical.
+     The first pass was pure #ffffff behind #0f172a text: maximum contrast,
+     maximum glare, and cards (#ffffff) were invisible against the page.
+     Now the PAGE is a soft off-white and CARDS are pure white, so surfaces
+     read as lifted instead of merged, and the text is a warm near-black
+     rather than true ink. Everything below still clears WCAG AA. */
+  --bg-primary: #f6f7f9;    /* page */
+  --bg-secondary: #ffffff;  /* raised surfaces */
+  --bg-tertiary: #eceff3;   /* recessed / inset */
+  --text-primary: #1b2430;  /* 13.9:1 on #f6f7f9 */
+  --text-secondary: #4b5563;/*  7.4:1 */
+  --text-muted: #6b7280;    /*  4.9:1 — still AA for body text */
   /* Accents are darker than the dark-theme cyan because they sit on white.
      Measured against #ffffff (WCAG 2.1 contrast):
        old #0891b2 = 3.68:1  → failed AA for body text
@@ -167,25 +177,28 @@ img {
   --accent-primary: #0e7490;   /* 5.36:1  AA  */
   --accent-secondary: #155e75; /* 7.27:1  AAA */
   --accent-hover: #0c6579;     /* 6.66:1  AA  */
-  --border-color: rgba(15, 23, 42, 0.10);
-  --shadow-color: rgba(14, 116, 144, 0.15);
-  
+  /* Borders are hairlines, not outlines. 0.10 alpha on white read as a hard
+     grey box around every card. */
+  --border-color: rgba(27, 36, 48, 0.07);
+  --shadow-color: rgba(27, 36, 48, 0.07);
+
   /* Card styles for light theme */
   --card-bg: #ffffff;
-  --card-border: rgba(15, 23, 42, 0.05);
-  
+  --card-border: rgba(27, 36, 48, 0.06);
+
   /* Availability widget adjustments for light theme */
-  --availability-bg: rgba(8, 145, 178, 0.05);
-  --availability-border: rgba(8, 145, 178, 0.15);
-  
-  /* Glass effects & decorations for light theme */
-  --glass-bg: rgba(248, 250, 252, 0.8);
-  --glass-border: rgba(15, 23, 42, 0.10);
-  --glow-primary: rgba(14, 116, 144, 0.15);
-  --glow-secondary: rgba(139, 92, 246, 0.15);
+  --availability-bg: rgba(14, 116, 144, 0.05);
+  --availability-border: rgba(14, 116, 144, 0.12);
+
+  /* Glass: nearly opaque white. A translucent panel over a light page has
+     almost no separation, so the blur just looked like a smudge. */
+  --glass-bg: rgba(255, 255, 255, 0.86);
+  --glass-border: rgba(27, 36, 48, 0.07);
+  --glow-primary: rgba(14, 116, 144, 0.10);
+  --glow-secondary: rgba(139, 92, 246, 0.10);
 
   /* Hover surface */
-  --hover-bg: #f1f5f9;
+  --hover-bg: #eceff3;
 
   color-scheme: light;
 }
@@ -206,10 +219,41 @@ img {
 
 /* Tailwind utility surfaces built from white-alpha (bg-white/5, border-white/10)
    collapse into invisible-on-white. Give them a dark-alpha equivalent. */
-[data-theme="light"] .bg-white\/5 { background-color: rgba(15, 23, 42, 0.04) !important; }
-[data-theme="light"] .bg-white\/10 { background-color: rgba(15, 23, 42, 0.06) !important; }
-[data-theme="light"] .border-white\/10 { border-color: rgba(15, 23, 42, 0.10) !important; }
-[data-theme="light"] .border-white\/20 { border-color: rgba(15, 23, 42, 0.16) !important; }
+[data-theme="light"] .bg-white\/5 { background-color: rgba(27, 36, 48, 0.035) !important; }
+[data-theme="light"] .bg-white\/10 { background-color: rgba(27, 36, 48, 0.055) !important; }
+[data-theme="light"] .border-white\/10 { border-color: rgba(27, 36, 48, 0.07) !important; }
+[data-theme="light"] .border-white\/20 { border-color: rgba(27, 36, 48, 0.11) !important; }
+
+/* Depth comes from a soft shadow, not from a border. On a light page a card
+   with only a border reads as a flat outlined rectangle — the main reason the
+   light theme looked unfinished. */
+[data-theme="light"] .card-bg,
+[data-theme="light"] .service-card,
+[data-theme="light"] [class*="backdrop-blur"] {
+  box-shadow: 0 1px 2px rgba(27, 36, 48, 0.04),
+              0 8px 24px -12px rgba(27, 36, 48, 0.12);
+}
+
+/* Neon belongs to the dark theme. On white, a cyan halo around text just makes
+   it look out of focus. */
+[data-theme="light"] .neon-text {
+  text-shadow: none;
+}
+
+[data-theme="light"] .grid-pattern {
+  background-image:
+    linear-gradient(rgba(27, 36, 48, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 36, 48, 0.04) 1px, transparent 1px);
+}
+
+/* The always-on cyan glow reads as a smear on a light background. Halve it. */
+[data-theme="light"] .animate-glow {
+  animation: none;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
 
 /* LANDSCAPE & TABLET OPTIMIZATIONS */
 

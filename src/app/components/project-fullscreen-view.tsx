@@ -213,8 +213,14 @@ export function ProjectFullscreenView({
         </motion.div>
 
         {/* 🔥 SCROLLABLE CONTENT */}
+        {/* `overflow-x-hidden` is load-bearing, not decoration. `overflow-y:
+            auto` on its own computes overflow-x to `auto` as well, so the
+            600px ambient glow below (wider than any phone) gave this container
+            a real horizontal scroll range. The page could be dragged sideways
+            and every section looked narrower than the screen — that is the
+            mobile width bug. */}
         <div
-          className="h-full overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent pt-20"
+          className="h-full w-full overflow-y-auto overflow-x-hidden overscroll-contain [-webkit-overflow-scrolling:touch] scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent pt-20"
           onScroll={handleScroll}
         >
           {/* 🔥 HERO IMAGE — full screenshot, anchored to top, no parallax gap */}
@@ -304,9 +310,10 @@ export function ProjectFullscreenView({
           </div>
 
           {/* 🔥 MAIN CONTENT SECTION */}
-          <div className="relative bg-[var(--bg-primary)]">
-            {/* Background Glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[var(--accent-primary)]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative w-full max-w-full overflow-x-hidden bg-[var(--bg-primary)]">
+            {/* Background Glow — sized against the viewport so it can never be
+                wider than the screen it sits on. */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(600px,100%)] h-[600px] bg-[var(--accent-primary)]/5 rounded-full blur-3xl pointer-events-none" />
             
             <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 pb-28 sm:pb-16">
               
@@ -317,7 +324,10 @@ export function ProjectFullscreenView({
                 transition={{ delay: 0.2 }}
                 className="mb-8 sm:mb-12"
               >
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 sm:mb-6 bg-gradient-to-r from-white via-[var(--accent-primary)] to-purple-500 bg-clip-text text-transparent leading-tight">
+                {/* Anchored to the text token, not `white` — this heading sits
+                    on --bg-primary, so a white gradient stop disappeared in
+                    the light theme. */}
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 sm:mb-6 bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-500 bg-clip-text text-transparent leading-tight">
                   {project.title}
                 </h1>
                 
@@ -409,7 +419,7 @@ export function ProjectFullscreenView({
                           style={{ clipPath: 'polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px)' }}
                         >
                           <Icon className="w-6 h-6 text-[var(--accent-primary)] mb-3 group-hover:scale-110 transition-transform" />
-                          <p className="text-2xl sm:text-3xl font-black text-white mb-1 font-mono">
+                          <p className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] mb-1 font-mono">
                             {metric.value}
                           </p>
                           <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-mono">
@@ -505,7 +515,7 @@ export function ProjectFullscreenView({
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 sm:flex-none px-6 py-4 bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] hover:border-[var(--accent-primary)]/50 text-white font-mono font-black text-sm sm:text-base transition-all flex items-center justify-center gap-3 group active:scale-95"
+                    className="flex-1 sm:flex-none px-6 py-4 bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] hover:border-[var(--accent-primary)]/50 text-[var(--text-primary)] font-mono font-black text-sm sm:text-base transition-all flex items-center justify-center gap-3 group active:scale-95"
                     style={{ clipPath: 'polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px)' }}
                     whileHover={{ scale: 1.05, y: -3 }}
                     whileTap={{ scale: 0.95 }}

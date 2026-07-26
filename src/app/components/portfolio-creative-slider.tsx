@@ -23,16 +23,41 @@ const projects = [
     id: 'marinek-store',
     title: "marinek.store",
     category: "Freelance · Landing & Payments",
-    description: "Commercial Next.js 14 landing for a fitness coaching program — payments, analytics and automated access delivery.",
-    fullDescription: "Designed, built and launched marinek.store end-to-end: a Next.js 14 landing site with three pricing tiers, WayForPay payment integration, GA4 analytics and automated post-payment access delivery via a Telegram bot. Payment webhooks run on Cloudflare Workers. Shipped to production in July 2026 with an AI-assisted workflow.",
+    description: "Commercial Next.js 14 landing for a fitness coaching program — verified payments and one-time access links issued automatically.",
+    fullDescription:
+      "Designed, built and launched marinek.store end-to-end: a statically exported Next.js 14 site with three pricing tiers, legal pages and consent-gated GA4. " +
+      "In July 2026 I rebuilt the whole payment and access flow. Access had been handed out through a single shared Telegram link baked into the client bundle — anyone could open the thank-you page and join without paying, and the link spread by forwarding. " +
+      "Now the order is created and priced server-side, submitted to WayForPay through their Purchase API, and access is released only after a signature-verified webhook confirms the payment. " +
+      "Each buyer receives a personal single-use Telegram invite (one member, 7-day expiry) plus a transactional email, and a refund or void revokes the invite automatically. " +
+      "The site itself is a static export, so all server logic lives in Netlify Functions with Supabase as the order store.",
     image: "/projects/marinek.webp",
-    tech: ["Next.js 14", "TypeScript", "WayForPay", "Cloudflare Workers", "Telegram Bot", "GA4"],
+    features: [
+      "Server-side pricing — the amount never comes from the client, so a tier cannot be bought for one hryvnia",
+      "HMAC signature verification on the payment webhook, plus an independent amount check against the stored order",
+      "Idempotent webhook: the gateway retries for up to four days, and a conditional update guarantees exactly one invite per order",
+      "Single-use Telegram invites via the Bot API — member limit 1, seven-day expiry, three tiers routed to two channels",
+      "Refund and void events revoke the invite automatically",
+      "Resend email as the guaranteed delivery channel if the buyer closes the tab",
+      "GA4 mounted only after explicit cookie consent; no analytics scripts before opt-in",
+      "Least-privilege bot: invite permission only, so a leaked token cannot damage the channels",
+    ],
+    tech: [
+      "Next.js 14",
+      "TypeScript",
+      "Tailwind",
+      "Netlify Functions",
+      "Supabase",
+      "WayForPay",
+      "Telegram Bot API",
+      "Resend",
+      "GA4",
+    ],
     gradient: "from-cyan-500 to-blue-600",
     stats: {
       launched: "2026",
       stack: "Next 14",
-      payments: "WayForPay",
-      automation: "Telegram",
+      payments: "Verified",
+      access: "One-time",
     },
     year: "2026",
     duration: "Freelance",

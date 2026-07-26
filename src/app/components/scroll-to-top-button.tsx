@@ -651,8 +651,14 @@ export function ScrollToTopButton() {
                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-white" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-black text-sm">Roze — project assistant</h3>
-                    <p className="text-[10px] text-black/60 font-mono">ONLINE • FAST QUOTES</p>
+                    {/* A chat header is a UI label, not a display heading.
+                        index.css puts var(--font-display) on every h1–h6, which
+                        set this line in the heading face at 13px where it only
+                        looked wide. Force the body face here. */}
+                    <h3 className="text-sm font-semibold text-black tracking-normal [font-family:var(--font-body)]">
+                      Roze — project assistant
+                    </h3>
+                    <p className="text-[10px] text-black/60 font-mono tracking-wide">ONLINE • FAST QUOTES</p>
                   </div>
                 </div>
                 <button

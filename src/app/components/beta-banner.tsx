@@ -16,8 +16,10 @@ export function BetaBanner() {
   // Get translated message
   const message = betaTranslations[language as keyof typeof betaTranslations] || betaTranslations.en;
 
-  // Create long repeating string for seamless animation
-  const repeatedMessage = Array(10).fill(message).join("");
+  // Each half of the track repeats the message enough times to overflow an
+  // ultrawide viewport. Four is plenty (~4000px) — ten made one animation cycle
+  // cover ~10000px, and at a duration that felt readable the text raced past.
+  const repeatedMessage = Array(4).fill(message).join("");
 
   // Arabic is a cursive script: `letter-spacing` breaks the joins between
   // letters, `text-transform: uppercase` does nothing, and the generic
@@ -26,7 +28,14 @@ export function BetaBanner() {
   const isArabic = language === "ar";
 
   return (
-    <div id="beta-banner" className="fixed top-0 left-0 right-0 z-[10000] bg-[#1a1a1a] border-b-2 border-[#ff9500] overflow-hidden">
+    // dir="ltr" on the bar itself: the layout here (warning block, track,
+    // warning block) is not a reading order and must not mirror in Arabic.
+    // Only the message text inside is RTL — see the span below.
+    <div
+      id="beta-banner"
+      dir="ltr"
+      className="fixed top-0 left-0 right-0 w-full z-[10000] bg-[#1a1a1a] border-b-2 border-[#ff9500] overflow-hidden"
+    >
       {/* Main content container */}
       <div className="relative h-10 md:h-12 flex items-center overflow-hidden bg-gradient-to-b from-[#252525] to-[#1a1a1a]">
         {/* Left warning indicator */}
@@ -82,8 +91,16 @@ export function BetaBanner() {
           100% { transform: translateX(-50%); }
         }
         .banner-scroll {
-          animation: banner-scroll 80s linear infinite;
+          /* One cycle = one half of the track = 4 copies of the message.
+             90s over ~4000px is roughly 45px/s: readable at a glance instead
+             of the previous ~125px/s, which was the "flies past" complaint. */
+          animation: banner-scroll 90s linear infinite;
           will-change: transform;
+        }
+        @media (max-width: 767px) {
+          /* Narrower viewport, same pixel speed would feel twice as fast
+             relative to the visible window. */
+          .banner-scroll { animation-duration: 120s; }
         }
         @media (prefers-reduced-motion: reduce) {
           .banner-scroll { animation: none; }

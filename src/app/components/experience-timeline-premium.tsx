@@ -12,15 +12,16 @@ const experiences = [
     company: "Self-Employed",
     location: "Belgium (Remote)",
     type: "Freelance",
-    description: "Designing, building and launching commercial web products end-to-end with an AI-assisted workflow. Delivered marinek.store — a Next.js 14 landing site for a fitness coaching program with three pricing tiers, payments, analytics and automated access delivery.",
+    description: "Designing, building and launching commercial web products end-to-end with an AI-assisted workflow. Delivered marinek.store — a Next.js 14 landing site for a fitness coaching program with three pricing tiers, verified card payments and automated one-time access delivery over Telegram.",
     achievements: [
       "Launched marinek.store to production (Next.js 14) in July 2026",
-      "Integrated WayForPay payments and GA4 analytics",
-      "Built serverless payment webhooks on Cloudflare Workers",
-      "Automated post-payment onboarding via a Telegram bot",
+      "Rebuilt paid access: server-priced orders, signature-verified WayForPay webhooks, single-use Telegram invites",
+      "Replaced a shared invite link that let anyone join the paid channels without paying",
+      "Made the payment webhook idempotent against a four-day retry window; refunds revoke access automatically",
+      "Built the serverless backend on Netlify Functions with Supabase, alongside a fully static Next.js export",
       "Owned the full cycle: requirements, design, build, launch & support"
     ],
-    tech: ["Next.js 14", "TypeScript", "React", "Cloudflare Workers", "Telegram Bot API", "WayForPay", "GA4"],
+    tech: ["Next.js 14", "TypeScript", "React", "Netlify Functions", "Supabase", "Telegram Bot API", "WayForPay", "GA4"],
     icon: Rocket,
     gradient: "from-cyan-500 via-blue-500 to-purple-500",
     color: "#00d9ff"
