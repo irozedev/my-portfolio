@@ -254,7 +254,7 @@ export function SiteTour() {
               </p>
             </div>
           </div>
-          <button
+          <button aria-label="Close"
             onClick={closeTour}
             className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors min-w-[40px] min-h-[40px] flex items-center justify-center active:scale-90"
           >
@@ -281,14 +281,14 @@ export function SiteTour() {
 
         {/* Nav buttons */}
         <div className="flex gap-2">
-          <button
+          <button aria-label="Previous step"
             onClick={prevStep}
             disabled={!hasPrev}
             className="flex items-center gap-1 px-3 py-2.5 bg-[var(--bg-secondary)] rounded-lg text-xs font-mono disabled:opacity-30 active:scale-95 transition-all min-h-[44px]"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
-          <button
+          <button aria-label="Next step"
             onClick={nextStep}
             className="flex-1 flex items-center justify-center gap-1 px-3 py-2.5 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black rounded-lg text-sm font-mono font-bold active:scale-95 transition-all min-h-[44px]"
           >

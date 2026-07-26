@@ -2,6 +2,7 @@ export const translations = {
   en: {
     nav: {
       home: 'Home',
+      skipToContent: 'Skip to content',
       about: 'About',
       experience: 'Experience',
       skills: 'Skills',
@@ -53,7 +54,7 @@ export const translations = {
       basedIn: 'Based in',
       forWork: 'For work',
       open: 'Open',
-      location: 'Lommel, BE',
+      location: 'Antwerp, BE',
       educationTitle: 'Education',
       highlights: {
         experience: '8+ years commercial experience',
@@ -347,6 +348,7 @@ export const translations = {
   uk: {
     nav: {
       home: 'Головна',
+      skipToContent: 'Перейти до вмісту',
       about: 'Про мене',
       experience: 'Досвід',
       skills: 'Навички',
@@ -398,7 +400,7 @@ export const translations = {
       basedIn: 'Базується в',
       forWork: 'Для роботи',
       open: 'Відкрито',
-      location: 'Ломмель, Бельгія',
+      location: 'Антверпен, Бельгія',
       educationTitle: 'Освіта',
       highlights: {
         experience: '8+ років комерційного досвіду',
@@ -692,6 +694,7 @@ export const translations = {
   nl: {
     nav: {
       home: 'Home',
+      skipToContent: 'Naar inhoud',
       about: 'Over',
       experience: 'Ervaring',
       skills: 'Vaardigheden',
@@ -743,7 +746,7 @@ export const translations = {
       basedIn: 'Gevestigd in',
       forWork: 'Voor werk',
       open: 'Open',
-      location: 'Lommel, België',
+      location: 'Antwerpen, België',
       educationTitle: 'Opleiding',
       highlights: {
         experience: '8+ jaar commerciële ervaring',
@@ -1037,6 +1040,7 @@ export const translations = {
   ar: {
     nav: {
       home: 'الرئيسية',
+      skipToContent: 'تخطَّ إلى المحتوى',
       about: 'عني',
       experience: 'الخبرة',
       skills: 'المهارات',
@@ -1088,7 +1092,7 @@ export const translations = {
       basedIn: 'مقيم في',
       forWork: 'للعمل',
       open: 'مفتوح',
-      location: 'لوميل، بلجيكا',
+      location: 'أنتويرب، بلجيكا',
       educationTitle: 'التعليم',
       highlights: {
         experience: '+8 سنوات خبرة تجارية',
@@ -1361,6 +1365,7 @@ export const translations = {
   es: {
     nav: {
       home: 'Inicio',
+      skipToContent: 'Saltar al contenido',
       about: 'Sobre mí',
       experience: 'Experiencia',
       skills: 'Habilidades',
@@ -1412,7 +1417,7 @@ export const translations = {
       basedIn: 'Ubicado en',
       forWork: 'Para trabajo',
       open: 'Abierto',
-      location: 'Lommel, Bélgica',
+      location: 'Amberes, Bélgica',
       educationTitle: 'Educación',
       highlights: {
         experience: '8+ años de experiencia comercial',

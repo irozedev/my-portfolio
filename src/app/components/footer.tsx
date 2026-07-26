@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Github, Linkedin, Mail, Heart, ArrowUp, Code2, Briefcase } from "lucide-react";
+import { Github, Linkedin, Mail, Code2, Briefcase } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { useAvailability } from "../contexts/availability-context";
 import { LegalFooter } from "./legal-footer";
@@ -14,7 +14,7 @@ const socialLinks = [
 
 export function Footer() {
   const { t } = useLanguage();
-  const { statusText, statusEmoji, isAvailable, detailedStatus } = useAvailability();
+  const { isAvailable } = useAvailability();
 
   // ✅ ВИПРАВЛЕННЯ: Обробник кліка для якірних посилань
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

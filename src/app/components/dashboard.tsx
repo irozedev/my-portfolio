@@ -59,7 +59,7 @@ export function Dashboard() {
   const loadUserStats = async () => {
     try {
       // Try to get user stats from KV store
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('kv_store_a62f57c7')
         .select('value')
         .eq('key', `user_stats_${user?.id}`)

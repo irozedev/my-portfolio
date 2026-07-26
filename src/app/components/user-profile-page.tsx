@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { useAuth } from "../contexts/auth-context";
-import { projectId, publicAnonKey } from "@/utils/supabase/info";
+import { projectId } from "@/utils/supabase/info";
 import { Camera, Upload, Save, Check, X, User, Briefcase, Building2, Mail } from "lucide-react";
 
 export function UserProfilePage() {
@@ -38,7 +38,6 @@ export function UserProfilePage() {
   // Redirect if not authenticated after loading
   useEffect(() => {
     if (!loading && !user) {
-      console.log('User not authenticated, redirecting to home...');
       window.location.href = '/';
     }
   }, [user, loading]);
@@ -163,8 +162,8 @@ export function UserProfilePage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        
+        await response.json();
+
         // Update local state
         setAvatarUrl(newAvatarUrl);
         setPreviewUrl('');
@@ -249,7 +248,7 @@ export function UserProfilePage() {
               <div className="flex flex-col items-center gap-6">
                 <div className="relative">
                   {/* Avatar */}
-                  <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-[#00d9ff]/50 shadow-[0_0_30px_rgba(0,217,255,0.3)]">
+                  <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-[#00d9ff]/50 shadow-[0_0_24px_rgba(0,217,255,0.18)]">
                     <img
                       src={displayAvatar}
                       alt="Avatar"
@@ -376,7 +375,7 @@ export function UserProfilePage() {
                 >
                   Cancel
                 </button>
-                <button
+                <button aria-label="Save changes"
                   type="submit"
                   disabled={isSaving}
                   className="flex-1 px-6 py-4 bg-gradient-to-r from-[#00d9ff] to-cyan-400 text-black font-bold rounded-xl hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"

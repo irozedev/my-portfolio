@@ -1,11 +1,9 @@
 import { motion, AnimatePresence } from "motion/react";
 import { Cookie, X, Check } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useLanguage } from "../contexts/language-context";
 
 export function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false);
-  const { t } = useLanguage();
 
   useEffect(() => {
     const consent = localStorage.getItem("cookie-consent");
@@ -35,7 +33,7 @@ export function CookieBanner() {
           className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:bottom-20 md:max-w-md z-[9990] bg-[var(--card-bg)] border-2 border-[var(--border-color)] rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur-xl"
         >
           {/* Close Button */}
-          <button
+          <button aria-label="Close"
             onClick={handleDecline}
             className="absolute top-2 right-2 md:top-3 md:right-3 p-1.5 md:p-1 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors z-10"
           >

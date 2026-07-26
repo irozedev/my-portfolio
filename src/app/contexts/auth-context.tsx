@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signInWithProvider = async (provider: 'google' | 'github') => {
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
           redirectTo: `${window.location.origin}/`, // Redirect to home page after auth
@@ -87,7 +87,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(`Failed to sign in with ${provider}. ${error.message}`);
       }
 
-      console.log('OAuth redirect initiated successfully', data);
     } catch (error: any) {
       console.error(`Sign in with ${provider} failed:`, error);
       throw error;

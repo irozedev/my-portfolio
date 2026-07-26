@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Code2, Palette, Database, Wrench, Globe, Zap, CheckCircle2, Award, Target, GraduationCap, MapPin, Calendar, Briefcase, Box } from "lucide-react";
+import { Code2, Globe, CheckCircle2, Award, Target, GraduationCap, MapPin, Calendar, Briefcase } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { SkillsFuturistic } from "./skills-futuristic";
 import { LanguagesModern } from "./languages-modern";
@@ -78,6 +78,10 @@ export function AboutSection() {
                   <img
                     src="https://lh3.googleusercontent.com/d/1x2hWpjRadIpYFTygTX9SJTfzFobjSDol"
                     alt="Stepan Roze"
+                    width={600}
+                    height={400}
+                    loading="lazy"
+                    decoding="async"
                     className="relative w-full h-[400px] object-cover rounded-2xl"
                     onError={(e) => {
                       // Fallback to Unsplash if Google Drive fails

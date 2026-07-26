@@ -1,1 +1,24 @@
 node_modules
+
+# Build cache
+.vite/
+*.tsbuildinfo
+
+# Local env — real secrets must never reach this public repo
+.env
+.env.*
+!.env.example
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+*.swp
+
+# Claude Code: settings.json is shared project config and IS committed.
+# settings.local.json is per-machine and is not.
+.claude/settings.local.json
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*

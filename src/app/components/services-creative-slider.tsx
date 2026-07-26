@@ -1,12 +1,7 @@
 import { motion } from "motion/react";
 import { Code, Globe, Bot, ShoppingCart, TrendingUp, Sparkles, Zap, CheckCircle2, ArrowRight, ChevronLeft, ChevronRight, Keyboard } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
-import Slider from "react-slick";
-import "@/styles/slick.css";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { ServiceActionModal } from "./service-action-modal";
-import { useSliderNavigation } from "../hooks/use-slider-navigation";
-import { SliderControls } from "./slider-controls";
-import { AnimatePresence } from "motion/react";
 import { useLanguage } from "../contexts/language-context";
 
 const services = [
@@ -91,21 +86,29 @@ const services = [
   },
 ];
 
-// Custom Arrow Components
-const PrevArrow = ({ onClick }: { onClick?: () => void }) => (
+// Carousel arrows. We render these ourselves now — they used to be handed to
+// react-slick, which injected the onClick and removed them at the ends.
+const arrowClass =
+  "absolute top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#00d9ff]/20 to-cyan-500/20 backdrop-blur-xl border-2 border-[#00d9ff]/30 rounded-full flex items-center justify-center hover:from-[#00d9ff]/30 hover:to-cyan-500/30 hover:scale-110 transition-all duration-300 shadow-[0_0_24px_rgba(0,217,255,0.18)] group disabled:opacity-25 disabled:pointer-events-none";
+
+const PrevArrow = ({ onClick, disabled }: { onClick: () => void; disabled: boolean }) => (
   <button
+    type="button"
     onClick={onClick}
-    className="absolute left-0 md:-left-16 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#00d9ff]/20 to-cyan-500/20 backdrop-blur-xl border-2 border-[#00d9ff]/30 rounded-full flex items-center justify-center hover:from-[#00d9ff]/30 hover:to-cyan-500/30 hover:scale-110 transition-all duration-300 shadow-[0_0_30px_rgba(0,217,255,0.3)] group"
+    disabled={disabled}
+    className={`${arrowClass} left-0 md:-left-16`}
     aria-label="Previous service"
   >
     <ChevronLeft className="w-6 h-6 text-[#00d9ff] group-hover:scale-110 transition-transform" />
   </button>
 );
 
-const NextArrow = ({ onClick }: { onClick?: () => void }) => (
+const NextArrow = ({ onClick, disabled }: { onClick: () => void; disabled: boolean }) => (
   <button
+    type="button"
     onClick={onClick}
-    className="absolute right-0 md:-right-16 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#00d9ff]/20 to-cyan-500/20 backdrop-blur-xl border-2 border-[#00d9ff]/30 rounded-full flex items-center justify-center hover:from-[#00d9ff]/30 hover:to-cyan-500/30 hover:scale-110 transition-all duration-300 shadow-[0_0_30px_rgba(0,217,255,0.3)] group"
+    disabled={disabled}
+    className={`${arrowClass} right-0 md:-right-16`}
     aria-label="Next service"
   >
     <ChevronRight className="w-6 h-6 text-[#00d9ff] group-hover:scale-110 transition-transform" />
@@ -122,50 +125,67 @@ export function ServicesCreativeSlider() {
     }
     return false;
   });
-  const sliderRef = useRef<Slider>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
   const [isProcessingClick, setIsProcessingClick] = useState(false);
-  
-  // 🔥 NEW: Touch detection to differentiate swipe vs click
-  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
 
   // Detect mobile on mount
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
     };
-    
+
     // Check immediately
     checkMobile();
-    
+
     // Listen for resize
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Enable advanced navigation (keyboard + touch swipe)
-  useSliderNavigation({
-    sliderRef,
-    totalSlides: services.length,
-    enableKeyboard: true,
-    enableSwipe: true,
-  });
-
-  // FIX: Force slider re-initialization on mobile after mount
-  useEffect(() => {
-    // Trigger resize event to force slider recalculation
-    const timer = setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-      
-      // Double-check: force slider to go to first slide
-      if (sliderRef.current) {
-        sliderRef.current.slickGoTo(0);
-      }
-    }, 100);
-
-    return () => clearTimeout(timer);
+  // Centre a card in the track. Native smooth scrolling replaces react-slick's
+  // JS animation, so it honours prefers-reduced-motion for free.
+  const scrollToIndex = useCallback((index: number) => {
+    const track = trackRef.current;
+    const card = track?.children[index] as HTMLElement | undefined;
+    if (!track || !card) return;
+    track.scrollTo({
+      left: card.offsetLeft - (track.clientWidth - card.clientWidth) / 2,
+      behavior: "smooth",
+    });
   }, []);
+
+  // Whichever card is closest to the middle of the track is the active one.
+  // An observer beats a scroll handler here: no work on frames where nothing
+  // crosses a boundary.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const index = Number((entry.target as HTMLElement).dataset.index);
+          if (!Number.isNaN(index)) setCurrentSlide(index);
+        });
+      },
+      { root: track, threshold: 0.6 },
+    );
+
+    Array.from(track.children).forEach((child) => observer.observe(child));
+    return () => observer.disconnect();
+  }, []);
+
+  // Arrow keys move the carousel, but ONLY while it has focus. The old global
+  // keydown listener called preventDefault() on every arrow press and ate
+  // keystrokes in every input on the page.
+  const handleTrackKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    const delta = e.key === "ArrowRight" ? 1 : -1;
+    scrollToIndex(Math.min(Math.max(currentSlide + delta, 0), services.length - 1));
+  };
 
   // 🔥 FIX: Debounced click handler to prevent multiple triggers
   const handleBookService = (service: typeof services[0]) => {
@@ -186,150 +206,19 @@ export function ServicesCreativeSlider() {
     }, 300);
   };
 
-  // 🔥 NEW: Touch handlers to detect swipe vs click
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    setTouchStart({ x: touch.clientX, y: touch.clientY });
-    setIsDragging(false);
+  // Native scroll-snap swallows drags before they become clicks, so the old
+  // touchstart/touchmove/touchend drag detector is gone. A card click now just
+  // opens the service — no "click once to centre, again to open" dance.
+  const handleCardClick = (service: typeof services[0]) => {
+    if (isProcessingClick) return;
+    handleBookService(service);
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!touchStart) return;
-    
-    const touch = e.touches[0];
-    const deltaX = Math.abs(touch.clientX - touchStart.x);
-    const deltaY = Math.abs(touch.clientY - touchStart.y);
-    
-    // If moved more than 10px, it's a drag (reduced from 15px for better detection)
-    if (deltaX > 10 || deltaY > 10) {
-      setIsDragging(true);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    // Use requestAnimationFrame for smoother state updates
-    requestAnimationFrame(() => {
-      setTouchStart(null);
-      // Reset dragging after a short delay to allow click detection
-      setTimeout(() => {
-        setIsDragging(false);
-      }, 50);
-    });
-  };
-
-  // 🔥 IMPROVED: Card click handler with better swipe detection
-  const handleCardClick = (service: typeof services[0], index: number, e: React.MouseEvent | React.TouchEvent) => {
-    // Don't prevent default or stop propagation - let slider handle it
-    // Only stop propagation if we're actually going to open the modal
-    
-    // Don't trigger click if it was a drag/swipe
-    if (isDragging) {
-      return;
-    }
-    
-    if (isProcessingClick) return; // Prevent multiple clicks
-    
-    const isActive = currentSlide === index;
-    
-    // If card is already centered (active), open modal
-    if (isActive) {
-      e.stopPropagation(); // Only stop propagation when opening modal
-      handleBookService(service);
-    } else {
-      // Otherwise, navigate to center it (let slider handle the event)
-      sliderRef.current?.slickGoTo(index);
-    }
-  };
-
-  // Dynamic initial settings based on screen size
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 400, // Reduced from 600 for faster response
-    slidesToShow: isMobile ? 1 : 3,
-    slidesToScroll: 1,
-    centerMode: true,
-    centerPadding: isMobile ? "40px" : "0px",
-    autoplay: !isMobile, // Disable autoplay on mobile to save battery
-    autoplaySpeed: 5000,
-    pauseOnHover: true,
-    swipeToSlide: true,
-    touchThreshold: 8, // Lower threshold for mobile (from 10)
-    swipe: true,
-    touchMove: true,
-    draggable: true,
-    accessibility: true,
-    arrows: !isMobile,
-    useCSS: true, // Use CSS transforms instead of JS
-    useTransform: true, // Enable hardware acceleration
-    lazyLoad: 'ondemand' as const, // Lazy load slides
-    waitForAnimate: false, // Don't wait for animations to complete
-    beforeChange: (_current: number, next: number) => {
-      setCurrentSlide(next);
-      setIsDragging(false);
-    },
-    prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />,
-    responsive: [
-      {
-        breakpoint: 1280,
-        settings: {
-          slidesToShow: 3,
-          centerMode: true,
-          centerPadding: "0px",
-          swipeToSlide: true,
-        }
-      },
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 1,
-          centerMode: true,
-          centerPadding: "60px",
-          arrows: false,
-          swipeToSlide: true,
-        }
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-          centerMode: true,
-          centerPadding: "40px",
-          arrows: false,
-          swipeToSlide: true,
-        }
-      },
-      {
-        breakpoint: 640,
-        settings: {
-          slidesToShow: 1,
-          centerMode: true,
-          centerPadding: "30px",
-          arrows: false,
-          swipeToSlide: true,
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          centerMode: true,
-          centerPadding: "20px",
-          arrows: false,
-          swipeToSlide: true,
-        }
-      }
-    ],
-    customPaging: () => (
-      <div className="w-3 h-3 rounded-full bg-white/20 hover:bg-[#00d9ff]/50 transition-all duration-300" />
-    ),
-    appendDots: (dots: React.ReactNode) => (
-      <div className="mt-8">
-        <ul className="flex items-center justify-center gap-2"> {dots} </ul>
-      </div>
-    ),
-  };
+  // Everything the ~90-line react-slick settings object used to configure —
+  // slidesToShow, centerMode, centerPadding, responsive breakpoints, swipe
+  // thresholds — is now CSS (flex-basis + scroll-snap). See the <style> block
+  // below. Autoplay is gone on purpose: it fought the user's own scrolling and
+  // there is no accessible way to pause it for keyboard users.
 
   return (
     <>
@@ -395,192 +284,89 @@ export function ServicesCreativeSlider() {
           >
             <style>
               {`
-                .slick-slide {
-                  padding: 0 12px;
-                  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-                  filter: blur(0);
+                /* Scroll-snap carousel. Replaces react-slick: no JS layout, no
+                   cloned DOM nodes, native touch momentum, and the browser
+                   handles reduced-motion for us. */
+                .services-track {
+                  display: flex;
+                  gap: 1.5rem;
+                  overflow-x: auto;
+                  overflow-y: hidden;
+                  scroll-snap-type: x mandatory;
+                  scroll-behavior: smooth;
+                  -webkit-overflow-scrolling: touch;
+                  padding: 1rem 0 1.5rem;
+                  /* Snap targets centre themselves inside the track */
+                  scroll-padding-inline: 50%;
+                  scrollbar-width: none;
                 }
-                
-                .slick-slide > div {
-                  height: 100%;
+                .services-track::-webkit-scrollbar { display: none; }
+
+                .services-track > * {
+                  scroll-snap-align: center;
+                  flex: 0 0 min(100%, 22rem);
                 }
 
-                /* Active center card */
-                .slick-center .service-card {
+                /* Show three cards side by side once there is room */
+                @media (min-width: 1024px) {
+                  .services-track > * { flex-basis: calc((100% - 3rem) / 3); }
+                }
+
+                /* Off-centre cards recede. Driven by a data attribute we set
+                   from the IntersectionObserver rather than react-slick's
+                   .slick-center class, which never appeared when centerMode
+                   was off and left every card dimmed. */
+                .service-card {
+                  height: 100%;
+                  transform: scale(0.94);
+                  opacity: 0.55;
+                  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                              border-color 0.3s ease;
+                }
+                .service-card[data-active="true"] {
                   transform: scale(1);
                   opacity: 1;
-                  z-index: 20;
-                  filter: brightness(1.1) blur(0);
-                  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
                 }
 
-                /* Left side card */
-                .slick-slide:has(+ .slick-center) .service-card {
-                  transform: scale(0.85);
-                  opacity: 0.6;
-                  z-index: 10;
-                  filter: brightness(0.7) blur(1px);
-                  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-                }
-
-                /* Right side card */
-                .slick-center + .slick-slide .service-card {
-                  transform: scale(0.85);
-                  opacity: 0.6;
-                  z-index: 10;
-                  filter: brightness(0.7) blur(1px);
-                  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-                }
-
-                /* Other cards - No flickering */
-                .service-card {
-                  transform: scale(0.75);
-                  opacity: 0.3;
-                  z-index: 1;
-                  filter: brightness(0.5) blur(2px);
-                  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-                              opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-                              filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-                  will-change: transform, opacity, filter;
-                }
-
-                /* Smooth transitions */
-                .slick-list {
-                  overflow: visible !important;
-                }
-
-                .slick-track {
-                  display: flex;
-                  align-items: center;
-                }
-
-                /* Dots styling */
-                .slick-dots {
-                  bottom: -60px;
-                }
-
-                .slick-dots li {
-                  margin: 0 6px;
-                }
-
-                .slick-dots li button:before {
-                  font-size: 12px;
-                  color: rgba(255, 255, 255, 0.3);
-                  opacity: 1;
-                  transition: all 0.3s;
-                }
-
-                .slick-dots li.slick-active button:before {
-                  color: #00d9ff;
-                  transform: scale(1.5);
-                }
-
-                .slick-dots li:hover button:before {
-                  color: rgba(0, 217, 255, 0.6);
-                }
-
-                /* Mobile adjustments */
-                @media (max-width: 768px) {
-                  /* Disable 3D transforms on mobile - simpler is better */
-                  .slick-slide {
-                    padding: 0 8px;
-                  }
-                  
+                @media (prefers-reduced-motion: reduce) {
+                  .services-track { scroll-behavior: auto; }
                   .service-card {
-                    transform: scale(0.85) !important;
-                    opacity: 0.5 !important;
-                    filter: brightness(0.7) blur(1px) !important;
-                    transition: all 0.4s ease-out !important;
-                  }
-                  
-                  .slick-center .service-card {
-                    transform: scale(1) !important;
-                    opacity: 1 !important;
-                    filter: brightness(1) blur(0) !important;
-                    z-index: 20;
-                  }
-                  
-                  /* Remove 3D transforms from side cards on mobile */
-                  .slick-slide:has(+ .slick-center) .service-card,
-                  .slick-center + .slick-slide .service-card {
-                    transform: scale(0.9) !important;
-                    opacity: 0.6 !important;
-                    filter: brightness(0.75) blur(0.5px) !important;
-                  }
-                  
-                  /* Fix overflow issues on small screens */
-                  .slick-list {
-                    overflow: hidden !important;
-                    perspective: none !important;
-                  }
-                  
-                  .slick-track {
-                    transform-style: flat !important;
-                  }
-                  
-                  /* Adjust dots position for mobile */
-                  .slick-dots {
-                    bottom: -50px !important;
-                  }
-                }
-                
-                /* Extra small screens - more aggressive fixes */
-                @media (max-width: 480px) {
-                  .slick-slide {
-                    padding: 0 6px;
-                  }
-                  
-                  .service-card {
-                    transform: scale(0.9) !important;
-                    opacity: 0.6 !important;
-                  }
-                  
-                  .slick-center .service-card {
-                    transform: scale(1) !important;
-                    opacity: 1 !important;
-                  }
-                  
-                  /* Side cards barely visible on very small screens */
-                  .slick-slide:has(+ .slick-center) .service-card,
-                  .slick-center + .slick-slide .service-card {
-                    transform: scale(0.92) !important;
-                    opacity: 0.5 !important;
+                    transition: none;
+                    transform: none;
+                    opacity: 1;
                   }
                 }
               `}
             </style>
 
-            <Slider ref={sliderRef} {...settings}>
+            <div
+              ref={trackRef}
+              className="services-track"
+              role="group"
+              aria-roledescription="carousel"
+              aria-label={t("services.title")}
+              tabIndex={0}
+              onKeyDown={handleTrackKeyDown}
+            >
               {services.map((service, index) => {
                 const Icon = service.icon;
                 const isActive = currentSlide === index;
-                
+
                 return (
-                  <div key={service.id} className="outline-none focus:outline-none pt-4">
+                  <div
+                    key={service.id}
+                    data-index={index}
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label={`${index + 1} / ${services.length}: ${service.title}`}
+                  >
                     <motion.div
-                      onClick={(e) => handleCardClick(service, index, e)}
-                      onTouchStart={handleTouchStart}
-                      onTouchMove={handleTouchMove}
-                      onTouchEnd={handleTouchEnd}
-                      className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-purple-500/50 transition-all duration-500 group cursor-pointer overflow-visible"
+                      onClick={() => handleCardClick(service)}
+                      data-active={isActive}
+                      className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-purple-500/50 group cursor-pointer overflow-visible"
                       whileHover={!isMobile ? { y: -10 } : undefined}
                     >
-                      {/* TAP/CLICK indicators removed per redesign plan */}
-                      
-                      {/* SIDE CARDS INDICATOR - TOP */}
-                      {!isActive && (
-                        <motion.div
-                          className="absolute top-4 left-4 z-30 flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm text-white/60 rounded-lg font-mono text-xs border border-white/20"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <ArrowRight className="w-3 h-3" />
-                          <span className="hidden sm:inline">CLICK TO CENTER</span>
-                          <span className="sm:hidden">CENTER</span>
-                        </motion.div>
-                      )}
-                      
                       {/* Animated Background Gradient - DISABLED ON MOBILE */}
                       {!isMobile && (
                         <motion.div
@@ -611,7 +397,7 @@ export function ServicesCreativeSlider() {
                       {/* Popular Badge */}
                       {service.popular && (
                         <div
-                          className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 px-3 py-1 sm:px-4 sm:py-1.5 bg-[#00d9ff] rounded-full text-black text-[10px] sm:text-xs font-bold shadow-[0_0_20px_rgba(0,217,255,0.6)] z-30 whitespace-nowrap"
+                          className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 px-3 py-1 sm:px-4 sm:py-1.5 bg-[#00d9ff] rounded-full text-black text-[10px] sm:text-xs font-bold shadow-[0_0_20px_rgba(0,217,255,0.18)] z-30 whitespace-nowrap"
                         >
                           <span className="flex items-center gap-1">
                             ⭐ {t("services.popular")}
@@ -717,29 +503,46 @@ export function ServicesCreativeSlider() {
                   </div>
                 );
               })}
-            </Slider>
+            </div>
+
+            <PrevArrow onClick={() => scrollToIndex(currentSlide - 1)} disabled={currentSlide === 0} />
+            <NextArrow
+              onClick={() => scrollToIndex(currentSlide + 1)}
+              disabled={currentSlide === services.length - 1}
+            />
           </motion.div>
 
-          {/* Counter */}
+          {/* Dots + counter */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="text-center mt-8 space-y-3 px-4"
           >
-            <p className="text-sm text-[var(--text-muted)]">
+            <div className="flex items-center justify-center gap-2">
+              {services.map((service, index) => (
+                <button
+                  key={service.id}
+                  type="button"
+                  onClick={() => scrollToIndex(index)}
+                  aria-label={`Go to ${service.title}`}
+                  aria-current={currentSlide === index}
+                  className={`h-3 rounded-full transition-all duration-300 ${
+                    currentSlide === index
+                      ? "w-8 bg-[#00d9ff]"
+                      : "w-3 bg-white/20 hover:bg-[#00d9ff]/50"
+                  }`}
+                />
+              ))}
+            </div>
+
+            <p className="text-sm text-[var(--text-muted)]" aria-live="polite">
               {currentSlide + 1} / {services.length}
             </p>
+
             <div className="hidden sm:flex items-center justify-center gap-2 text-xs text-[var(--text-muted)]">
               <Keyboard className="w-3 h-3 flex-shrink-0" />
-              <span className="text-center">
-                {t("services.navigation.inactive")} • {t("services.navigation.active")} • {t("services.navigation.keyboard")}
-              </span>
-            </div>
-            <div className="flex sm:hidden items-center justify-center gap-2 text-[10px] sm:text-xs text-[var(--text-muted)] px-2">
-              <span className="text-center leading-tight">
-                {t("services.navigation.active")} • {t("services.navigation.keyboard")}
-              </span>
+              <span className="text-center">{t("services.navigation.keyboard")}</span>
             </div>
           </motion.div>
         </div>

@@ -84,287 +84,6 @@ img {
   content-visibility: auto;
 }
 
-/* Driver.js Tour Customization - WOW Edition */
-.driver-popover {
-  background: linear-gradient(135deg, rgba(10, 10, 10, 0.99) 0%, rgba(20, 20, 20, 0.98) 100%) !important;
-  border: 3px solid rgba(0, 217, 255, 0.7) !important;
-  border-radius: 20px !important;
-  box-shadow: 
-    0 0 80px rgba(0, 217, 255, 0.6),
-    0 20px 100px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-  backdrop-filter: blur(40px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
-  max-width: 420px !important;
-  padding: 28px !important;
-  animation: popover-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-/* Popover entrance animation */
-@keyframes popover-enter {
-  0% {
-    opacity: 0;
-    transform: scale(0.8) translateY(20px);
-  }
-  60% {
-    transform: scale(1.05) translateY(-5px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-/* Glowing border animation */
-.driver-popover::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, 
-    #00d9ff, 
-    #8b5cf6, 
-    #00d9ff, 
-    #8b5cf6);
-  background-size: 400% 400%;
-  border-radius: 20px;
-  z-index: -1;
-  opacity: 0.4;
-  filter: blur(8px);
-  animation: border-glow 4s ease-in-out infinite;
-}
-
-@keyframes border-glow {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Shimmer effect overlay */
-.driver-popover::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(0, 217, 255, 0.1), 
-    transparent);
-  animation: popover-shimmer 3s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes popover-shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 200%;
-  }
-}
-
-.driver-popover-title {
-  color: #ffffff !important;
-  font-size: 1.4rem !important;
-  font-weight: 700 !important;
-  margin-bottom: 16px !important;
-  font-family: 'Geist Mono', monospace !important;
-  text-shadow: 0 0 20px rgba(0, 217, 255, 0.3) !important;
-  letter-spacing: 0.5px !important;
-  position: relative !important;
-  padding-left: 32px !important;
-}
-
-/* Icon before title */
-.driver-popover-title::before {
-  content: '◆';
-  position: absolute;
-  left: 0;
-  color: #00d9ff;
-  font-size: 1.2rem;
-  animation: icon-pulse 2s ease-in-out infinite;
-}
-
-@keyframes icon-pulse {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
-
-.driver-popover-description {
-  color: #d4d4d4 !important;
-  font-size: 1rem !important;
-  line-height: 1.7 !important;
-  margin-bottom: 20px !important;
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-/* Custom progress bar */
-.driver-popover-progress-text {
-  display: inline-block !important;
-  background: linear-gradient(135deg, #00d9ff 0%, #8b5cf6 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  font-weight: 700 !important;
-  font-family: 'Geist Mono', monospace !important;
-  font-size: 0.9rem !important;
-  padding: 6px 14px !important;
-  border-radius: 20px !important;
-  border: 1px solid rgba(0, 217, 255, 0.3) !important;
-  background-color: rgba(0, 217, 255, 0.05) !important;
-  background-clip: padding-box !important;
-  -webkit-text-fill-color: #00d9ff !important;
-  box-shadow: 0 0 15px rgba(0, 217, 255, 0.2) !important;
-  animation: progress-glow 2s ease-in-out infinite !important;
-}
-
-@keyframes progress-glow {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
-  }
-}
-
-.driver-popover-navigation-btns {
-  gap: 12px !important;
-  margin-top: 24px !important;
-  display: flex !important;
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-/* Modern gradient buttons with hover effects */
-.driver-popover-next-btn,
-.driver-popover-prev-btn {
-  background: linear-gradient(135deg, #00d9ff 0%, #0096bb 100%) !important;
-  color: #0a0a0a !important;
-  border: none !important;
-  padding: 12px 24px !important;
-  border-radius: 12px !important;
-  font-weight: 700 !important;
-  font-family: 'Geist Mono', monospace !important;
-  font-size: 0.95rem !important;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-  box-shadow: 
-    0 4px 20px rgba(0, 217, 255, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-  cursor: pointer !important;
-  position: relative !important;
-  overflow: hidden !important;
-  text-transform: uppercase !important;
-  letter-spacing: 1px !important;
-}
-
-/* Button shine effect */
-.driver-popover-next-btn::before,
-.driver-popover-prev-btn::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, 
-    transparent 30%, 
-    rgba(255, 255, 255, 0.3) 50%, 
-    transparent 70%);
-  transform: rotate(45deg);
-  animation: button-shine 3s ease-in-out infinite;
-}
-
-@keyframes button-shine {
-  0% {
-    transform: translateX(-100%) rotate(45deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(45deg);
-  }
-}
-
-.driver-popover-next-btn:hover,
-.driver-popover-prev-btn:hover {
-  transform: translateY(-3px) scale(1.05) !important;
-  box-shadow: 
-    0 8px 30px rgba(0, 217, 255, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
-  background: linear-gradient(135deg, #00eeff 0%, #00b8dd 100%) !important;
-}
-
-.driver-popover-next-btn:active,
-.driver-popover-prev-btn:active {
-  transform: translateY(-1px) scale(1.02) !important;
-}
-
-/* Previous button with different style */
-.driver-popover-prev-btn {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
-  color: #00d9ff !important;
-  border: 2px solid rgba(0, 217, 255, 0.3) !important;
-  box-shadow: 
-    0 4px 20px rgba(0, 217, 255, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-}
-
-.driver-popover-prev-btn:hover {
-  border-color: rgba(0, 217, 255, 0.6) !important;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
-}
-
-/* Close button with modern style */
-.driver-popover-close-btn {
-  color: #ffffff !important;
-  font-size: 1.5rem !important;
-  opacity: 0.6 !important;
-  transition: all 0.3s ease !important;
-  width: 32px !important;
-  height: 32px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-radius: 8px !important;
-  background: rgba(255, 255, 255, 0.05) !important;
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-.driver-popover-close-btn:hover {
-  opacity: 1 !important;
-  background: rgba(255, 0, 0, 0.2) !important;
-  transform: rotate(90deg) scale(1.1) !important;
-}
-
-/* Arrow pointer style */
-.driver-popover-arrow {
-  border-color: rgba(0, 217, 255, 0.5) !important;
-}
-
-.driver-popover-arrow-side {
-  border-color: rgba(0, 217, 255, 0.3) !important;
-}
-
-.driver-active-element {
-  outline: 3px solid #00d9ff !important;
-  outline-offset: 5px !important;
-  border-radius: 16px !important;
-}
 
 :root {
   /* Dark Theme (Default) */
@@ -383,7 +102,9 @@ img {
   /* Card styles */
   --card-bg: rgba(255, 255, 255, 0.03);
   --card-border: rgba(255, 255, 255, 0.08);
-  
+  --hover-bg: #1f1f1f;
+  color-scheme: dark;
+
   /* Availability widget */
   --availability-bg: rgba(255, 255, 255, 0.05);
   --availability-border: rgba(255, 255, 255, 0.1);
@@ -437,11 +158,17 @@ img {
   --text-primary: #0f172a;
   --text-secondary: #334155;
   --text-muted: #64748b;
-  --accent-primary: #0891b2;
-  --accent-secondary: #0e7490;
-  --accent-hover: #06b6d4;
-  --border-color: rgba(15, 23, 42, 0.06);
-  --shadow-color: rgba(8, 145, 178, 0.15);
+  /* Accents are darker than the dark-theme cyan because they sit on white.
+     Measured against #ffffff (WCAG 2.1 contrast):
+       old #0891b2 = 3.68:1  → failed AA for body text
+       old #06b6d4 = 2.43:1  → failed even AA-large
+     The hover shade is now DARKER than the base, not lighter — on a light
+     background "more prominent" means more contrast, not more glow. */
+  --accent-primary: #0e7490;   /* 5.36:1  AA  */
+  --accent-secondary: #155e75; /* 7.27:1  AAA */
+  --accent-hover: #0c6579;     /* 6.66:1  AA  */
+  --border-color: rgba(15, 23, 42, 0.10);
+  --shadow-color: rgba(14, 116, 144, 0.15);
   
   /* Card styles for light theme */
   --card-bg: #ffffff;
@@ -453,10 +180,36 @@ img {
   
   /* Glass effects & decorations for light theme */
   --glass-bg: rgba(248, 250, 252, 0.8);
-  --glass-border: rgba(15, 23, 42, 0.06);
-  --glow-primary: rgba(8, 145, 178, 0.15);
+  --glass-border: rgba(15, 23, 42, 0.10);
+  --glow-primary: rgba(14, 116, 144, 0.15);
   --glow-secondary: rgba(139, 92, 246, 0.15);
+
+  /* Hover surface */
+  --hover-bg: #f1f5f9;
+
+  color-scheme: light;
 }
+
+/* ==========================================================================
+   LIGHT THEME — patches for components that hardcode dark-only colours.
+   Everything else reads the CSS variables above and adapts automatically.
+   ========================================================================== */
+
+/* Sonner toasts: the ghost button was white-alpha on a light surface */
+[data-theme="light"] .toast-modern [data-button] {
+  background: rgba(15, 23, 42, 0.06) !important;
+}
+
+[data-theme="light"] .toast-modern [data-button]:hover {
+  background: rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Tailwind utility surfaces built from white-alpha (bg-white/5, border-white/10)
+   collapse into invisible-on-white. Give them a dark-alpha equivalent. */
+[data-theme="light"] .bg-white\/5 { background-color: rgba(15, 23, 42, 0.04) !important; }
+[data-theme="light"] .bg-white\/10 { background-color: rgba(15, 23, 42, 0.06) !important; }
+[data-theme="light"] .border-white\/10 { border-color: rgba(15, 23, 42, 0.10) !important; }
+[data-theme="light"] .border-white\/20 { border-color: rgba(15, 23, 42, 0.16) !important; }
 
 /* LANDSCAPE & TABLET OPTIMIZATIONS */
 

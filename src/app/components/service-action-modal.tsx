@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { X, MessageCircle, Mail, Sparkles, Zap, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "../contexts/language-context";
+import { useModalA11y } from "../hooks/use-modal-a11y";
 
 interface ServiceActionModalProps {
   isOpen?: boolean;
@@ -19,7 +20,7 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
   const { language } = useLanguage();
   
   // Detect mobile for performance optimizations
-  const [isMobile, setIsMobile] = useState(() => {
+  const [, setIsMobile] = useState(() => {
     if (typeof window !== 'undefined') {
       return window.innerWidth < 768;
     }
@@ -104,18 +105,16 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
     return translations[key][language as keyof typeof translations[typeof key]] || translations[key].en;
   };
   
-  // Close on Escape key
+  // Escape, focus trap and focus restore all live in the shared hook now — this
+  // component only kept the Escape half and left focus loose behind the modal.
+  const dialogRef = useModalA11y({ isOpen: true, onClose });
+
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleEscape);
     document.body.style.overflow = 'hidden';
     return () => {
-      document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [onClose]);
+  }, []);
 
   return (
     <AnimatePresence>
@@ -136,6 +135,11 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 30 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="service-modal-title"
+          tabIndex={-1}
           className="relative bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/30 rounded-3xl w-full max-w-[95vw] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] max-h-[85vh] overflow-y-auto shadow-[0_20px_80px_rgba(0,217,255,0.4)]"
           onClick={(e) => e.stopPropagation()}
         >
@@ -160,7 +164,7 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
           </div>
 
           {/* Close Button */}
-          <button
+          <button aria-label="Close"
             onClick={onClose}
             className="absolute top-5 right-5 w-12 h-12 flex items-center justify-center rounded-xl bg-[var(--bg-secondary)]/80 hover:bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] hover:border-[var(--accent-primary)] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-all z-10 backdrop-blur-sm"
           >
@@ -203,6 +207,7 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
               </motion.h3>
 
               <motion.p
+                id="service-modal-title"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -225,7 +230,7 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               
               {/* ChatBot Option */}
-              <motion.button
+              <motion.button aria-label="Discuss in chat"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 }}
@@ -259,7 +264,7 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
               </motion.button>
 
               {/* Contact Form Option */}
-              <motion.button
+              <motion.button aria-label="Contact by email"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6 }}

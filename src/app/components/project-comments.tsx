@@ -28,7 +28,6 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
   const loadComments = async () => {
     try {
       const url = `https://${supabaseProjectId}.supabase.co/functions/v1/make-server-a62f57c7/projects/${projectId}/comments`;
-      console.log('Loading comments from:', url);
       
       const response = await fetch(url, {
         headers: {
@@ -36,11 +35,9 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
         },
       });
 
-      console.log('Comments response:', response.status, response.statusText);
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Comments data:', data);
         setComments(data.comments || []);
       } else {
         const errorData = await response.text();

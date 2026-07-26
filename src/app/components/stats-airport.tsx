@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Award, CheckCircle2, Users, TrendingUp, Flame, Star, Zap, Code2, Cpu, Boxes } from "lucide-react";
+import { Award, CheckCircle2, Users, TrendingUp, Star, Zap, Code2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "../contexts/language-context";
 

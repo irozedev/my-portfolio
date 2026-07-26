@@ -54,7 +54,7 @@ export function LegalPage({ page, onClose }: LegalPageProps) {
               <p className="text-sm text-white/80">Last updated: January 25, 2026</p>
             </div>
           </div>
-          <button
+          <button aria-label="Close"
             onClick={handleClose}
             className="p-2 hover:bg-white/20 rounded-full transition-colors"
           >

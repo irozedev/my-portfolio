@@ -381,7 +381,7 @@ export function GitHubShowcase() {
                 whileTap={{ scale: 0.98 }}
                 className={`relative text-left bg-[var(--bg-secondary)]/40 backdrop-blur-xl border-2 rounded-2xl p-5 transition-all duration-300 ${
                   index === featuredIndex
-                    ? 'border-[var(--accent-primary)] shadow-[0_0_30px_rgba(0,217,255,0.2)]'
+                    ? 'border-[var(--accent-primary)] shadow-[0_0_24px_rgba(0,217,255,0.18)]'
                     : 'border-[var(--border-color)] hover:border-[var(--accent-primary)]/50'
                 }`}
               >

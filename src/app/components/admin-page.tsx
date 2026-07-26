@@ -1,28 +1,32 @@
 import { motion } from "motion/react";
-import { ArrowLeft, Plus, Edit2, Trash2, Save, X } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, Plus, Edit2, Trash2, Save, X, ShieldAlert, LogIn } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useAuth } from "../contexts/auth-context";
+import { ModernAuthModal } from "./modern-auth-modal";
+
+// Only this account may open the admin panel. A client-side check alone is not a
+// security boundary — anything genuinely sensitive must also be enforced
+// server-side (Supabase RLS / edge-function auth check).
+const OWNER_EMAIL = "rozedev095@gmail.com";
 
 export function AdminPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState("");
+  const { user, loading } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [projects, setProjects] = useState<any[]>([]);
   const [editingProject, setEditingProject] = useState<any>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Simple password check (in production, use proper auth)
-    if (password === "admin123") {
-      setIsAuthenticated(true);
-      // Load projects from localStorage
+  const isOwner = !!user && user.email?.toLowerCase() === OWNER_EMAIL;
+
+  useEffect(() => {
+    if (!isOwner) return;
+    try {
       const saved = localStorage.getItem("portfolio-projects");
-      if (saved) {
-        setProjects(JSON.parse(saved));
-      }
-    } else {
-      alert("Incorrect password!");
+      if (saved) setProjects(JSON.parse(saved));
+    } catch {
+      setProjects([]);
     }
-  };
+  }, [isOwner]);
 
   const handleSaveProject = (project: any) => {
     let updated;
@@ -45,7 +49,15 @@ export function AdminPage() {
     }
   };
 
-  if (!isAuthenticated) {
+  if (loading) {
+    return (
+      <div className="relative min-h-screen bg-[var(--bg-primary)] flex items-center justify-center px-4">
+        <div className="w-10 h-10 rounded-full border-2 border-[var(--accent-primary)] border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isOwner) {
     return (
       <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex items-center justify-center px-4">
         <motion.div
@@ -53,42 +65,37 @@ export function AdminPage() {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md"
         >
-          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-8">
-            <h1 className="text-3xl font-bold mb-6 text-center">Admin Login</h1>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl focus:outline-none focus:border-[var(--accent-primary)] transition-colors"
-                  placeholder="Enter admin password"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full py-3 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-white font-bold rounded-xl hover:shadow-lg transition-all"
-              >
-                Login
-              </button>
-              <a
-                href="#home"
-                className="block text-center text-[var(--text-muted)] hover:text-[var(--accent-primary)] transition-colors"
-              >
-                Back to Home
-              </a>
-            </form>
-            <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
-              <p className="text-xs text-yellow-400">
-                <strong>Default Password:</strong> admin123
-              </p>
-              <p className="text-xs text-yellow-400 mt-1">
-                ⚠️ Change this in production!
-              </p>
+          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
+            <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-[var(--accent-primary)]/10 flex items-center justify-center">
+              <ShieldAlert className="w-7 h-7 text-[var(--accent-primary)]" />
             </div>
+            <h1 className="text-2xl font-bold mb-2">Restricted area</h1>
+            <p className="text-sm text-[var(--text-muted)] mb-6">
+              {user
+                ? "This account does not have access to the admin panel."
+                : "Sign in with the owner account to continue."}
+            </p>
+
+            {!user && (
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className="w-full py-3 mb-3 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:shadow-lg transition-all"
+              >
+                <LogIn className="w-5 h-5" />
+                Sign In
+              </button>
+            )}
+
+            <a
+              href="#home"
+              className="block text-center text-[var(--text-muted)] hover:text-[var(--accent-primary)] transition-colors"
+            >
+              Back to Home
+            </a>
           </div>
         </motion.div>
+
+        <ModernAuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
       </div>
     );
   }

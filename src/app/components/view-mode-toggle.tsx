@@ -38,7 +38,7 @@ const translations = {
 };
 
 export function ViewModeToggle() {
-  const { viewMode, setViewMode, isClientMode } = useViewMode();
+  const { setViewMode, isClientMode } = useViewMode();
   const { language } = useLanguage();
   const t = translations[language as keyof typeof translations] || translations.en;
   const [isHovered, setIsHovered] = useState(false);
@@ -54,7 +54,7 @@ export function ViewModeToggle() {
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
       >
-        <div className="relative flex flex-col gap-3 p-3 bg-[var(--bg-primary)]/80 backdrop-blur-xl border-2 border-[var(--border-color)] rounded-2xl shadow-[0_0_40px_rgba(0,217,255,0.2)]">
+        <div className="relative flex flex-col gap-3 p-3 bg-[var(--bg-primary)]/80 backdrop-blur-xl border-2 border-[var(--border-color)] rounded-2xl shadow-[0_0_24px_rgba(0,217,255,0.18)]">
           {/* Animated Background */}
           <motion.div
             className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#00d9ff]/10 via-purple-500/10 to-pink-500/10 opacity-50"
@@ -80,7 +80,7 @@ export function ViewModeToggle() {
             {isClientMode && (
               <motion.div
                 layoutId="active-mode-desktop"
-                className="absolute inset-0 bg-gradient-to-br from-[#00d9ff] to-cyan-400 rounded-xl shadow-[0_0_25px_rgba(0,217,255,0.7)]"
+                className="absolute inset-0 bg-gradient-to-br from-[#00d9ff] to-cyan-400 rounded-xl shadow-[0_0_24px_rgba(0,217,255,0.18)]"
                 transition={{ type: "spring", bounce: 0.25, duration: 0.7 }}
               />
             )}
@@ -148,7 +148,7 @@ export function ViewModeToggle() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}
       >
-        <div className="flex gap-2 p-2 bg-[var(--bg-primary)]/80 backdrop-blur-xl border-2 border-[var(--border-color)] rounded-xl shadow-[0_0_30px_rgba(0,217,255,0.2)]">
+        <div className="flex gap-2 p-2 bg-[var(--bg-primary)]/80 backdrop-blur-xl border-2 border-[var(--border-color)] rounded-xl shadow-[0_0_24px_rgba(0,217,255,0.18)]">
           {/* CLIENT */}
           <motion.button
             onClick={() => setViewMode('client')}
@@ -161,7 +161,7 @@ export function ViewModeToggle() {
             {isClientMode && (
               <motion.div
                 layoutId="active-mode-tablet"
-                className="absolute inset-0 bg-gradient-to-r from-[#00d9ff] to-cyan-400 rounded-lg shadow-[0_0_20px_rgba(0,217,255,0.6)]"
+                className="absolute inset-0 bg-gradient-to-r from-[#00d9ff] to-cyan-400 rounded-lg shadow-[0_0_20px_rgba(0,217,255,0.18)]"
                 transition={{ type: "spring", bounce: 0.25, duration: 0.7 }}
               />
             )}
@@ -198,7 +198,7 @@ export function ViewModeToggle() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}
       >
-        <div className="flex gap-2 p-2 bg-[var(--bg-primary)]/90 backdrop-blur-xl border-2 border-[var(--border-color)] rounded-full shadow-[0_0_30px_rgba(0,217,255,0.3)]">
+        <div className="flex gap-2 p-2 bg-[var(--bg-primary)]/90 backdrop-blur-xl border-2 border-[var(--border-color)] rounded-full shadow-[0_0_24px_rgba(0,217,255,0.18)]">
           {/* CLIENT */}
           <motion.button
             onClick={() => setViewMode('client')}
@@ -210,7 +210,7 @@ export function ViewModeToggle() {
             {isClientMode && (
               <motion.div
                 layoutId="active-mode-mobile"
-                className="absolute inset-0 bg-gradient-to-r from-[#00d9ff] to-cyan-400 rounded-full shadow-[0_0_20px_rgba(0,217,255,0.6)]"
+                className="absolute inset-0 bg-gradient-to-r from-[#00d9ff] to-cyan-400 rounded-full shadow-[0_0_20px_rgba(0,217,255,0.18)]"
                 transition={{ type: "spring", bounce: 0.25, duration: 0.7 }}
               />
             )}

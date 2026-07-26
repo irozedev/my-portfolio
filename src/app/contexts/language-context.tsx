@@ -20,6 +20,20 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>(() => {
     if (typeof window !== "undefined") {
+      // 1. ?lang= in the URL wins. index.html, sitemap.xml and seo-head.tsx all
+      //    publish hreflang alternates like https://roze.live/?lang=nl — without
+      //    honouring the param those URLs served identical English content, so
+      //    the whole hreflang cluster read as duplicate pages to crawlers.
+      const urlLang = new URLSearchParams(window.location.search).get("lang");
+      if (urlLang) {
+        const normalized = urlLang.toLowerCase().split("-")[0];
+        // 'ua' is the alias used in the published URLs; internally it's 'uk'
+        const fromUrl = normalized === "ua" ? "uk" : normalized;
+        if (["en", "uk", "nl", "ar", "es"].includes(fromUrl)) {
+          return fromUrl as Language;
+        }
+      }
+
       // Check if user has previously selected a language
       const saved = localStorage.getItem("language");
       // Validate saved language
@@ -44,15 +58,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       };
       
       const detectedLang = languageMap[langCode];
-      
-      if (detectedLang) {
-        console.log(`🌍 Auto-detected browser language: ${browserLang} → ${detectedLang}`);
-        return detectedLang;
-      }
-      
-      // Fallback to English
-      console.log(`🌍 Browser language '${browserLang}' not supported, using English`);
+      if (detectedLang) return detectedLang;
     }
+
     return "en";
   });
 
@@ -71,6 +79,23 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       }
     }
   }, [language, isRTL]);
+
+  // Arabic webfonts are ~200 KB and useless to the other four locales, so they
+  // are not in index.html. Inject them the first time someone picks Arabic;
+  // the <link> is idempotent and stays for the rest of the session.
+  useEffect(() => {
+    if (typeof document === "undefined" || language !== "ar") return;
+    const id = "arabic-fonts";
+    if (document.getElementById(id)) return;
+
+    const link = document.createElement("link");
+    link.id = id;
+    link.rel = "stylesheet";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800" +
+      "&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap";
+    document.head.appendChild(link);
+  }, [language]);
 
   const t = (key: string): string => {
     // Navigate through nested object using dot notation
@@ -102,6 +127,21 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLanguage(lang);
     if (typeof window !== "undefined") {
       localStorage.setItem("language", lang);
+
+      // Keep the URL in sync with the published hreflang alternates so a shared
+      // or crawled link reproduces the same language. replaceState keeps the
+      // hash (section anchors) and adds no history entry.
+      try {
+        const url = new URL(window.location.href);
+        if (lang === "en") {
+          url.searchParams.delete("lang"); // English is the x-default at /
+        } else {
+          url.searchParams.set("lang", lang === "uk" ? "ua" : lang);
+        }
+        window.history.replaceState(null, "", url.toString());
+      } catch {
+        /* non-fatal — language still switches */
+      }
     }
   };
 

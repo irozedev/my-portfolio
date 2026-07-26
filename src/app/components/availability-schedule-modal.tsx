@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from "motion/react";
-import { X, Calendar, Clock, CheckCircle, Zap, Award } from "lucide-react";
+import { X, Calendar, Clock, CheckCircle, Zap } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { useState } from "react";
 import { BookCallModal } from "./book-call-fixed";
+import { useModalA11y } from "../hooks/use-modal-a11y";
 
 interface AvailabilityScheduleModalProps {
   isOpen: boolean;
@@ -85,13 +86,24 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
     },
   };
 
-  const getTranslation = (key: keyof typeof translations) => {
-    return translations[key][language as keyof typeof translations[typeof key]] || translations[key].en;
+  // The `days` entry is a nested record, the rest are flat {en,uk,nl,ar,es}
+  // maps. Indexing the union directly gave TS no common signature, so narrow
+  // to a plain per-language record at the point of lookup.
+  type Localized = Record<string, string>;
+
+  const getTranslation = (key: Exclude<keyof typeof translations, "days">) => {
+    const entry = translations[key] as Localized;
+    return entry[language] || entry.en;
   };
 
   const getDay = (day: string) => {
-    return translations.days[day as keyof typeof translations.days][language as keyof typeof translations.days[typeof day]] || day;
+    const days = translations.days as Record<string, Localized>;
+    const entry = days[day];
+    if (!entry) return day;
+    return entry[language] || entry.en || day;
   };
+
+  const dialogRef = useModalA11y({ isOpen, onClose });
 
   if (!isOpen) return null;
 
@@ -115,6 +127,11 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.85, y: 10 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="availability-modal-title"
+              tabIndex={-1}
               className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] sm:w-[420px] md:w-[480px] lg:w-[540px] xl:w-[600px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/40 rounded-xl shadow-[0_20px_50px_rgba(0,217,255,0.3)] z-[100000] overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
@@ -136,7 +153,10 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                     <div className="absolute inset-0 blur-sm bg-[var(--accent-primary)]/30" />
                   </div>
                   <div>
-                    <span className="text-base font-mono font-bold text-[var(--text-primary)] uppercase tracking-wide block">
+                    <span
+                      id="availability-modal-title"
+                      className="text-base font-mono font-bold text-[var(--text-primary)] uppercase tracking-wide block"
+                    >
                       {getTranslation('title')}
                     </span>
                     <span className="text-xs font-mono text-[var(--text-muted)] block">
@@ -144,7 +164,7 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                     </span>
                   </div>
                 </div>
-                <motion.button 
+                <motion.button aria-label="Close" 
                   onClick={onClose} 
                   className="p-2 hover:bg-red-500/20 rounded-lg transition-colors group"
                   whileHover={{ scale: 1.1, rotate: 90 }}

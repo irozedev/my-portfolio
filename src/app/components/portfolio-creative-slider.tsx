@@ -79,12 +79,10 @@ export function PortfolioCreativeSlider() {
     if (isFavorite(project.id)) {
       removeFavorite(project.id);
     } else {
-      addFavorite({
-        projectId: project.id,
-        projectName: project.title,
-        projectImage: project.image,
-        type: 'project',
-      });
+      // addFavorite takes positional arguments, not an options object. Passing
+      // one object put the whole object into `projectId`, so the saved entry
+      // never matched isFavorite() and favouriting silently did nothing.
+      addFavorite(project.id, project.title, project.image, 'project');
     }
   };
 

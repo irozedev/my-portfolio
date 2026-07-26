@@ -1,7 +1,6 @@
 import { ContactSection } from "./contact-section";
 import { Footer } from "./footer";
 import { CookieBanner } from "./cookie-banner";
-import { CartButton } from "./cart-button";
 import { SEOHead } from "./seo-head";
 import { PersonalCabinet } from "./personal-cabinet";
 import { Navigation } from "./navigation";
@@ -17,11 +16,13 @@ import { GitHubShowcase } from "./github-showcase";
 import { ScrollToTopButton } from "./scroll-to-top-button";
 import { ViewModeToggle } from "./view-mode-toggle";
 import { useViewMode } from "../contexts/view-mode-context";
+import { useLanguage } from "../contexts/language-context";
 import { useState } from "react";
 
 export function MainPage() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { isClientMode, isCVMode } = useViewMode();
+  const { t } = useLanguage();
 
   // Scroll to projects section
   const handleViewWork = () => {
@@ -34,7 +35,13 @@ export function MainPage() {
   return (
     <main className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
       <SEOHead />
-      
+
+      {/* First tab stop: lets keyboard users jump past the banner and the ~20
+          navigation controls straight to the content. */}
+      <a href="#hero" className="skip-link">
+        {t("nav.skipToContent")}
+      </a>
+
       {/* Navigation */}
       <Navigation onOpenProfile={() => setIsProfileOpen(true)} />
 
@@ -118,8 +125,6 @@ export function MainPage() {
       
       <CookieBanner />
       
-      {/* Cart only in CLIENT mode */}
-      {isClientMode && <CartButton />}
       
       <PersonalCabinet isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
       

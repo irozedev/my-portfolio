@@ -1,5 +1,41 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   DESIGN TOKENS (Tailwind v4 @theme)
+   --------------------------------------------------------------------------
+   fonts.css used to redefine .font-bold / .font-black / h1…h6 with ~30
+   `!important` rules to pull every weight one notch lighter. Redefining the
+   scale here does the same thing at the source: the `font-bold` utility now
+   *emits* 600, so nothing has to be overridden afterwards.
+   ========================================================================== */
+@theme {
+  --font-weight-light: 200;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 500;
+  --font-weight-bold: 600;
+  --font-weight-extrabold: 700;
+  --font-weight-black: 700;
+
+  /* Fluid type scale — one ramp instead of six breakpoint overrides.
+     Each step interpolates between a phone and a desktop size. */
+  --text-xs: clamp(0.75rem, 0.73rem + 0.10vw, 0.8125rem);
+  --text-sm: clamp(0.875rem, 0.85rem + 0.12vw, 0.9375rem);
+  --text-base: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --text-lg: clamp(1.125rem, 1.08rem + 0.22vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.18rem + 0.35vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.38rem + 0.60vw, 1.875rem);
+  --text-3xl: clamp(1.875rem, 1.65rem + 1.10vw, 2.5rem);
+  --text-4xl: clamp(2.25rem, 1.90rem + 1.75vw, 3.25rem);
+  --text-5xl: clamp(2.75rem, 2.15rem + 3.00vw, 4.25rem);
+  --text-6xl: clamp(3.25rem, 2.30rem + 4.75vw, 5.5rem);
+
+  /* 8pt spacing rhythm. Section padding and stack gaps read from these
+     instead of ad-hoc values like `pt-36 md:pt-44`. */
+  --spacing-section: clamp(3rem, 2rem + 5vw, 6rem);
+  --spacing-stack: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+}
+
 /* Card Backgrounds - Theme adaptive */
 .card-bg {
   background: var(--bg-secondary);

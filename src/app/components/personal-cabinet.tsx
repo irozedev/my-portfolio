@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Heart, MessageSquare, Clock, TrendingUp, Sparkles, Star, Calendar, CheckCircle2, AlertCircle, Package, Code, ShoppingBag, Settings, FileText, CreditCard, Inbox, Briefcase, Download, Eye, Send } from 'lucide-react';
+import { X, Heart, MessageSquare, Clock, TrendingUp, Sparkles, Calendar, CheckCircle2, AlertCircle, Package, Code, ShoppingBag, Settings, FileText, CreditCard, Inbox, Briefcase } from 'lucide-react';
 import { useAuth } from '@/app/contexts/auth-context';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase/client';
@@ -302,7 +302,7 @@ export function PersonalCabinet({ isOpen, onClose }: PersonalCabinetProps) {
             <div className="relative h-40 sm:h-48 bg-gradient-to-br from-[#00d9ff]/20 via-purple-500/20 to-pink-500/20 border-b border-white/10 flex-shrink-0">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#00d9ff08_1px,transparent_1px),linear-gradient(to_bottom,#00d9ff08_1px,transparent_1px)] bg-[size:2rem_2rem]" />
               
-              <button
+              <button aria-label="Close"
                 onClick={onClose}
                 className="absolute top-4 sm:top-6 right-4 sm:right-6 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors z-10"
               >

@@ -31,8 +31,7 @@ export function AvailabilityProvider({ children }: { children: ReactNode }) {
       const now = new Date();
       const cetTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Brussels" }));
       const cetHour = cetTime.getHours();
-      const cetMinutes = cetTime.getMinutes();
-      
+
       // Available between 6:00 and 12:00 CET
       const available = cetHour >= 6 && cetHour < 12;
       
@@ -41,7 +40,6 @@ export function AvailabilityProvider({ children }: { children: ReactNode }) {
       if (available) {
         // Calculate how much time left in availability window
         const hoursLeft = 11 - cetHour;
-        const minutesLeft = 60 - cetMinutes;
         
         if (hoursLeft > 3) {
           setDetailedStatus({
@@ -90,7 +88,6 @@ export function AvailabilityProvider({ children }: { children: ReactNode }) {
         }
       }
       
-      console.log('[Availability] CET Time:', `${cetHour}:${cetMinutes.toString().padStart(2, '0')}`, 'Available:', available);
     };
 
     checkAvailability();

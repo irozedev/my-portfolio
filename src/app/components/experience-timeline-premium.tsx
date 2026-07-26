@@ -200,7 +200,7 @@ export function ExperienceTimelinePremium() {
                       }}
                     >
                       {/* Outer Ring */}
-                      <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${exp.gradient} p-0.5 shadow-[0_0_20px_rgba(0,217,255,0.4)]`}>
+                      <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${exp.gradient} p-0.5 shadow-[0_0_20px_rgba(0,217,255,0.18)]`}>
                         {/* Inner Circle */}
                         <div className="w-full h-full rounded-full bg-[var(--bg-primary)] flex items-center justify-center">
                           <Icon className="w-6 h-6 text-cyan-400" />
@@ -335,7 +335,7 @@ export function ExperienceTimelinePremium() {
                       }}
                     >
                       {/* Outer Ring */}
-                      <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${exp.gradient} p-1 shadow-[0_0_30px_rgba(0,217,255,0.4)]`}>
+                      <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${exp.gradient} p-1 shadow-[0_0_24px_rgba(0,217,255,0.18)]`}>
                         {/* Inner Circle */}
                         <div className="w-full h-full rounded-full bg-[var(--bg-primary)] flex items-center justify-center">
                           <Icon className="w-7 h-7 text-cyan-400" />

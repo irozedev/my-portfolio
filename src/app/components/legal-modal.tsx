@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Shield, FileText, Info } from 'lucide-react';
 import { useLanguage } from '../contexts/language-context';
+import { useModalA11y } from '../hooks/use-modal-a11y';
 
 interface LegalModalProps {
   type: 'privacy' | 'terms' | 'imprint' | null;
@@ -9,6 +10,7 @@ interface LegalModalProps {
 
 export function LegalModal({ type, onClose }: LegalModalProps) {
   const { t } = useLanguage();
+  const dialogRef = useModalA11y({ isOpen: type !== null, onClose });
 
   if (!type) return null;
 
@@ -61,7 +63,7 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
               <ul className="list-disc list-inside text-[var(--text-secondary)] space-y-2">
                 <li>Right to access your personal data</li>
                 <li>Right to rectification of inaccurate data</li>
-                <li>Right to erasure ("right to be forgotten")</li>
+                <li>Right to erasure (&ldquo;right to be forgotten&rdquo;)</li>
                 <li>Right to data portability</li>
                 <li>Right to withdraw consent</li>
               </ul>
@@ -103,7 +105,7 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
             <section>
               <h3 className="text-xl font-bold text-[var(--text-primary)] mb-3">4. Disclaimer</h3>
               <p className="text-[var(--text-secondary)] leading-relaxed">
-                This portfolio is provided "as is" without warranties. Project showcases are for demonstration purposes and may not reflect current live implementations.
+                This portfolio is provided &ldquo;as is&rdquo; without warranties. Project showcases are for demonstration purposes and may not reflect current live implementations.
               </p>
             </section>
 
@@ -198,14 +200,19 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="legal-modal-title"
+            tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
-            className="bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/30 rounded-3xl w-full max-w-4xl shadow-[0_0_100px_rgba(0,217,255,0.2)] my-8 relative"
+            className="bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/30 rounded-3xl w-full max-w-4xl shadow-[0_0_24px_rgba(0,217,255,0.18)] my-8 relative"
           >
             {/* Gradient Glow */}
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[var(--accent-primary)]/10 via-transparent to-purple-500/10 pointer-events-none" />
 
             {/* Close Button */}
-            <button
+            <button aria-label="Close"
               onClick={onClose}
               className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 sm:p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all z-10 group"
             >
@@ -220,7 +227,7 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
                   <Icon className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-500 bg-clip-text text-transparent">
+                  <h2 id="legal-modal-title" className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-500 bg-clip-text text-transparent">
                     {getTitle()}
                   </h2>
                   <p className="text-sm text-[var(--text-muted)] mt-1">

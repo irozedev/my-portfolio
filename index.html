@@ -5,22 +5,43 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- One request for both faces, in the document head so it starts
+         immediately instead of waiting on the CSS bundle to parse an @import.
+         Space Grotesk backs --font-display (headings); Inter backs body text.
+         Arabic faces load on demand, see language-context.tsx. -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
     <!-- Primary Meta Tags -->
     <title>Stepan Roze | Front-End / JavaScript Developer — React, Vue, Next.js, TypeScript</title>
     <meta name="title" content="Stepan Roze | Front-End / JavaScript Developer — React, Vue, Next.js, TypeScript" />
     <meta name="description" content="Front-End Developer with 8+ years of experience — e-commerce (childrensalon.com, vogacloset.com) and banking systems. React, Vue, Next.js, TypeScript. Based in Belgium, available for freelance projects." />
-    <meta name="keywords" content="Stepan Roze, Степан Розе, Front-End Developer, React Developer, TypeScript Developer, Vue.js Developer, Next.js Developer, Web Developer Belgium, Freelance Developer, розробник React, веб-розробник, Belgian developer, E-commerce development, Portfolio Stepan Roze, Webontwikkelaar Vlaanderen, Webontwikkelaar België, Front-end developer Antwerpen, React developer Gent, Web developer Hasselt, Freelance developer Brussel, Webdevelopment Vlaanderen, Website bouwen België, Webdesign Antwerpen, Freelance programmeur België, Zelfstandige developer Vlaanderen, IT consultant België" />
+    <!-- Belgium / EU first: the local Dutch-language terms carry the commercial
+         intent. The brand name follows; Cyrillic terms are kept only so the
+         name itself is findable, not as a target market. -->
+    <meta name="keywords" content="Webontwikkelaar Vlaanderen, Webontwikkelaar België, Front-end developer Antwerpen, React developer Antwerpen, Web developer Gent, Freelance developer Brussel, Webdevelopment Vlaanderen, Website laten maken België, Webdesign Antwerpen, Freelance programmeur België, Zelfstandige developer Vlaanderen, IT consultant België, Webshop laten maken Vlaanderen, Front-End Developer Belgium, React Developer Belgium, TypeScript Developer, Vue.js Developer, Next.js Developer, Freelance Web Developer Europe, E-commerce development Belgium, Stepan Roze, Степан Розе" />
     <meta name="author" content="Stepan Roze" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://roze.live/" />
     
-    <!-- Alternate Language Versions -->
-    <link rel="alternate" hreflang="en" href="https://roze.live/?lang=en" />
+    <!-- Alternate Language Versions.
+         English is served at the bare origin (and is the x-default), so its
+         alternate points there rather than at ?lang=en — otherwise / and
+         /?lang=en are two URLs with identical content.
+         The ?region= variants were dropped: nothing in the app reads that
+         param, so nl-BE and nl-NL resolved to the same page. -->
+    <link rel="alternate" hreflang="en" href="https://roze.live/" />
     <link rel="alternate" hreflang="uk" href="https://roze.live/?lang=ua" />
-    <link rel="alternate" hreflang="nl-BE" href="https://roze.live/?lang=nl&region=be" />
-    <link rel="alternate" hreflang="nl-NL" href="https://roze.live/?lang=nl&region=nl" />
+    <link rel="alternate" hreflang="nl-BE" href="https://roze.live/?lang=nl" />
     <link rel="alternate" hreflang="nl" href="https://roze.live/?lang=nl" />
     <link rel="alternate" hreflang="ar" href="https://roze.live/?lang=ar" />
     <link rel="alternate" hreflang="es" href="https://roze.live/?lang=es" />
@@ -34,9 +55,12 @@
     <meta property="og:image" content="https://roze.live/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Stepan Roze — Front-End / JavaScript Developer" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="uk_UA" />
-    <meta property="og:locale:alternate" content="nl_NL" />
+    <meta property="og:locale:alternate" content="nl_BE" />
+    <meta property="og:locale:alternate" content="ar_SA" />
+    <meta property="og:locale:alternate" content="es_ES" />
     <meta property="og:site_name" content="Stepan Roze Portfolio" />
     
     <!-- Twitter Card -->
@@ -45,6 +69,7 @@
     <meta name="twitter:title" content="Stepan Roze | Front-End / JavaScript Developer — React, Vue, Next.js, TypeScript" />
     <meta name="twitter:description" content="Front-End Developer with 8+ years of experience — e-commerce (childrensalon.com, vogacloset.com) and banking systems. React, Vue, Next.js, TypeScript. Based in Belgium, available for freelance projects." />
     <meta name="twitter:image" content="https://roze.live/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Stepan Roze — Front-End / JavaScript Developer" />
     
     <!-- Additional SEO Meta Tags -->
     <meta name="theme-color" content="#00d9ff" />
@@ -58,10 +83,10 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json" />
     
-    <!-- Geographic Meta Tags -->
-    <meta name="geo.region" content="BE" />
-    <meta name="geo.placename" content="Belgium" />
-    <meta name="geo.region" content="BE-VLG" />
+    <!-- Geographic Meta Tags — one value per name. The duplicated geo.region /
+         geo.placename pair (BE + BE-VLG, Belgium + Antwerp) was ambiguous;
+         keep the specific one. Must match the JSON-LD blocks and seo-head.tsx. -->
+    <meta name="geo.region" content="BE-VAN" />
     <meta name="geo.placename" content="Antwerp, Flanders" />
     <meta name="geo.position" content="51.2194;4.4025" />
     <meta name="ICBM" content="51.2194, 4.4025" />
@@ -181,7 +206,7 @@
         "opens": "06:00",
         "closes": "12:00"
       },
-      "areaServed": ["BE", "NL", "UA", "Worldwide"],
+      "areaServed": ["BE", "NL", "LU", "DE", "FR", "EU"],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Development Services",
@@ -409,6 +434,22 @@
     </script>
     
     <script>
+      // Apply the saved theme before first paint so light-theme users don't get
+      // a flash of the dark palette. Must stay in sync with theme-context.tsx.
+      (function() {
+        try {
+          var t = localStorage.getItem('theme') === 'light' ? 'light' : 'dark';
+          var root = document.documentElement;
+          root.setAttribute('data-theme', t);
+          root.classList.add(t);
+          root.style.colorScheme = t;
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', t === 'light' ? '#ffffff' : '#0a0a0a');
+        } catch (e) {}
+      })();
+    </script>
+
+    <script>
       // Prevent double-tap zoom on iOS (lightweight)
       (function() {
         let lastTouchEnd = 0;
@@ -424,6 +465,20 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <h1>Stepan Roze — Front-End / JavaScript Developer</h1>
+      <p>
+        Front-End / JavaScript Developer with 8+ years of commercial experience
+        building e-commerce and enterprise web applications — React, TypeScript,
+        Vue, Next.js, Node.js and Magento. Based in Antwerp, Belgium and
+        available for freelance projects.
+      </p>
+      <p>
+        Contact: <a href="mailto:rozedev095@gmail.com">rozedev095@gmail.com</a> ·
+        GitHub: <a href="https://github.com/irozedev">@irozedev</a>
+      </p>
+      <p>This portfolio needs JavaScript enabled to run.</p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

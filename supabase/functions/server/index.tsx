@@ -6,10 +6,24 @@ import * as kv from "./kv_store.tsx";
 
 const app = new Hono();
 
-// Create Supabase client with service role key
-const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? 'https://saeohtefpfuzzajfduad.supabase.co';
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhZW9odGVwZnB1enphamZkdWFkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTE5ODM2MSwiZXhwIjoyMDg0Nzc0MzYxfQ.iHvCGrgYLwVRJfXB5lZL16cNiEJaRKPjOl2xJ_OrKtk';
-const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhZW9odGVwZnB1enphamZkdWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxOTgzNjEsImV4cCI6MjA4NDc3NDM2MX0.bxKkFIXrqVzRVU72E_zZHVGkWuVF_hyJVqvdYrRls9U';
+// Create Supabase client with service role key.
+// NEVER inline these values as fallbacks — the service_role key bypasses RLS and
+// this file lives in a public git repo. Supabase injects all three automatically
+// into every edge function; fail loudly if they are somehow missing.
+function requiredEnv(name: string): string {
+  const value = Deno.env.get(name);
+  if (!value) {
+    throw new Error(
+      `Missing required environment variable ${name}. ` +
+      `Set it in Supabase dashboard → Edge Functions → Secrets.`,
+    );
+  }
+  return value;
+}
+
+const supabaseUrl = requiredEnv('SUPABASE_URL');
+const supabaseServiceKey = requiredEnv('SUPABASE_SERVICE_ROLE_KEY');
+const supabaseAnonKey = requiredEnv('SUPABASE_ANON_KEY');
 
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 

@@ -1,0 +1,29 @@
+# Line endings
+#
+# The machine has core.autocrlf=true, so without this file every checkout
+# rewrites LF files to CRLF and git prints a "LF will be replaced by CRLF"
+# warning for each one. Normalise to LF in the repository AND in the working
+# tree so the two never disagree again.
+* text=auto eol=lf
+
+# Windows-only files that genuinely want CRLF
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binaries — never touch these
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.eot  binary
+
+# Generated: collapse in diffs and exclude from language stats
+pnpm-lock.yaml linguist-generated=true -diff
+dist/**        linguist-generated=true

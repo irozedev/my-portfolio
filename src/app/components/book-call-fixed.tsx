@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Calendar, Clock, Video, Phone, X, ChevronLeft, Loader2, ArrowRight, CheckCircle, Sparkles, Mail, User as UserIcon, MessageSquare, Zap } from "lucide-react";
+import { Calendar, Video, Phone, X, ChevronLeft, Loader2, ArrowRight, CheckCircle, Mail, User as UserIcon, MessageSquare, Zap } from "lucide-react";
 import { format, addDays, startOfDay, isWeekend } from "date-fns";
 import { useLanguage } from "../contexts/language-context";
 import { useAuth } from "../contexts/auth-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
+import { useModalA11y } from "../hooks/use-modal-a11y";
 
 interface BookCallModalProps {
   isOpen: boolean;
@@ -158,6 +159,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
   const { language } = useLanguage();
   const { user } = useAuth();
   const t = translations[language as keyof typeof translations] || translations.en;
+  const dialogRef = useModalA11y({ isOpen, onClose });
 
   const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
@@ -254,7 +256,6 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
     }
   };
 
-  const stepLabels = [t.step1, t.step2, t.step3, t.step4];
   const isRTL = language === "ar";
 
   return (
@@ -268,7 +269,12 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
           onClick={onClose}
         >
           <motion.div
-            className="bg-[var(--bg-primary)] border-t-2 sm:border-2 border-[#00d9ff]/30 rounded-t-3xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90dvh] overflow-hidden shadow-[0_0_80px_rgba(0,217,255,0.15)] flex flex-col"
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="book-call-title"
+            tabIndex={-1}
+            className="bg-[var(--bg-primary)] border-t-2 sm:border-2 border-[#00d9ff]/30 rounded-t-3xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90dvh] overflow-hidden shadow-[0_0_24px_rgba(0,217,255,0.15)] flex flex-col"
             initial={{ y: "100%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
@@ -284,15 +290,15 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-color)]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-[#00d9ff] to-cyan-400 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,217,255,0.3)]">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#00d9ff] to-cyan-400 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,217,255,0.18)]">
                   <Calendar className="w-5 h-5 text-black" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-black text-[var(--text-primary)] font-mono tracking-tight">{t.title}</h2>
+                  <h2 id="book-call-title" className="text-lg font-black text-[var(--text-primary)] font-mono tracking-tight">{t.title}</h2>
                   <p className="text-xs text-[var(--text-muted)] font-mono">{t.free}</p>
                 </div>
               </div>
-              <button onClick={onClose} className="p-2.5 hover:bg-[var(--bg-secondary)] rounded-xl transition-colors active:scale-90">
+              <button aria-label="Close" onClick={onClose} className="p-2.5 hover:bg-[var(--bg-secondary)] rounded-xl transition-colors active:scale-90">
                 <X className="w-5 h-5 text-[var(--text-muted)]" />
               </button>
             </div>
@@ -553,7 +559,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                       <motion.button
                         onClick={handleSubmit}
                         disabled={loading || !email}
-                        className="flex-1 py-3.5 bg-gradient-to-r from-[#00d9ff] to-cyan-400 text-black font-black rounded-xl text-sm font-mono disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,217,255,0.3)] hover:shadow-[0_0_30px_rgba(0,217,255,0.5)]"
+                        className="flex-1 py-3.5 bg-gradient-to-r from-[#00d9ff] to-cyan-400 text-black font-black rounded-xl text-sm font-mono disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,217,255,0.18)] hover:shadow-[0_0_30px_rgba(0,217,255,0.5)]"
                         whileTap={{ scale: loading ? 1 : 0.95 }}
                       >
                         {loading ? (

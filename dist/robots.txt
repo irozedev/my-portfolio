@@ -1,40 +1,25 @@
-# roze.live - Robots.txt
-# Stepan Roze - Full-Stack Developer Portfolio
+# roze.live — Robots.txt
+# Stepan Roze — Front-End / JavaScript Developer portfolio
+
+# A crawler obeys exactly ONE group: the most specific User-agent match.
+# Groups are never merged. The previous file listed "User-agent: Googlebot /
+# Allow: /" on its own, which meant Googlebot matched that group and ignored
+# every Disallow below — and "Crawl-delay: 1" applied only to YandexBot,
+# the last group in the file. One "*" group avoids both traps.
 
 User-agent: *
 Allow: /
-Disallow: /admin/
 Disallow: /api/
 Disallow: /private/
-Disallow: /*.json$
-Disallow: /*?*utm_source=
-Disallow: /*?*utm_medium=
-Disallow: /*?*utm_campaign=
-
-# Allow all major search engines
-User-agent: Googlebot
-Allow: /
-
-User-agent: Googlebot-Image
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Slurp
-Allow: /
-
-User-agent: DuckDuckBot
-Allow: /
-
-User-agent: Baiduspider
-Allow: /
-
-User-agent: YandexBot
-Allow: /
-
-# Crawl-delay for respectful crawling
 Crawl-delay: 1
 
-# Sitemap location
+# NOTE: a blanket "Disallow: /*.json$" used to live here. It blocked
+# /manifest.json and /site.webmanifest, which Google needs for PWA and
+# rich-result checks. The utm_* rules were also dropped — tracking params are
+# handled by the self-referencing canonical, and blocking them stops Google
+# from crawling shared campaign links at all.
+#
+# /#admin is a hash route. Fragments are never sent to the server, so robots.txt
+# cannot block it; it is gated on the owner account inside the app instead.
+
 Sitemap: https://roze.live/sitemap.xml

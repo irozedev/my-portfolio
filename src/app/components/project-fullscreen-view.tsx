@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { X, ExternalLink, Github, Calendar, Users, Zap, Star, Clock, ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react';
+import { X, ExternalLink, Github, Calendar, Users, Zap, ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react';
 import { ProjectComments } from './project-comments';
 import { ProjectReactions } from './project-reactions';
 import { useEffect, useState } from 'react';
@@ -45,12 +45,18 @@ export function ProjectFullscreenView({
   const [scrolled, setScrolled] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
 
-  if (!project) return null;
-
-  // Generate project ID if not provided
-  const projectId = project.id || project.title.toLowerCase().replace(/\\s+/g, '-');
+  // NOTE: no early return above this line. `if (!project) return null` used to
+  // sit here, which skipped the two effects below whenever project was null —
+  // React then saw a different number of hooks between renders and threw
+  // "Rendered more hooks than during the previous render". The guard now lives
+  // after every hook, and each effect no-ops when there is no project.
+  const projectId = project
+    ? project.id || project.title.toLowerCase().replace(/\s+/g, '-')
+    : '';
 
   useEffect(() => {
+    if (!project) return;
+
     // Save current scroll position BEFORE locking
     const scrollY = window.scrollY;
     const scrollX = window.scrollX;
@@ -84,7 +90,9 @@ export function ProjectFullscreenView({
       
       window.removeEventListener('keydown', handleEscape);
     };
-  }, [onClose, onNext, onPrev, hasNext, hasPrev]);
+  }, [project, onClose, onNext, onPrev, hasNext, hasPrev]);
+
+  if (!project) return null;
 
   // Only update state when crossing thresholds — avoids a re-render of this
   // large modal on every scroll frame (which made mobile scrolling janky).
@@ -194,7 +202,7 @@ export function ProjectFullscreenView({
             </div>
 
             {/* Close Button - Mobile */}
-            <motion.button
+            <motion.button aria-label="Close"
               onClick={onClose}
               className="sm:hidden p-2.5 bg-red-500/10 backdrop-blur-xl border-2 border-red-500/30 hover:border-red-500/60 rounded-xl transition-all active:scale-95"
               whileTap={{ scale: 0.9 }}
@@ -214,6 +222,10 @@ export function ProjectFullscreenView({
             <img
               src={project.image}
               alt={project.title}
+              // This is the LCP element once the fullscreen view opens, so it
+              // must not be lazy — the view only mounts on demand anyway.
+              fetchPriority="high"
+              decoding="async"
               className="w-full h-full object-cover object-top"
               onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
             />

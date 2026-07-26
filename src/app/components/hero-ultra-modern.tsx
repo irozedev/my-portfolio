@@ -109,7 +109,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                       {t("hero.bookCall")}
                     </span>
                   </button>
-                  <button
+                  <button aria-label="View my work"
                     onClick={onViewWork}
                     className="group px-8 py-4 bg-[var(--bg-secondary)] text-[var(--text-primary)] font-bold rounded-xl border-2 border-[var(--border-color)] hover:border-[var(--accent-primary)] transition-all active:scale-95"
                   >
@@ -192,7 +192,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
 
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 px-2 sm:px-0">
-                <button
+                <button aria-label="View my work"
                   onClick={onViewWork}
                   className="group px-8 py-4 bg-[var(--bg-secondary)] text-[var(--text-primary)] font-bold rounded-xl border-2 border-[var(--accent-primary)]/30 hover:border-[var(--accent-primary)] transition-all active:scale-95"
                 >

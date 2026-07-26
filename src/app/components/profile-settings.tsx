@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { User, MapPin, Phone, Globe, Save, CreditCard, Building2, Mail } from 'lucide-react';
+import { User, MapPin, Save, CreditCard } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/contexts/auth-context';
 import { supabase } from '@/utils/supabase/client';
@@ -331,7 +331,7 @@ export function ProfileSettings() {
           onClick={handleSave}
           disabled={loading}
           size="lg"
-          className="w-full bg-gradient-to-r from-[#00d9ff] to-cyan-400 hover:from-[#00b8dd] hover:to-cyan-300 text-black font-bold py-4 shadow-[0_0_30px_rgba(0,217,255,0.3)] hover:shadow-[0_0_50px_rgba(0,217,255,0.6)] transition-all duration-300 group"
+          className="w-full bg-gradient-to-r from-[#00d9ff] to-cyan-400 hover:from-[#00b8dd] hover:to-cyan-300 text-black font-bold py-4 shadow-[0_0_24px_rgba(0,217,255,0.18)] hover:shadow-[0_0_50px_rgba(0,217,255,0.6)] transition-all duration-300 group"
         >
           {loading ? (
             <>

@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/auth-context";
 import { useLanguage } from "../contexts/language-context";
 import { toast } from "sonner";
 import { lockScroll, unlockScroll } from "../../utils/scroll-lock";
+import { useModalA11y } from "../hooks/use-modal-a11y";
 
 interface ModernAuthModalProps {
   isOpen: boolean;
@@ -50,6 +51,10 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
     }
   };
 
+  // Escape to close, focus trapped inside, focus restored to the trigger.
+  // Hook must run before the early return so its call order never changes.
+  const dialogRef = useModalA11y({ isOpen, onClose: handleClose });
+
   if (!isOpen) return null;
 
   return (
@@ -66,6 +71,11 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           transition={{ type: "spring", duration: 0.5 }}
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="auth-modal-title"
+          tabIndex={-1}
           onClick={(e) => e.stopPropagation()}
           className="relative w-full max-w-[95vw] sm:max-w-md md:max-w-lg lg:max-w-xl"
         >
@@ -102,7 +112,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
 
             {/* Close Button */}
             {!loading && (
-              <button
+              <button aria-label="Close"
                 onClick={handleClose}
                 className="absolute top-4 right-4 z-10 p-2 bg-[var(--bg-secondary)]/50 hover:bg-[var(--bg-secondary)] rounded-full transition-colors group"
               >
@@ -122,6 +132,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
               </motion.div>
 
               <motion.h2
+                id="auth-modal-title"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}

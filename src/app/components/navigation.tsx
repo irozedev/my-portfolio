@@ -147,7 +147,11 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
   }, [showLangMenu, showUserMenu]);
 
   const handleSignOut = async () => {
-    try { await signOut(); } catch {}
+    try {
+      await signOut();
+    } catch (err) {
+      console.error('Sign out failed', err);
+    }
     setShowUserMenu(false);
     setIsMobileMenuOpen(false);
   };
@@ -255,7 +259,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               {/* Language Selector */}
               <div id="language-selector" className="relative language-selector">
                 <button
-                  onClick={() => setShowLangMenu(!showLangMenu)}
+                  onClick={() => { setShowLangMenu(!showLangMenu); setShowUserMenu(false); }}
                   className="p-2 hover:bg-[var(--bg-secondary)] rounded-md transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-lg">{currentLang.flag}</span>
@@ -290,6 +294,67 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               >
                 {theme === "dark" ? <Sun className="w-5 h-5 text-[var(--text-secondary)]" /> : <Moon className="w-5 h-5 text-[var(--text-secondary)]" />}
               </button>
+
+              {/* Sign In (not logged in) */}
+              {!user && !loading && (
+                <button
+                  onClick={() => setShowAuthModal(true)}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors"
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span>{t('auth.signIn')}</span>
+                </button>
+              )}
+
+              {/* User menu (logged in) */}
+              {user && !loading && (
+                <div className="relative user-menu">
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center gap-2 p-1 pr-2 rounded-md hover:bg-[var(--bg-secondary)] transition-colors"
+                    aria-label="Account menu"
+                  >
+                    <span className="w-8 h-8 rounded-full overflow-hidden border-2 border-[var(--accent-primary)]/30 flex-shrink-0">
+                      {user.user_metadata?.avatar_url || user.user_metadata?.picture ? (
+                        <img
+                          src={user.user_metadata.avatar_url || user.user_metadata.picture}
+                          alt=""
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span className="w-full h-full bg-gradient-to-br from-[var(--accent-primary)] to-purple-500 flex items-center justify-center">
+                          <User className="w-4 h-4 text-white" />
+                        </span>
+                      )}
+                    </span>
+                    <ChevronDown className={`w-3.5 h-3.5 text-[var(--text-muted)] transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {showUserMenu && (
+                    <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} mt-2 w-56 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg shadow-xl overflow-hidden z-[100000]`}>
+                      <div className="px-3 py-2.5 border-b border-[var(--border-color)]">
+                        <p className="text-sm font-bold text-[var(--text-primary)] truncate">
+                          {user.user_metadata?.name || 'User'}
+                        </p>
+                        <p className="text-xs text-[var(--text-muted)] truncate">{user.email}</p>
+                      </div>
+                      <button
+                        onClick={() => { onOpenProfile(); setShowUserMenu(false); }}
+                        className={`w-full px-3 py-2.5 ${isRTL ? 'text-right' : 'text-left'} text-sm text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors`}
+                      >
+                        Profile
+                      </button>
+                      <button
+                        onClick={handleSignOut}
+                        className={`w-full px-3 py-2.5 ${isRTL ? 'text-right' : 'text-left'} text-sm text-red-400 hover:bg-red-500/10 transition-colors`}
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* CTA — Terminal-style "Start Project" */}
               <a
@@ -414,7 +479,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
             {/* Menu Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-color)]">
               <span className="font-mono text-sm text-[var(--text-muted)]">// menu</span>
-              <button onClick={closeMobileMenu} className="p-2 hover:bg-[var(--bg-secondary)] rounded-md active:scale-90 transition-transform">
+              <button aria-label="Close" onClick={closeMobileMenu} className="p-2 hover:bg-[var(--bg-secondary)] rounded-md active:scale-90 transition-transform">
                 <X className="w-5 h-5 text-[var(--text-primary)]" />
               </button>
             </div>

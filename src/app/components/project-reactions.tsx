@@ -211,7 +211,7 @@ export function ProjectReactions({ projectId, compact = false }: ProjectReaction
                 </motion.button>
 
                 <p className="text-xs text-[var(--text-muted)] mt-4">
-                  We'll never post without your permission
+                  We&rsquo;ll never post without your permission
                 </p>
               </div>
             </motion.div>

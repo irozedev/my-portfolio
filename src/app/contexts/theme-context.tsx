@@ -22,40 +22,33 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const root = document.documentElement;
-      
+
       // Remove both classes first
       root.classList.remove("light", "dark");
-      
-      // Add the current theme class
+
+      // Add the current theme class (Tailwind's `dark:` variant hooks onto this)
       root.classList.add(theme);
-      
+
+      // The full palettes live in src/styles/theme.css under `:root` (dark) and
+      // `[data-theme="light"]`. Drive them from this attribute instead of
+      // setting a handful of inline vars here — inline styles on <html> beat
+      // every stylesheet rule, so a partial inline palette used to leave the
+      // remaining vars (--bg-tertiary, --text-muted, --glass-*, --glow-*,
+      // --shadow-color, --availability-*) stuck on their dark values in light
+      // mode. That's what made the light theme look broken.
+      root.setAttribute("data-theme", theme);
+
+      // Keep the browser chrome (mobile address bar) in sync with the theme
+      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute("content", theme === "light" ? "#ffffff" : "#0a0a0a");
+      }
+
+      // Let the UA style native widgets (scrollbars, form controls) correctly
+      root.style.colorScheme = theme;
+
       // Save to localStorage
       localStorage.setItem("theme", theme);
-      
-      // Apply theme-specific colors
-      if (theme === "light") {
-        root.style.setProperty("--bg-primary", "#ffffff");
-        root.style.setProperty("--bg-secondary", "#f5f5f5");
-        root.style.setProperty("--text-primary", "#0a0a0a");
-        root.style.setProperty("--text-secondary", "#666666");
-        root.style.setProperty("--border-color", "#e5e5e5");
-        root.style.setProperty("--accent-primary", "#00d9ff");
-        root.style.setProperty("--accent-secondary", "#0099ff");
-        root.style.setProperty("--card-bg", "#ffffff");
-        root.style.setProperty("--card-border", "#e5e5e5");
-        root.style.setProperty("--hover-bg", "#f8f8f8");
-      } else {
-        root.style.setProperty("--bg-primary", "#0a0a0a");
-        root.style.setProperty("--bg-secondary", "#1a1a1a");
-        root.style.setProperty("--text-primary", "#ffffff");
-        root.style.setProperty("--text-secondary", "#a0a0a0");
-        root.style.setProperty("--border-color", "#2a2a2a");
-        root.style.setProperty("--accent-primary", "#00d9ff");
-        root.style.setProperty("--accent-secondary", "#0099ff");
-        root.style.setProperty("--card-bg", "#0f0f0f");
-        root.style.setProperty("--card-border", "#2a2a2a");
-        root.style.setProperty("--hover-bg", "#1f1f1f");
-      }
     }
   }, [theme]);
 

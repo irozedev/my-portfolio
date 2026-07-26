@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { Code2, Database, Zap, Box, Cpu, Terminal, Layers, GitBranch, Globe } from "lucide-react";
+import { Code2, Database, Box, Cpu, Terminal, Layers, GitBranch, Globe } from "lucide-react";
 import { useState } from "react";
 
 interface Skill {
@@ -14,7 +14,7 @@ interface Skill {
 
 const skills: Skill[] = [
   // Frontend
-  { name: "React", icon: Code2, category: "Frontend", level: 95, color: "#00d9ff", glow: "shadow-[0_0_30px_rgba(0,217,255,0.6)]", years: "5+ yrs" },
+  { name: "React", icon: Code2, category: "Frontend", level: 95, color: "#00d9ff", glow: "shadow-[0_0_24px_rgba(0,217,255,0.18)]", years: "5+ yrs" },
   { name: "Vue.js", icon: Layers, category: "Frontend", level: 90, color: "#42b883", glow: "shadow-[0_0_30px_rgba(66,184,131,0.6)]", years: "3+ yrs" },
   { name: "TypeScript", icon: Terminal, category: "Frontend", level: 92, color: "#3178c6", glow: "shadow-[0_0_30px_rgba(49,120,198,0.6)]", years: "4+ yrs" },
   { name: "Next.js", icon: Box, category: "Frontend", level: 88, color: "#ffffff", glow: "shadow-[0_0_30px_rgba(255,255,255,0.4)]", years: "3+ yrs" },
@@ -50,7 +50,7 @@ export function SkillsFuturistic() {
             onClick={() => setSelectedCategory(category)}
             className={`relative px-4 py-2 font-mono text-xs font-bold rounded-lg border-2 transition-all overflow-hidden ${
               selectedCategory === category
-                ? 'border-[var(--accent-primary)] text-black bg-[var(--accent-primary)] shadow-[0_0_30px_rgba(0,217,255,0.5)]'
+                ? 'border-[var(--accent-primary)] text-black bg-[var(--accent-primary)] shadow-[0_0_24px_rgba(0,217,255,0.18)]'
                 : 'border-[var(--glass-border)] text-[var(--text-muted)] bg-[var(--glass-bg)] hover:border-[var(--accent-primary)]/50'
             }`}
             whileHover={{ scale: 1.05 }}

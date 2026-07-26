@@ -11,14 +11,20 @@ const betaTranslations = {
 };
 
 export function BetaBanner() {
-  const { language, isRTL } = useLanguage();
-  
+  const { language } = useLanguage();
+
   // Get translated message
   const message = betaTranslations[language as keyof typeof betaTranslations] || betaTranslations.en;
-  
+
   // Create long repeating string for seamless animation
   const repeatedMessage = Array(10).fill(message).join("");
-  
+
+  // Arabic is a cursive script: `letter-spacing` breaks the joins between
+  // letters, `text-transform: uppercase` does nothing, and the generic
+  // `monospace` family has no Arabic glyphs — together they rendered the ticker
+  // as disconnected boxes. Use a proper Arabic-capable stack and drop both.
+  const isArabic = language === "ar";
+
   return (
     <div id="beta-banner" className="fixed top-0 left-0 right-0 z-[10000] bg-[#1a1a1a] border-b-2 border-[#ff9500] overflow-hidden">
       {/* Main content container */}
@@ -33,26 +39,39 @@ export function BetaBanner() {
           <Wrench className="w-5 h-5 md:w-6 md:h-6 text-black" strokeWidth={2.5} />
         </div>
 
-        {/* Scrolling text - CSS animation instead of motion for performance */}
-        <div className="absolute inset-0 flex items-center overflow-hidden" style={{ direction: 'ltr' }}>
-          <div
-            className="flex items-center whitespace-nowrap banner-scroll"
-            style={{ 
-              paddingLeft: '4rem',
-              paddingRight: '4rem',
-            }}
-          >
-            <span 
-              className="font-mono text-sm md:text-base font-bold uppercase"
-              style={{
-                color: '#ff9500',
-                textShadow: '0 0 10px rgba(255, 149, 0, 0.6)',
-                letterSpacing: '0.15em',
-                fontFamily: 'monospace',
-              }}
-            >
-              {repeatedMessage}
-            </span>
+        {/* Scrolling text — CSS animation instead of motion for performance.
+            The track holds exactly TWO identical halves, so translateX(-50%)
+            lands precisely on a repeat boundary and the loop is seamless.
+            The old markup had one padded span, so -50% cut mid-message and the
+            ticker visibly jumped once per cycle. Padding now lives on the
+            wrapper, where it can't skew the 50%. */}
+        <div
+          className="absolute inset-0 flex items-center overflow-hidden px-16"
+          style={{ direction: 'ltr' }}
+        >
+          <div className="flex items-center whitespace-nowrap banner-scroll">
+            {[0, 1].map((half) => (
+              <span
+                key={half}
+                lang={language}
+                aria-hidden={half === 1}
+                className={`text-sm md:text-base font-bold ${isArabic ? '' : 'font-mono uppercase'}`}
+                style={{
+                  color: '#ff9500',
+                  textShadow: '0 0 10px rgba(255, 149, 0, 0.6)',
+                  letterSpacing: isArabic ? 'normal' : '0.15em',
+                  fontFamily: isArabic
+                    ? "'Noto Naskh Arabic', 'Noto Sans Arabic', 'Segoe UI', Tahoma, 'Geeza Pro', 'Arabic Typesetting', sans-serif"
+                    : 'monospace',
+                  // The track always scrolls LTR (see the wrapper), but each
+                  // message must still shape and order internally as RTL.
+                  direction: isArabic ? 'rtl' : 'ltr',
+                  unicodeBidi: 'isolate',
+                }}
+              >
+                {repeatedMessage}
+              </span>
+            ))}
           </div>
         </div>
       </div>
@@ -65,6 +84,9 @@ export function BetaBanner() {
         .banner-scroll {
           animation: banner-scroll 80s linear infinite;
           will-change: transform;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .banner-scroll { animation: none; }
         }
       `}</style>
     </div>

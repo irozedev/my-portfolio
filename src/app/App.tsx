@@ -2,20 +2,43 @@ import { ThemeProvider } from "./contexts/theme-context";
 import { LanguageProvider } from "./contexts/language-context";
 import { AvailabilityProvider } from "./contexts/availability-context";
 import { AuthProvider } from "./contexts/auth-context";
-import { CartProvider } from "./contexts/cart-context";
 import { ViewModeProvider } from "./contexts/view-mode-context";
 import { MainPage } from "./components/main-page";
-import { LegalPage } from "./components/legal-pages";
-import { AdminPage } from "./components/admin-page";
-import { Dashboard } from "./components/dashboard";
-import { UserProfilePage } from "./components/user-profile-page";
 import { BetaBanner } from "./components/beta-banner";
 import { ViewModeToggle } from "./components/view-mode-toggle";
 import { Toaster } from "sonner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { AnimatePresence } from "motion/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "./components/analytics";
+
+// Secondary routes. None of these are on the path to first paint — the home
+// page is what people (and crawlers) land on — so they ship as separate chunks
+// fetched only when their hash route is opened.
+const LegalPage = lazy(() =>
+  import("./components/legal-pages").then((m) => ({ default: m.LegalPage })),
+);
+const AdminPage = lazy(() =>
+  import("./components/admin-page").then((m) => ({ default: m.AdminPage })),
+);
+const Dashboard = lazy(() =>
+  import("./components/dashboard").then((m) => ({ default: m.Dashboard })),
+);
+const UserProfilePage = lazy(() =>
+  import("./components/user-profile-page").then((m) => ({ default: m.UserProfilePage })),
+);
+
+function RouteFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)]">
+      <div
+        className="w-10 h-10 rounded-full border-2 border-[var(--accent-primary)] border-t-transparent animate-spin"
+        role="status"
+        aria-label="Loading"
+      />
+    </div>
+  );
+}
 
 
 export default function App() {
@@ -80,11 +103,19 @@ export default function App() {
     return (
       <ThemeProvider>
         <LanguageProvider>
-          <AvailabilityProvider>
-            <AdminPage />
-            <SpeedInsights />
-            <Analytics />
-          </AvailabilityProvider>
+          {/* AuthProvider is required: AdminPage gates on the owner account via
+              useAuth(). Without it the hook falls back to a logged-out stub and
+              the panel can never be opened. */}
+          <AuthProvider>
+            <AvailabilityProvider>
+              <Suspense fallback={<RouteFallback />}>
+                <AdminPage />
+              </Suspense>
+              <Toaster position="top-right" richColors />
+              <SpeedInsights />
+              <Analytics />
+            </AvailabilityProvider>
+          </AuthProvider>
         </LanguageProvider>
       </ThemeProvider>
     );
@@ -96,10 +127,12 @@ export default function App() {
         <LanguageProvider>
           <AuthProvider>
             <AvailabilityProvider>
-              <Dashboard />
+              <Suspense fallback={<RouteFallback />}>
+                <Dashboard />
+              </Suspense>
               <Toaster position="top-right" richColors />
               <SpeedInsights />
-            <Analytics />
+              <Analytics />
             </AvailabilityProvider>
           </AuthProvider>
         </LanguageProvider>
@@ -112,7 +145,9 @@ export default function App() {
       <ThemeProvider>
         <LanguageProvider>
           <AuthProvider>
-            <UserProfilePage />
+            <Suspense fallback={<RouteFallback />}>
+              <UserProfilePage />
+            </Suspense>
             <Toaster position="top-right" richColors />
             <SpeedInsights />
             <Analytics />
@@ -127,26 +162,22 @@ export default function App() {
       <LanguageProvider>
         <AuthProvider>
           <AvailabilityProvider>
-            <CartProvider>
-              <ViewModeProvider>
-                <AnimatePresence mode="wait">
-                  {currentPage === "home" ? (
-                    <MainPage key="main" />
-                  ) : currentPage === "privacy" || currentPage === "terms" || currentPage === "imprint" ? (
-                    <LegalPage 
-                      key={currentPage}
-                      page={currentPage}
-                      onClose={handleCloseLegal}
-                    />
-                  ) : null}
-                </AnimatePresence>
-                <BetaBanner />
-                <ViewModeToggle />
-                <Toaster position="top-right" richColors />
-                <SpeedInsights />
-            <Analytics />
-              </ViewModeProvider>
-            </CartProvider>
+            <ViewModeProvider>
+              <AnimatePresence mode="wait">
+                {currentPage === "home" ? (
+                  <MainPage key="main" />
+                ) : currentPage === "privacy" || currentPage === "terms" || currentPage === "imprint" ? (
+                  <Suspense key={currentPage} fallback={<RouteFallback />}>
+                    <LegalPage page={currentPage} onClose={handleCloseLegal} />
+                  </Suspense>
+                ) : null}
+              </AnimatePresence>
+              <BetaBanner />
+              <ViewModeToggle />
+              <Toaster position="top-right" richColors />
+              <SpeedInsights />
+              <Analytics />
+            </ViewModeProvider>
           </AvailabilityProvider>
         </AuthProvider>
       </LanguageProvider>

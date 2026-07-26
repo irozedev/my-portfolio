@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Mail, Linkedin, Github, Briefcase, Send, CheckCircle2, XCircle, Loader2, Clock, MessageSquare, Sparkles } from "lucide-react";
+import { Mail, Linkedin, Github, Briefcase, Send, CheckCircle2, Clock, MessageSquare, Sparkles } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
-import { useAvailability } from "../contexts/availability-context";
 import { toast } from "sonner";
 
 // Simple form components

@@ -322,17 +322,16 @@ export function ScrollToTopButton() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [hasServiceContext, setHasServiceContext] = useState(false);
-  const [requestCount, setRequestCount] = useState(0);
-  const [isRateLimited, setIsRateLimited] = useState(false);
-  const [showQuickQuestions, setShowQuickQuestions] = useState(true);
+  const [isRateLimited] = useState(false);
+  const [, setRequestCount] = useState(0);
+  const [, setShowQuickQuestions] = useState(true);
   const [stage, setStage] = useState<Stage>('intro');
   const [lead, setLead] = useState<Lead>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { t, language, setLanguage } = useLanguage();
-  const { isClientMode, setViewMode } = useViewMode();
+  const { language, setLanguage } = useLanguage();
+  const { setViewMode } = useViewMode();
   const rafRef = useRef<number>(0);
 
-  const MAX_REQUESTS = 30;
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // Scroll tracking - optimized with rAF
@@ -486,7 +485,7 @@ export function ScrollToTopButton() {
     const clientOnly = ['#services', '#how-i-work'].includes(a.target);
     const cvOnly = ['#experience'].includes(a.target);
     window.setTimeout(() => {
-      let el = document.querySelector(a.target);
+      const el = document.querySelector(a.target);
       if (!el && (clientOnly || cvOnly)) {
         setViewMode(clientOnly ? 'client' : 'cv');
         window.setTimeout(() => document.querySelector(a.target)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 450);
@@ -640,7 +639,7 @@ export function ScrollToTopButton() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed inset-x-4 bottom-4 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[420px] h-[calc(100dvh-120px)] sm:h-[600px] max-h-[700px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/50 rounded-2xl shadow-[0_0_60px_rgba(0,217,255,0.3)] z-[99990] flex flex-col overflow-hidden"
+              className="fixed inset-x-4 bottom-4 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[420px] h-[calc(100dvh-120px)] sm:h-[600px] max-h-[700px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/50 rounded-2xl shadow-[0_0_24px_rgba(0,217,255,0.18)] z-[99990] flex flex-col overflow-hidden"
             >
               {/* Header */}
               <div className="bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 p-4 flex items-center justify-between flex-shrink-0">
@@ -836,7 +835,7 @@ export function ScrollToTopButton() {
         <motion.button
           id="chat-bot-button"
           onClick={() => setIsChatOpen(!isChatOpen)}
-          className="relative w-14 h-14 bg-gradient-to-br from-[var(--accent-primary)] to-cyan-400 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,217,255,0.4)] hover:shadow-[0_0_40px_rgba(0,217,255,0.6)] transition-all"
+          className="relative w-14 h-14 bg-gradient-to-br from-[var(--accent-primary)] to-cyan-400 rounded-full flex items-center justify-center shadow-[0_0_24px_rgba(0,217,255,0.18)] hover:shadow-[0_0_40px_rgba(0,217,255,0.6)] transition-all"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           initial={{ opacity: 0, scale: 0 }}
