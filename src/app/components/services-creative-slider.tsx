@@ -91,25 +91,150 @@ const services = [
 const arrowClass =
   "absolute top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-10 md:h-10 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--accent-primary)]/30 rounded-full flex items-center justify-center hover:border-[var(--accent-primary)]/70 hover:scale-105 transition-all duration-300 group disabled:opacity-20 disabled:pointer-events-none";
 
-const PrevArrow = ({ onClick, disabled }: { onClick: () => void; disabled: boolean }) => (
+// Pixels of pointer travel above which a press counts as a drag, not a click.
+const DRAG_THRESHOLD = 6;
+
+type Lang = (en: string, uk: string, nl: string, ar: string, es: string) => string;
+
+/**
+ * Display copy per service, in all five languages.
+ *
+ * The `services` array above stays canonical English on purpose: its `title`
+ * is what goes into sessionStorage and the `openChatBot` event, and the chat
+ * assistant matches on English service names. Only what the user reads is
+ * translated.
+ */
+function serviceCopy(L: Lang) {
+  const from = L("from", "від", "vanaf", "من", "desde");
+  const perHour = L("/hr", "/год", "/uur", "/س", "/h");
+
+  return {
+    automation: {
+      title: L("Automation & Bots", "Автоматизація та боти", "Automatisering & bots", "الأتمتة والبوتات", "Automatización y bots"),
+      description: L(
+        "Telegram bots, workflow automation and API integrations that save you hours every week",
+        "Telegram-боти, автоматизація процесів та інтеграції з API, які щотижня економлять вам години",
+        "Telegram-bots, procesautomatisering en API-integraties die je elke week uren besparen",
+        "بوتات تيليجرام وأتمتة سير العمل وتكاملات API توفّر عليك ساعات كل أسبوع",
+        "Bots de Telegram, automatización de procesos e integraciones de API que te ahorran horas cada semana",
+      ),
+      price: `${from} €45${perHour}`,
+      features: [
+        L("Telegram & Discord bots", "Боти для Telegram і Discord", "Telegram- en Discord-bots", "بوتات تيليجرام وديسكورد", "Bots de Telegram y Discord"),
+        L("Payment & API integrations", "Інтеграції платежів та API", "Betaal- en API-integraties", "تكاملات الدفع وواجهات API", "Integraciones de pago y API"),
+        L("Workflow automation", "Автоматизація процесів", "Procesautomatisering", "أتمتة سير العمل", "Automatización de procesos"),
+        L("Data sync & scripts", "Синхронізація даних і скрипти", "Datasynchronisatie en scripts", "مزامنة البيانات والسكربتات", "Sincronización de datos y scripts"),
+      ],
+    },
+    landing: {
+      title: L("Websites & Landing Pages", "Сайти та лендинги", "Websites & landingspagina's", "المواقع وصفحات الهبوط", "Webs y landing pages"),
+      description: L(
+        "Fast, modern sites that turn visitors into customers — built with Next.js / React",
+        "Швидкі сучасні сайти, які перетворюють відвідувачів на клієнтів — на Next.js / React",
+        "Snelle, moderne sites die bezoekers klant maken — gebouwd met Next.js / React",
+        "مواقع سريعة وحديثة تحوّل الزوار إلى عملاء — مبنية بـ Next.js / React",
+        "Sitios rápidos y modernos que convierten visitas en clientes — con Next.js / React",
+      ),
+      price: `${from} €650`,
+      features: [
+        L("Responsive & fast", "Адаптивні та швидкі", "Responsief en snel", "متجاوب وسريع", "Responsive y rápido"),
+        L("Payments (Stripe/WayForPay)", "Оплати (Stripe/WayForPay)", "Betalingen (Stripe/WayForPay)", "مدفوعات (Stripe/WayForPay)", "Pagos (Stripe/WayForPay)"),
+        L("GA4 analytics", "Аналітика GA4", "GA4-analytics", "تحليلات GA4", "Analítica GA4"),
+        L("SEO-ready", "Готові до SEO", "SEO-klaar", "جاهز لتحسين محركات البحث", "Listo para SEO"),
+      ],
+    },
+    design: {
+      title: L("UI Design & Build", "UI-дизайн і верстка", "UI-ontwerp & bouw", "تصميم وتنفيذ الواجهات", "Diseño UI y desarrollo"),
+      description: L(
+        "Modern interface design and pixel-perfect build in one — AI-assisted, delivered fast",
+        "Сучасний дизайн інтерфейсу і точна верстка в одному — з AI, швидко",
+        "Modern interface-ontwerp én pixel-perfecte bouw in één — AI-ondersteund, snel opgeleverd",
+        "تصميم واجهات حديث وتنفيذ دقيق في آن واحد — بمساعدة الذكاء الاصطناعي وتسليم سريع",
+        "Diseño de interfaz moderno y maquetación pixel-perfect en uno — con IA, entrega rápida",
+      ),
+      price: `${from} €400`,
+      features: [
+        L("UI / UX design", "UI / UX дизайн", "UI / UX-ontwerp", "تصميم UI / UX", "Diseño UI / UX"),
+        L("Design-to-code", "Дизайн у код", "Design-to-code", "تحويل التصميم إلى كود", "De diseño a código"),
+        L("Responsive layouts", "Адаптивні макети", "Responsieve layouts", "تخطيطات متجاوبة", "Maquetación responsive"),
+        L("Reusable components", "Перевикористовувані компоненти", "Herbruikbare componenten", "مكوّنات قابلة لإعادة الاستخدام", "Componentes reutilizables"),
+      ],
+    },
+    webapp: {
+      title: L("Web Apps & Dashboards", "Веб-застосунки та дашборди", "Webapps & dashboards", "تطبيقات الويب ولوحات التحكم", "Aplicaciones web y paneles"),
+      description: L(
+        "Custom tools, dashboards and integrations for your business processes",
+        "Власні інструменти, дашборди та інтеграції під ваші бізнес-процеси",
+        "Maatwerk-tools, dashboards en integraties voor je bedrijfsprocessen",
+        "أدوات مخصّصة ولوحات تحكم وتكاملات لعمليات عملك",
+        "Herramientas a medida, paneles e integraciones para tus procesos de negocio",
+      ),
+      price: `${from} €60${perHour}`,
+      features: [
+        L("Custom dashboards", "Кастомні дашборди", "Custom dashboards", "لوحات تحكم مخصّصة", "Paneles a medida"),
+        L("Internal tools", "Внутрішні інструменти", "Interne tools", "أدوات داخلية", "Herramientas internas"),
+        L("REST API integration", "Інтеграція REST API", "REST API-integratie", "تكامل REST API", "Integración de REST API"),
+        L("Admin panels", "Адмін-панелі", "Beheerpanelen", "لوحات إدارة", "Paneles de administración"),
+      ],
+    },
+    ecommerce: {
+      title: L("E-Commerce", "Електронна комерція", "E-commerce", "التجارة الإلكترونية", "E-commerce"),
+      description: L(
+        "Online stores and storefronts with payment and shipping — Magento or custom",
+        "Інтернет-магазини з оплатою та доставкою — Magento або власне рішення",
+        "Webshops met betaling en verzending — Magento of maatwerk",
+        "متاجر إلكترونية مع الدفع والشحن — Magento أو حل مخصّص",
+        "Tiendas online con pago y envío — Magento o a medida",
+      ),
+      price: `${from} €1200`,
+      features: [
+        L("Magento 1 & 2 / custom", "Magento 1 і 2 / власне", "Magento 1 & 2 / maatwerk", "Magento 1 و2 / مخصّص", "Magento 1 y 2 / a medida"),
+        L("Payment gateways", "Платіжні шлюзи", "Betaalproviders", "بوابات الدفع", "Pasarelas de pago"),
+        L("Shipping integrations", "Інтеграції доставки", "Verzendintegraties", "تكاملات الشحن", "Integraciones de envío"),
+        L("Product pages & SEO", "Картки товарів і SEO", "Productpagina's & SEO", "صفحات المنتجات وSEO", "Fichas de producto y SEO"),
+      ],
+    },
+    consulting: {
+      title: L("Consulting / Hourly", "Консультації / погодинно", "Consultancy / per uur", "استشارات / بالساعة", "Consultoría / por horas"),
+      description: L(
+        "Front-end & automation advice, code review and hands-on help by the hour",
+        "Консультації з фронтенду й автоматизації, код-рев'ю та практична допомога погодинно",
+        "Front-end- en automatiseringsadvies, code review en praktische hulp per uur",
+        "استشارات في الواجهات والأتمتة ومراجعة الكود ومساعدة عملية بالساعة",
+        "Asesoría de front-end y automatización, code review y ayuda práctica por horas",
+      ),
+      price: `€55${perHour}`,
+      features: [
+        L("Code review & audits", "Код-рев'ю та аудити", "Code review & audits", "مراجعة الكود والتدقيق", "Code review y auditorías"),
+        L("Architecture advice", "Поради з архітектури", "Architectuuradvies", "استشارات معمارية", "Asesoría de arquitectura"),
+        L("Automation strategy", "Стратегія автоматизації", "Automatiseringsstrategie", "استراتيجية الأتمتة", "Estrategia de automatización"),
+        L("Pair programming", "Парне програмування", "Pair programming", "برمجة ثنائية", "Programación en pareja"),
+      ],
+    },
+  } as const;
+}
+
+type ArrowProps = { onClick: () => void; disabled: boolean; label: string };
+
+const PrevArrow = ({ onClick, disabled, label }: ArrowProps) => (
   <button
     type="button"
     onClick={onClick}
     disabled={disabled}
     className={`${arrowClass} left-0 md:-left-12`}
-    aria-label="Previous service"
+    aria-label={label}
   >
     <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-[var(--accent-primary)]" />
   </button>
 );
 
-const NextArrow = ({ onClick, disabled }: { onClick: () => void; disabled: boolean }) => (
+const NextArrow = ({ onClick, disabled, label }: ArrowProps) => (
   <button
     type="button"
     onClick={onClick}
     disabled={disabled}
     className={`${arrowClass} right-0 md:-right-12`}
-    aria-label="Next service"
+    aria-label={label}
   >
     <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-[var(--accent-primary)]" />
   </button>
@@ -129,8 +254,12 @@ export function ServicesCreativeSlider() {
   // Scroll extent, not slide index, drives the arrows — see the comment on
   // `step` below.
   const [edges, setEdges] = useState({ atStart: true, atEnd: false });
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isProcessingClick, setIsProcessingClick] = useState(false);
+
+  const L: Lang = (en, uk, nl, ar, es) =>
+    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+  const copy = serviceCopy(L);
 
   // Detect mobile on mount
   useEffect(() => {
@@ -228,6 +357,85 @@ export function ServicesCreativeSlider() {
     track.scrollBy({ left: direction * (card.offsetWidth + gap), behavior: "smooth" });
   }, []);
 
+  // ---------------------------------------------------------------------
+  // MOUSE INPUT
+  //
+  // Touch gets native momentum scrolling for free, but a mouse had nothing:
+  // no drag, and a vertical wheel over a horizontal track does nothing at all.
+  // The only way to move the carousel with a mouse was to hit an arrow.
+  // ---------------------------------------------------------------------
+
+  // Vertical wheel → horizontal scroll.
+  //
+  // Registered natively rather than via onWheel because React attaches its
+  // listeners passively and preventDefault() is a no-op there.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const onWheel = (e: WheelEvent) => {
+      // A trackpad sends real horizontal deltas; the browser already handles
+      // those correctly, so only translate a dominantly-vertical wheel.
+      if (Math.abs(e.deltaX) >= Math.abs(e.deltaY) || e.deltaY === 0) return;
+
+      const max = track.scrollWidth - track.clientWidth;
+      if (max <= 0) return;
+
+      // RTL runs scrollLeft from 0 down to -max.
+      const rtl = getComputedStyle(track).direction === "rtl";
+      const travelled = Math.abs(track.scrollLeft);
+      const forward = e.deltaY > 0;
+
+      // Hand the gesture back to the page at either end instead of trapping
+      // the pointer in a carousel the user has already scrolled through.
+      if ((!forward && travelled <= 0) || (forward && travelled >= max - 1)) return;
+
+      e.preventDefault();
+      track.scrollLeft += (rtl ? -1 : 1) * e.deltaY;
+    };
+
+    track.addEventListener("wheel", onWheel, { passive: false });
+    return () => track.removeEventListener("wheel", onWheel);
+  }, []);
+
+  // Click-and-drag with a mouse.
+  //
+  // Snapping is switched off for the duration of the drag: scroll-snap also
+  // applies to programmatic scrollLeft writes, so with it on the track fought
+  // every frame of the gesture. On release we re-enable it and centre the
+  // nearest card explicitly.
+  const dragRef = useRef({ active: false, startX: 0, startScroll: 0, moved: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    const track = trackRef.current;
+    if (!track) return;
+    dragRef.current = {
+      active: true,
+      startX: e.clientX,
+      startScroll: track.scrollLeft,
+      moved: 0,
+    };
+    setIsDragging(true);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const track = trackRef.current;
+    if (!dragRef.current.active || !track) return;
+    const dx = e.clientX - dragRef.current.startX;
+    dragRef.current.moved = Math.max(dragRef.current.moved, Math.abs(dx));
+    track.scrollLeft = dragRef.current.startScroll - dx;
+  };
+
+  const handlePointerUp = () => {
+    if (!dragRef.current.active) return;
+    dragRef.current.active = false;
+    setIsDragging(false);
+    // Land on a card rather than wherever the mouse happened to stop.
+    if (dragRef.current.moved > DRAG_THRESHOLD) scrollToIndex(currentSlide);
+  };
+
   // Arrow keys move the carousel, but ONLY while it has focus. The old global
   // keydown listener called preventDefault() on every arrow press and ate
   // keystrokes in every input on the page.
@@ -256,11 +464,26 @@ export function ServicesCreativeSlider() {
     }, 300);
   };
 
-  // Native scroll-snap swallows drags before they become clicks, so the old
-  // touchstart/touchmove/touchend drag detector is gone. A card click now just
-  // opens the service — no "click once to centre, again to open" dance.
-  const handleCardClick = (service: typeof services[0]) => {
+  const handleCardClick = (service: typeof services[0], index: number) => {
     if (isProcessingClick) return;
+
+    // A mouse drag ends with a click event on whatever card was under the
+    // cursor. Without this the carousel opened a service every time you
+    // dragged it.
+    if (dragRef.current.moved > DRAG_THRESHOLD) {
+      dragRef.current.moved = 0;
+      return;
+    }
+
+    // Below 1024px only one card is on screen, and its neighbours peek in at
+    // the edges. Tapping a peeking card brings it to the centre instead of
+    // opening a service the user cannot even read yet; the second tap, now on
+    // the centred card, opens it.
+    if (isMobile && index !== currentSlide) {
+      scrollToIndex(index);
+      return;
+    }
+
     handleBookService(service);
   };
 
@@ -368,6 +591,24 @@ export function ServicesCreativeSlider() {
                 }
                 .services-track::-webkit-scrollbar { display: none; }
 
+                /* Mouse affordance: the track is grabbable. */
+                @media (hover: hover) and (pointer: fine) {
+                  .services-track { cursor: grab; }
+                  .services-track.is-dragging { cursor: grabbing; }
+                }
+
+                /* While dragging, snapping and text selection both get in the
+                   way — snapping fights each programmatic scrollLeft write,
+                   and selection turns the gesture into a text highlight. */
+                .services-track.is-dragging {
+                  scroll-snap-type: none;
+                  scroll-behavior: auto;
+                  user-select: none;
+                }
+                .services-track.is-dragging * {
+                  pointer-events: none;
+                }
+
                 .services-track > * {
                   scroll-snap-align: center;
                   flex: 0 0 min(100%, 22rem);
@@ -377,6 +618,19 @@ export function ServicesCreativeSlider() {
                 /* Show three cards side by side once there is room */
                 @media (min-width: 1024px) {
                   .services-track > * { flex-basis: calc((100% - 3rem) / 3); }
+                }
+
+                /* Single-card mode. Snapping is mandatory here — with one card
+                   on screen there is no ambiguity about where to land, so the
+                   selected card always ends up centred.
+                   The inline padding is what lets the FIRST and LAST cards
+                   reach the centre at all: without it they can only sit
+                   flush against their end of the track. */
+                @media (max-width: 1023px) {
+                  .services-track {
+                    scroll-snap-type: x mandatory;
+                    padding-inline: max(0px, calc((100% - 22rem) / 2));
+                  }
                 }
 
                 .service-card {
@@ -413,16 +667,22 @@ export function ServicesCreativeSlider() {
 
             <div
               ref={trackRef}
-              className="services-track"
+              className={`services-track${isDragging ? " is-dragging" : ""}`}
               role="group"
               aria-roledescription="carousel"
               aria-label={t("services.title")}
               tabIndex={0}
               onKeyDown={handleTrackKeyDown}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+              onPointerLeave={handlePointerUp}
             >
               {services.map((service, index) => {
                 const Icon = service.icon;
                 const isActive = currentSlide === index;
+                const text = copy[service.key as keyof typeof copy];
 
                 return (
                   <div
@@ -430,10 +690,10 @@ export function ServicesCreativeSlider() {
                     data-index={index}
                     role="group"
                     aria-roledescription="slide"
-                    aria-label={`${index + 1} / ${services.length}: ${service.title}`}
+                    aria-label={`${index + 1} / ${services.length}: ${text.title}`}
                   >
                     <motion.div
-                      onClick={() => handleCardClick(service)}
+                      onClick={() => handleCardClick(service, index)}
                       data-active={isActive}
                       className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-purple-500/50 group cursor-pointer overflow-visible"
                       whileHover={!isMobile ? { y: -10 } : undefined}
@@ -512,20 +772,26 @@ export function ServicesCreativeSlider() {
 
                       {/* Title & Description */}
                       <h3 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-3 group-hover:text-[var(--accent-primary)] transition-colors">
-                        {service.title}
+                        {text.title}
                       </h3>
                       <p className="text-[var(--text-secondary)] mb-6 leading-relaxed min-h-[60px]">
-                        {service.description}
+                        {text.description}
                       </p>
 
                       {/* Price */}
                       <div className="mb-6 pb-6 border-b border-white/10">
                         <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] bg-clip-text text-transparent mb-1">
-                          {service.priceRange}
+                          {text.price}
                         </div>
                         {service.key === 'automation' && (
                           <p className="text-xs text-[var(--accent-primary)] font-mono mb-1">
-                            or fixed from €350/bot
+                            {L(
+                              "or fixed from €350/bot",
+                              "або фікс від €350/бот",
+                              "of vast vanaf €350/bot",
+                              "أو سعر ثابت من €350 للبوت",
+                              "o fijo desde €350/bot",
+                            )}
                           </p>
                         )}
                         <p className="text-xs text-[var(--text-muted)]">
@@ -535,7 +801,7 @@ export function ServicesCreativeSlider() {
 
                       {/* Features */}
                       <div className="space-y-3 mb-6">
-                        {service.features.slice(0, 4).map((feature, idx) => (
+                        {text.features.slice(0, 4).map((feature, idx) => (
                           <motion.div
                             key={idx}
                             initial={{ opacity: 0, x: -20 }}
@@ -549,9 +815,10 @@ export function ServicesCreativeSlider() {
                             <span className="text-sm text-[var(--text-secondary)]">{feature}</span>
                           </motion.div>
                         ))}
-                        {service.features.length > 4 && (
+                        {text.features.length > 4 && (
                           <p className="text-xs text-[var(--text-muted)] ml-8">
-                            +{service.features.length - 4} more features
+                            +{text.features.length - 4}{" "}
+                            {L("more", "ще", "meer", "أخرى", "más")}
                           </p>
                         )}
                       </div>
@@ -567,7 +834,7 @@ export function ServicesCreativeSlider() {
                         whileTap={{ scale: 0.98 }}
                       >
                         <Zap className="w-4 h-4 group-hover/btn:rotate-12 transition-transform" />
-                        Start project
+                        {L("Start project", "Почати проєкт", "Project starten", "ابدأ المشروع", "Iniciar proyecto")}
                         <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                       </motion.button>
                     </motion.div>
@@ -576,8 +843,16 @@ export function ServicesCreativeSlider() {
               })}
             </div>
 
-            <PrevArrow onClick={() => step(-1)} disabled={edges.atStart} />
-            <NextArrow onClick={() => step(1)} disabled={edges.atEnd} />
+            <PrevArrow
+              onClick={() => step(-1)}
+              disabled={edges.atStart}
+              label={L("Previous service", "Попередня послуга", "Vorige dienst", "الخدمة السابقة", "Servicio anterior")}
+            />
+            <NextArrow
+              onClick={() => step(1)}
+              disabled={edges.atEnd}
+              label={L("Next service", "Наступна послуга", "Volgende dienst", "الخدمة التالية", "Servicio siguiente")}
+            />
           </motion.div>
 
           {/* Dots + counter */}
@@ -593,7 +868,7 @@ export function ServicesCreativeSlider() {
                   key={service.id}
                   type="button"
                   onClick={() => scrollToIndex(index)}
-                  aria-label={`Go to ${service.title}`}
+                  aria-label={copy[service.key as keyof typeof copy].title}
                   aria-current={currentSlide === index}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     currentSlide === index

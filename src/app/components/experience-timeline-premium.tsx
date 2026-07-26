@@ -3,114 +3,330 @@ import { Briefcase, MapPin, Calendar, Award, ChevronRight, Code2, Rocket, Buildi
 import { useState } from "react";
 import { useLanguage } from "../contexts/language-context";
 
+type Lang = (en: string, uk: string, nl: string, ar: string, es: string) => string;
+
+// Non-textual data only. Company names are proper nouns and stay as written;
+// everything a visitor reads is built per-language in `experienceCopy`.
 const experiences = [
   {
     id: 1,
     year: "2026",
-    period: "2026 - Present",
-    title: "Freelance Web Developer",
     company: "Self-Employed",
-    location: "Belgium (Remote)",
-    type: "Freelance",
-    description: "Designing, building and launching commercial web products end-to-end with an AI-assisted workflow. Delivered marinek.store — a Next.js 14 landing site for a fitness coaching program with three pricing tiers, verified card payments and automated one-time access delivery over Telegram.",
-    achievements: [
-      "Launched marinek.store to production (Next.js 14) in July 2026",
-      "Rebuilt paid access: server-priced orders, signature-verified WayForPay webhooks, single-use Telegram invites",
-      "Replaced a shared invite link that let anyone join the paid channels without paying",
-      "Made the payment webhook idempotent against a four-day retry window; refunds revoke access automatically",
-      "Built the serverless backend on Netlify Functions with Supabase, alongside a fully static Next.js export",
-      "Owned the full cycle: requirements, design, build, launch & support"
-    ],
     tech: ["Next.js 14", "TypeScript", "React", "Netlify Functions", "Supabase", "Telegram Bot API", "WayForPay", "GA4"],
     icon: Rocket,
     gradient: "from-cyan-500 via-blue-500 to-purple-500",
-    color: "#00d9ff"
+    color: "#00d9ff",
   },
   {
     id: 2,
     year: "2024",
-    period: "Oct 2022 - Jan 2024",
-    title: "Middle JavaScript Developer",
     company: "E-Consulting",
-    location: "Remote, Ukraine",
-    type: "Full-time",
-    description: "Built and customized CRM web resources for Oschadbank — Ukraine's state savings bank — on MS Dynamics 365 XRM in pure functional JavaScript. Developed a Vue.js electronic document-signing application for bank workflows and integrated REST APIs with back-end teams.",
-    achievements: [
-      "Developed CRM web resources for Oschadbank on MS Dynamics 365 XRM",
-      "Built a Vue.js document-signing app (async requests, canvas-based UI)",
-      "Configured entity fields and integrated REST APIs with back-end teams",
-      "Introduced GPT-based tooling into daily development (since 2022)"
-    ],
     tech: ["JavaScript (ES6+)", "MS Dynamics 365 XRM", "Vue.js", "Canvas", "REST API"],
     icon: Code2,
     gradient: "from-purple-500 via-pink-500 to-rose-500",
-    color: "#a78bfa"
+    color: "#a78bfa",
   },
   {
     id: 3,
     year: "2022",
-    period: "May 2019 - Sep 2022",
-    title: "Front-End Developer (Junior → Middle)",
     company: "Ronis BT",
-    location: "Kharkiv, Ukraine (Hybrid)",
-    type: "Full-time",
-    description: "Core team member on childrensalon.com — one of the world's largest luxury children's fashion retailers — and vogacloset.com (MENA fashion marketplace). Rewrote the Product Detail Page front-end during a Magento 1.9 → custom Symfony re-platforming.",
-    achievements: [
-      "Migrated legacy jQuery to a modular vanilla JS architecture for the PDP",
-      "Integrated payment providers (Stripe, Klarna) into checkout & order flows",
-      "Built reusable components with Magento 1 & 2, React and Knockout.js",
-      "Improved performance & SEO for high-traffic retail pages"
-    ],
     tech: ["Magento 1 & 2", "React", "Knockout.js", "jQuery", "SCSS / LESS", "JavaScript (ES6+)"],
     icon: Users,
     gradient: "from-green-500 via-emerald-500 to-teal-500",
-    color: "#10b981"
+    color: "#10b981",
   },
   {
     id: 4,
     year: "2015",
-    period: "2015 - 2019",
-    title: "Front-End Developer (in-house & freelance)",
     company: "Web Studio & Freelance",
-    location: "Kharkiv, Ukraine",
-    type: "Full-time",
-    description: "Started in a web studio with formal HTML/CSS training, then delivered freelance projects: responsive websites with jQuery, Bootstrap, vanilla JS and PHP basics, with exposure to .NET project structure.",
-    achievements: [
-      "Completed formal HTML/CSS training in a web studio (2015)",
-      "Delivered responsive freelance websites for local businesses",
-      "Worked with jQuery, Bootstrap, vanilla JS and PHP basics",
-      "Gained exposure to .NET project structure"
-    ],
     tech: ["HTML5", "CSS3", "JavaScript", "jQuery", "Bootstrap", "PHP"],
     icon: Building2,
     gradient: "from-amber-500 via-orange-500 to-red-500",
-    color: "#f59e0b"
+    color: "#f59e0b",
   },
   {
     id: 5,
     year: "2012",
-    period: "2012 - 2015",
-    title: "Computer Science (coursework)",
     company: "V.N. Karazin Kharkiv National University",
-    location: "Kharkiv, Ukraine",
-    type: "Education",
-    description: "Completed coursework in Computer Science, building a foundation in programming, algorithms, data structures and software development principles.",
-    achievements: [
-      "Studied programming fundamentals and algorithms",
-      "Learned data structures and software engineering principles",
-      "Built a strong technical foundation for a front-end career"
-    ],
     tech: ["Computer Science", "Algorithms", "Data Structures"],
     icon: Building2,
     gradient: "from-slate-500 via-gray-500 to-zinc-500",
-    color: "#94a3b8"
+    color: "#94a3b8",
   },
-];
+] as const;
+
+function experienceCopy(L: Lang) {
+  const remote = L("Remote", "Віддалено", "Op afstand", "عن بُعد", "En remoto");
+  const kharkiv = L("Kharkiv, Ukraine", "Харків, Україна", "Charkov, Oekraïne", "خاركيف، أوكرانيا", "Járkov, Ucrania");
+  const fullTime = L("Full-time", "Повна занятість", "Voltijds", "دوام كامل", "Jornada completa");
+
+  return {
+    1: {
+      title: L("Freelance Web Developer", "Веб-розробник, фриланс", "Freelance webontwikkelaar", "مطوّر ويب مستقل", "Desarrollador web freelance"),
+      period: L("2026 — present", "2026 — дотепер", "2026 — heden", "2026 — حتى الآن", "2026 — actualidad"),
+      location: L("Belgium (remote)", "Бельгія (віддалено)", "België (op afstand)", "بلجيكا (عن بُعد)", "Bélgica (en remoto)"),
+      type: L("Freelance", "Фриланс", "Freelance", "عمل حر", "Freelance"),
+      description: L(
+        "Designing, building and launching commercial web products end-to-end with an AI-assisted workflow. Delivered marinek.store — a Next.js 14 landing site for a fitness coaching program with three pricing tiers, verified card payments and automated one-time access delivery over Telegram.",
+        "Проєктую, збираю й запускаю комерційні веб-продукти під ключ, з AI у процесі. Зробив marinek.store — лендинг на Next.js 14 для фітнес-програми: три тарифи, підтверджені платежі картою та автоматична видача одноразового доступу в Telegram.",
+        "Commerciële webproducten van begin tot eind ontwerpen, bouwen en lanceren, met AI in de workflow. marinek.store opgeleverd — een Next.js 14-landingssite voor een fitnessprogramma met drie tarieven, geverifieerde kaartbetalingen en automatische eenmalige toegang via Telegram.",
+        "أصمّم وأبني وأطلق منتجات ويب تجارية من البداية إلى النهاية بسير عمل مدعوم بالذكاء الاصطناعي. أنجزت marinek.store — موقع هبوط بـ Next.js 14 لبرنامج لياقة، بثلاث فئات أسعار ومدفوعات بطاقات موثَّقة وتسليم وصول تلقائي لمرة واحدة عبر تيليجرام.",
+        "Diseño, construyo y lanzo productos web comerciales de principio a fin con un flujo asistido por IA. Entregué marinek.store — una landing en Next.js 14 para un programa de fitness con tres niveles de precio, pagos con tarjeta verificados y entrega automática de acceso de un solo uso por Telegram.",
+      ),
+      achievements: [
+        L(
+          "Launched marinek.store to production (Next.js 14) in July 2026",
+          "Запустив marinek.store у продакшн (Next.js 14) у липні 2026",
+          "marinek.store in juli 2026 in productie gebracht (Next.js 14)",
+          "أطلقت marinek.store في الإنتاج (Next.js 14) في يوليو 2026",
+          "Lancé marinek.store a producción (Next.js 14) en julio de 2026",
+        ),
+        L(
+          "Rebuilt paid access: server-priced orders, signature-verified webhooks, single-use Telegram invites",
+          "Переробив платний доступ: ціна на сервері, вебхуки з перевіркою підпису, одноразові інвайти в Telegram",
+          "Betaalde toegang herbouwd: server-side geprijsde orders, webhooks met geverifieerde signature, eenmalige Telegram-invites",
+          "أعدت بناء الوصول المدفوع: تسعير الطلبات على الخادم، وخطّافات موثَّقة التوقيع، ودعوات تيليجرام لمرة واحدة",
+          "Reconstruí el acceso de pago: pedidos tarifados en servidor, webhooks con firma verificada, invitaciones de Telegram de un solo uso",
+        ),
+        L(
+          "Replaced a shared invite link that let anyone join the paid channels without paying",
+          "Замінив спільне посилання, яке пускало в платні канали будь-кого без оплати",
+          "Een gedeelde invite-link vervangen waarmee iedereen zonder te betalen de betaalde kanalen in kon",
+          "استبدلت رابط دعوة مشتركًا كان يُدخل أي شخص إلى القنوات المدفوعة دون دفع",
+          "Sustituí un enlace de invitación compartido que dejaba entrar a cualquiera sin pagar",
+        ),
+        L(
+          "Made the payment webhook idempotent against a four-day retry window; refunds revoke access automatically",
+          "Зробив вебхук платежу ідемпотентним до чотириденних ретраїв; повернення гасить доступ автоматично",
+          "De betaal-webhook idempotent gemaakt tegen een retry-venster van vier dagen; terugbetalingen trekken toegang automatisch in",
+          "جعلت خطّاف الدفع غير متأثر بإعادة المحاولة على مدى أربعة أيام؛ والاسترداد يبطل الوصول تلقائيًا",
+          "Hice el webhook de pago idempotente frente a una ventana de reintentos de cuatro días; las devoluciones revocan el acceso automáticamente",
+        ),
+        L(
+          "Built the serverless backend on Netlify Functions with Supabase, alongside a fully static Next.js export",
+          "Зібрав безсерверний бекенд на Netlify Functions із Supabase поруч із повністю статичним експортом Next.js",
+          "De serverless backend gebouwd op Netlify Functions met Supabase, naast een volledig statische Next.js-export",
+          "بنيت الخلفية بلا خادم على Netlify Functions مع Supabase، جنبًا إلى جنب مع تصدير Next.js ثابت بالكامل",
+          "Construí el backend serverless en Netlify Functions con Supabase, junto a una exportación de Next.js totalmente estática",
+        ),
+        L(
+          "Owned the full cycle: requirements, design, build, launch and support",
+          "Вів повний цикл: вимоги, дизайн, розробка, запуск і підтримка",
+          "De volledige cyclus in eigen hand: eisen, ontwerp, bouw, livegang en support",
+          "توليت الدورة الكاملة: المتطلبات والتصميم والتنفيذ والإطلاق والدعم",
+          "Asumí el ciclo completo: requisitos, diseño, desarrollo, lanzamiento y soporte",
+        ),
+      ],
+    },
+    2: {
+      title: L("Middle JavaScript Developer", "Middle JavaScript-розробник", "Middle JavaScript-ontwikkelaar", "مطوّر JavaScript متوسط", "Desarrollador JavaScript Middle"),
+      period: L("Oct 2022 — Jan 2024", "жовт. 2022 — січ. 2024", "okt 2022 — jan 2024", "أكتوبر 2022 — يناير 2024", "oct 2022 — ene 2024"),
+      location: `${remote}, ${L("Ukraine", "Україна", "Oekraïne", "أوكرانيا", "Ucrania")}`,
+      type: fullTime,
+      description: L(
+        "Built and customized CRM web resources for Oschadbank — Ukraine's state savings bank — on MS Dynamics 365 XRM in pure functional JavaScript. Developed a Vue.js electronic document-signing application for bank workflows and integrated REST APIs with back-end teams.",
+        "Робив і кастомізував CRM веб-ресурси для Ощадбанку — державного ощадного банку України — на MS Dynamics 365 XRM чистим функціональним JavaScript. Розробив застосунок електронного підпису документів на Vue.js для банківських процесів та інтегрував REST API разом із бекенд-командами.",
+        "CRM-webresources gebouwd en aangepast voor Oschadbank — de Oekraïense staatsspaarbank — op MS Dynamics 365 XRM in puur functioneel JavaScript. Een Vue.js-applicatie voor elektronisch ondertekenen van documenten ontwikkeld en REST API's geïntegreerd met back-endteams.",
+        "بنيت وخصّصت موارد ويب لنظام CRM لبنك Oschadbank — بنك التوفير الحكومي في أوكرانيا — على MS Dynamics 365 XRM بجافاسكربت وظيفي خالص. طوّرت تطبيق توقيع مستندات إلكتروني بـ Vue.js لسير عمل البنك، وربطت واجهات REST مع فرق الخلفية.",
+        "Construí y personalicé recursos web de CRM para Oschadbank — la caja de ahorros estatal de Ucrania — sobre MS Dynamics 365 XRM en JavaScript funcional puro. Desarrollé una aplicación Vue.js de firma electrónica de documentos e integré APIs REST con los equipos de back-end.",
+      ),
+      achievements: [
+        L(
+          "Developed CRM web resources for Oschadbank on MS Dynamics 365 XRM",
+          "Розробляв CRM веб-ресурси для Ощадбанку на MS Dynamics 365 XRM",
+          "CRM-webresources ontwikkeld voor Oschadbank op MS Dynamics 365 XRM",
+          "طوّرت موارد ويب لنظام CRM لبنك Oschadbank على MS Dynamics 365 XRM",
+          "Desarrollé recursos web de CRM para Oschadbank en MS Dynamics 365 XRM",
+        ),
+        L(
+          "Built a Vue.js document-signing app (async requests, canvas-based UI)",
+          "Зробив застосунок підпису документів на Vue.js (асинхронні запити, UI на canvas)",
+          "Een Vue.js-app voor documentondertekening gebouwd (async requests, canvas-UI)",
+          "بنيت تطبيق توقيع مستندات بـ Vue.js (طلبات غير متزامنة وواجهة على Canvas)",
+          "Construí una app de firma de documentos en Vue.js (peticiones asíncronas, UI con canvas)",
+        ),
+        L(
+          "Configured entity fields and integrated REST APIs with back-end teams",
+          "Налаштовував поля сутностей та інтегрував REST API разом із бекенд-командами",
+          "Entiteitvelden geconfigureerd en REST API's geïntegreerd met back-endteams",
+          "أعددت حقول الكيانات وربطت واجهات REST مع فرق الخلفية",
+          "Configuré campos de entidades e integré APIs REST con los equipos de back-end",
+        ),
+        L(
+          "Introduced GPT-based tooling into daily development (since 2022)",
+          "Впровадив інструменти на базі GPT у щоденну розробку (з 2022)",
+          "GPT-tooling in de dagelijkse ontwikkeling geïntroduceerd (sinds 2022)",
+          "أدخلت أدوات مبنية على GPT في التطوير اليومي (منذ 2022)",
+          "Introduje herramientas basadas en GPT en el desarrollo diario (desde 2022)",
+        ),
+      ],
+    },
+    3: {
+      title: L(
+        "Front-End Developer (Junior → Middle)",
+        "Front-End розробник (Junior → Middle)",
+        "Front-end-ontwikkelaar (Junior → Middle)",
+        "مطوّر واجهات (مبتدئ → متوسط)",
+        "Desarrollador Front-End (Junior → Middle)",
+      ),
+      period: L("May 2019 — Sep 2022", "трав. 2019 — вер. 2022", "mei 2019 — sep 2022", "مايو 2019 — سبتمبر 2022", "may 2019 — sep 2022"),
+      location: `${kharkiv} (${L("hybrid", "гібридно", "hybride", "هجين", "híbrido")})`,
+      type: fullTime,
+      description: L(
+        "Core team member on childrensalon.com — one of the world's largest luxury children's fashion retailers — and vogacloset.com (MENA fashion marketplace). Rewrote the Product Detail Page front-end during a Magento 1.9 → custom Symfony re-platforming.",
+        "Учасник основної команди childrensalon.com — одного з найбільших у світі ритейлерів люксового дитячого одягу — і vogacloset.com (фешн-маркетплейс MENA). Переписав фронтенд сторінки товару під час переїзду з Magento 1.9 на власний Symfony.",
+        "Kernteamlid bij childrensalon.com — een van de grootste luxe kinderkledingretailers ter wereld — en vogacloset.com (MENA-fashionmarktplaats). De front-end van de productdetailpagina herschreven tijdens een re-platforming van Magento 1.9 naar custom Symfony.",
+        "عضو في الفريق الأساسي لـ childrensalon.com — أحد أكبر متاجر أزياء الأطفال الفاخرة في العالم — وvogacloset.com (سوق أزياء في الشرق الأوسط وشمال أفريقيا). أعدت كتابة واجهة صفحة تفاصيل المنتج خلال الانتقال من Magento 1.9 إلى Symfony مخصّص.",
+        "Miembro del equipo principal de childrensalon.com — uno de los mayores minoristas de moda infantil de lujo del mundo — y vogacloset.com (marketplace de moda MENA). Reescribí el front-end de la ficha de producto durante la migración de Magento 1.9 a Symfony a medida.",
+      ),
+      achievements: [
+        L(
+          "Migrated legacy jQuery to a modular vanilla JS architecture for the product page",
+          "Перевів легасі jQuery на модульну архітектуру на чистому JS для сторінки товару",
+          "Legacy jQuery gemigreerd naar een modulaire vanilla JS-architectuur voor de productpagina",
+          "نقلت jQuery القديم إلى بنية JavaScript صافية ومعيارية لصفحة المنتج",
+          "Migré jQuery heredado a una arquitectura modular de JS puro para la ficha de producto",
+        ),
+        L(
+          "Integrated payment providers (Stripe, Klarna) into checkout and order flows",
+          "Інтегрував платіжні провайдери (Stripe, Klarna) у чекаут і обробку замовлень",
+          "Betaalproviders (Stripe, Klarna) geïntegreerd in checkout- en orderflows",
+          "دمجت مزوّدي الدفع (Stripe وKlarna) في مسارات الدفع والطلبات",
+          "Integré proveedores de pago (Stripe, Klarna) en el checkout y el flujo de pedidos",
+        ),
+        L(
+          "Built reusable components with Magento 1 & 2, React and Knockout.js",
+          "Робив перевикористовувані компоненти на Magento 1 і 2, React та Knockout.js",
+          "Herbruikbare componenten gebouwd met Magento 1 & 2, React en Knockout.js",
+          "بنيت مكوّنات قابلة لإعادة الاستخدام بـ Magento 1 و2 وReact وKnockout.js",
+          "Construí componentes reutilizables con Magento 1 y 2, React y Knockout.js",
+        ),
+        L(
+          "Improved performance and SEO for high-traffic retail pages",
+          "Покращив продуктивність і SEO високонавантажених сторінок",
+          "Performance en SEO verbeterd voor retailpagina's met veel verkeer",
+          "حسّنت الأداء وتحسين محركات البحث لصفحات تجارية عالية الزيارات",
+          "Mejoré el rendimiento y el SEO de páginas de retail con mucho tráfico",
+        ),
+      ],
+    },
+    4: {
+      title: L(
+        "Front-End Developer (in-house & freelance)",
+        "Front-End розробник (in-house і фриланс)",
+        "Front-end-ontwikkelaar (in-house & freelance)",
+        "مطوّر واجهات (داخلي ومستقل)",
+        "Desarrollador Front-End (interno y freelance)",
+      ),
+      period: L("2015 — 2019", "2015 — 2019", "2015 — 2019", "2015 — 2019", "2015 — 2019"),
+      location: kharkiv,
+      type: fullTime,
+      description: L(
+        "Started in a web studio with formal HTML/CSS training, then delivered freelance projects: responsive websites with jQuery, Bootstrap, vanilla JS and PHP basics, with exposure to .NET project structure.",
+        "Почав у веб-студії з формального навчання HTML/CSS, далі робив фриланс-проєкти: адаптивні сайти на jQuery, Bootstrap, чистому JS і базовому PHP, зі знайомством зі структурою .NET-проєктів.",
+        "Begonnen in een webstudio met formele HTML/CSS-opleiding, daarna freelanceprojecten opgeleverd: responsieve websites met jQuery, Bootstrap, vanilla JS en PHP-basis, met kennismaking met .NET-projectstructuur.",
+        "بدأت في استوديو ويب بتدريب رسمي على HTML/CSS، ثم أنجزت مشاريع مستقلة: مواقع متجاوبة بـ jQuery وBootstrap وJavaScript صافٍ وأساسيات PHP، مع اطّلاع على بنية مشاريع .NET.",
+        "Empecé en un estudio web con formación formal en HTML/CSS y después entregué proyectos freelance: webs responsive con jQuery, Bootstrap, JS puro y bases de PHP, con contacto con la estructura de proyectos .NET.",
+      ),
+      achievements: [
+        L(
+          "Completed formal HTML/CSS training in a web studio (2015)",
+          "Пройшов формальне навчання HTML/CSS у веб-студії (2015)",
+          "Formele HTML/CSS-opleiding afgerond in een webstudio (2015)",
+          "أكملت تدريبًا رسميًا على HTML/CSS في استوديو ويب (2015)",
+          "Completé formación formal de HTML/CSS en un estudio web (2015)",
+        ),
+        L(
+          "Delivered responsive freelance websites for local businesses",
+          "Робив адаптивні фриланс-сайти для локального бізнесу",
+          "Responsieve freelancewebsites opgeleverd voor lokale bedrijven",
+          "أنجزت مواقع متجاوبة كعمل مستقل لشركات محلية",
+          "Entregué webs freelance responsive para negocios locales",
+        ),
+        L(
+          "Worked with jQuery, Bootstrap, vanilla JS and PHP basics",
+          "Працював із jQuery, Bootstrap, чистим JS і базовим PHP",
+          "Gewerkt met jQuery, Bootstrap, vanilla JS en PHP-basis",
+          "عملت بـ jQuery وBootstrap وJavaScript صافٍ وأساسيات PHP",
+          "Trabajé con jQuery, Bootstrap, JS puro y bases de PHP",
+        ),
+        L(
+          "Gained exposure to .NET project structure",
+          "Познайомився зі структурою .NET-проєктів",
+          "Kennisgemaakt met .NET-projectstructuur",
+          "اطّلعت على بنية مشاريع .NET",
+          "Me familiaricé con la estructura de proyectos .NET",
+        ),
+      ],
+    },
+    5: {
+      title: L(
+        "Computer Science (coursework)",
+        "Комп'ютерні науки (навчання)",
+        "Informatica (studie)",
+        "علوم الحاسوب (دراسة)",
+        "Informática (estudios)",
+      ),
+      period: L("2012 — 2015", "2012 — 2015", "2012 — 2015", "2012 — 2015", "2012 — 2015"),
+      location: kharkiv,
+      type: L("Education", "Освіта", "Opleiding", "تعليم", "Formación"),
+      description: L(
+        "Completed coursework in Computer Science, building a foundation in programming, algorithms, data structures and software development principles.",
+        "Пройшов курс комп'ютерних наук, що дав базу з програмування, алгоритмів, структур даних і принципів розробки ПЗ.",
+        "Studie informatica gevolgd en zo een basis gelegd in programmeren, algoritmen, datastructuren en principes van softwareontwikkeling.",
+        "درست علوم الحاسوب، فبنيت أساسًا في البرمجة والخوارزميات وبنى البيانات ومبادئ تطوير البرمجيات.",
+        "Cursé Informática, construyendo una base en programación, algoritmos, estructuras de datos y principios de desarrollo de software.",
+      ),
+      achievements: [
+        L(
+          "Studied programming fundamentals and algorithms",
+          "Вивчав основи програмування та алгоритми",
+          "Programmeerfundamenten en algoritmen gestudeerd",
+          "درست أساسيات البرمجة والخوارزميات",
+          "Estudié fundamentos de programación y algoritmos",
+        ),
+        L(
+          "Learned data structures and software engineering principles",
+          "Опанував структури даних і принципи інженерії ПЗ",
+          "Datastructuren en software-engineeringprincipes geleerd",
+          "تعلّمت بنى البيانات ومبادئ هندسة البرمجيات",
+          "Aprendí estructuras de datos y principios de ingeniería de software",
+        ),
+        L(
+          "Built a strong technical foundation for a front-end career",
+          "Заклав міцну технічну базу для кар'єри у фронтенді",
+          "Een sterke technische basis gelegd voor een front-endcarrière",
+          "بنيت أساسًا تقنيًا متينًا لمسار مهني في الواجهات",
+          "Construí una base técnica sólida para una carrera en front-end",
+        ),
+      ],
+    },
+  } as const;
+}
 
 export function ExperienceTimelinePremium() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+
+  const L: Lang = (en, uk, nl, ar, es) =>
+    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+  const copy = experienceCopy(L);
+
+  const stats = [
+    { icon: Award, value: "8+", label: L("Years", "Років", "Jaar", "سنوات", "Años") },
+    {
+      icon: Building2,
+      value: "3",
+      label: L("Enterprise brands", "Enterprise-бренди", "Enterprise-merken", "علامات كبرى", "Marcas enterprise"),
+    },
+    { icon: Code2, value: "5", label: L("Roles", "Ролей", "Rollen", "أدوار", "Puestos") },
+    {
+      icon: Target,
+      value: "2026",
+      label: L("Latest launch", "Останній запуск", "Laatste launch", "أحدث إطلاق", "Último lanzamiento"),
+    },
+  ];
 
   return (
     <section
@@ -121,18 +337,12 @@ export function ExperienceTimelinePremium() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 10, repeat: Infinity }}
         />
         <motion.div
           className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.5, 0.3, 0.5],
-          }}
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.5, 0.3, 0.5] }}
           transition={{ duration: 10, repeat: Infinity, delay: 2 }}
         />
       </div>
@@ -150,35 +360,42 @@ export function ExperienceTimelinePremium() {
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-full mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[var(--accent-primary)]/10 to-purple-500/10 border border-[var(--accent-primary)]/30 rounded-full mb-6"
           >
-            <Briefcase className="w-5 h-5 text-cyan-400" />
-            <span className="text-sm font-medium text-cyan-400">Career Journey</span>
+            <Briefcase className="w-5 h-5 text-[var(--accent-primary)]" />
+            <span className="text-sm font-medium text-[var(--accent-primary)]">
+              {L("Career journey", "Кар'єрний шлях", "Loopbaan", "المسار المهني", "Trayectoria")}
+            </span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[var(--text-primary)] via-cyan-400 to-purple-400 bg-clip-text text-transparent">
-            {t("experience.title") || "Work Experience"}
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-400 bg-clip-text text-transparent">
+            {t("experience.title") || L("Work experience", "Досвід роботи", "Werkervaring", "الخبرة العملية", "Experiencia")}
           </h2>
           <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
-            {t("experience.subtitle") || "8+ years building e-commerce & enterprise web applications"}
+            {t("experience.subtitle") ||
+              L(
+                "8+ years building e-commerce & enterprise web applications",
+                "8+ років розробки e-commerce та enterprise веб-застосунків",
+                "8+ jaar e-commerce en enterprise-webapplicaties bouwen",
+                "أكثر من 8 سنوات في بناء تطبيقات التجارة الإلكترونية والمؤسسات",
+                "8+ años construyendo e-commerce y aplicaciones web empresariales",
+              )}
           </p>
         </motion.div>
 
         {/* Timeline */}
         <div className="relative">
-          {/* Timeline Line - Desktop */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500/50 via-purple-500/50 to-pink-500/50 hidden md:block -translate-x-1/2" />
-          
-          {/* Timeline Line - Mobile */}
-          <div className="absolute left-7 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500/50 via-purple-500/50 to-pink-500/50 block md:hidden" />
+          {/* Spine — desktop centre, mobile left */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--accent-primary)]/40 via-purple-500/40 to-pink-500/40 hidden md:block -translate-x-1/2" />
+          <div className="absolute left-7 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--accent-primary)]/40 via-purple-500/40 to-pink-500/40 block md:hidden" />
 
-          {/* Timeline Items */}
           <div className="space-y-12 md:space-y-16">
             {experiences.map((exp, index) => {
               const isEven = index % 2 === 0;
               const Icon = exp.icon;
               const isSelected = selectedId === exp.id;
               const isHovered = hoveredId === exp.id;
+              const text = copy[exp.id as keyof typeof copy];
 
               return (
                 <motion.div
@@ -191,78 +408,81 @@ export function ExperienceTimelinePremium() {
                   onMouseEnter={() => setHoveredId(exp.id)}
                   onMouseLeave={() => setHoveredId(null)}
                 >
-                  {/* Mobile Icon (Left Side) */}
+                  {/* Mobile node */}
                   <div className="block md:hidden absolute left-0 top-4">
                     <motion.div
                       className="relative"
-                      whileHover={{ scale: 1.2 }}
-                      animate={{
-                        scale: isHovered || isSelected ? 1.15 : 1,
-                      }}
+                      animate={{ scale: isHovered || isSelected ? 1.12 : 1 }}
                     >
-                      {/* Outer Ring */}
-                      <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${exp.gradient} p-0.5 shadow-[0_0_20px_rgba(0,217,255,0.18)]`}>
-                        {/* Inner Circle */}
+                      <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${exp.gradient} p-0.5`}>
                         <div className="w-full h-full rounded-full bg-[var(--bg-primary)] flex items-center justify-center">
-                          <Icon className="w-6 h-6 text-cyan-400" />
+                          <Icon className="w-6 h-6 text-[var(--accent-primary)]" />
                         </div>
                       </div>
-
-                      {/* Glow */}
                       <div
-                        className="absolute inset-0 rounded-full blur-lg opacity-50"
-                        style={{
-                          background: `radial-gradient(circle, ${exp.color}, transparent)`,
-                        }}
+                        className="absolute inset-0 rounded-full blur-lg opacity-40"
+                        style={{ background: `radial-gradient(circle, ${exp.color}, transparent)` }}
                       />
                     </motion.div>
                   </div>
 
-                  {/* Content Card - Always on left side on mobile, alternating on desktop */}
+                  {/*
+                    Card placement.
+                    There used to be a trailing empty <div> here "for grid
+                    balance". It was not balancing anything: for right-hand
+                    items the card is explicitly placed in column 2, so
+                    auto-placement pushed that filler onto a SECOND row. The
+                    explicit column start is the whole mechanism — no filler
+                    needed, and nothing spills onto an extra row.
+                    (It also carried `md:direction-ltr`, which is not a Tailwind
+                    class and compiled to nothing.)
+                  */}
                   <motion.div
-                    className={`${isEven ? "md:pr-12" : "md:pl-12 md:col-start-2"} w-full`}
-                    whileHover={{ scale: 1.02 }}
+                    className={`${isEven ? "md:pr-12" : "md:pl-12 md:col-start-2"} md:row-start-1 w-full`}
                   >
-                    <div className={`bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border-2 ${
-                      isHovered || isSelected ? "border-cyan-500/50" : "border-white/10"
-                    } rounded-2xl p-6 md:p-8 transition-all duration-500 cursor-pointer group relative overflow-hidden`}
+                    <div
+                      className={`bg-[var(--glass-bg)] backdrop-blur-xl border-2 ${
+                        isHovered || isSelected ? "border-[var(--accent-primary)]/50" : "border-[var(--glass-border)]"
+                      } rounded-2xl p-6 md:p-8 transition-all duration-500 cursor-pointer group relative overflow-hidden`}
                       onClick={() => setSelectedId(isSelected ? null : exp.id)}
                     >
-                      {/* Glow Effect */}
-                      <motion.div
-                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                      {/* Hover wash */}
+                      <div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
                         style={{
                           background: `radial-gradient(circle at ${isEven ? "right" : "left"} center, ${exp.color}15 0%, transparent 70%)`,
                         }}
                       />
 
-                      {/* Year Badge */}
-                      <div className={`inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r ${exp.gradient} rounded-full mb-4`}>
+                      {/* Year */}
+                      <div className={`inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r ${exp.gradient} rounded-full mb-4 relative z-10`}>
                         <Calendar className="w-4 h-4 text-white" />
                         <span className="text-sm font-bold text-white">{exp.year}</span>
                       </div>
 
-                      {/* Company & Role */}
+                      {/* Role & company */}
                       <div className="relative z-10 mb-4">
-                        <h3 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-2 group-hover:text-cyan-400 transition-colors">
-                          {exp.title}
+                        <h3 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-primary)] transition-colors">
+                          {text.title}
                         </h3>
                         <div className="flex items-center gap-4 text-[var(--text-secondary)] flex-wrap">
                           <span className="flex items-center gap-1.5 font-semibold">
-                            <Building2 className="w-4 h-4" />
+                            <Building2 className="w-4 h-4 flex-shrink-0" />
                             {exp.company}
                           </span>
                           <span className="flex items-center gap-1.5">
-                            <MapPin className="w-4 h-4" />
-                            {exp.location}
+                            <MapPin className="w-4 h-4 flex-shrink-0" />
+                            {text.location}
                           </span>
                         </div>
-                        <p className="text-sm text-[var(--text-muted)] mt-2">{exp.period}</p>
+                        <p className="text-sm text-[var(--text-muted)] mt-2">
+                          {text.period} · {text.type}
+                        </p>
                       </div>
 
                       {/* Description */}
                       <p className="text-[var(--text-secondary)] mb-4 leading-relaxed relative z-10">
-                        {exp.description}
+                        {text.description}
                       </p>
 
                       {/* Achievements */}
@@ -270,91 +490,78 @@ export function ExperienceTimelinePremium() {
                         initial={false}
                         animate={{ height: isSelected ? "auto" : 0, opacity: isSelected ? 1 : 0 }}
                         transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
+                        className="overflow-hidden relative z-10"
                       >
-                        <div className="space-y-2 mb-4 pt-4 border-t border-white/10">
-                          {exp.achievements.map((achievement, idx) => (
+                        <div className="space-y-2 mb-4 pt-4 border-t border-[var(--border-color)]">
+                          {text.achievements.map((achievement, idx) => (
                             <motion.div
                               key={idx}
                               initial={{ opacity: 0, x: -20 }}
                               animate={{ opacity: isSelected ? 1 : 0, x: isSelected ? 0 : -20 }}
-                              transition={{ delay: idx * 0.1 }}
+                              transition={{ delay: idx * 0.06 }}
                               className="flex items-start gap-2"
                             >
-                              <Award className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                              <Award className="w-4 h-4 text-[var(--accent-primary)] mt-0.5 flex-shrink-0" />
                               <span className="text-sm text-[var(--text-secondary)]">{achievement}</span>
                             </motion.div>
                           ))}
                         </div>
                       </motion.div>
 
-                      {/* Tech Stack */}
+                      {/* Tech */}
                       <div className="flex flex-wrap gap-2 mb-4 relative z-10">
-                        {exp.tech.slice(0, isSelected ? exp.tech.length : 3).map((tech, idx) => (
+                        {exp.tech.slice(0, isSelected ? exp.tech.length : 3).map((tech) => (
                           <span
-                            key={idx}
-                            className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-[var(--text-secondary)] hover:border-cyan-500/50 transition-colors"
+                            key={tech}
+                            className="px-3 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-full text-xs text-[var(--text-secondary)]"
                           >
                             {tech}
                           </span>
                         ))}
                         {!isSelected && exp.tech.length > 3 && (
-                          <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-[var(--text-muted)]">
+                          <span className="px-3 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-full text-xs text-[var(--text-muted)]">
                             +{exp.tech.length - 3}
                           </span>
                         )}
                       </div>
 
-                      {/* Expand Button */}
+                      {/* Expand */}
                       <button
-                        className={`text-sm font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors relative z-10 ${
-                          isEven ? "md:ml-auto" : ""
-                        }`}
+                        type="button"
+                        className="text-sm font-semibold text-[var(--accent-primary)] hover:text-[var(--accent-hover)] flex items-center gap-1 transition-colors relative z-10"
+                        aria-expanded={isSelected}
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedId(isSelected ? null : exp.id);
                         }}
                       >
-                        {isSelected ? "Show Less" : "Show More"}
-                        <motion.div
-                          animate={{ rotate: isSelected ? 90 : 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
+                        {isSelected
+                          ? L("Show less", "Менше", "Minder tonen", "أقل", "Ver menos")
+                          : L("Show more", "Детальніше", "Meer tonen", "المزيد", "Ver más")}
+                        <motion.div animate={{ rotate: isSelected ? 90 : 0 }} transition={{ duration: 0.3 }}>
                           <ChevronRight className="w-4 h-4" />
                         </motion.div>
                       </button>
                     </div>
                   </motion.div>
 
-                  {/* Timeline Node (Desktop) */}
+                  {/* Desktop node */}
                   <div className="hidden md:block absolute left-1/2 top-8 -translate-x-1/2">
                     <motion.div
                       className="relative"
-                      whileHover={{ scale: 1.2 }}
-                      animate={{
-                        scale: isHovered || isSelected ? 1.2 : 1,
-                      }}
+                      animate={{ scale: isHovered || isSelected ? 1.15 : 1 }}
                     >
-                      {/* Outer Ring */}
-                      <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${exp.gradient} p-1 shadow-[0_0_24px_rgba(0,217,255,0.18)]`}>
-                        {/* Inner Circle */}
+                      <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${exp.gradient} p-1`}>
                         <div className="w-full h-full rounded-full bg-[var(--bg-primary)] flex items-center justify-center">
-                          <Icon className="w-7 h-7 text-cyan-400" />
+                          <Icon className="w-7 h-7 text-[var(--accent-primary)]" />
                         </div>
                       </div>
-
-                      {/* Glow */}
                       <div
-                        className="absolute inset-0 rounded-full blur-xl opacity-50"
-                        style={{
-                          background: `radial-gradient(circle, ${exp.color}, transparent)`,
-                        }}
+                        className="absolute inset-0 rounded-full blur-xl opacity-40"
+                        style={{ background: `radial-gradient(circle, ${exp.color}, transparent)` }}
                       />
                     </motion.div>
                   </div>
-
-                  {/* Empty Space for Grid Balance */}
-                  <div className={`hidden md:block ${isEven ? "md:pl-12" : "md:pr-12 md:direction-ltr"}`} />
                 </motion.div>
               );
             })}
@@ -369,27 +576,21 @@ export function ExperienceTimelinePremium() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
         >
-          {[
-            { icon: Award, value: "8+", label: "Years" },
-            { icon: Building2, value: "3", label: "Enterprise Brands" },
-            { icon: Code2, value: "5", label: "Roles" },
-            { icon: Target, value: "2026", label: "Latest Launch" },
-          ].map((stat, index) => {
+          {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
               <motion.div
-                key={index}
+                key={stat.label}
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                className="bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl p-4 md:p-6 text-center hover:border-cyan-500/50 transition-all duration-300 group"
+                className="bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] rounded-2xl p-4 md:p-6 text-center hover:border-[var(--accent-primary)]/50 transition-all duration-300 group"
               >
-                <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3 md:mb-4 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-cyan-400" />
+                <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3 md:mb-4 bg-gradient-to-br from-[var(--accent-primary)]/20 to-purple-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-[var(--accent-primary)]" />
                 </div>
-                <div className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-1 md:mb-2">
+                <div className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[var(--accent-primary)] to-purple-400 bg-clip-text text-transparent mb-1 md:mb-2">
                   {stat.value}
                 </div>
                 <div className="text-xs md:text-sm text-[var(--text-secondary)]">{stat.label}</div>

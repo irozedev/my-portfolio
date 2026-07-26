@@ -1,46 +1,24 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
-import {
-  Award,
-  Heart,
-  Code2,
-  ExternalLink,
-  Github,
-  Calendar,
-  Users,
-  Clock,
-  ArrowRight,
-} from "lucide-react";
+import { Award, Heart, ExternalLink, Github, ArrowRight } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { useFavorites } from "../hooks/use-favorites";
 import { ProjectFullscreenView } from "./project-fullscreen-view";
 
+type Lang = (en: string, uk: string, nl: string, ar: string, es: string) => string;
+
 // Real, curated projects. Screenshots are captured once and served as static
 // assets from /public/projects (no runtime API dependency, no rate limits).
 // A gradient fallback shows if an image ever fails to load.
+//
+// Only the non-textual data lives here. Everything the visitor reads is built
+// per-language in `projectCopy` below — same inline-L() convention the newer
+// components use, so the huge shared translations file stays untouched.
 const projects = [
   {
-    id: 'marinek-store',
+    id: "marinek-store",
     title: "marinek.store",
-    category: "Freelance · Landing & Payments",
-    description: "Commercial Next.js 14 landing for a fitness coaching program — verified payments and one-time access links issued automatically.",
-    fullDescription:
-      "Designed, built and launched marinek.store end-to-end: a statically exported Next.js 14 site with three pricing tiers, legal pages and consent-gated GA4. " +
-      "In July 2026 I rebuilt the whole payment and access flow. Access had been handed out through a single shared Telegram link baked into the client bundle — anyone could open the thank-you page and join without paying, and the link spread by forwarding. " +
-      "Now the order is created and priced server-side, submitted to WayForPay through their Purchase API, and access is released only after a signature-verified webhook confirms the payment. " +
-      "Each buyer receives a personal single-use Telegram invite (one member, 7-day expiry) plus a transactional email, and a refund or void revokes the invite automatically. " +
-      "The site itself is a static export, so all server logic lives in Netlify Functions with Supabase as the order store.",
     image: "/projects/marinek.webp",
-    features: [
-      "Server-side pricing — the amount never comes from the client, so a tier cannot be bought for one hryvnia",
-      "HMAC signature verification on the payment webhook, plus an independent amount check against the stored order",
-      "Idempotent webhook: the gateway retries for up to four days, and a conditional update guarantees exactly one invite per order",
-      "Single-use Telegram invites via the Bot API — member limit 1, seven-day expiry, three tiers routed to two channels",
-      "Refund and void events revoke the invite automatically",
-      "Resend email as the guaranteed delivery channel if the buyer closes the tab",
-      "GA4 mounted only after explicit cookie consent; no analytics scripts before opt-in",
-      "Least-privilege bot: invite permission only, so a leaked token cannot damage the channels",
-    ],
     tech: [
       "Next.js 14",
       "TypeScript",
@@ -53,63 +31,250 @@ const projects = [
       "GA4",
     ],
     gradient: "from-cyan-500 to-blue-600",
-    stats: {
-      launched: "2026",
-      stack: "Next 14",
-      payments: "Verified",
-      access: "One-time",
-    },
     year: "2026",
-    duration: "Freelance",
-    team: "Solo",
-    role: "Full ownership (design → launch)",
     liveUrl: "https://marinek.store",
     featured: true,
   },
   {
-    id: 'roze-live',
+    id: "roze-live",
     title: "roze.live",
-    category: "Personal · Portfolio",
-    description: "This portfolio — a multilingual React/TypeScript site with dark mode, view modes and live GitHub data.",
-    fullDescription: "My personal portfolio built with React, TypeScript, Tailwind and Vite. Features five languages, light/dark theming, client & company view modes, motion-based animations, a contact pipeline and a live GitHub projects feed.",
     image: "/projects/roze.webp",
     tech: ["React", "TypeScript", "Tailwind", "Vite", "Motion"],
     gradient: "from-teal-500 to-cyan-600",
-    stats: {
-      stack: "React",
-      lang: "TypeScript",
-      i18n: "5 langs",
-      type: "Portfolio",
-    },
     year: "2026",
-    duration: "Personal",
-    team: "Solo",
-    role: "Design & Development",
     liveUrl: "https://roze.live",
     githubUrl: "https://github.com/irozedev",
     featured: false,
   },
-];
+] as const;
 
-type Project = typeof projects[0];
+type ProjectData = (typeof projects)[number];
+
+/**
+ * Per-project copy in all five languages.
+ *
+ * The tone here is deliberately conversational rather than résumé-formal:
+ * these cards are the first thing a prospective client reads, and a spec sheet
+ * does not tell them what the project actually achieved.
+ */
+function projectCopy(L: Lang) {
+  return {
+    "marinek-store": {
+      category: L(
+        "Freelance · payments",
+        "Фриланс · оплати",
+        "Freelance · betalingen",
+        "عمل حر · مدفوعات",
+        "Freelance · pagos",
+      ),
+      description: L(
+        "A paid marathon that actually keeps its paywall shut. Pay, the payment gets verified, and you get your own one-time Telegram invite. No more link that everybody forwards.",
+        "Платний марафон, який справді тримає пейволл закритим. Оплата, підтвердження платежу — і ви отримуєте персональний одноразовий інвайт у Telegram. Жодного посилання, яке всі пересилають.",
+        "Een betaalde marathon die haar paywall echt dicht houdt. Je betaalt, de betaling wordt geverifieerd, en je krijgt je eigen eenmalige Telegram-invite. Geen link meer die iedereen doorstuurt.",
+        "ماراثون مدفوع يُحكم إغلاق بوابة الدفع فعليًا. تدفع، فيُتحقَّق من الدفع، ثم تحصل على دعوة تيليجرام خاصة بك تُستخدم مرة واحدة. لا رابط يتناقله الجميع بعد الآن.",
+        "Un maratón de pago que de verdad mantiene cerrado su acceso. Pagas, el pago se verifica y recibes tu propia invitación de Telegram de un solo uso. Se acabó el enlace que todos reenvían.",
+      ),
+      role: L(
+        "Full ownership — design to launch",
+        "Повний цикл — від дизайну до запуску",
+        "Volledig eigendom — ontwerp tot livegang",
+        "مسؤولية كاملة — من التصميم إلى الإطلاق",
+        "Responsabilidad total — del diseño al lanzamiento",
+      ),
+      duration: L("Freelance", "Фриланс", "Freelance", "عمل حر", "Freelance"),
+      team: L("Solo", "Сам", "Solo", "منفرد", "En solitario"),
+      fullDescription: L(
+        "Designed, built and launched marinek.store end-to-end: a statically exported Next.js 14 site with three pricing tiers, legal pages and consent-gated GA4. In July 2026 I rebuilt the whole payment and access flow. Access had been handed out through a single shared Telegram link baked into the client bundle — anyone could open the thank-you page and join without paying, and the link spread by forwarding. Now the order is created and priced server-side, submitted to WayForPay through their Purchase API, and access is released only after a signature-verified webhook confirms the payment. Each buyer receives a personal single-use Telegram invite plus a transactional email, and a refund or void revokes the invite automatically. The site itself is a static export, so all server logic lives in Netlify Functions with Supabase as the order store.",
+        "Спроєктував, зібрав і запустив marinek.store під ключ: статичний експорт Next.js 14 із трьома тарифами, юридичними сторінками та GA4, що вантажиться лише після згоди. У липні 2026 переробив увесь контур оплати й доступу. До того доступ роздавався одним спільним посиланням на Telegram, вшитим у клієнтський бандл — сторінку подяки міг відкрити будь-хто без оплати, а посилання розходилося пересиланням. Тепер замовлення створюється й оцінюється на сервері, підписується та йде у WayForPay через Purchase API, і доступ видається лише після вебхука з перевіреним підписом. Кожен покупець отримує персональний одноразовий інвайт і лист, а повернення чи скасування платежу гасить інвайт автоматично. Сайт статичний, тож уся серверна логіка живе в Netlify Functions, а замовлення — у Supabase.",
+        "marinek.store van begin tot eind ontworpen, gebouwd en gelanceerd: een statisch geëxporteerde Next.js 14-site met drie tarieven, juridische pagina's en GA4 achter cookie-consent. In juli 2026 heb ik de volledige betaal- en toegangsflow herbouwd. Toegang liep eerder via één gedeelde Telegram-link die in de client-bundle zat — iedereen kon de bedankpagina openen en zonder betaling meedoen, en de link werd doorgestuurd. Nu wordt de order server-side aangemaakt en geprijsd, ondertekend naar WayForPay via hun Purchase API gestuurd, en komt toegang pas vrij nadat een webhook met geverifieerde signature de betaling bevestigt. Elke koper krijgt een persoonlijke eenmalige Telegram-invite plus een e-mail, en een terugbetaling trekt de invite automatisch in. De site is een statische export, dus alle serverlogica zit in Netlify Functions met Supabase als orderopslag.",
+        "صمّمت وبنيت وأطلقت marinek.store من البداية إلى النهاية: موقع Next.js 14 بتصدير ثابت، بثلاث فئات أسعار وصفحات قانونية وGA4 لا يعمل إلا بعد الموافقة. في يوليو 2026 أعدت بناء مسار الدفع والوصول بالكامل. كان الوصول يُمنح عبر رابط تيليجرام واحد مشترك مدفون في حزمة العميل — يستطيع أي شخص فتح صفحة الشكر والانضمام دون دفع، والرابط ينتشر بالتحويل. الآن يُنشأ الطلب ويُسعَّر على الخادم، ويُوقَّع ويُرسل إلى WayForPay عبر واجهة Purchase API، ولا يُفتح الوصول إلا بعد أن يؤكّد الدفع خطّاف ويب موثَّق التوقيع. يستلم كل مشترٍ دعوة تيليجرام خاصة تُستخدم مرة واحدة مع رسالة بريد، وأي استرداد أو إلغاء يبطل الدعوة تلقائيًا. الموقع تصدير ثابت، لذا تعمل كل المنطق الخادمي في Netlify Functions مع Supabase لتخزين الطلبات.",
+        "Diseñé, construí y lancé marinek.store de principio a fin: un sitio Next.js 14 de exportación estática con tres niveles de precio, páginas legales y GA4 supeditado al consentimiento. En julio de 2026 reconstruí todo el flujo de pago y acceso. Antes el acceso se repartía con un único enlace de Telegram compartido, incrustado en el bundle del cliente: cualquiera podía abrir la página de agradecimiento y entrar sin pagar, y el enlace se propagaba reenviándolo. Ahora el pedido se crea y se tarifica en el servidor, se firma y se envía a WayForPay por su Purchase API, y el acceso solo se libera cuando un webhook con firma verificada confirma el pago. Cada comprador recibe una invitación de Telegram personal de un solo uso más un correo, y una devolución o anulación revoca la invitación automáticamente. El sitio es una exportación estática, así que toda la lógica de servidor vive en Netlify Functions con Supabase como almacén de pedidos.",
+      ),
+      features: [
+        L(
+          "Server-side pricing — the amount never comes from the client, so a tier cannot be bought for one hryvnia",
+          "Ціна тільки з сервера — сума не приходить від клієнта, тож тариф не купити за одну гривню",
+          "Prijs alleen server-side — het bedrag komt nooit van de client, dus een tarief is niet voor één hryvnia te koop",
+          "التسعير على الخادم فقط — المبلغ لا يأتي من العميل أبدًا، فلا يمكن شراء فئة بهريفنيا واحدة",
+          "Precio solo en servidor — el importe nunca llega del cliente, así que un nivel no se compra por una grivna",
+        ),
+        L(
+          "Signature-verified payment webhook, plus an independent amount check against the stored order",
+          "Вебхук платежу з перевіркою підпису та незалежна сверка суми зі збереженим замовленням",
+          "Betaal-webhook met geverifieerde signature, plus een onafhankelijke bedragcontrole tegen de opgeslagen order",
+          "خطّاف دفع موثَّق التوقيع، مع تحقّق مستقل من المبلغ مقابل الطلب المحفوظ",
+          "Webhook de pago con firma verificada, más una comprobación independiente del importe contra el pedido guardado",
+        ),
+        L(
+          "Idempotent webhook: the gateway retries for up to four days, and a conditional update guarantees exactly one invite per order",
+          "Ідемпотентний вебхук: шлюз ретраїть до чотирьох діб, а умовний UPDATE гарантує рівно один інвайт на замовлення",
+          "Idempotente webhook: de gateway probeert tot vier dagen opnieuw, en een conditionele update garandeert precies één invite per order",
+          "خطّاف غير متأثر بالتكرار: البوابة تعيد المحاولة حتى أربعة أيام، وتحديث شرطي يضمن دعوة واحدة بالضبط لكل طلب",
+          "Webhook idempotente: la pasarela reintenta hasta cuatro días, y una actualización condicional garantiza exactamente una invitación por pedido",
+        ),
+        L(
+          "Single-use Telegram invites — one member, seven-day expiry, three tiers routed to two channels",
+          "Одноразові інвайти в Telegram — один учасник, термін 7 днів, три тарифи на два канали",
+          "Eenmalige Telegram-invites — één lid, zeven dagen geldig, drie tarieven naar twee kanalen",
+          "دعوات تيليجرام لمرة واحدة — عضو واحد، صلاحية سبعة أيام، ثلاث فئات موجَّهة إلى قناتين",
+          "Invitaciones de Telegram de un solo uso — un miembro, caducidad de siete días, tres niveles hacia dos canales",
+        ),
+        L(
+          "Refunds and voids revoke the invite automatically",
+          "Повернення та скасування гасять інвайт автоматично",
+          "Terugbetalingen en annuleringen trekken de invite automatisch in",
+          "الاسترداد والإلغاء يبطلان الدعوة تلقائيًا",
+          "Devoluciones y anulaciones revocan la invitación automáticamente",
+        ),
+        L(
+          "Email as the guaranteed delivery channel if the buyer closes the tab",
+          "Лист як гарантований канал доставки, якщо покупець закрив вкладку",
+          "E-mail als gegarandeerd bezorgkanaal als de koper het tabblad sluit",
+          "البريد الإلكتروني كقناة تسليم مضمونة إذا أغلق المشتري التبويب",
+          "El correo como canal de entrega garantizado si el comprador cierra la pestaña",
+        ),
+        L(
+          "Analytics mount only after explicit cookie consent",
+          "Аналітика вантажиться лише після явної згоди на cookie",
+          "Analytics laadt pas na expliciete cookie-toestemming",
+          "التحليلات لا تُحمَّل إلا بعد موافقة صريحة على الكوكيز",
+          "La analítica se carga solo tras el consentimiento explícito de cookies",
+        ),
+        L(
+          "Least-privilege bot: invite permission only, so a leaked token cannot damage the channels",
+          "Бот із мінімальними правами: лише запрошувати, тож злитий токен не зашкодить каналам",
+          "Bot met minimale rechten: alleen uitnodigen, dus een gelekt token kan de kanalen niet beschadigen",
+          "بوت بأقل الصلاحيات: صلاحية الدعوة فقط، فلا يستطيع رمز مسروق إضرار القنوات",
+          "Bot con privilegios mínimos: solo invitar, así un token filtrado no puede dañar los canales",
+        ),
+      ],
+    },
+    "roze-live": {
+      category: L(
+        "Personal · portfolio",
+        "Особисте · портфоліо",
+        "Persoonlijk · portfolio",
+        "شخصي · بورتفوليو",
+        "Personal · portafolio",
+      ),
+      description: L(
+        "The site you're on right now. Five languages, two view modes for two audiences, a light theme that isn't an afterthought — and a chat that quotes your project without an API bill.",
+        "Сайт, на якому ви зараз. П'ять мов, два режими перегляду для двох аудиторій, світла тема не «на відчепись» — і чат, що прикидає кошторис без рахунків за API.",
+        "De site waar je nu bent. Vijf talen, twee weergavemodi voor twee doelgroepen, een licht thema dat geen bijzaak is — en een chat die je project inschat zonder API-rekening.",
+        "الموقع الذي تتصفّحه الآن. خمس لغات، ووضعان للعرض لجمهورين، وثيم فاتح ليس مجرد إضافة لاحقة — ودردشة تقدّر مشروعك دون فاتورة API.",
+        "El sitio en el que estás ahora. Cinco idiomas, dos modos de vista para dos públicos, un tema claro que no es un añadido — y un chat que presupuesta tu proyecto sin factura de API.",
+      ),
+      role: L(
+        "Design & development",
+        "Дизайн і розробка",
+        "Ontwerp & ontwikkeling",
+        "التصميم والتطوير",
+        "Diseño y desarrollo",
+      ),
+      duration: L("Personal", "Особисте", "Persoonlijk", "شخصي", "Personal"),
+      team: L("Solo", "Сам", "Solo", "منفرد", "En solitario"),
+      fullDescription: L(
+        "My personal portfolio, built with React 19, TypeScript, Tailwind v4 and Vite. Five languages including Arabic with real RTL support, a light and a dark theme, and two view modes — one for clients looking to hire, one showing the full CV. The chat assistant runs entirely in the browser: it answers questions about pricing, timelines and stack, navigates the page for you and collects a lead, at zero API cost.",
+        "Моє особисте портфоліо на React 19, TypeScript, Tailwind v4 і Vite. П'ять мов, включно з арабською та справжнім RTL, світла й темна теми, два режими перегляду — один для клієнтів, другий із повним CV. Чат-асистент працює цілком у браузері: відповідає про ціни, строки та стек, навігує сторінкою і збирає лід — без жодних витрат на API.",
+        "Mijn persoonlijke portfolio, gebouwd met React 19, TypeScript, Tailwind v4 en Vite. Vijf talen inclusief Arabisch met echte RTL-ondersteuning, een licht en een donker thema, en twee weergavemodi — één voor klanten, één met het volledige cv. De chat-assistent loopt volledig in de browser: hij antwoordt over prijzen, planning en stack, navigeert de pagina voor je en verzamelt een lead, tegen nul API-kosten.",
+        "بورتفوليو الشخصي، مبني بـ React 19 وTypeScript وTailwind v4 وVite. خمس لغات منها العربية بدعم RTL حقيقي، وثيم فاتح وآخر داكن، ووضعان للعرض — أحدهما للعملاء والآخر يعرض السيرة الكاملة. مساعد الدردشة يعمل بالكامل في المتصفّح: يجيب عن الأسعار والمواعيد والتقنيات، ويتنقّل في الصفحة عنك، ويجمع العميل المحتمل — بتكلفة API صفرية.",
+        "Mi portafolio personal, hecho con React 19, TypeScript, Tailwind v4 y Vite. Cinco idiomas incluido árabe con soporte RTL real, tema claro y oscuro, y dos modos de vista: uno para clientes y otro con el CV completo. El asistente de chat funciona íntegramente en el navegador: responde sobre precios, plazos y stack, navega la página por ti y capta el contacto, con coste de API cero.",
+      ),
+      features: [
+        L(
+          "Five languages with a real ?lang= URL, honest hreflang and Arabic RTL",
+          "П'ять мов зі справжнім ?lang= в URL, чесним hreflang і арабським RTL",
+          "Vijf talen met een echte ?lang=-URL, eerlijke hreflang en Arabisch RTL",
+          "خمس لغات مع رابط ?lang= حقيقي، وhreflang صادق، وRTL للعربية",
+          "Cinco idiomas con una URL ?lang= real, hreflang honesto y RTL en árabe",
+        ),
+        L(
+          "Client and CV view modes off one dataset",
+          "Режими «клієнт» і «CV» з одного набору даних",
+          "Client- en cv-weergavemodi uit één dataset",
+          "وضعا العرض «عميل» و«سيرة» من مجموعة بيانات واحدة",
+          "Modos de vista cliente y CV desde un mismo conjunto de datos",
+        ),
+        L(
+          "Light and dark themes applied before first paint — no flash on reload",
+          "Світла й темна теми застосовуються до першого рендера — без миготіння при перезавантаженні",
+          "Licht en donker thema toegepast vóór de eerste paint — geen flits bij herladen",
+          "الثيم الفاتح والداكن يُطبَّق قبل أول رسم — بلا وميض عند إعادة التحميل",
+          "Temas claro y oscuro aplicados antes del primer pintado — sin destello al recargar",
+        ),
+        L(
+          "In-browser chat assistant: quotes, navigation and lead capture at zero API cost",
+          "Чат-асистент у браузері: кошторис, навігація і збір ліда без витрат на API",
+          "Chat-assistent in de browser: prijsindicatie, navigatie en leadcaptatie tegen nul API-kosten",
+          "مساعد دردشة داخل المتصفّح: تسعير وتنقّل وجمع العملاء بتكلفة API صفرية",
+          "Asistente de chat en el navegador: presupuesto, navegación y captación con coste de API cero",
+        ),
+        L(
+          "Keyboard-navigable throughout, with focus trapping in every dialog",
+          "Повна навігація з клавіатури, з фокус-трапом у кожному діалозі",
+          "Volledig met het toetsenbord te navigeren, met focus-trapping in elke dialog",
+          "التنقّل بالكيبورد في كل المواضع، مع حصر التركيز في كل نافذة حوار",
+          "Navegable por teclado en todo el sitio, con focus trap en cada diálogo",
+        ),
+        L(
+          "Code-split bundle, live GitHub feed, static screenshots instead of runtime API calls",
+          "Розбитий на чанки бандл, живий фід GitHub, статичні скриншоти замість запитів у рантаймі",
+          "Code-split bundle, live GitHub-feed, statische screenshots in plaats van runtime-API-calls",
+          "حزمة مقسَّمة، وتغذية GitHub مباشرة، ولقطات ثابتة بدل نداءات API وقت التشغيل",
+          "Bundle dividido, feed de GitHub en vivo, capturas estáticas en lugar de llamadas API en tiempo de ejecución",
+        ),
+      ],
+    },
+  } as const;
+}
 
 export function PortfolioCreativeSlider() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { favorites, addFavorite, removeFavorite } = useFavorites();
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const L: Lang = (en, uk, nl, ar, es) =>
+    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+  const copy = projectCopy(L);
 
   const isFavorite = (projectId: string) => favorites.some((fav) => fav.projectId === projectId);
 
-  const handleToggleFavorite = (project: Project) => {
+  const handleToggleFavorite = (project: ProjectData) => {
     if (isFavorite(project.id)) {
       removeFavorite(project.id);
     } else {
       // addFavorite takes positional arguments, not an options object. Passing
       // one object put the whole object into `projectId`, so the saved entry
       // never matched isFavorite() and favouriting silently did nothing.
-      addFavorite(project.id, project.title, project.image, 'project');
+      addFavorite(project.id, project.title, project.image, "project");
     }
   };
+
+  // Merge static data with the current language's copy. The fullscreen view
+  // takes the same shape, so it stays localized too.
+  const view = (project: ProjectData) => {
+    const text = copy[project.id as keyof typeof copy];
+    return {
+      ...project,
+      tech: [...project.tech],
+      category: text.category,
+      description: text.description,
+      fullDescription: text.fullDescription,
+      features: [...text.features],
+      role: text.role,
+      duration: text.duration,
+      team: text.team,
+      subtitle: text.category,
+      timeline: `${project.year} • ${text.duration}`,
+    };
+  };
+
+  const selectedProject = selectedId
+    ? view(projects.find((p) => p.id === selectedId) ?? projects[0])
+    : null;
+
+  const openLabel = L("Look inside", "Зазирнути", "Bekijk van binnen", "اطّلع من الداخل", "Ver por dentro");
+  const liveLabel = L("Open the live site", "Відкрити сайт", "Live site openen", "افتح الموقع المباشر", "Abrir el sitio");
 
   return (
     <section
@@ -133,9 +298,11 @@ export function PortfolioCreativeSlider() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/30 rounded-full mb-6">
             <Award className="w-5 h-5 text-purple-400" />
-            <span className="text-sm font-medium text-purple-400">Featured Work</span>
+            <span className="text-sm font-medium text-purple-400">
+              {L("Things I've built", "Що я зробив", "Wat ik gebouwd heb", "أعمال بنيتها", "Cosas que he construido")}
+            </span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-[var(--text-primary)] via-cyan-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-400 bg-clip-text text-transparent">
             {t("projects.title")}
           </h2>
           <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
@@ -143,135 +310,141 @@ export function PortfolioCreativeSlider() {
           </p>
         </motion.div>
 
-        {/* Projects Grid */}
-        <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 max-w-4xl mx-auto">
+        {/* Projects grid.
+            The screenshot is the hero of each card now: full-bleed at the top
+            with the title set over it, instead of a small thumbnail above a
+            table of facts. The old card led with a four-cell stats box, which
+            read like a datasheet — these are two personal projects, not
+            product listings. */}
+        <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 max-w-5xl mx-auto">
           {projects.map((project, index) => {
+            const text = copy[project.id as keyof typeof copy];
             const isFav = isFavorite(project.id);
+
             return (
-              <motion.div
+              <motion.article
                 key={project.id}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -6 }}
-                onClick={() => setSelectedProject(project)}
-                className="group relative flex flex-col bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl overflow-hidden hover:border-[var(--accent-primary)]/50 hover:shadow-[0_20px_60px_-15px_rgba(0,217,255,0.25)] transition-all duration-500 cursor-pointer"
+                className="group relative flex flex-col overflow-hidden rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 hover:shadow-[0_24px_60px_-24px_var(--shadow-color)] transition-all duration-500"
               >
-                {/* Featured badge */}
-                {project.featured && (
-                  <div className="absolute top-4 left-4 z-20 px-3 py-1.5 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 rounded-full text-black text-xs font-bold shadow-lg">
-                    FEATURED
-                  </div>
-                )}
-
-                {/* Favorite */}
+                {/* Screenshot.
+                    A fixed aspect-ratio box reserves the space before the image
+                    decodes, so the grid does not jump (CLS). */}
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleToggleFavorite(project);
-                  }}
-                  className="absolute top-4 right-4 z-20 w-10 h-10 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center hover:bg-black/70 hover:scale-110 transition-all duration-300"
-                  aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
+                  type="button"
+                  onClick={() => setSelectedId(project.id)}
+                  className={`relative block w-full aspect-[16/10] overflow-hidden bg-gradient-to-br ${project.gradient} text-left`}
+                  aria-label={`${project.title} — ${openLabel}`}
                 >
-                  <Heart className={`w-5 h-5 transition-colors ${isFav ? "fill-red-500 text-red-500" : "text-white"}`} />
-                </button>
-
-                {/* Screenshot */}
-                <div className={`relative h-52 sm:h-56 md:h-64 overflow-hidden bg-gradient-to-br ${project.gradient}`}>
                   <img
                     src={project.image}
                     alt={project.title}
                     loading="lazy"
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-[900ms] ease-out group-hover:scale-[1.05]"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = "none";
+                    }}
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${project.gradient} opacity-20 group-hover:opacity-30 transition-opacity pointer-events-none`} />
-                </div>
 
-                {/* Content */}
-                <div className="flex flex-col flex-1 p-6 md:p-7">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Code2 className="w-4 h-4 text-[var(--accent-primary)]" />
-                    <span className="text-sm text-[var(--accent-primary)] font-medium">{project.category}</span>
+                  {/* Scrim only where the text sits, so the screenshot itself
+                      stays readable. Fixed dark colours, not theme tokens:
+                      the caption on top is always white. */}
+                  <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
+
+                  {/* Caption over the photo */}
+                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6" dir="auto">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-white/70 mb-1.5">
+                      {text.category}
+                    </p>
+                    <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight">
+                      {project.title}
+                    </h3>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-3 group-hover:text-[var(--accent-primary)] transition-colors">
-                    {project.title}
-                  </h3>
+                  {project.featured && (
+                    <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[var(--accent-primary)] text-black text-[11px] font-bold tracking-wide">
+                      {L("Featured", "Обране", "Uitgelicht", "مميّز", "Destacado")}
+                    </span>
+                  )}
+                </button>
 
-                  <p className="text-[var(--text-secondary)] mb-5 leading-relaxed">
-                    {project.description}
+                {/* Favourite — outside the button above, so it is its own tab
+                    stop and its click cannot bubble into "open project". */}
+                <button
+                  type="button"
+                  onClick={() => handleToggleFavorite(project)}
+                  className="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-black/45 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-black/65 transition-colors"
+                  aria-label={
+                    isFav
+                      ? L("Remove from favourites", "Прибрати з обраного", "Uit favorieten halen", "إزالة من المفضّلة", "Quitar de favoritos")
+                      : L("Add to favourites", "Додати в обране", "Aan favorieten toevoegen", "إضافة إلى المفضّلة", "Añadir a favoritos")
+                  }
+                  aria-pressed={isFav}
+                >
+                  <Heart className={`w-5 h-5 transition-colors ${isFav ? "fill-red-500 text-red-500" : "text-white"}`} />
+                </button>
+
+                {/* Body */}
+                <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
+                  <p className="text-[15px] text-[var(--text-secondary)] leading-relaxed">
+                    {text.description}
                   </p>
 
-                  {/* Facts */}
-                  <div className="grid grid-cols-2 gap-3 mb-5 p-4 bg-[var(--bg-secondary)]/40 rounded-xl border border-[var(--border-color)]">
-                    {Object.entries(project.stats).slice(0, 4).map(([key, value]) => (
-                      <div key={key} className="text-center">
-                        <div className="text-base md:text-lg font-bold text-[var(--accent-primary)] truncate">{value}</div>
-                        <div className="text-[10px] md:text-xs text-[var(--text-muted)] capitalize">{key}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Tech */}
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {project.tech.slice(0, 4).map((tech, idx) => (
+                  <div className="flex flex-wrap gap-2">
+                    {project.tech.slice(0, 4).map((tech) => (
                       <span
-                        key={idx}
-                        className="px-3 py-1 bg-[var(--bg-secondary)]/50 border border-[var(--border-color)] rounded-full text-xs text-[var(--text-secondary)]"
+                        key={tech}
+                        className="px-2.5 py-1 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[11px] text-[var(--text-secondary)]"
                       >
                         {tech}
                       </span>
                     ))}
                     {project.tech.length > 4 && (
-                      <span className="px-3 py-1 bg-[var(--bg-secondary)]/50 border border-[var(--border-color)] rounded-full text-xs text-[var(--text-muted)]">
+                      <span className="px-2.5 py-1 rounded-full bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[11px] text-[var(--text-muted)]">
                         +{project.tech.length - 4}
                       </span>
                     )}
                   </div>
 
-                  {/* Meta */}
-                  <div className="flex items-center gap-4 mb-5 text-sm text-[var(--text-muted)]">
-                    <span className="flex items-center gap-1"><Calendar className="w-4 h-4" />{project.year}</span>
-                    <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{project.duration}</span>
-                    <span className="flex items-center gap-1"><Users className="w-4 h-4" />{project.team}</span>
-                  </div>
+                  <div className="flex items-center gap-2 mt-auto pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedId(project.id)}
+                      className="flex-1 py-3 px-4 rounded-xl bg-[var(--accent-primary)] text-[var(--bg-primary)] text-sm font-semibold flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+                    >
+                      {openLabel}
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
 
-                  {/* Actions */}
-                  <div className="flex gap-3 mt-auto">
                     <a
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex-1 py-3 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 rounded-xl text-black font-semibold flex items-center justify-center gap-2 hover:shadow-[0_0_24px_rgba(0,217,255,0.4)] transition-all"
+                      className="w-11 h-11 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent-primary)]/50 transition-all flex items-center justify-center flex-shrink-0"
+                      aria-label={liveLabel}
+                      title={liveLabel}
                     >
                       <ExternalLink className="w-4 h-4" />
-                      View Live
                     </a>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setSelectedProject(project); }}
-                      className="px-4 py-3 bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] rounded-xl text-[var(--text-primary)] hover:border-[var(--accent-primary)]/50 transition-all flex items-center justify-center gap-2"
-                    >
-                      Details
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                    {project.githubUrl && (
+
+                    {"githubUrl" in project && project.githubUrl && (
                       <a
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="px-4 py-3 bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] rounded-xl text-[var(--text-primary)] hover:border-[var(--accent-primary)]/50 transition-all flex items-center justify-center"
-                        aria-label="View code on GitHub"
+                        className="w-11 h-11 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent-primary)]/50 transition-all flex items-center justify-center flex-shrink-0"
+                        aria-label={L("View code on GitHub", "Код на GitHub", "Code op GitHub", "الكود على GitHub", "Código en GitHub")}
                       >
-                        <Github className="w-5 h-5" />
+                        <Github className="w-4 h-4" />
                       </a>
                     )}
                   </div>
                 </div>
-              </motion.div>
+              </motion.article>
             );
           })}
         </div>
@@ -281,19 +454,15 @@ export function PortfolioCreativeSlider() {
       <AnimatePresence>
         {selectedProject && (
           <ProjectFullscreenView
-            project={{
-              ...selectedProject,
-              subtitle: selectedProject.category,
-              timeline: `${selectedProject.year} • ${selectedProject.duration}`,
-            }}
-            onClose={() => setSelectedProject(null)}
+            project={selectedProject}
+            onClose={() => setSelectedId(null)}
             onNext={() => {
-              const i = projects.findIndex((p) => p.id === selectedProject.id);
-              setSelectedProject(projects[(i + 1) % projects.length]);
+              const i = projects.findIndex((p) => p.id === selectedId);
+              setSelectedId(projects[(i + 1) % projects.length].id);
             }}
             onPrev={() => {
-              const i = projects.findIndex((p) => p.id === selectedProject.id);
-              setSelectedProject(projects[(i - 1 + projects.length) % projects.length]);
+              const i = projects.findIndex((p) => p.id === selectedId);
+              setSelectedId(projects[(i - 1 + projects.length) % projects.length].id);
             }}
             hasNext={projects.length > 1}
             hasPrev={projects.length > 1}

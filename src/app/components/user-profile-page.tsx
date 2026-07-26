@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { useAuth } from "../contexts/auth-context";
-import { projectId } from "@/utils/supabase/info";
+import { API_BASE, edgeHeaders, currentAccessToken } from "@/utils/supabase/api";
 import { Camera, Upload, Save, Check, X, User, Briefcase, Building2, Mail } from "lucide-react";
 
 export function UserProfilePage() {
@@ -97,11 +97,13 @@ export function UserProfilePage() {
       formData.append('file', avatarFile);
       formData.append('userId', user!.id);
 
-      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/upload-avatar`, {
+      // No Content-Type here on purpose: the browser must set the multipart
+      // boundary itself. `apikey` is still required — it is the gateway
+      // credential, separate from the user token.
+      const { 'Content-Type': _omit, ...headers } = await edgeHeaders();
+      const response = await fetch(`${API_BASE}/upload-avatar`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
+        headers,
         body: formData,
       });
 
@@ -125,7 +127,10 @@ export function UserProfilePage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!accessToken) {
+    // Re-read rather than trusting cached state: an expired token still
+    // renders as a live session but cannot authorize the write.
+    const token = await currentAccessToken();
+    if (!token) {
       setMessage({ type: 'error', text: 'Please sign in to update your profile' });
       return;
     }
@@ -147,12 +152,9 @@ export function UserProfilePage() {
       }
 
       // Update user metadata
-      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/update-profile`, {
+      const response = await fetch(`${API_BASE}/update-profile`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
+        headers: await edgeHeaders(),
         body: JSON.stringify({
           name: formData.name,
           role: formData.role,

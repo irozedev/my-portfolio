@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { MessageCircle, Send, Trash2, User, LogIn, Lock } from "lucide-react";
 import { useAuth } from "../contexts/auth-context";
-import { projectId as supabaseProjectId, publicAnonKey } from "@/utils/supabase/info";
+import { useLanguage } from "../contexts/language-context";
+import { toast } from "sonner";
+import { API_BASE, edgeHeaders, currentAccessToken } from "@/utils/supabase/api";
 
 interface ProjectCommentsProps {
   projectId: string;
@@ -18,7 +20,10 @@ interface Comment {
 }
 
 export function ProjectComments({ projectId }: ProjectCommentsProps) {
-  const { user, accessToken } = useAuth();
+  const { user } = useAuth();
+  const { language } = useLanguage();
+  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
+    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,12 +32,8 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
   // Load comments
   const loadComments = async () => {
     try {
-      const url = `https://${supabaseProjectId}.supabase.co/functions/v1/make-server-a62f57c7/projects/${projectId}/comments`;
-      
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${publicAnonKey}`,
-        },
+      const response = await fetch(`${API_BASE}/projects/${projectId}/comments`, {
+        headers: await edgeHeaders(),
       });
 
 
@@ -58,42 +59,52 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!user || !accessToken) {
-      alert('Please login to comment!');
+    if (!commentText.trim()) {
       return;
     }
 
-    if (!commentText.trim()) {
+    // A cached token an hour old still looks like a valid session in the UI but
+    // cannot authorize a write, so re-read it at submit time.
+    const token = user ? await currentAccessToken() : null;
+    if (!token) {
+      toast.error(
+        L(
+          'Please sign in to comment',
+          'Увійдіть, щоб коментувати',
+          'Meld je aan om te reageren',
+          'سجّل الدخول للتعليق',
+          'Inicia sesión para comentar',
+        ),
+      );
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(
-        `https://${supabaseProjectId}.supabase.co/functions/v1/make-server-a62f57c7/projects/${projectId}/comments`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            text: commentText,
-          }),
-        }
-      );
+      const response = await fetch(`${API_BASE}/projects/${projectId}/comments`, {
+        method: 'POST',
+        headers: await edgeHeaders(),
+        body: JSON.stringify({
+          text: commentText,
+        }),
+      });
 
       if (response.ok) {
         setCommentText('');
         await loadComments();
       } else {
-        const error = await response.json();
-        alert(error.error || 'Failed to post comment');
+        const detail = await response.text();
+        console.error('Could not post comment:', response.status, detail);
+        toast.error(
+          L('Could not post the comment', 'Не вдалося надіслати коментар', 'Reactie plaatsen mislukt', 'تعذّر نشر التعليق', 'No se pudo publicar el comentario'),
+        );
       }
     } catch (error) {
       console.error('Error posting comment:', error);
-      alert('Failed to post comment');
+      toast.error(
+        L('Could not post the comment', 'Не вдалося надіслати коментар', 'Reactie plaatsen mislukt', 'تعذّر نشر التعليق', 'No se pudo publicar el comentario'),
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -104,15 +115,10 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
     if (!confirm('Delete this comment?')) return;
 
     try {
-      const response = await fetch(
-        `https://${supabaseProjectId}.supabase.co/functions/v1/make-server-a62f57c7/projects/${projectId}/comments/${commentId}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await fetch(`${API_BASE}/projects/${projectId}/comments/${commentId}`, {
+        method: 'DELETE',
+        headers: await edgeHeaders(),
+      });
 
       if (response.ok) {
         await loadComments();

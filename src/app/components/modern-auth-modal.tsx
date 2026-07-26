@@ -16,7 +16,10 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
   const [loading, setLoading] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<"google" | "github" | null>(null);
   const { signInWithProvider } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
+    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -34,12 +37,17 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
     try {
       await signInWithProvider(provider);
       const providerName = provider === "google" ? "Google" : "GitHub";
-      toast.success(`🚀 Redirecting to ${providerName}...`);
+      toast.success(
+        `🚀 ${L("Redirecting to", "Переходимо до", "Doorsturen naar", "جارٍ التحويل إلى", "Redirigiendo a")} ${providerName}…`,
+      );
       // Don't close modal immediately - user is being redirected
     } catch (error: any) {
       console.error("Social login error:", error);
       const providerName = provider === "google" ? "Google" : "GitHub";
-      toast.error(error.message || `Failed to sign in with ${providerName}. Please try again.`);
+      toast.error(
+        error.message ||
+          `${L("Could not sign in with", "Не вдалося увійти через", "Inloggen mislukt via", "تعذّر تسجيل الدخول عبر", "No se pudo iniciar sesión con")} ${providerName}.`,
+      );
       setLoading(false);
       setSelectedProvider(null);
     }
@@ -55,35 +63,45 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
   // Hook must run before the early return so its call order never changes.
   const dialogRef = useModalA11y({ isOpen, onClose: handleClose });
 
-  if (!isOpen) return null;
-
+  // The `isOpen` check belongs INSIDE AnimatePresence. It used to be an early
+  // `return null` above this point, which unmounted the whole tree in one go —
+  // AnimatePresence never got a chance to run the exit variants, so every
+  // `exit={...}` below was dead code and the dialog vanished instantly.
   return (
     <AnimatePresence>
+      {isOpen && (
       <motion.div
+        key="auth-modal"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={handleClose}
-        className="fixed inset-0 z-[100000] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
+        /* `items-start sm:items-center` + `overflow-y-auto`: the panel is taller
+           than a landscape phone or a 13" laptop, and a centred flex item in a
+           non-scrolling container has its overflow clipped in BOTH directions —
+           the sign-in buttons were simply unreachable. Now the backdrop
+           scrolls and the panel is capped to the visible viewport. */
+        className="fixed inset-0 z-[100000] bg-black/40 backdrop-blur-sm flex items-start sm:items-center justify-center overflow-y-auto overscroll-contain p-4 py-8"
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 20 }}
+          initial={{ scale: 0.95, opacity: 0, y: 16 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          transition={{ type: "spring", duration: 0.5 }}
+          exit={{ scale: 0.95, opacity: 0, y: 16 }}
+          transition={{ type: "spring", duration: 0.4, bounce: 0.15 }}
           ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby="auth-modal-title"
           tabIndex={-1}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-[95vw] sm:max-w-md md:max-w-lg lg:max-w-xl"
+          className="relative w-full max-w-md my-auto"
         >
-          {/* Glow Effects */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-[#00d9ff] via-purple-500 to-pink-500 rounded-3xl blur-2xl opacity-20 animate-pulse" />
-          
+          {/* Glow. `animate-pulse` was removed: a permanently breathing halo
+              behind a dialog you are trying to read is just noise. */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-[var(--accent-primary)] via-purple-500 to-pink-500 rounded-3xl blur-2xl opacity-15" />
+
           {/* Modal Content */}
-          <div className="relative bg-[var(--bg-primary)] border-2 border-[var(--border-color)] rounded-3xl shadow-2xl overflow-hidden">
+          <div className="relative bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-3xl shadow-2xl overflow-hidden">
             {/* Animated Background Orbs */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               <motion.div
@@ -112,7 +130,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
 
             {/* Close Button */}
             {!loading && (
-              <button aria-label="Close"
+              <button aria-label={L("Close", "Закрити", "Sluiten", "إغلاق", "Cerrar")}
                 onClick={handleClose}
                 className="absolute top-4 right-4 z-10 p-2 bg-[var(--bg-secondary)]/50 hover:bg-[var(--bg-secondary)] rounded-full transition-colors group"
               >
@@ -121,14 +139,14 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
             )}
 
             {/* Header */}
-            <div className="relative p-6 sm:p-8 md:p-10 lg:p-12 pb-4 sm:pb-6 md:pb-8 text-center">
+            <div className="relative px-6 pt-8 pb-5 sm:px-8 text-center">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mb-3 sm:mb-4 md:mb-6 bg-gradient-to-br from-[#00d9ff]/20 to-purple-500/20 rounded-2xl"
+                className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 mb-4 bg-gradient-to-br from-[var(--accent-primary)]/20 to-purple-500/20 rounded-2xl"
               >
-                <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#00d9ff]" />
+                <Sparkles className="w-7 h-7 sm:w-8 sm:h-8 text-[var(--accent-primary)]" />
               </motion.div>
 
               <motion.h2
@@ -136,7 +154,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] mb-2"
+                className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] mb-2"
               >
                 {t("auth.welcome")}! 👋
               </motion.h2>
@@ -145,7 +163,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-[var(--text-muted)] text-base sm:text-lg md:text-xl"
+                className="text-[var(--text-muted)] text-sm sm:text-base"
               >
                 {t("auth.unlockFeatures")}
               </motion.p>
@@ -156,7 +174,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="relative px-6 sm:px-8 md:px-10 lg:px-12 pb-4 sm:pb-6 space-y-3 sm:space-y-4"
+              className="relative px-6 sm:px-8 pb-5 space-y-3"
             >
               {[
                 { icon: Zap, text: t("auth.premiumProjects") },
@@ -168,12 +186,12 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + index * 0.1 }}
-                  className="flex items-center gap-3 sm:gap-4 text-[var(--text-secondary)]"
+                  className="flex items-center gap-3 text-[var(--text-secondary)]"
                 >
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-[#00d9ff]/10 flex items-center justify-center flex-shrink-0">
-                    <feature.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-[#00d9ff]" />
+                  <div className="w-9 h-9 rounded-lg bg-[var(--accent-primary)]/10 flex items-center justify-center flex-shrink-0">
+                    <feature.icon className="w-4 h-4 text-[var(--accent-primary)]" />
                   </div>
-                  <span className="text-sm sm:text-base md:text-lg">{feature.text}</span>
+                  <span className="text-sm">{feature.text}</span>
                 </motion.div>
               ))}
             </motion.div>
@@ -183,7 +201,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
-              className="relative p-6 sm:p-8 md:p-10 lg:p-12 pt-4 sm:pt-4 space-y-3 sm:space-y-4"
+              className="relative px-6 sm:px-8 pt-1 space-y-3"
             >
               {/* Google Login */}
               <motion.button
@@ -191,7 +209,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 disabled={loading}
                 whileHover={{ scale: loading ? 1 : 1.02, y: loading ? 0 : -2 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="relative w-full py-3 sm:py-4 md:py-5 lg:py-6 bg-white hover:bg-gray-50 text-gray-800 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group overflow-hidden"
+                className="relative w-full py-3.5 bg-white hover:bg-gray-50 text-gray-800 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group overflow-hidden"
               >
                 {/* Animated shine effect */}
                 {!loading && (
@@ -212,7 +230,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 {loading && selectedProvider === "google" ? (
                   <>
                     <Loader2 className="w-6 h-6 animate-spin" />
-                    <span className="relative z-10">Connecting to Google...</span>
+                    <span className="relative z-10">{L("Connecting to Google…", "З’єднання з Google…", "Verbinden met Google…", "جارٍ الاتصال بـ Google…", "Conectando con Google…")}</span>
                   </>
                 ) : (
                   <>
@@ -234,7 +252,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                       />
                     </svg>
-                    <span className="relative z-10 text-base">{t("auth.continueWithGoogle")}</span>
+                    <span className="relative z-10 text-sm sm:text-base">{t("auth.continueWithGoogle")}</span>
                   </>
                 )}
               </motion.button>
@@ -245,7 +263,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 disabled={loading}
                 whileHover={{ scale: loading ? 1 : 1.02, y: loading ? 0 : -2 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="relative w-full py-3 sm:py-4 md:py-5 lg:py-6 bg-[#24292e] hover:bg-[#1a1e22] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group overflow-hidden"
+                className="relative w-full py-3.5 bg-[#24292e] hover:bg-[#1a1e22] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group overflow-hidden"
               >
                 {/* Animated shine effect */}
                 {!loading && (
@@ -266,12 +284,12 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 {loading && selectedProvider === "github" ? (
                   <>
                     <Loader2 className="w-6 h-6 animate-spin" />
-                    <span className="relative z-10">Connecting to GitHub...</span>
+                    <span className="relative z-10">{L("Connecting to GitHub…", "З’єднання з GitHub…", "Verbinden met GitHub…", "جارٍ الاتصال بـ GitHub…", "Conectando con GitHub…")}</span>
                   </>
                 ) : (
                   <>
                     <Github className="w-6 h-6 relative z-10" />
-                    <span className="relative z-10 text-base">{t("auth.continueWithGithub")}</span>
+                    <span className="relative z-10 text-sm sm:text-base">{t("auth.continueWithGithub")}</span>
                   </>
                 )}
               </motion.button>
@@ -282,22 +300,29 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
-              className="relative p-6 pt-0 text-center"
+              className="relative px-6 sm:px-8 pt-4 pb-6 text-center"
             >
-              <p className="text-xs text-[var(--text-muted)]">
-                By continuing, you agree to our{" "}
-                <a href="#privacy" className="text-[#00d9ff] hover:underline">
-                  Privacy Policy
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                {L(
+                  "By continuing you agree to the",
+                  "Продовжуючи, ви погоджуєтесь із",
+                  "Door verder te gaan ga je akkoord met het",
+                  "بالمتابعة أنت توافق على",
+                  "Al continuar aceptas la",
+                )}{" "}
+                <a href="#privacy" className="text-[var(--accent-primary)] hover:underline">
+                  {L("Privacy Policy", "Політикою конфіденційності", "privacybeleid", "سياسة الخصوصية", "Política de privacidad")}
                 </a>{" "}
-                and{" "}
-                <a href="#terms" className="text-[#00d9ff] hover:underline">
-                  Terms of Service
+                {L("and", "та", "en de", "و", "y los")}{" "}
+                <a href="#terms" className="text-[var(--accent-primary)] hover:underline">
+                  {L("Terms of Service", "Умовами використання", "gebruiksvoorwaarden", "شروط الخدمة", "Términos del servicio")}
                 </a>
               </p>
             </motion.div>
           </div>
         </motion.div>
       </motion.div>
+      )}
     </AnimatePresence>
   );
 }

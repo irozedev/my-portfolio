@@ -1,264 +1,151 @@
-# 🔐 ENVIRONMENT VARIABLES SETUP
+# Environment variables
 
-## 📋 ВИКОРИСТАНІ СЕРВІСИ:
+Short version: this site needs **one** build-time variable, and it is optional.
 
-✅ **Supabase** - для авторизації, бази даних, storage
-- Не потрібні додаткові env variables!
-- Конфігурація зберігається в `/utils/supabase/info.tsx`
-- Автоматично згенерована Figma Make
+## What the app actually reads
 
-❌ **Firebase** - НЕ використовується (package встановлено, але не налаштовано)
+Exactly one variable is read anywhere in `src/`:
 
----
+| Variable | Read by | Required | Purpose |
+|---|---|---|---|
+| `VITE_GA_ID` | [`src/app/components/analytics.tsx`](../src/app/components/analytics.tsx) | No | GA4 measurement id, e.g. `G-XXXXXXXXXX`. Without it no analytics script is ever injected. |
 
-## ✅ ЩО ВЖЕ НАЛАШТОВАНО:
-
-### 1. Supabase Configuration
-```tsx
-// /utils/supabase/info.tsx
-export const projectId = "saeohtepfpuzzajfduad"
-export const publicAnonKey = "eyJhbG..."
-```
-
-### 2. Supabase Client
-```tsx
-// /utils/supabase/client.tsx
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = `https://${projectId}.supabase.co`;
-export const supabase = createClient(supabaseUrl, publicAnonKey);
-```
-
----
-
-## 🚀 NETLIFY DEPLOYMENT - НЕ ПОТРІБНІ ENV VARIABLES!
-
-**ВАЖЛИВО:** Для базового функціоналу твого портфоліо **не потрібно налаштовувати env variables на Netlify!**
-
-Всі Supabase credentials вже захардкоджені в коді:
-- ✅ Project ID
-- ✅ Anon Key (публічний, безпечно показувати)
-
----
-
-## ⚙️ ОПЦІОНАЛЬНІ ENV VARIABLES (якщо хочеш додати):
-
-### Якщо хочеш додати Google Analytics:
-```
-VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-```
-
-### Якщо хочеш додати Firebase (для додаткових функцій):
-```
-VITE_FIREBASE_API_KEY=your_key
-VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your-project-id
-VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=123456
-VITE_FIREBASE_APP_ID=1:123456:web:abc123
-```
-
----
-
-## 🔧 ЯК ДОДАТИ ENV VARIABLES НА NETLIFY (якщо знадобиться):
-
-### Варіант 1: Через Netlify UI
-
-1. **Відкрий свій сайт на Netlify:**
-   - Іди на https://app.netlify.com
-   - Обери свій проект (roze.live)
-
-2. **Site settings → Environment variables:**
-   ```
-   Site settings → Build & deploy → Environment variables
-   ```
-
-3. **Натисни "Add a variable":**
-   ```
-   Key: VITE_GA_MEASUREMENT_ID
-   Value: G-XXXXXXXXXX
-   ```
-
-4. **Збережи і передеплой:**
-   ```
-   Deploys → Trigger deploy → Deploy site
-   ```
-
----
-
-### Варіант 2: Через netlify.toml
-
-Додай в `netlify.toml`:
-
-```toml
-[build.environment]
-  VITE_GA_MEASUREMENT_ID = "G-XXXXXXXXXX"
-```
-
-**⚠️ НЕ ДОДАВАЙ СЕКРЕТНІ КЛЮЧІ В netlify.toml!**
-- Тільки публічні ключі (GA ID, Supabase Anon Key)
-- Секретні ключі додавай через Netlify UI!
-
----
-
-## 🔍 ЯК ВИКОРИСТОВУВАТИ В КОДІ:
-
-### У Vite проекті:
-
-```tsx
-// ✅ Правильно
-const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-
-// ❌ Неправильно
-const gaId = process.env.VITE_GA_MEASUREMENT_ID; // Це для Node.js!
-```
-
-### Перевірка чи змінна існує:
-
-```tsx
-if (import.meta.env.VITE_GA_MEASUREMENT_ID) {
-  console.log('Google Analytics enabled');
-} else {
-  console.log('Google Analytics disabled');
-}
-```
-
----
-
-## 🎯 ПОТОЧНИЙ СТАН:
-
-### ✅ ЩО ПРАЦЮЄ БЕЗ ENV:
-- Авторизація через Google (Supabase Auth)
-- База даних (KV Store)
-- Contact form
-- Testimonials
-- Comments
-- Reactions
-- User profiles
-- Dashboard
-
-### 📊 ЩО МОЖНА ДОДАТИ ЧЕРЕЗ ENV:
-- Google Analytics (VITE_GA_MEASUREMENT_ID)
-- Firebase (якщо потрібен)
-- Інші сторонні сервіси
-
----
-
-## 🚀 ШВИДКИЙ СТАРТ:
-
-### 1. Локально (.env для розробки):
+Confirm that claim yourself at any time:
 
 ```bash
-# Створи .env файл
-touch .env
-
-# Додай змінні (опціонально)
-echo "VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX" > .env
+grep -rn "import.meta.env" src/
 ```
 
-### 2. На Netlify:
+An earlier revision of this file told you to set `VITE_GA_MEASUREMENT_ID`. The
+code has always read `VITE_GA_ID`, so following that instruction created a
+variable nothing looks at and analytics that silently never loaded. The same
+revision documented six `VITE_FIREBASE_*` variables; Firebase was removed in the
+2026-07 cleanup and is no longer a dependency.
 
-**НЕ ПОТРІБНО НІЧОГО РОБИТИ!** 🎉
+## Where to set it
 
-Просто push в GitHub:
-```bash
-git push origin main
-```
-
-Netlify автоматично задеплоїть з існуючими Supabase credentials!
-
----
-
-## ⚠️ ВАЖЛИВІ НОТАТКИ:
-
-### 1. Публічні vs Приватні ключі:
-
-**✅ МОЖНА показувати:**
-- Supabase Project ID
-- Supabase Anon Key
-- Google Analytics ID
-- Firebase API Key (якщо налаштовані правила безпеки)
-
-**❌ НЕ МОЖНА показувати:**
-- Supabase Service Role Key
-- Private API keys
-- Database passwords
-- OAuth Client Secrets
-
-### 2. Prefix `VITE_`:
-
-Vite вимагає щоб **всі env variables для фронтенду** починалися з `VITE_`:
+Netlify UI → **Site configuration → Environment variables**, or from the CLI:
 
 ```bash
-# ✅ Працює
-VITE_API_KEY=abc123
-
-# ❌ НЕ працює
-API_KEY=abc123
+netlify env:set VITE_GA_ID G-XXXXXXXXXX
 ```
 
-### 3. .gitignore:
-
-Перевір що `.env` додано в `.gitignore`:
+`VITE_*` values are baked in **at build time**, so a change only takes effect
+after a fresh build — not a restart:
 
 ```bash
-# Local .env files
-.env
-.env.local
-.env.*.local
+netlify deploy --build --prod
 ```
 
----
+For local development put it in `.env.local` (git-ignored):
 
-## 🔍 TROUBLESHOOTING:
+```
+VITE_GA_ID=G-XXXXXXXXXX
+```
 
-### Проблема: "import.meta.env.VITE_XXX is undefined"
+## Critical: `VITE_` means public
 
-**Рішення 1:** Перевір що змінна починається з `VITE_`
+Vite inlines every `VITE_`-prefixed variable into the JavaScript bundle shipped
+to the browser. There is no such thing as a private `VITE_` variable.
 
-**Рішення 2:** Перезапусти dev server:
+**Never** put a Supabase `service_role` / `sb_secret_…` key, an OAuth client
+secret, or any other credential in a `VITE_` variable, on Netlify or locally. It
+becomes readable by every visitor in the page source. For the same reason, do not
+put secrets in `netlify.toml` under `[build.environment]` — that file is
+committed.
+
+## Supabase credentials
+
+No Supabase value comes from the environment on the client. They are compiled in
+from [`src/utils/supabase/info.tsx`](../src/utils/supabase/info.tsx):
+
+- `projectId` — the project ref
+- `publicAnonKey` — the publishable / anon key
+
+Both are public by design. The anon key grants only what Row Level Security
+allows, so committing it is safe. A modern `sb_publishable_…` key also exists for
+this project and can replace the legacy anon JWT; it rotates independently, which
+is the reason to prefer it.
+
+### Server-side secrets
+
+The backend is a **Supabase Edge Function** (`supabase/functions/server`), not a
+Netlify Function. Its secrets therefore live in the Supabase dashboard under
+**Edge Functions → Secrets**. Netlify never sees this code, so setting them there
+accomplishes nothing.
+
+| Secret | How it is provided | Purpose |
+|---|---|---|
+| `SUPABASE_URL` | Injected by the platform | — |
+| `SUPABASE_ANON_KEY` | Injected by the platform | — |
+| `SUPABASE_SERVICE_ROLE_KEY` | Injected by the platform | Admin auth calls: `auth.admin.createUser`, `getUser`, `updateUserById` |
+| `RESEND_API_KEY` | You set it, optional | Emails contact and chat leads to `rozedev095@gmail.com`. Without it leads are still written to the KV store and visible on `#admin`. |
+| `ANTHROPIC_API_KEY` | You set it, optional and currently unused | Real LLM chat. The live assistant runs entirely in-browser and calls no API, so this is not needed. |
+
+The three `SUPABASE_*` values come from the platform; you do not set them by
+hand. The function reads them through a `requiredEnv()` helper that throws during
+startup if one is missing, which makes that failure loud rather than subtle:
+
+```
+Missing required environment variable SUPABASE_SERVICE_ROLE_KEY.
+Set it in Supabase dashboard → Edge Functions → Secrets.
+```
+
+That gives you a one-request test for whether the secrets resolved:
+
 ```bash
-npm run dev
+curl -s "https://saeohtepfpuzzajfduad.supabase.co/functions/v1/make-server-a62f57c7/health" \
+  -H "apikey: <publishable key>"
+# {"status":"ok"}  → the function booted, so every required secret was present
 ```
 
-**Рішення 3:** На Netlify - trigger re-deploy після додавання env variables
+Never hardcode a `service_role` key as a fallback in the function source. An
+earlier revision of `index.tsx` did exactly that in a public repository and the
+key had to be rotated.
 
----
+## Calling the edge function from the client
 
-### Проблема: "Env variables не працюють на Netlify"
+Two different credentials are involved, and confusing them produces failures that
+look like a server outage:
 
-**Рішення 1:** Перевір що додав їх в правильному місці:
-```
-Site settings → Build & deploy → Environment variables
-```
+- **`apikey`** — the gateway credential. Always the publishable / anon key.
+  Supabase validates it and rejects the request before your handler runs.
+- **`Authorization: Bearer …`** — identifies the user. Handlers read it back with
+  `auth.getUser(token)`.
 
-**Рішення 2:** Trigger новий деплой:
-```
-Deploys → Trigger deploy → Clear cache and deploy site
-```
+Use [`src/utils/supabase/api.ts`](../src/utils/supabase/api.ts) (`edgeHeaders()`)
+instead of assembling headers by hand. It always sends `apikey`, and it takes the
+user token from `supabase.auth.getSession()` — a call that refreshes an expired
+session — rather than from cached React state. Access tokens last about an hour,
+and the gateway answers `401 UNAUTHORIZED_LEGACY_JWT` to a stale one. Project
+reactions were dead for exactly this reason: they put a cached session JWT in
+`Authorization` and sent no `apikey` at all.
 
----
+## Troubleshooting
 
-## 📚 КОРИСНІ ПОСИЛАННЯ:
+**`import.meta.env.VITE_X` is `undefined`**
+The name must start with `VITE_`; anything else is stripped from the client
+bundle. Locally, restart `npm run dev` after editing `.env.local`. On Netlify,
+trigger a rebuild — the value is inlined at build time.
 
-- [Vite Env Variables](https://vitejs.dev/guide/env-and-mode.html)
-- [Netlify Environment Variables](https://docs.netlify.com/environment-variables/overview/)
-- [Supabase JavaScript Client](https://supabase.com/docs/reference/javascript/initializing)
+**Analytics still not loading with `VITE_GA_ID` set**
+GA4 mounts only after cookie consent. Check that consent was accepted; the
+choice is stored in `localStorage`.
 
----
+**Everything server-backed returns 401**
+Check the `apikey` header is present, then check the session is fresh. See
+"Calling the edge function" above.
 
-## ✅ ПІДСУМОК:
+## Checklist
 
-**ДЛЯ БАЗОВОГО ДЕПЛОЮ НА NETLIFY:**
-- ✅ НЕ потрібні env variables
-- ✅ Просто push в GitHub
-- ✅ Netlify автоматично все задеплоїть
+- [ ] `VITE_GA_ID` set on Netlify, if you want analytics at all
+- [ ] Rebuilt after changing it — `VITE_*` is build-time, not runtime
+- [ ] No secret of any kind in a `VITE_` variable or in `netlify.toml`
+- [ ] `/health` returns `{"status":"ok"}`
+- [ ] `RESEND_API_KEY` set in Supabase if contact emails should actually arrive
 
-**ДЛЯ ДОДАТКОВИХ ФУНКЦІЙ:**
-- 📊 Додай Google Analytics через Netlify UI
-- 🔥 Налаштуй Firebase (якщо потрібен)
-- 🔐 Ніколи не комітуй секретні ключі!
+## Reference
 
----
-
-**READY TO DEPLOY! 🚀**
+- [Vite env variables](https://vitejs.dev/guide/env-and-mode.html)
+- [Netlify environment variables](https://docs.netlify.com/environment-variables/overview/)
+- [Supabase API keys](https://supabase.com/docs/guides/api/api-keys)

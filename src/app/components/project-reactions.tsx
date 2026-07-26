@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ThumbsUp, Heart, Star, Sparkles, X, LogIn } from "lucide-react";
 import { useAuth } from "../contexts/auth-context";
-import { projectId as supabaseProjectId, publicAnonKey } from "@/utils/supabase/info";
+import { API_BASE, edgeHeaders, currentAccessToken } from "@/utils/supabase/api";
 
 interface ProjectReactionsProps {
   projectId: string;
@@ -17,7 +17,7 @@ const reactionTypes = [
 ];
 
 export function ProjectReactions({ projectId, compact = false }: ProjectReactionsProps) {
-  const { user, accessToken, signInWithGoogle } = useAuth();
+  const { user, signInWithGoogle } = useAuth();
   const [reactions, setReactions] = useState<Record<string, number>>({});
   const [userReaction, setUserReaction] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,18 +26,18 @@ export function ProjectReactions({ projectId, compact = false }: ProjectReaction
   // Load reactions
   const loadReactions = async () => {
     try {
-      const url = `https://${supabaseProjectId}.supabase.co/functions/v1/make-server-a62f57c7/projects/${projectId}/reactions`;
-      
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${accessToken || publicAnonKey}`,
-        },
+      const response = await fetch(`${API_BASE}/projects/${projectId}/reactions`, {
+        headers: await edgeHeaders(),
       });
 
       if (response.ok) {
         const data = await response.json();
         setReactions(data.reactions || {});
         setUserReaction(data.userReaction || null);
+      } else {
+        // Worth surfacing: this endpoint answered 401 silently for a while and
+        // the bar just rendered zeroes, which looked like "nobody reacted".
+        console.error('Could not load reactions:', response.status, await response.text());
       }
     } catch (error) {
       console.error('Error loading reactions:', error);
@@ -52,7 +52,10 @@ export function ProjectReactions({ projectId, compact = false }: ProjectReaction
 
   // Toggle reaction
   const handleReaction = async (reactionType: string) => {
-    if (!user || !accessToken) {
+    // Re-read the token rather than trusting the cached one: an hour-old
+    // session still renders as "signed in" but cannot authorize a write.
+    const token = user ? await currentAccessToken() : null;
+    if (!token) {
       setShowAuthModal(true);
       return;
     }
@@ -60,22 +63,18 @@ export function ProjectReactions({ projectId, compact = false }: ProjectReaction
     const isRemoving = userReaction === reactionType;
 
     try {
-      const response = await fetch(
-        `https://${supabaseProjectId}.supabase.co/functions/v1/make-server-a62f57c7/projects/${projectId}/reactions`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            reactionType: isRemoving ? null : reactionType,
-          }),
-        }
-      );
+      const response = await fetch(`${API_BASE}/projects/${projectId}/reactions`, {
+        method: 'POST',
+        headers: await edgeHeaders(),
+        body: JSON.stringify({
+          reactionType: isRemoving ? null : reactionType,
+        }),
+      });
 
       if (response.ok) {
         await loadReactions();
+      } else {
+        console.error('Could not save reaction:', response.status, await response.text());
       }
     } catch (error) {
       console.error('Error toggling reaction:', error);
