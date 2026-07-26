@@ -3,10 +3,10 @@
 Personal portfolio for **Stepan Roze**, Front-End / JavaScript Developer.
 Single-page React app, live at **[roze.live](https://roze.live)**.
 
-[![React](https://img.shields.io/badge/React-18.3-61dafb?style=flat&logo=react)](https://react.dev/)
+[![React](https://img.shields.io/badge/React-19.2-61dafb?style=flat&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.3-646cff?style=flat&logo=vite)](https://vite.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-8.1-646cff?style=flat&logo=vite)](https://vite.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.3-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Auth%20%2B%20Edge-3ecf8e?style=flat&logo=supabase)](https://supabase.com/)
 
 ---
@@ -23,11 +23,15 @@ dark/light theme. A local, zero-cost chat assistant doubles as a lead funnel.
 
 ## Stack
 
-- **React 18 + Vite 6 + TypeScript**, **Tailwind CSS v4**
+- **React 19 + Vite 8 + TypeScript 5.9**, **Tailwind CSS v4.3**
 - **Motion** (`motion/react`) for animation
 - **Supabase** — OAuth sign-in (Google / GitHub) and an edge function
   (`make-server-a62f57c7`) backing the contact form, comments and reactions
+- Services carousel is CSS `scroll-snap`, not a library
 - Deployed on **Netlify** (`netlify.toml`); `dist/` is committed to the repo
+
+**Vite 8 bundles with rolldown**, so build config lives under
+`build.rolldownOptions` and chunking under `output.advancedChunks.groups`.
 
 > Auth is **Supabase**, not Firebase. Earlier revisions of this file said
 > Firebase — that dependency is gone.
@@ -89,20 +93,24 @@ security boundary — anything sensitive needs a server-side check too.
 
 | Guide | |
 | --- | --- |
-| [Quick start](docs/QUICK_START.md) | get running in 5 minutes |
-| [Developer guide](docs/DEVELOPER_GUIDE.md) | architecture and conventions |
-| [Content updates](docs/CONTENT_UPDATE_GUIDE.md) | change copy without touching components |
-| [Features](docs/FEATURES.md) | full feature list |
-| [SEO setup](docs/SEO_SETUP.md) | meta, JSON-LD, sitemap, hreflang |
-| [Google auth](docs/GOOGLE_AUTH_SETUP.md) | OAuth configuration |
-| [Env setup](docs/ENV_SETUP.md) | environment variables |
-| [Deployment](docs/DEPLOYMENT_CHECKLIST.md) · [DNS](docs/DNS_SETUP.md) | going live |
-| [Performance](docs/PERFORMANCE_TIPS.md) | budgets and techniques |
+| [Env setup](docs/ENV_SETUP.md) | environment variables, and where secrets actually live |
+| [OAuth sign-in](docs/GOOGLE_AUTH_SETUP.md) | Google and GitHub provider configuration |
+| [SEO setup](docs/SEO_SETUP.md) | meta, JSON-LD, sitemap, hreflang, GA4 |
 
-`CLAUDE.md` holds working notes for AI assistants, including the gotchas that
-cost real debugging time.
+Seven other guides used to sit here. They documented Firebase, `recharts`,
+`react-router`, Cloudflare, Vercel and React 18 — none of which this project uses
+— and gave instructions that actively broke things: the wrong env-var name for
+GA4, an OAuth redirect path that does not exist, port 5173, and a `gtag` snippet
+to paste into `index.html` that would have bypassed cookie consent. They were
+deleted rather than translated, because a confidently wrong guide costs more than
+no guide at all.
+
+`CLAUDE.md` holds the working notes that remain accurate, including the gotchas
+that cost real debugging time.
 
 ## License
 
-Personal project — all rights reserved. UI primitives from
-[shadcn/ui](https://ui.shadcn.com/), see [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
+Personal project — all rights reserved. One remaining UI primitive
+(`src/app/components/ui/button.tsx`) derives from
+[shadcn/ui](https://ui.shadcn.com/); the other 45 were removed in the 2026-07
+cleanup. See [ATTRIBUTIONS.md](ATTRIBUTIONS.md).

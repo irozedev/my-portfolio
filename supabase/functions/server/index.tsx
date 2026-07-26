@@ -35,7 +35,12 @@ app.use(
   "/*",
   cors({
     origin: "*",
-    allowHeaders: ["Content-Type", "Authorization"],
+    // `apikey` is required. The browser sends it as the Supabase gateway
+    // credential, and any header outside this list makes the CORS preflight
+    // fail before the real request is ever attempted — which shows up in the
+    // console as an opaque "TypeError: Failed to fetch", not as a 4xx.
+    // `x-client-info` is what supabase-js attaches to its own calls.
+    allowHeaders: ["Content-Type", "Authorization", "apikey", "x-client-info"],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     exposeHeaders: ["Content-Length"],
     maxAge: 600,

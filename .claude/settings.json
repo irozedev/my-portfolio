@@ -12,7 +12,8 @@
       "TodoWrite",
       "WebFetch",
       "WebSearch",
-      "Bash"
+      "Bash",
+      "mcp__playwright"
     ],
     "deny": [
       "Bash(git push)",

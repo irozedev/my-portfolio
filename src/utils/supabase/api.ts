@@ -7,34 +7,34 @@ export const API_BASE = `https://${projectId}.supabase.co/functions/v1/make-serv
 /**
  * Headers for a call to the edge function.
  *
- * There are TWO distinct credentials here, and conflating them is what broke
- * project reactions:
+ * `Authorization` does double duty here: it is both the Supabase gateway
+ * credential and how a handler identifies the user (handlers read it back with
+ * `supabaseAdmin.auth.getUser(token)`). A valid user JWT satisfies both roles;
+ * with no session we fall back to the anon key, which is correct because every
+ * GET route treats "no user" as an anonymous read.
  *
- *   `apikey`        — the GATEWAY credential. Always the publishable (anon) key.
- *                     Supabase validates it and rejects the request before our
- *                     handler ever runs.
- *   `Authorization` — identifies the USER. Handlers read it back out with
- *                     `supabaseAdmin.auth.getUser(token)`.
+ * The bug this replaced: `project-reactions.tsx` read the token from React
+ * state in AuthContext — a snapshot taken whenever the session was last read.
+ * A Supabase access token is valid for about an hour, so any tab left open past
+ * expiry sent a stale JWT and the gateway answered 401 to every reactions
+ * request. The reaction bar was dead while comments, which always sent the anon
+ * key, kept working. The edge-function logs showed exactly that pairing: 401 on
+ * `/reactions` next to 200 on `/comments` in the same page load. Reading from
+ * `getSession()` fixes it because that call transparently refreshes an expired
+ * session, so what we send is always current.
  *
- * `project-reactions.tsx` used to put the user's session JWT straight into
- * `Authorization` with no `apikey` at all. A Supabase access token is valid for
- * roughly an hour, and the value it used came from React state in AuthContext —
- * a snapshot taken whenever the session was last read. Leave a tab open past
- * expiry and the gateway answered 401 to every reactions request, so the
- * reaction bar was dead while comments (which always sent the anon key) kept
- * working. The edge-function logs show exactly that: 401 on
- * `/reactions` paired with 200 on `/comments` in the same page load.
- *
- * The token here comes from `getSession()` rather than cached state because
- * that call transparently refreshes an expired session, so what we send is
- * always current. With no session at all we fall back to the anon key, which
- * is correct: every GET route treats "no user" as an anonymous read.
+ * Deliberately NO `apikey` header. Sending one is the more orthodox way to
+ * present the gateway credential, but it pushes the request into a CORS
+ * preflight, and the edge function's `allowHeaders` did not list `apikey` —
+ * every call then failed at the preflight with an opaque
+ * "TypeError: Failed to fetch" rather than an HTTP status. `allowHeaders` has
+ * since been widened in `supabase/functions/server/index.tsx`, but that only
+ * takes effect once the function is redeployed, and nothing here needs it.
  */
 export async function edgeHeaders(): Promise<Record<string, string>> {
   const token = await currentAccessToken();
   return {
     'Content-Type': 'application/json',
-    apikey: publicAnonKey,
     Authorization: `Bearer ${token ?? publicAnonKey}`,
   };
 }
