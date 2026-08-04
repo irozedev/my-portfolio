@@ -9,26 +9,25 @@ const labels = {
   es: "Descargar CV",
 };
 
-// The real, up-to-date résumé lives as a static file in /public.
-const CV_URL = "/Stepan_Roze_CV.pdf";
-
+// Opens the CV page rather than downloading a static file.
+//
+// It used to pull `/Stepan_Roze_CV.pdf` straight out of /public, a document
+// maintained by hand that had drifted from the site: wrong E-Consulting end
+// date, no Albron entry. The page at #cv is generated from `data/experience.ts`
+// — the same module the timeline renders — and offers "Save as PDF" through the
+// browser's own print dialog, so there is no second copy of the facts to keep
+// in sync and no PDF library in the bundle.
 export function DownloadCVButton() {
   const { language } = useLanguage();
   const label = labels[language as keyof typeof labels] || labels.en;
 
-  const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = CV_URL;
-    link.download = "Stepan_Roze_CV.pdf";
-    link.rel = "noopener";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleOpen = () => {
+    window.location.hash = "cv";
   };
 
   return (
     <motion.button aria-label="Download CV"
-      onClick={handleDownload}
+      onClick={handleOpen}
       className="relative px-6 py-3 rounded-xl font-bold text-sm transition-all overflow-hidden group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}

@@ -18,6 +18,9 @@ const LegalPage = lazy(() =>
 const AdminRoute = lazy(() =>
   import("./components/admin-page").then((m) => ({ default: m.AdminRoute })),
 );
+const CVPrint = lazy(() =>
+  import("./components/cv-print").then((m) => ({ default: m.CVPrint })),
+);
 // /dashboard and /profile are gone with the rest of the account surface. They
 // were two full pages behind a sign-in that only ever had one user.
 
@@ -36,13 +39,13 @@ function RouteFallback() {
 
 export default function App() {
  
-  const [currentPage, setCurrentPage] = useState<"home" | "privacy" | "terms" | "imprint" | "admin">(() => {
+  const [currentPage, setCurrentPage] = useState<"home" | "privacy" | "terms" | "imprint" | "admin" | "cv">(() => {
     // Safe window check for SSR
     if (typeof window === 'undefined') return "home";
 
     const hash = window.location.hash.slice(1);
 
-    if (["privacy", "terms", "imprint", "admin"].includes(hash)) {
+    if (["privacy", "terms", "imprint", "admin", "cv"].includes(hash)) {
       return hash as any;
     }
     return "home";
@@ -51,7 +54,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.slice(1);
-      if (["privacy", "terms", "imprint", "admin"].includes(hash)) {
+      if (["privacy", "terms", "imprint", "admin", "cv"].includes(hash)) {
         setCurrentPage(hash as any);
       } else {
         setCurrentPage("home");
@@ -67,6 +70,25 @@ export default function App() {
       window.removeEventListener("popstate", handleHashChange);
     };
   }, []);
+
+  const closeToHome = () => {
+    // Clear the hash without scrolling
+    window.history.replaceState(null, '', window.location.pathname);
+    setCurrentPage("home");
+  };
+
+  // The CV renders on its own, outside every provider except language: it is a
+  // document, not a page of the site, and it must not inherit the dark theme.
+  if (currentPage === "cv") {
+    return (
+      <LanguageProvider>
+        <Suspense fallback={<RouteFallback />}>
+          <CVPrint onClose={closeToHome} />
+        </Suspense>
+        <Analytics />
+      </LanguageProvider>
+    );
+  }
 
   const handleCloseLegal = () => {
     // Clear the hash without scrolling

@@ -1,0 +1,262 @@
+/*
+ * Styles for the printable CV at #cv.
+ *
+ * This is a faithful rebuild of the existing `public/Stepan_Roze_CV.pdf`, not a
+ * redesign. That file was written in LibreOffice and its layout was measured
+ * straight out of the PDF so the two match:
+ *
+ *   page      A4, 595.3 x 841.9 pt, left margin 36 pt (12.7 mm)
+ *   photo     75 x 90.7 pt, top-left, header text starts at x = 126.5 pt
+ *   name      20 pt bold, #1F6FB2
+ *   role      11.5 pt, #1A1A1A
+ *   contact   9.5 pt label #555555 + value #1A1A1A, label/value columns
+ *   headings  12 pt bold, #1F6FB2
+ *   body      10.5 pt #1A1A1A, bullets indent 43.1 -> 52.1 pt
+ *   font      Carlito (metric-compatible with Calibri)
+ *
+ * Everything is scoped under `.cv-root` so none of it reaches the site, and it
+ * ignores dark mode on purpose — a CV printed from a dark theme comes out
+ * inverted or blank.
+ */
+
+.cv-root {
+  color: #1a1a1a;
+  font-family: Carlito, Calibri, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* The grey surround exists only to make the white sheet read as paper on a
+   screen. It is declared inside `@media screen` rather than being overridden
+   back to white in the print block: an override was in fact losing there —
+   `padding` and `min-height` from the print rule applied while `background`
+   did not — and a grey border around a saved PDF is the kind of detail that
+   makes the file look wrong. Not emitting it for print removes the question. */
+@media screen {
+  .cv-root {
+    background: #e9ecef;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+}
+
+.cv-actions {
+  max-width: 210mm;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.cv-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #c3c9d0;
+  background: #fff;
+  color: #1a1a1a;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cv-actions button:hover {
+  border-color: #1f6fb2;
+}
+
+.cv-actions .cv-primary {
+  background: #1f6fb2;
+  border-color: #1f6fb2;
+  color: #fff;
+}
+
+/* A4 sheet. `mm` keeps the on-screen preview the same proportions as the
+   printed output, so what is checked here is what comes out of the printer. */
+.cv-sheet {
+  width: 100%;
+  max-width: 210mm;
+  margin: 0 auto;
+  background: #fff;
+  padding: 12.7mm;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.14);
+  font-size: 10.5pt;
+  line-height: 1.35;
+}
+
+/* Header: photo left, identity block right — the original's arrangement. */
+.cv-header {
+  display: flex;
+  gap: 6mm;
+  align-items: flex-start;
+  margin-bottom: 5mm;
+}
+
+.cv-photo {
+  width: 26.5mm; /* 75 pt */
+  height: 32mm; /* 90.7 pt */
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cv-identity {
+  min-width: 0;
+}
+
+.cv-identity h1 {
+  font-size: 20pt;
+  font-weight: 700;
+  color: #1f6fb2;
+  margin: 0 0 1mm;
+  line-height: 1.1;
+}
+
+.cv-role {
+  font-size: 11.5pt;
+  color: #1a1a1a;
+  margin: 0 0 2mm;
+}
+
+/* Label / value rows, mirroring the two text columns in the original. */
+.cv-contact {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4mm 3mm;
+  font-size: 9.5pt;
+}
+
+.cv-contact dt {
+  color: #555;
+}
+
+.cv-contact dd {
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.cv-contact a {
+  color: #1a1a1a;
+  text-decoration: none;
+}
+
+/* The site sets a generous line-height on `p` for on-screen reading, which
+   leaked in here and cost ~40% of the page height (measured: 23.8px against
+   the sheet's 18.9px). A document is not a landing page — it inherits the
+   sheet's leading. */
+.cv-sheet p,
+.cv-sheet li,
+.cv-sheet dd,
+.cv-sheet dt {
+  line-height: inherit;
+}
+
+.cv-sheet section {
+  margin-bottom: 4mm;
+}
+
+.cv-sheet h2 {
+  font-size: 12pt;
+  font-weight: 700;
+  color: #1f6fb2;
+  margin: 0 0 1.5mm;
+}
+
+.cv-entry {
+  margin-bottom: 3mm;
+}
+
+.cv-entry:last-child {
+  margin-bottom: 0;
+}
+
+.cv-entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4mm;
+}
+
+.cv-entry-head h3 {
+  font-size: 10.5pt;
+  font-weight: 700;
+  margin: 0;
+}
+
+.cv-at {
+  font-weight: 400;
+  color: #1f6fb2;
+}
+
+.cv-period {
+  font-size: 9.5pt;
+  color: #555;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cv-meta {
+  font-size: 9.5pt;
+  color: #777;
+  margin: 0.3mm 0 1mm;
+}
+
+.cv-desc {
+  margin: 0;
+  color: #1a1a1a;
+}
+
+/* Bullet geometry from the original: marker at 43.1 pt, text at 52.1 pt,
+   i.e. a 9 pt hang off a 7 pt indent. */
+.cv-list {
+  margin: 1mm 0 0;
+  padding-inline-start: 5.7mm;
+  list-style: disc;
+}
+
+.cv-list li {
+  margin-bottom: 0.4mm;
+}
+
+.cv-tech {
+  font-size: 9.5pt;
+  color: #555;
+  margin: 1mm 0 0;
+}
+
+.cv-tech strong {
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+/* Arabic is cursive — same rule the rest of the site follows. A Latin-only
+   stack renders tofu and letter-spacing breaks the joins. */
+.cv-root:lang(ar) {
+  font-family: 'Noto Naskh Arabic', 'Noto Sans Arabic', serif;
+  letter-spacing: normal;
+}
+
+@media print {
+  /* The browser prints the whole document, so the page background and the
+     on-screen controls have to be neutralised. */
+  .cv-noprint {
+    display: none !important;
+  }
+
+  .cv-sheet {
+    max-width: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  /* Never split a role across two sheets — an entry cut mid-bullet is the
+     commonest way a printed CV looks careless. */
+  .cv-entry,
+  .cv-sheet section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  @page {
+    size: A4;
+    margin: 12.7mm;
+  }
+}

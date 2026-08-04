@@ -1,6 +1,7 @@
 @import './fonts.css';
 @import './tailwind.css';
 @import './theme.css';
+@import './cv-print.css';
 
 /* Smooth scrolling with easing */
 html {
@@ -945,14 +946,19 @@ select:focus-visible {
     display: none !important;
   }
 
-  /* Optimize for printing */
-  * {
+  /* Optimize for printing.
+     Scoped away from the CV route. This is a blanket `color: black !important`
+     meant to make the marketing page survive a printer; applied to the CV at
+     #cv it flattened the whole document to black and threw away the blue the
+     original PDF is built on — the one thing that must not change. The CV
+     brings its own print rules in cv-print.css. */
+  body:not(:has(.cv-root)) * {
     background: white !important;
     color: black !important;
     box-shadow: none !important;
   }
 
-  a {
+  body:not(:has(.cv-root)) a {
     text-decoration: underline;
   }
 

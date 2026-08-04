@@ -253,19 +253,45 @@ and since the entry needs the helper, the entry statically imported all 202 KB.
 Verify with `grep -o 'assets/[a-z-]*\.[A-Za-z0-9_-]*\.js' dist/index.html` —
 supabase must not appear.
 
+## The CV (`#cv`)
+`public/Stepan_Roze_CV.pdf` is **gone**. It was maintained by hand and had
+already drifted from the site — old E-Consulting end date, no Albron entry — so
+the document a recruiter downloaded contradicted the page they downloaded it
+from. It is replaced by a generated route:
+
+- `src/app/data/experience.ts` — **the single source of truth for employment
+  history.** Both the timeline and the CV render from it. Anything factual about
+  a role goes here and nowhere else.
+- `src/app/components/cv-print.tsx` + `src/styles/cv-print.css` — the document.
+- `#cv` renders **outside every provider except language**: it must not inherit
+  the dark theme. "Save as PDF" comes from the browser's own print dialog, so
+  there is no PDF library in the bundle and no second file to keep in sync.
+
+The visual design is a deliberate rebuild of the old PDF, measured out of it
+(LibreOffice/Carlito): A4, 12.7mm margins, photo 75×90.7pt top-left, name 20pt
+**#1F6FB2**, headings 12pt #1F6FB2, body 10.5pt #1A1A1A, labels #555. Keep it —
+this is the look, not a starting point. `public/cv-photo.jpg` was extracted from
+that PDF; note it is **not** the photo `about-section.tsx` shows.
+
+Two traps, both already hit:
+- `index.css` has a print block with a blanket `* { color: black !important }`
+  to make the marketing page printable. It flattened the CV and threw away the
+  blue. It is now scoped `body:not(:has(.cv-root)) *` — keep it that way.
+- The site's generous `p { line-height }` leaked in and cost ~40% of the page
+  height. `.cv-sheet p,li,dd,dt { line-height: inherit }` fixes it.
+
+Length is **~1.7 A4 pages**, and that is correct: the document it replaces was
+two pages, and two pages is normal for eight years of experience in Belgium. Do
+not squeeze it to one.
+
 ## Open items (as of 2026-08-04)
 Ordered by how much they matter, most first.
 
 1. **The About photo looks like a stock image** (`about-section.tsx`). If it is
    not Stepan, it is the single most damaging thing on the page: a face that
    does not match LinkedIn is spotted instantly. Needs a real photo from him.
-2. **One-page CV for the Belgian market** — not written yet. All the data is in
-   `experience-timeline-premium.tsx` and now correct. The existing
-   `public/Stepan_Roze_CV.pdf` has the old (wrong) E-Consulting end date and no
-   Albron entry, so the file currently contradicts the site. Plan: generate it
-   from the same data as HTML that prints to PDF, so the two cannot drift apart.
-3. **Experience section is 3 464 px** for six entries — the largest block left
+2. **Experience section is 3 464 px** for six entries — the largest block left
    on the page. Page total is 11 125 px desktop / 14 051 px mobile.
-4. **`knowsLanguage` in `index.html` still lists Ukrainian.** Left deliberately:
+3. **`knowsLanguage` in `index.html` still lists Ukrainian.** Left deliberately:
    that is a language Stepan speaks, not a language the site is published in.
    Confirm with him before touching it.

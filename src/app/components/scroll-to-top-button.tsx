@@ -198,11 +198,13 @@ function assistantReply(input: string, language: string): { text: string; action
 
   // CV / resume
   if (/(\bcv\b|resume|curriculum|résumé|резюме|السيرة الذاتية|سيرة ذاتية)/.test(s))
-    return { matched: true, action: { kind: 'link', href: '/Stepan_Roze_CV.pdf', label: lblCV }, text: L(
-      "📄 Download Stepan's CV as PDF, or switch to Company view for the full interactive timeline.",
-      "📄 Download Stepans cv als PDF, of schakel naar Company-weergave voor de volledige tijdlijn.",
-      "📄 حمّل سيرة ستيبان PDF، أو بدّل لوضع الشركة للخبرة كاملة.",
-      "📄 Descarga el CV de Stepan en PDF, o cambia a vista Empresa para la trayectoria completa.",
+    // Points at the generated CV page, not the retired static PDF. That file
+    // was maintained by hand and had drifted out of sync with the site.
+    return { matched: true, action: { kind: 'link', href: '#cv', label: lblCV }, text: L(
+      "📄 Open Stepan's CV — printable, and \"Save as PDF\" from there. Or switch to Company view for the full interactive timeline.",
+      "📄 Open Stepans cv — printbaar, en daar \"Opslaan als PDF\". Of schakel naar Company-weergave voor de volledige tijdlijn.",
+      "📄 افتح سيرة ستيبان — قابلة للطباعة والحفظ كـ PDF. أو بدّل لوضع الشركة للخبرة كاملة.",
+      "📄 Abre el CV de Stepan — imprimible, y desde ahí \"Guardar como PDF\". O cambia a vista Empresa para la trayectoria completa.",
     ) };
 
   // Experience / career
