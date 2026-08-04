@@ -18,8 +18,8 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
   const { signInWithProvider } = useAuth();
   const { t, language } = useLanguage();
 
-  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
-    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+  const L = (en: string, nl: string, ar: string, es: string) =>
+    language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -38,7 +38,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
       await signInWithProvider(provider);
       const providerName = provider === "google" ? "Google" : "GitHub";
       toast.success(
-        `🚀 ${L("Redirecting to", "Переходимо до", "Doorsturen naar", "جارٍ التحويل إلى", "Redirigiendo a")} ${providerName}…`,
+        `🚀 ${L("Redirecting to", "Doorsturen naar", "جارٍ التحويل إلى", "Redirigiendo a")} ${providerName}…`,
       );
       // Don't close modal immediately - user is being redirected
     } catch (error: any) {
@@ -46,7 +46,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
       const providerName = provider === "google" ? "Google" : "GitHub";
       toast.error(
         error.message ||
-          `${L("Could not sign in with", "Не вдалося увійти через", "Inloggen mislukt via", "تعذّر تسجيل الدخول عبر", "No se pudo iniciar sesión con")} ${providerName}.`,
+          `${L("Could not sign in with", "Inloggen mislukt via", "تعذّر تسجيل الدخول عبر", "No se pudo iniciar sesión con")} ${providerName}.`,
       );
       setLoading(false);
       setSelectedProvider(null);
@@ -130,7 +130,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
 
             {/* Close Button */}
             {!loading && (
-              <button aria-label={L("Close", "Закрити", "Sluiten", "إغلاق", "Cerrar")}
+              <button aria-label={L("Close", "Sluiten", "إغلاق", "Cerrar")}
                 onClick={handleClose}
                 className="absolute top-4 right-4 z-10 p-2 bg-[var(--bg-secondary)]/50 hover:bg-[var(--bg-secondary)] rounded-full transition-colors group"
               >
@@ -230,7 +230,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 {loading && selectedProvider === "google" ? (
                   <>
                     <Loader2 className="w-6 h-6 animate-spin" />
-                    <span className="relative z-10">{L("Connecting to Google…", "З’єднання з Google…", "Verbinden met Google…", "جارٍ الاتصال بـ Google…", "Conectando con Google…")}</span>
+                    <span className="relative z-10">{L("Connecting to Google…", "Verbinden met Google…", "جارٍ الاتصال بـ Google…", "Conectando con Google…")}</span>
                   </>
                 ) : (
                   <>
@@ -284,7 +284,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 {loading && selectedProvider === "github" ? (
                   <>
                     <Loader2 className="w-6 h-6 animate-spin" />
-                    <span className="relative z-10">{L("Connecting to GitHub…", "З’єднання з GitHub…", "Verbinden met GitHub…", "جارٍ الاتصال بـ GitHub…", "Conectando con GitHub…")}</span>
+                    <span className="relative z-10">{L("Connecting to GitHub…", "Verbinden met GitHub…", "جارٍ الاتصال بـ GitHub…", "Conectando con GitHub…")}</span>
                   </>
                 ) : (
                   <>
@@ -305,17 +305,16 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
               <p className="text-xs text-[var(--text-muted)] leading-relaxed">
                 {L(
                   "By continuing you agree to the",
-                  "Продовжуючи, ви погоджуєтесь із",
                   "Door verder te gaan ga je akkoord met het",
                   "بالمتابعة أنت توافق على",
                   "Al continuar aceptas la",
                 )}{" "}
                 <a href="#privacy" className="text-[var(--accent-primary)] hover:underline">
-                  {L("Privacy Policy", "Політикою конфіденційності", "privacybeleid", "سياسة الخصوصية", "Política de privacidad")}
+                  {L("Privacy Policy", "privacybeleid", "سياسة الخصوصية", "Política de privacidad")}
                 </a>{" "}
-                {L("and", "та", "en de", "و", "y los")}{" "}
+                {L("and", "en de", "و", "y los")}{" "}
                 <a href="#terms" className="text-[var(--accent-primary)] hover:underline">
-                  {L("Terms of Service", "Умовами використання", "gebruiksvoorwaarden", "شروط الخدمة", "Términos del servicio")}
+                  {L("Terms of Service", "gebruiksvoorwaarden", "شروط الخدمة", "Términos del servicio")}
                 </a>
               </p>
             </motion.div>

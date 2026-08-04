@@ -6,6 +6,7 @@ import { smoothScrollToSection } from "../../utils/scroll-utils";
 import { useAuth } from "../contexts/auth-context";
 import { useAvailability } from "../contexts/availability-context";
 import { useViewMode } from "../contexts/view-mode-context";
+import { ViewModeToggle } from "./view-mode-toggle";
 import { ModernAuthModal } from "./modern-auth-modal";
 import { BookCallModal } from "./book-call-fixed";
 import { AvailabilityScheduleModal } from "./availability-schedule-modal";
@@ -40,7 +41,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
         { label: t("nav.services"), href: "#services" },
         {
           label:
-            language === "uk" ? "Процес" :
+            
             language === "nl" ? "Werkwijze" :
             language === "ar" ? "آلية العمل" :
             language === "es" ? "Proceso" : "Process",
@@ -61,9 +62,10 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
     }
   }, [t, isClientMode, language]);
 
+  // Order and contents must match OFFERED in language-context.tsx.
+  // Ukrainian was retired: the site targets the European hiring market.
   const languages: { code: Language; label: string; flag: string }[] = [
     { code: "en", label: "English", flag: "🇬🇧" },
-    { code: "uk", label: "Українська", flag: "🇺🇦" },
     { code: "nl", label: "Nederlands", flag: "🇳🇱" },
     { code: "ar", label: "العربية", flag: "🇸🇦" },
     { code: "es", label: "Español", flag: "🇪🇸" },
@@ -224,9 +226,9 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                   <div className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-green-500 animate-pulse' : 'bg-orange-500'}`} />
                   <span className={`text-xs font-bold uppercase ${isAvailable ? 'text-green-500' : 'text-orange-500'}`}>
                     {isAvailable ? (
-                      language === 'uk' ? 'Онлайн' : language === 'nl' ? 'Online' : language === 'ar' ? 'متصل' : language === 'es' ? 'En línea' : 'Online'
+                      language === 'nl' ? 'Online' : language === 'ar' ? 'متصل' : language === 'es' ? 'En línea' : 'Online'
                     ) : (
-                      language === 'uk' ? 'Зайнятий' : language === 'nl' ? 'Bezet' : language === 'ar' ? 'مشغول' : language === 'es' ? 'Ocupado' : 'Busy'
+                      language === 'nl' ? 'Bezet' : language === 'ar' ? 'مشغول' : language === 'es' ? 'Ocupado' : 'Busy'
                     )}
                   </span>
                 </button>
@@ -256,6 +258,11 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
 
             {/* Desktop Controls */}
             <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-end">
+              {/* Client / CV switch. Lives here rather than as a floating panel:
+                  it is navigation, and pinned to the right edge it covered the
+                  About section text. */}
+              <ViewModeToggle className="mr-1" />
+
               {/* Language Selector */}
               <div id="language-selector" className="relative language-selector">
                 <button
@@ -299,10 +306,16 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               {!user && !loading && (
                 <button
                   onClick={() => setShowAuthModal(true)}
+                  title={t('auth.signIn')}
+                  aria-label={t('auth.signIn')}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors"
                 >
                   <LogIn className="w-4 h-4" />
-                  <span>{t('auth.signIn')}</span>
+                  {/* Label only on very wide screens. Sign-in is secondary here
+                      — almost nobody uses it — while the Client/CV switch is the
+                      primary control and keeps its labels. Something had to give
+                      to stop the header wrapping onto two lines at 1440. */}
+                  <span className="hidden 2xl:inline">{t('auth.signIn')}</span>
                 </button>
               )}
 
@@ -360,12 +373,12 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, "#contact")}
-                className="ml-2 group relative flex items-center gap-2 px-4 py-2.5 bg-[var(--bg-secondary)] border border-[var(--accent-primary)]/40 rounded-md font-mono text-sm text-[var(--accent-primary)] hover:bg-[var(--accent-primary)]/10 hover:border-[var(--accent-primary)] hover:shadow-[0_0_15px_rgba(0,217,255,0.2)] transition-all active:scale-95"
+                className="ml-2 group relative flex items-center gap-2 whitespace-nowrap px-4 py-2.5 bg-[var(--bg-secondary)] border border-[var(--accent-primary)]/40 rounded-md font-mono text-sm text-[var(--accent-primary)] hover:bg-[var(--accent-primary)]/10 hover:border-[var(--accent-primary)] hover:shadow-[0_0_15px_rgba(0,217,255,0.2)] transition-all active:scale-95"
               >
                 <Terminal className="w-4 h-4" />
                 <span className="text-[var(--text-muted)] group-hover:text-[var(--accent-primary)] transition-colors">$</span>
                 <span>
-                  {language === 'uk' ? 'запустити проєкт' :
+                  {
                    language === 'nl' ? 'start project' :
                    language === 'ar' ? 'ابدأ مشروع' :
                    language === 'es' ? 'iniciar proyecto' :
@@ -377,6 +390,10 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
 
             {/* Mobile Controls */}
             <div className="lg:hidden flex items-center gap-1.5">
+              {/* Icon-only here — the labels do not fit next to the language
+                  chip, the theme button and the burger on a 390px screen. */}
+              <ViewModeToggle size="compact" layoutGroup="mobile" />
+
               {/* Language — compact */}
               <div className="relative language-selector">
                 <button
@@ -568,7 +585,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                 <Terminal className="w-4 h-4" />
                 <span className="text-[var(--text-muted)]">$</span>
                 <span>
-                  {language === 'uk' ? 'запустити проєкт' :
+                  {
                    language === 'nl' ? 'start project' :
                    language === 'ar' ? 'ابدأ مشروع' :
                    language === 'es' ? 'iniciar proyecto' :

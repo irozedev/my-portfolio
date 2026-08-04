@@ -22,8 +22,8 @@ interface Comment {
 export function ProjectComments({ projectId }: ProjectCommentsProps) {
   const { user } = useAuth();
   const { language } = useLanguage();
-  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
-    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+  const L = (en: string, nl: string, ar: string, es: string) =>
+    language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,7 +70,6 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
       toast.error(
         L(
           'Please sign in to comment',
-          'Увійдіть, щоб коментувати',
           'Meld je aan om te reageren',
           'سجّل الدخول للتعليق',
           'Inicia sesión para comentar',
@@ -97,13 +96,13 @@ export function ProjectComments({ projectId }: ProjectCommentsProps) {
         const detail = await response.text();
         console.error('Could not post comment:', response.status, detail);
         toast.error(
-          L('Could not post the comment', 'Не вдалося надіслати коментар', 'Reactie plaatsen mislukt', 'تعذّر نشر التعليق', 'No se pudo publicar el comentario'),
+          L('Could not post the comment', 'Reactie plaatsen mislukt', 'تعذّر نشر التعليق', 'No se pudo publicar el comentario'),
         );
       }
     } catch (error) {
       console.error('Error posting comment:', error);
       toast.error(
-        L('Could not post the comment', 'Не вдалося надіслати коментар', 'Reactie plaatsen mislukt', 'تعذّر نشر التعليق', 'No se pudo publicar el comentario'),
+        L('Could not post the comment', 'Reactie plaatsen mislukt', 'تعذّر نشر التعليق', 'No se pudo publicar el comentario'),
       );
     } finally {
       setIsSubmitting(false);

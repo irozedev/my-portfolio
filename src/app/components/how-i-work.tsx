@@ -21,20 +21,18 @@ import { useLanguage } from "../contexts/language-context";
  */
 export function HowIWork() {
   const { language } = useLanguage();
-  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
-    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+  const L = (en: string, nl: string, ar: string, es: string) =>
+    language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
 
-  const kicker = L("How I work", "Як я працюю", "Hoe ik werk", "كيف أعمل", "Cómo trabajo");
+  const kicker = L("How I work", "Hoe ik werk", "كيف أعمل", "Cómo trabajo");
   const title = L(
     "Clear process, honest timelines",
-    "Прозорий процес, чесні строки",
     "Helder proces, eerlijke planning",
     "عملية واضحة ومواعيد صادقة",
     "Proceso claro, plazos honestos",
   );
   const subtitle = L(
     "I run this alongside a main job, so I build every morning — steady daily progress instead of empty promises.",
-    "Веду це паралельно з основною роботою, тож працюю щоранку — стабільний прогрес щодня, без порожніх обіцянок.",
     "Ik doe dit naast een hoofdbaan, dus ik bouw elke ochtend — dagelijkse voortgang in plaats van loze beloftes.",
     "أعمل على هذا إلى جانب وظيفة أساسية، لذا أبني كل صباح — تقدّم يومي ثابت بدل الوعود الفارغة.",
     "Lo compagino con un trabajo principal, así que avanzo cada mañana — progreso diario en vez de promesas vacías.",
@@ -44,10 +42,9 @@ export function HowIWork() {
     {
       icon: MessageSquare,
       n: "01",
-      t: L("Intro — free", "Знайомство — безкоштовно", "Kennismaking — gratis", "تعارف — مجانًا", "Introducción — gratis"),
+      t: L("Intro — free", "Kennismaking — gratis", "تعارف — مجانًا", "Introducción — gratis"),
       d: L(
         "You tell me what you need. A short chat to understand the goal.",
-        "Розповідаєш, що потрібно. Коротка розмова, щоб зрозуміти ціль.",
         "Je vertelt wat je nodig hebt. Kort gesprek om het doel te snappen.",
         "تخبرني بما تحتاجه. محادثة قصيرة لفهم الهدف.",
         "Me cuentas qué necesitas. Una charla breve para entender el objetivo.",
@@ -56,10 +53,9 @@ export function HowIWork() {
     {
       icon: FileText,
       n: "02",
-      t: L("Quote & timeline", "Кошторис і строки", "Offerte & planning", "عرض السعر والمدة", "Presupuesto y plazo"),
+      t: L("Quote & timeline", "Offerte & planning", "عرض السعر والمدة", "Presupuesto y plazo"),
       d: L(
         "Fixed price or hourly estimate — you see the total and deadline before we start.",
-        "Фікс або погодинна оцінка — бачиш суму й дедлайн ще до старту.",
         "Vaste prijs of uurschatting — je ziet totaal en deadline vóór de start.",
         "سعر ثابت أو تقدير بالساعة — ترى المبلغ والموعد قبل أن نبدأ.",
         "Precio fijo o estimación por hora — ves el total y el plazo antes de empezar.",
@@ -68,10 +64,9 @@ export function HowIWork() {
     {
       icon: CreditCard,
       n: "03",
-      t: L("Deposit 30–50%", "Передоплата 30–50%", "Aanbetaling 30–50%", "دفعة أولى 30–50%", "Anticipo 30–50%"),
+      t: L("Deposit 30–50%", "Aanbetaling 30–50%", "دفعة أولى 30–50%", "Anticipo 30–50%"),
       d: L(
         "Rest on delivery. Small jobs — paid on completion.",
-        "Решта — при здачі. Дрібні задачі — оплата за фактом.",
         "Rest bij oplevering. Kleine klussen — betaling achteraf.",
         "الباقي عند التسليم. المهام الصغيرة — الدفع بعد الإنجاز.",
         "El resto a la entrega. Trabajos pequeños — pago al finalizar.",
@@ -80,10 +75,9 @@ export function HowIWork() {
     {
       icon: Code2,
       n: "04",
-      t: L("Build with preview", "Розробка з превʼю", "Bouwen met preview", "بناء مع معاينة", "Desarrollo con vista previa"),
+      t: L("Build with preview", "Bouwen met preview", "بناء مع معاينة", "Desarrollo con vista previa"),
       d: L(
         "Live link so you follow progress and adjust along the way, not at the end.",
-        "Робоче посилання: стежиш за прогресом і коригуєш дорогою, а не в кінці.",
         "Live link zodat je meekijkt en onderweg bijstuurt, niet pas op het einde.",
         "رابط مباشر لمتابعة التقدّم والتعديل أثناء العمل، لا في النهاية.",
         "Enlace en vivo para seguir el avance y ajustar sobre la marcha, no al final.",
@@ -92,10 +86,9 @@ export function HowIWork() {
     {
       icon: RefreshCw,
       n: "05",
-      t: L("Revisions included", "Правки включені", "Revisies inbegrepen", "التعديلات مشمولة", "Revisiones incluidas"),
+      t: L("Revisions included", "Revisies inbegrepen", "التعديلات مشمولة", "Revisiones incluidas"),
       d: L(
         "1–2 rounds of changes in the price. Usually that's all it takes.",
-        "1–2 кола правок у ціні. Зазвичай цього достатньо.",
         "1–2 rondes wijzigingen in de prijs. Meestal is dat genoeg.",
         "جولتان من التعديلات ضمن السعر. عادةً هذا يكفي.",
         "1–2 rondas de cambios en el precio. Normalmente es suficiente.",
@@ -104,10 +97,9 @@ export function HowIWork() {
     {
       icon: Rocket,
       n: "06",
-      t: L("Launch & handover", "Запуск і передача", "Lancering & overdracht", "الإطلاق والتسليم", "Lanzamiento y entrega"),
+      t: L("Launch & handover", "Lancering & overdracht", "الإطلاق والتسليم", "Lanzamiento y entrega"),
       d: L(
         "It's all yours — code, access, domains. Optional aftercare available.",
-        "Все твоє — код, доступи, домени. Опційна підтримка після запуску.",
         "Alles is van jou — code, toegang, domeinen. Optionele nazorg mogelijk.",
         "كل شيء ملكك — الكود والوصول والنطاقات. دعم اختياري بعد الإطلاق.",
         "Todo es tuyo — código, accesos, dominios. Soporte posterior opcional.",
@@ -118,68 +110,67 @@ export function HowIWork() {
   const availability = [
     {
       icon: Sunrise,
-      t: L("Mornings · CET", "Ранок · CET", "Ochtenden · CET", "الصباح · CET", "Mañanas · CET"),
-      d: L("06:00–12:00, steady daily progress", "06:00–12:00, стабільно щодня", "06:00–12:00, dagelijks vooruit", "06:00–12:00، تقدّم يومي ثابت", "06:00–12:00, avance diario"),
+      t: L("Mornings · CET", "Ochtenden · CET", "الصباح · CET", "Mañanas · CET"),
+      d: L("06:00–12:00, steady daily progress", "06:00–12:00, dagelijks vooruit", "06:00–12:00، تقدّم يومي ثابت", "06:00–12:00, avance diario"),
     },
     {
       icon: MessageCircle,
-      t: L("Replies within the day", "Відповідь того ж дня", "Reactie binnen de dag", "الرد خلال اليوم", "Respuesta el mismo día"),
-      d: L("No ghosting after a smart-shift", "Без зникнень після зміни", "Geen ghosting na een shift", "بلا اختفاء بعد الدوام", "Sin desaparecer tras el turno"),
+      t: L("Replies within the day", "Reactie binnen de dag", "الرد خلال اليوم", "Respuesta el mismo día"),
+      d: L("No ghosting after a smart-shift", "Geen ghosting na een shift", "بلا اختفاء بعد الدوام", "Sin desaparecer tras el turno"),
     },
     {
       icon: Target,
-      t: L("1–2 projects at a time", "1–2 проєкти водночас", "1–2 projecten tegelijk", "مشروعان كحدّ أقصى", "1–2 proyectos a la vez"),
-      d: L("Your project isn't in a queue", "Твій проєкт не в черзі", "Jouw project staat niet in de rij", "مشروعك ليس في طابور", "Tu proyecto no hace cola"),
+      t: L("1–2 projects at a time", "1–2 projecten tegelijk", "مشروعان كحدّ أقصى", "1–2 proyectos a la vez"),
+      d: L("Your project isn't in a queue", "Jouw project staat niet in de rij", "مشروعك ليس في طابور", "Tu proyecto no hace cola"),
     },
     {
       icon: CalendarCheck,
-      t: L("Realistic deadlines", "Реалістичні дедлайни", "Realistische deadlines", "مواعيد واقعية", "Plazos realistas"),
-      d: L("Planned around mornings from day one", "Враховують ранковий графік одразу", "Vanaf dag één op ochtenden gepland", "مخطّطة وفق الصباح منذ البداية", "Planificados según las mañanas"),
+      t: L("Realistic deadlines", "Realistische deadlines", "مواعيد واقعية", "Plazos realistas"),
+      d: L("Planned around mornings from day one", "Vanaf dag één op ochtenden gepland", "مخطّطة وفق الصباح منذ البداية", "Planificados según las mañanas"),
     },
   ];
 
   const tableHead = {
-    what: L("What you need", "Що потрібно", "Wat je nodig hebt", "ما تحتاجه", "Qué necesitas"),
-    price: L("Realistic total", "Реальний підсумок", "Realistisch totaal", "الإجمالي الواقعي", "Total realista"),
-    time: L("Timeframe", "Строк", "Doorlooptijd", "المدة", "Plazo"),
+    what: L("What you need", "Wat je nodig hebt", "ما تحتاجه", "Qué necesitas"),
+    price: L("Realistic total", "Realistisch totaal", "الإجمالي الواقعي", "Total realista"),
+    time: L("Timeframe", "Doorlooptijd", "المدة", "Plazo"),
   };
 
   const rows = [
     {
-      what: L("Landing page", "Лендінг", "Landingspagina", "صفحة هبوط", "Landing page"),
+      what: L("Landing page", "Landingspagina", "صفحة هبوط", "Landing page"),
       price: "€650 – €1 200",
-      time: L("1–1.5 weeks", "1–1.5 тижня", "1–1.5 week", "1–1.5 أسبوع", "1–1.5 semanas"),
+      time: L("1–1.5 weeks", "1–1.5 week", "1–1.5 أسبوع", "1–1.5 semanas"),
     },
     {
-      what: L("Website (4–6 pages)", "Сайт (4–6 стор.)", "Website (4–6 pagina's)", "موقع (4–6 صفحات)", "Web (4–6 páginas)"),
+      what: L("Website (4–6 pages)", "Website (4–6 pagina's)", "موقع (4–6 صفحات)", "Web (4–6 páginas)"),
       price: "€1 500 – €2 500",
-      time: L("2.5–3.5 weeks", "2.5–3.5 тижня", "2.5–3.5 week", "2.5–3.5 أسبوع", "2.5–3.5 semanas"),
+      time: L("2.5–3.5 weeks", "2.5–3.5 week", "2.5–3.5 أسبوع", "2.5–3.5 semanas"),
     },
     {
-      what: L("Telegram bot", "Telegram-бот", "Telegram-bot", "بوت تيليجرام", "Bot de Telegram"),
-      price: L("from €350", "від €350", "vanaf €350", "من €350", "desde €350"),
-      time: L("~1 week", "~1 тиждень", "~1 week", "~أسبوع", "~1 semana"),
+      what: L("Telegram bot", "Telegram-bot", "بوت تيليجرام", "Bot de Telegram"),
+      price: L("from €350", "vanaf €350", "من €350", "desde €350"),
+      time: L("~1 week", "~1 week", "~أسبوع", "~1 semana"),
     },
     {
-      what: L("Automation / integration", "Автоматизація / інтеграція", "Automatisering / integratie", "أتمتة / تكامل", "Automatización / integración"),
+      what: L("Automation / integration", "Automatisering / integratie", "أتمتة / تكامل", "Automatización / integración"),
       price: "€45/h (~€225–450)",
-      time: L("3–5 mornings", "3–5 ранків", "3–5 ochtenden", "3–5 صباحات", "3–5 mañanas"),
+      time: L("3–5 mornings", "3–5 ochtenden", "3–5 صباحات", "3–5 mañanas"),
     },
     {
-      what: L("Web app / dashboard (MVP)", "Веб-застосунок / дашборд (MVP)", "Webapp / dashboard (MVP)", "تطبيق ويب / لوحة (MVP)", "Web app / panel (MVP)"),
+      what: L("Web app / dashboard (MVP)", "Webapp / dashboard (MVP)", "تطبيق ويب / لوحة (MVP)", "Web app / panel (MVP)"),
       price: "€60/h (~€2 500–5 000)",
-      time: L("4–6 weeks", "4–6 тижнів", "4–6 weken", "4–6 أسابيع", "4–6 semanas"),
+      time: L("4–6 weeks", "4–6 weken", "4–6 أسابيع", "4–6 semanas"),
     },
     {
-      what: L("Online store", "Інтернет-магазин", "Webshop", "متجر إلكتروني", "Tienda online"),
-      price: L("from €1 200", "від €1 200", "vanaf €1 200", "من €1 200", "desde €1 200"),
-      time: L("3–5 weeks", "3–5 тижнів", "3–5 weken", "3–5 أسابيع", "3–5 semanas"),
+      what: L("Online store", "Webshop", "متجر إلكتروني", "Tienda online"),
+      price: L("from €1 200", "vanaf €1 200", "من €1 200", "desde €1 200"),
+      time: L("3–5 weeks", "3–5 weken", "3–5 أسابيع", "3–5 semanas"),
     },
   ];
 
   const billingNote = L(
     "Fixed price for typical jobs · hourly for flexible work · no VAT (small-business scheme)",
-    "Фікс для типових задач · погодинно для гнучких · без ПДВ (спецрежим для малого бізнесу)",
     "Vaste prijs voor standaardklussen · uurtarief voor flexibel werk · geen btw (vrijstellingsregeling)",
     "سعر ثابت للمهام النمطية · بالساعة للعمل المرن · بدون ضريبة (نظام المنشآت الصغيرة)",
     "Precio fijo para trabajos típicos · por hora para lo flexible · sin IVA (régimen de pequeñas empresas)",

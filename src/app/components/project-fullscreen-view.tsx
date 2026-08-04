@@ -46,8 +46,8 @@ export function ProjectFullscreenView({
   const [scrolled, setScrolled] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const { language } = useLanguage();
-  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
-    language === 'uk' ? uk : language === 'nl' ? nl : language === 'ar' ? ar : language === 'es' ? es : en;
+  const L = (en: string, nl: string, ar: string, es: string) =>
+    language === 'nl' ? nl : language === 'ar' ? ar : language === 'es' ? es : en;
 
   // NOTE: no early return above this line. `if (!project) return null` used to
   // sit here, which skipped the two effects below whenever project was null —
@@ -156,7 +156,7 @@ export function ProjectFullscreenView({
               whileTap={{ scale: 0.95 }}
             >
               <ArrowLeft className="w-5 h-5 text-[var(--accent-primary)] group-hover:-translate-x-1 transition-transform" />
-              <span className="hidden sm:inline text-sm font-bold text-[var(--text-primary)] font-mono">{L("BACK", "НАЗАД", "TERUG", "رجوع", "ATRÁS")}</span>
+              <span className="hidden sm:inline text-sm font-bold text-[var(--text-primary)] font-mono">{L("BACK", "TERUG", "رجوع", "ATRÁS")}</span>
             </motion.button>
 
             {/* Project Title - Hidden on scroll down */}
@@ -178,7 +178,7 @@ export function ProjectFullscreenView({
                 className="p-2.5 bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--border-color)] hover:border-[var(--accent-primary)]/50 rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed active:scale-95"
                 whileHover={hasPrev ? { scale: 1.1 } : {}}
                 whileTap={hasPrev ? { scale: 0.9 } : {}}
-                title={L("Previous project (Arrow Left)", "Попередній проєкт (←)", "Vorig project (←)", "المشروع السابق (←)", "Proyecto anterior (←)")}
+                title={L("Previous project (Arrow Left)", "Vorig project (←)", "المشروع السابق (←)", "Proyecto anterior (←)")}
               >
                 <ArrowLeft className="w-5 h-5 text-[var(--text-primary)]" />
               </motion.button>
@@ -189,7 +189,7 @@ export function ProjectFullscreenView({
                 className="p-2.5 bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--border-color)] hover:border-[var(--accent-primary)]/50 rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed active:scale-95"
                 whileHover={hasNext ? { scale: 1.1 } : {}}
                 whileTap={hasNext ? { scale: 0.9 } : {}}
-                title={L("Next project (Arrow Right)", "Наступний проєкт (→)", "Volgend project (→)", "المشروع التالي (→)", "Proyecto siguiente (→)")}
+                title={L("Next project (Arrow Right)", "Volgend project (→)", "المشروع التالي (→)", "Proyecto siguiente (→)")}
               >
                 <ArrowRight className="w-5 h-5 text-[var(--text-primary)]" />
               </motion.button>
@@ -199,14 +199,14 @@ export function ProjectFullscreenView({
                 className="p-2.5 bg-red-500/10 backdrop-blur-xl border-2 border-red-500/30 hover:border-red-500/60 hover:bg-red-500/20 rounded-xl transition-all group active:scale-95"
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                title={L("Close (Esc)", "Закрити (Esc)", "Sluiten (Esc)", "إغلاق (Esc)", "Cerrar (Esc)")}
+                title={L("Close (Esc)", "Sluiten (Esc)", "إغلاق (Esc)", "Cerrar (Esc)")}
               >
                 <X className="w-5 h-5 text-red-400" />
               </motion.button>
             </div>
 
             {/* Close Button - Mobile */}
-            <motion.button aria-label={L("Close", "Закрити", "Sluiten", "إغلاق", "Cerrar")}
+            <motion.button aria-label={L("Close", "Sluiten", "إغلاق", "Cerrar")}
               onClick={onClose}
               className="sm:hidden p-2.5 bg-red-500/10 backdrop-blur-xl border-2 border-red-500/30 hover:border-red-500/60 rounded-xl transition-all active:scale-95"
               whileTap={{ scale: 0.9 }}
@@ -262,7 +262,7 @@ export function ProjectFullscreenView({
                 transition={{ delay: 0.1 }}
                 className="px-4 py-2 bg-gradient-to-r from-[var(--accent-primary)] to-purple-500 text-white font-mono font-bold text-xs sm:text-sm rounded-lg shadow-[0_4px_20px_rgba(0,217,255,0.5)]"
               >
-                {L("⭐ FEATURED", "⭐ ОБРАНЕ", "⭐ UITGELICHT", "⭐ مميّز", "⭐ DESTACADO")}
+                {L("⭐ FEATURED", "⭐ UITGELICHT", "⭐ مميّز", "⭐ DESTACADO")}
               </motion.div>
             </div>
 
@@ -305,7 +305,7 @@ export function ProjectFullscreenView({
                     transition={{ duration: 1.5, repeat: Infinity }}
                     className="flex flex-col items-center gap-2 px-4 py-3 bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--accent-primary)]/50 rounded-full shadow-lg"
                   >
-                    <span className="text-xs font-mono text-[var(--accent-primary)] font-bold">{L("SCROLL DOWN", "ЛИСТАЙ НИЖЧЕ", "SCROLL OMLAAG", "مرّر لأسفل", "DESLIZA")}</span>
+                    <span className="text-xs font-mono text-[var(--accent-primary)] font-bold">{L("SCROLL DOWN", "SCROLL OMLAAG", "مرّر لأسفل", "DESLIZA")}</span>
                     <ChevronDown className="w-4 h-4 text-[var(--accent-primary)]" />
                   </motion.div>
                 </motion.div>
@@ -372,7 +372,7 @@ export function ProjectFullscreenView({
                 <div className="flex items-center gap-3 mb-6">
                   <div className="h-0.5 flex-1 bg-gradient-to-r from-transparent to-[var(--accent-primary)]/50" />
                   <h3 className="text-sm sm:text-base font-mono font-black text-[var(--text-primary)] uppercase tracking-wider">
-                    {L("Tech Stack", "Стек", "Tech-stack", "التقنيات", "Stack")}
+                    {L("Tech Stack", "Tech-stack", "التقنيات", "Stack")}
                   </h3>
                   <div className="h-0.5 flex-1 bg-gradient-to-l from-transparent to-[var(--accent-primary)]/50" />
                 </div>
@@ -405,7 +405,7 @@ export function ProjectFullscreenView({
                   <div className="flex items-center gap-3 mb-6">
                     <div className="h-0.5 flex-1 bg-gradient-to-r from-transparent to-[var(--accent-primary)]/50" />
                     <h3 className="text-sm sm:text-base font-mono font-black text-[var(--text-primary)] uppercase tracking-wider">
-                      {L("Key Metrics", "Ключові метрики", "Kerncijfers", "مقاييس رئيسية", "Métricas clave")}
+                      {L("Key Metrics", "Kerncijfers", "مقاييس رئيسية", "Métricas clave")}
                     </h3>
                     <div className="h-0.5 flex-1 bg-gradient-to-l from-transparent to-[var(--accent-primary)]/50" />
                   </div>
@@ -447,7 +447,7 @@ export function ProjectFullscreenView({
                   <div className="flex items-center gap-3 mb-6">
                     <div className="h-0.5 flex-1 bg-gradient-to-r from-transparent to-[var(--accent-primary)]/50" />
                     <h3 className="text-sm sm:text-base font-mono font-black text-[var(--text-primary)] uppercase tracking-wider">
-                      {L("About This Project", "Про проєкт", "Over dit project", "عن هذا المشروع", "Sobre el proyecto")}
+                      {L("About This Project", "Over dit project", "عن هذا المشروع", "Sobre el proyecto")}
                     </h3>
                     <div className="h-0.5 flex-1 bg-gradient-to-l from-transparent to-[var(--accent-primary)]/50" />
                   </div>
@@ -470,7 +470,7 @@ export function ProjectFullscreenView({
                   <div className="flex items-center gap-3 mb-6">
                     <div className="h-0.5 flex-1 bg-gradient-to-r from-transparent to-[var(--accent-primary)]/50" />
                     <h3 className="text-sm sm:text-base font-mono font-black text-[var(--text-primary)] uppercase tracking-wider">
-                      {L("Key Features", "Ключове", "Belangrijkste onderdelen", "أبرز الميزات", "Claves")}
+                      {L("Key Features", "Belangrijkste onderdelen", "أبرز الميزات", "Claves")}
                     </h3>
                     <div className="h-0.5 flex-1 bg-gradient-to-l from-transparent to-[var(--accent-primary)]/50" />
                   </div>
@@ -511,7 +511,7 @@ export function ProjectFullscreenView({
                     whileTap={{ scale: 0.95 }}
                   >
                     <ExternalLink className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                    {L("VIEW LIVE", "ВІДКРИТИ САЙТ", "LIVE BEKIJKEN", "افتح الموقع", "VER EN VIVO")}
+                    {L("VIEW LIVE", "LIVE BEKIJKEN", "افتح الموقع", "VER EN VIVO")}
                   </motion.a>
                 )}
                 {project.githubUrl && (
@@ -525,7 +525,7 @@ export function ProjectFullscreenView({
                     whileTap={{ scale: 0.95 }}
                   >
                     <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                    {L("VIEW CODE", "КОД", "CODE BEKIJKEN", "الكود", "VER CÓDIGO")}
+                    {L("VIEW CODE", "CODE BEKIJKEN", "الكود", "VER CÓDIGO")}
                   </motion.a>
                 )}
               </motion.div>
@@ -565,7 +565,7 @@ export function ProjectFullscreenView({
                 whileTap={hasPrev ? { scale: 0.95 } : {}}
               >
                 <ArrowLeft className="w-5 h-5" />
-                <span className="font-mono font-bold text-sm">{L("PREV", "НАЗАД", "VORIGE", "السابق", "ANTERIOR")}</span>
+                <span className="font-mono font-bold text-sm">{L("PREV", "VORIGE", "السابق", "ANTERIOR")}</span>
               </motion.button>
               
               <motion.button
@@ -575,7 +575,7 @@ export function ProjectFullscreenView({
                 style={{ clipPath: 'polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)' }}
                 whileTap={hasNext ? { scale: 0.95 } : {}}
               >
-                <span className="font-mono font-bold text-sm">{L("NEXT", "ДАЛЕЕ", "VOLGENDE", "التالي", "SIGUIENTE")}</span>
+                <span className="font-mono font-bold text-sm">{L("NEXT", "VOLGENDE", "التالي", "SIGUIENTE")}</span>
                 <ArrowRight className="w-5 h-5" />
               </motion.button>
             </div>

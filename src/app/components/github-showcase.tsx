@@ -158,7 +158,7 @@ export function GitHubShowcase() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/60 backdrop-blur-xl border border-[var(--border-color)] rounded-full mb-6">
             <Github className="w-4 h-4 text-[var(--accent-primary)]" />
             <span className="text-sm font-bold text-[var(--text-secondary)]">
-              {language === 'uk' ? 'GitHub Проекти' :
+              {
                language === 'nl' ? 'GitHub Projecten' :
                language === 'ar' ? 'مشاريع GitHub' :
                language === 'es' ? 'Proyectos GitHub' :
@@ -166,14 +166,14 @@ export function GitHubShowcase() {
             </span>
           </div>
           <h2 className="text-2xl md:text-4xl font-black bg-gradient-to-r from-[#00d9ff] to-purple-500 bg-clip-text text-transparent mb-3">
-            {language === 'uk' ? 'Скоро тут з’являться проекти' :
+            {
              language === 'nl' ? 'Projecten binnenkort beschikbaar' :
              language === 'ar' ? 'المشاريع قادمة قريباً' :
              language === 'es' ? 'Proyectos próximamente' :
              'Projects coming soon'}
           </h2>
           <p className="text-base text-[var(--text-secondary)] max-w-xl mx-auto mb-8">
-            {language === 'uk' ? 'Мої репозиторії відкриваються поступово. Тим часом — загляньте на мій GitHub.' :
+            {
              language === 'nl' ? 'Mijn repositories worden geleidelijk openbaar. Bekijk intussen mijn GitHub.' :
              language === 'ar' ? 'يتم فتح مستودعاتي تدريجياً. في هذه الأثناء، تفضل بزيارة GitHub الخاص بي.' :
              language === 'es' ? 'Mis repositorios se están abriendo poco a poco. Mientras tanto, visita mi GitHub.' :
@@ -216,7 +216,7 @@ export function GitHubShowcase() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/60 backdrop-blur-xl border border-[var(--border-color)] rounded-full mb-4">
             <Github className="w-4 h-4 text-[var(--accent-primary)]" />
             <span className="text-sm font-bold text-[var(--text-secondary)]">
-              {language === 'uk' ? 'GitHub Проекти' : 
+              {
                language === 'nl' ? 'GitHub Projecten' : 
                language === 'ar' ? 'مشاريع GitHub' :
                language === 'es' ? 'Proyectos GitHub' :
@@ -224,14 +224,14 @@ export function GitHubShowcase() {
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#00d9ff] to-purple-500 bg-clip-text text-transparent mb-3">
-            {language === 'uk' ? 'Останні Розробки' : 
+            {
              language === 'nl' ? 'Recente Ontwikkelingen' : 
              language === 'ar' ? 'أحدث الت��ورات' :
              language === 'es' ? 'Desarrollos Recientes' :
              'Latest Developments'}
           </h2>
           <p className="text-base md:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-            {language === 'uk' ? 'Мої найкращі open-source проекти з GitHub' : 
+            {
              language === 'nl' ? 'Mijn beste open-source projecten van GitHub' : 
              language === 'ar' ? 'أفضل مشاريعي مفتوحة المصدر من GitHub' :
              language === 'es' ? 'Mis mejores proyectos de código abierto en GitHub' :
@@ -277,7 +277,7 @@ export function GitHubShowcase() {
                       <Sparkles className="w-5 h-5 text-[var(--accent-primary)]" />
                     </motion.div>
                     <span className="text-sm font-bold text-[var(--accent-primary)] uppercase tracking-wider">
-                      {language === 'uk' ? 'Головний Проект' : 
+                      {
                        language === 'nl' ? 'Uitgelicht Project' : 
                        language === 'ar' ? 'المشروع المميز' :
                        language === 'es' ? 'Proyecto Destacado' :

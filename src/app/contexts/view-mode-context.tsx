@@ -12,9 +12,13 @@ interface ViewModeContextType {
 const ViewModeContext = createContext<ViewModeContextType | undefined>(undefined);
 
 export function ViewModeProvider({ children }: { children: ReactNode }) {
-  const [viewMode, setViewModeState] = useState<ViewMode>('client');
+  // CV comes first, not services and pricing. The audience is recruiters and
+  // hiring managers: shown an hourly rate before the experience, they read the
+  // page as a freelance pitch rather than a job application. Client mode is
+  // still one click away on the toggle.
+  const [viewMode, setViewModeState] = useState<ViewMode>('cv');
 
-  // Синхронізація з localStorage
+  // Sync with localStorage
   useEffect(() => {
     const saved = localStorage.getItem('viewMode') as ViewMode;
     if (saved === 'client' || saved === 'cv') {
@@ -26,7 +30,7 @@ export function ViewModeProvider({ children }: { children: ReactNode }) {
     setViewModeState(mode);
     localStorage.setItem('viewMode', mode);
     
-    // Scroll to top при зміні режиму
+    // Scroll to top when the mode changes
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

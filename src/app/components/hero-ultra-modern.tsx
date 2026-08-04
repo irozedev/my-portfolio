@@ -34,22 +34,22 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
 
   const viewWorkLabel = t("hero.viewWork");
   const roleTitle =
-    language === "uk" ? "Front-End / JavaScript розробник" :
+    
     language === "nl" ? "Front-End / JavaScript Developer" :
     language === "ar" ? "مطور Front-End / JavaScript" :
     language === "es" ? "Desarrollador Front-End / JavaScript" :
     "Front-End / JavaScript Developer";
 
   // Tiny localization helper
-  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
-    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+  const L = (en: string, nl: string, ar: string, es: string) =>
+    language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
 
   // Outcome/proof tiles for the client (agency) hero
   const clientProof = [
-    { value: "8+", label: L("years of experience", "років досвіду", "jaar ervaring", "سنوات خبرة", "años de experiencia") },
-    { value: "E-com", label: L("e-commerce & enterprise", "e-commerce та enterprise", "e-commerce & enterprise", "تجارة إلكترونية ومؤسسات", "e-commerce y enterprise") },
-    { value: "Next 14", label: L("latest launch · 2026", "останній запуск · 2026", "laatste launch · 2026", "أحدث إطلاق · 2026", "último lanzamiento · 2026") },
-    { value: "AI", label: L("assisted workflow · since 2022", "робочий процес · з 2022", "workflow · sinds 2022", "سير عمل · منذ 2022", "flujo · desde 2022") },
+    { value: "8+", label: L("years of experience", "jaar ervaring", "سنوات خبرة", "años de experiencia") },
+    { value: "E-com", label: L("e-commerce & enterprise", "e-commerce & enterprise", "تجارة إلكترونية ومؤسسات", "e-commerce y enterprise") },
+    { value: "Next 14", label: L("latest launch · 2026", "laatste launch · 2026", "أحدث إطلاق · 2026", "último lanzamiento · 2026") },
+    { value: "AI", label: L("assisted workflow · since 2022", "workflow · sinds 2022", "سير عمل · منذ 2022", "flujo · desde 2022") },
   ];
 
   // Availability pill — shared, emoji-free
@@ -150,7 +150,6 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                 <p className="text-base sm:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto mb-6">
                   {L(
                     "8+ years of commercial experience building e-commerce and enterprise web applications — from luxury retail platforms to banking systems.",
-                    "8+ років комерційного досвіду в e-commerce та enterprise — від люксового рітейлу до банківських систем.",
                     "8+ jaar commerciële ervaring in e-commerce en enterprise webapps — van luxe retail tot banksystemen.",
                     "أكثر من 8 سنوات خبرة تجارية في بناء تطبيقات التجارة الإلكترونية والمؤسسات — من التجزئة الفاخرة إلى الأنظمة المصرفية.",
                     "8+ años de experiencia comercial en e-commerce y enterprise — desde retail de lujo hasta sistemas bancarios."
@@ -160,10 +159,10 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                 {/* Credential chips */}
                 <div className="flex flex-wrap items-center justify-center gap-2.5">
                   {[
-                    L("8+ years", "8+ років", "8+ jaar", "+8 سنوات", "8+ años"),
+                    L("8+ years", "8+ jaar", "+8 سنوات", "8+ años"),
                     "React · TypeScript · Vue · Next.js",
-                    L("E-commerce & enterprise", "E-commerce та enterprise", "E-commerce & enterprise", "تجارة إلكترونية ومؤسسات", "E-commerce y enterprise"),
-                    L("Belgium · remote", "Бельгія · remote", "België · remote", "بلجيكا · عن بُعد", "Bélgica · remoto"),
+                    L("E-commerce & enterprise", "E-commerce & enterprise", "تجارة إلكترونية ومؤسسات", "E-commerce y enterprise"),
+                    L("Belgium · remote", "België · remote", "بلجيكا · عن بُعد", "Bélgica · remoto"),
                   ].map((c) => (
                     <span key={c} className="px-3.5 py-1.5 bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] rounded-full text-xs sm:text-sm font-mono text-[var(--text-secondary)]">
                       {c}
@@ -175,9 +174,9 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
               {/* Career highlights */}
               <div className="grid sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mb-8">
                 {[
-                  { icon: Building2, k: L("Luxury retail", "Люкс-рітейл", "Luxe retail", "تجزئة فاخرة", "Retail de lujo"), v: "childrensalon · vogacloset" },
-                  { icon: ShieldCheck, k: L("Banking systems", "Банківські системи", "Banksystemen", "أنظمة مصرفية", "Sistemas bancarios"), v: "Oschadbank CRM" },
-                  { icon: Rocket, k: L("Shipped 2026", "Запуск 2026", "Gelanceerd 2026", "إطلاق 2026", "Lanzado 2026"), v: "Next.js 14 · marinek.store" },
+                  { icon: Building2, k: L("Luxury retail", "Luxe retail", "تجزئة فاخرة", "Retail de lujo"), v: "childrensalon · vogacloset" },
+                  { icon: ShieldCheck, k: L("Banking systems", "Banksystemen", "أنظمة مصرفية", "Sistemas bancarios"), v: "Oschadbank CRM" },
+                  { icon: Rocket, k: L("Shipped 2026", "Gelanceerd 2026", "إطلاق 2026", "Lanzado 2026"), v: "Next.js 14 · marinek.store" },
                 ].map((h) => {
                   const Icon = h.icon;
                   return (

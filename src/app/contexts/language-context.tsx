@@ -1,7 +1,19 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { translations } from "@/utils/translations";
 
-export type Language = "en" | "uk" | "nl" | "ar" | "es";
+export type Language = "en" | "nl" | "ar" | "es";
+
+/**
+ * The languages the site offers. Single source of truth: the switcher, ?lang=,
+ * the saved choice and browser auto-detection all validate against this list
+ * and nothing else.
+ *
+ * Ukrainian used to be here and was removed outright — not just hidden. The
+ * site targets employers in Belgium, the Netherlands and the rest of Europe,
+ * so the translations were dead weight shipped in every bundle. The strings
+ * are gone from the components too; `L()` now takes (en, nl, ar, es).
+ */
+const OFFERED: readonly string[] = ["en", "nl", "ar", "es"];
 
 // Validate translations on import
 if (!translations || typeof translations !== 'object') {
@@ -27,17 +39,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const urlLang = new URLSearchParams(window.location.search).get("lang");
       if (urlLang) {
         const normalized = urlLang.toLowerCase().split("-")[0];
-        // 'ua' is the alias used in the published URLs; internally it's 'uk'
-        const fromUrl = normalized === "ua" ? "uk" : normalized;
-        if (["en", "uk", "nl", "ar", "es"].includes(fromUrl)) {
-          return fromUrl as Language;
+        if (OFFERED.includes(normalized)) {
+          return normalized as Language;
         }
       }
 
-      // Check if user has previously selected a language
+      // Check if the user has previously selected a language. A removed
+      // language is rejected here too: a visitor who once picked Ukrainian
+      // still has it in localStorage and would otherwise keep seeing it.
       const saved = localStorage.getItem("language");
-      // Validate saved language
-      if (saved && (saved === "en" || saved === "uk" || saved === "nl" || saved === "ar" || saved === "es")) {
+      if (saved && OFFERED.includes(saved)) {
         return saved as Language;
       }
       // Clear invalid value
@@ -47,18 +58,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const browserLang = navigator.language || navigator.languages?.[0] || "en";
       const langCode = browserLang.toLowerCase().split('-')[0]; // Get just 'en' from 'en-US'
       
-      // Map browser language to our supported languages
-      const languageMap: Record<string, Language> = {
-        'en': 'en',
-        'uk': 'uk',
-        'ua': 'uk', // Ukrainian can be 'ua' or 'uk'
-        'nl': 'nl',
-        'ar': 'ar',
-        'es': 'es',
-      };
-      
-      const detectedLang = languageMap[langCode];
-      if (detectedLang) return detectedLang;
+      // Auto-detection only honours languages in OFFERED, and 'nl' is excluded
+      // from it on top of that. The audience is employers in Belgium and the
+      // Netherlands, whose browsers are set to Dutch — serving them a
+      // translation the author cannot proof-read himself does active harm:
+      // weak Dutch is spotted instantly and costs trust, while English is
+      // normal and expected in Benelux IT. The version is still reachable via
+      // the switcher and ?lang=nl. Put it back into auto-detection once a
+      // native speaker has reviewed the copy.
+      if (langCode !== "nl" && OFFERED.includes(langCode)) {
+        return langCode as Language;
+      }
     }
 
     return "en";
@@ -136,7 +146,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         if (lang === "en") {
           url.searchParams.delete("lang"); // English is the x-default at /
         } else {
-          url.searchParams.set("lang", lang === "uk" ? "ua" : lang);
+          url.searchParams.set("lang", lang);
         }
         window.history.replaceState(null, "", url.toString());
       } catch {

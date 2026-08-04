@@ -93,7 +93,10 @@ export function AboutSection() {
                   <div className="absolute bottom-8 left-8 right-8">
                     <div className="bg-[var(--bg-primary)]/80 backdrop-blur-md border border-[var(--border-color)] rounded-xl p-4">
                       <h3 className="text-2xl font-bold mb-2 text-[var(--text-primary)]">Stepan Roze</h3>
-                      <p className="text-[var(--accent-primary)]">{t("hero.role")} & {t("hero.aiEnthusiast")}</p>
+                      {/* One claim, not two glued together. This used to append
+                          "& AI Enthusiast" after a sentence that already had an
+                          ampersand in it, which read as a broken list. */}
+                      <p className="text-[var(--accent-primary)]">{t("hero.role")}</p>
                     </div>
                   </div>
                 </div>

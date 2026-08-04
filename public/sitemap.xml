@@ -2,7 +2,7 @@
 <!--
   Only real, crawlable URLs belong here.
 
-  Removed from the previous version:
+  Removed from earlier versions:
   - #projects / #about / #skills / #contact / #merch entries. Search engines
     strip the fragment, so all five collapsed to "https://roze.live/" — five
     duplicate rows for one page. (#skills and #merch were not even valid
@@ -11,8 +11,13 @@
     the x-default, so the two were identical content under two addresses.
   - "?lang=nl&region=be" / "&region=nl". Nothing in the app reads ?region=,
     so both rendered the same Dutch page as ?lang=nl.
+  - Ukrainian: the "?lang=ua" URL and every hreflang="uk" alternate. The
+    language was taken off the site — the audience is employers in Belgium,
+    the Netherlands and the rest of Europe. "?lang=ua" no longer resolves to
+    Ukrainian content, so keeping it would publish a duplicate of the English
+    page under a second address.
 
-  Every remaining URL now renders genuinely different content, because
+  Every remaining URL renders genuinely different content, because
   language-context.tsx reads the ?lang= param on load.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -21,26 +26,10 @@
   <!-- Homepage — English / x-default -->
   <url>
     <loc>https://roze.live/</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://roze.live/" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://roze.live/?lang=ua" />
-    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://roze.live/?lang=nl" />
-    <xhtml:link rel="alternate" hreflang="nl" href="https://roze.live/?lang=nl" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://roze.live/?lang=ar" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://roze.live/?lang=es" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://roze.live/" />
-  </url>
-
-  <!-- Ukrainian — secondary market, kept for name searches only -->
-  <url>
-    <loc>https://roze.live/?lang=ua</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://roze.live/" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://roze.live/?lang=ua" />
     <xhtml:link rel="alternate" hreflang="nl-BE" href="https://roze.live/?lang=nl" />
     <xhtml:link rel="alternate" hreflang="nl" href="https://roze.live/?lang=nl" />
     <xhtml:link rel="alternate" hreflang="ar" href="https://roze.live/?lang=ar" />
@@ -51,11 +40,10 @@
   <!-- Dutch (Belgium) — primary local market, highest priority after the root -->
   <url>
     <loc>https://roze.live/?lang=nl</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://roze.live/" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://roze.live/?lang=ua" />
     <xhtml:link rel="alternate" hreflang="nl-BE" href="https://roze.live/?lang=nl" />
     <xhtml:link rel="alternate" hreflang="nl" href="https://roze.live/?lang=nl" />
     <xhtml:link rel="alternate" hreflang="ar" href="https://roze.live/?lang=ar" />
@@ -66,11 +54,10 @@
   <!-- Arabic — secondary -->
   <url>
     <loc>https://roze.live/?lang=ar</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://roze.live/" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://roze.live/?lang=ua" />
     <xhtml:link rel="alternate" hreflang="nl-BE" href="https://roze.live/?lang=nl" />
     <xhtml:link rel="alternate" hreflang="nl" href="https://roze.live/?lang=nl" />
     <xhtml:link rel="alternate" hreflang="ar" href="https://roze.live/?lang=ar" />
@@ -81,11 +68,10 @@
   <!-- Spanish — EU market, secondary -->
   <url>
     <loc>https://roze.live/?lang=es</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://roze.live/" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://roze.live/?lang=ua" />
     <xhtml:link rel="alternate" hreflang="nl-BE" href="https://roze.live/?lang=nl" />
     <xhtml:link rel="alternate" hreflang="nl" href="https://roze.live/?lang=nl" />
     <xhtml:link rel="alternate" hreflang="ar" href="https://roze.live/?lang=ar" />

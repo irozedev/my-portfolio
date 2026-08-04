@@ -10,8 +10,8 @@ export function CookieBanner() {
   // This is a consent notice, so it has to be readable in the language the
   // visitor is actually using — an English-only banner over an Arabic page is
   // not informed consent.
-  const L = (en: string, uk: string, nl: string, ar: string, es: string) =>
-    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+  const L = (en: string, nl: string, ar: string, es: string) =>
+    language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
 
   useEffect(() => {
     const consent = localStorage.getItem("cookie-consent");
@@ -41,7 +41,7 @@ export function CookieBanner() {
           className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:bottom-20 md:max-w-md z-[9990] bg-[var(--card-bg)] border-2 border-[var(--border-color)] rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur-xl"
         >
           {/* Close Button */}
-          <button aria-label={L("Close", "Закрити", "Sluiten", "إغلاق", "Cerrar")}
+          <button aria-label={L("Close", "Sluiten", "إغلاق", "Cerrar")}
             onClick={handleDecline}
             className="absolute top-2 right-2 md:top-3 md:right-3 p-1.5 md:p-1 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors z-10"
           >
@@ -55,12 +55,11 @@ export function CookieBanner() {
             </div>
             <div>
               <h3 className="text-base md:text-lg font-bold text-[var(--text-primary)] mb-1">
-                🍪 {L("Cookie notice", "Про файли cookie", "Cookiemelding", "إشعار ملفات تعريف الارتباط", "Aviso de cookies")}
+                🍪 {L("Cookie notice", "Cookiemelding", "إشعار ملفات تعريف الارتباط", "Aviso de cookies")}
               </h3>
               <p className="text-xs md:text-sm text-[var(--text-secondary)] leading-relaxed">
                 {L(
                   "We use cookies to improve your experience and analyse site traffic. Analytics loads only after you accept.",
-                  "Ми використовуємо cookie, щоб покращити ваш досвід і аналізувати відвідуваність. Аналітика вантажиться лише після згоди.",
                   "We gebruiken cookies om je ervaring te verbeteren en het siteverkeer te analyseren. Analytics laadt pas na je toestemming.",
                   "نستخدم ملفات تعريف الارتباط لتحسين تجربتك وتحليل زيارات الموقع. لا تُحمَّل أدوات التحليل إلا بعد موافقتك.",
                   "Usamos cookies para mejorar tu experiencia y analizar el tráfico del sitio. La analítica se carga solo tras tu consentimiento.",
@@ -80,7 +79,7 @@ export function CookieBanner() {
               }}
               className="hover:text-[var(--accent-primary)] transition-colors underline cursor-pointer"
             >
-              {L("Privacy Policy", "Політика конфіденційності", "Privacybeleid", "سياسة الخصوصية", "Política de privacidad")}
+              {L("Privacy Policy", "Privacybeleid", "سياسة الخصوصية", "Política de privacidad")}
             </a>
             <a 
               href="#terms" 
@@ -91,7 +90,7 @@ export function CookieBanner() {
               }}
               className="hover:text-[var(--accent-primary)] transition-colors underline cursor-pointer"
             >
-              {L("Terms of Service", "Умови використання", "Gebruiksvoorwaarden", "شروط الخدمة", "Términos del servicio")}
+              {L("Terms of Service", "Gebruiksvoorwaarden", "شروط الخدمة", "Términos del servicio")}
             </a>
           </div>
 
@@ -104,7 +103,7 @@ export function CookieBanner() {
               whileTap={{ scale: 0.98 }}
             >
               <Check className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              {L("Accept all", "Прийняти все", "Alles accepteren", "قبول الكل", "Aceptar todo")}
+              {L("Accept all", "Alles accepteren", "قبول الكل", "Aceptar todo")}
             </motion.button>
             <motion.button
               onClick={handleDecline}
@@ -112,7 +111,7 @@ export function CookieBanner() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              {L("Decline", "Відхилити", "Weigeren", "رفض", "Rechazar")}
+              {L("Decline", "Weigeren", "رفض", "Rechazar")}
             </motion.button>
           </div>
         </motion.div>

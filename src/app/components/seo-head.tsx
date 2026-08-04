@@ -68,14 +68,14 @@ export function SEOHead() {
 
   useEffect(() => {
     document.title = data.title;
-    document.documentElement.lang = language === 'uk' ? 'uk' : language;
+    document.documentElement.lang = language;
 
     // Self-referencing canonical. English lives at the bare origin (it is also
-    // the x-default); every other language at ?lang=<code>. Pointing all five
+    // the x-default); every other language at ?lang=<code>. Pointing all of them
     // at "https://roze.live/" — as this used to — told Google the translated
     // versions were duplicates and cancelled out the hreflang cluster below.
     const canonicalFor = (lang: string) =>
-      lang === "en" ? SITE_URL + "/" : `${SITE_URL}/?lang=${lang === "uk" ? "ua" : lang}`;
+      lang === "en" ? SITE_URL + "/" : `${SITE_URL}/?lang=${lang}`;
 
     const pageUrl = canonicalFor(language);
 
@@ -100,7 +100,7 @@ export function SEOHead() {
       ["property", "og:image:height", "630"],
       ["property", "og:image:alt", "Stepan Roze — Front-End / JavaScript Developer"],
       ["property", "og:url", pageUrl],
-      ["property", "og:locale", language === 'uk' ? 'uk_UA' : language === 'nl' ? 'nl_BE' : language === 'ar' ? 'ar_SA' : language === 'es' ? 'es_ES' : 'en_US'],
+      ["property", "og:locale", language === 'nl' ? 'nl_BE' : language === 'ar' ? 'ar_SA' : language === 'es' ? 'es_ES' : 'en_US'],
       // Twitter
       ["name", "twitter:card", "summary_large_image"],
       ["name", "twitter:title", data.title],
@@ -123,7 +123,6 @@ export function SEOHead() {
     // what sitemap.xml and index.html publish, or the cluster is ignored.
     const alts: Record<string, string> = {
       en: canonicalFor("en"),
-      uk: canonicalFor("uk"),   // published as ?lang=ua
       "nl-BE": canonicalFor("nl"),
       nl: canonicalFor("nl"),
       ar: canonicalFor("ar"),

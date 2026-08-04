@@ -6,7 +6,27 @@ Guidance for Claude Code (and any AI assistant) working in this repo.
 Personal portfolio for **Stepan Roze** — live at **roze.live**. A single-page
 React app. Two audiences via a **view mode** toggle: **Client** (hire me:
 services, prices, projects) and **Company** (full CV: experience + skills).
-Multilingual (en, uk, nl, ar, es), dark/light theme.
+Multilingual (en, nl, ar, es), dark/light theme.
+
+## Who this site is for (2026-08 repositioning — read before changing copy)
+The goal changed from winning freelance clients to **getting hired as an
+employee**, at companies in Belgium, the Netherlands and the rest of Europe.
+That decision drives most of what follows:
+
+- **CV mode is the default view.** A recruiter seeing an hourly rate before the
+  experience reads the page as a freelance pitch, not a job application.
+- **Ukrainian was removed from the codebase entirely**, not hidden — the
+  Ukrainian market is not a target and the strings were dead weight in every
+  bundle. `L()` now takes `(en, nl, ar, es)` and `Language` has no `"uk"`, so
+  new Ukrainian copy will not compile.
+- **Dutch is excluded from browser auto-detection** even though the version
+  exists. The audience has Dutch browsers, the author cannot proof-read Dutch,
+  and weak Dutch costs more trust than plain English does in Benelux IT. Put it
+  back only after a native speaker reviews the copy.
+- **Client-only content must not leak into CV mode.** It reads as "looking for
+  gigs" to someone considering an employment offer.
+
+Client mode still exists and still works — it is one click away, not deleted.
 
 ## Stack
 - **React 19 + Vite 8 + TypeScript 5.9**
@@ -47,13 +67,23 @@ imports it and pnpm does not hoist it.
 - `src/app/components/services-creative-slider.tsx` — services + **prices**
   (hardcoded array, NOT from translations)
 - `src/app/components/how-i-work.tsx` — process + honest part-time timelines
-  (self-contained translations via an inline `L()` helper)
+  (self-contained translations via an inline `L()` helper). **Client mode only**
+  — its content ("Intro — free", "Quote & timeline") is a sales funnel, and it
+  was 1 528 px of it sitting in the middle of the CV.
+- `src/app/components/view-mode-toggle.tsx` — the Client/CV switch, rendered
+  **inline inside the header** by `navigation.tsx`. It used to be three
+  fixed-position variants that all covered page content; do not float it again.
 - `src/app/components/portfolio-creative-slider.tsx` — projects grid (owned work
   only: marinek.store, roze.live) → opens `project-fullscreen-view.tsx`
 - `src/app/components/github-showcase.tsx` — live GitHub feed (@irozedev)
-- `src/utils/translations.ts` — **huge** 5-language dictionary. Newer components
-  skip it and localize inline with an `L(en,uk,nl,ar,es)` helper.
-- `src/app/contexts/view-mode-context.tsx` — `client` | `cv`, `setViewMode`
+- `src/utils/translations.ts` — **huge** 4-language dictionary. Newer components
+  skip it and localize inline with an `L(en,nl,ar,es)` helper.
+- `src/app/contexts/language-context.tsx` — `OFFERED` is the single source of
+  truth for which languages exist. The switcher, `?lang=`, the saved choice and
+  auto-detection all validate against it; a language removed there is also
+  rejected out of a visitor's stale `localStorage`.
+- `src/app/contexts/view-mode-context.tsx` — `client` | `cv`, `setViewMode`.
+  **Defaults to `cv`.**
 - `src/app/hooks/use-modal-a11y.ts` — Escape, focus trap and focus restore for
   dialogs. **Every modal must use it**; none of them had any of this before.
 
@@ -72,6 +102,10 @@ imports it and pnpm does not hoist it.
 ## The chat assistant (important)
 - **The live chat is in `scroll-to-top-button.tsx`.** It also holds the
   scroll-to-top button. This is the ONLY mounted chat.
+- **It renders in client mode only** (`isClientMode` gate on both the launcher
+  and the window). In CV mode the reader is a recruiter who will never use it,
+  and it competed with the scroll-to-top button in the same corner. The funnel
+  itself is untouched — the services CTA still opens it in client mode.
 - The old duplicate chats (`chat-bot.tsx`, `ai-assistant-smart.tsx`) were
   deleted in the 2026-07 cleanup along with 98 other unreachable files.
   Before adding a component, check it is actually reached from `src/main.tsx`.
@@ -108,6 +142,12 @@ Two layers, keep them consistent:
 - OG image: `public/og-image.jpg` (1200×630). Section anchors: `#hero`,
   `#services`, `#how-i-work`, `#projects`, `#github`, `#about`, `#contact`
   (client), `#experience` (company).
+- `public/sitemap.xml` and the static `hreflang` block in `index.html` must list
+  exactly the languages in `OFFERED`. A `?lang=` URL for a removed language now
+  renders English, so leaving it published would be duplicate content.
+- Geo meta deliberately targets **Antwerp**, which is where Stepan wants to
+  work — not where he lives (Lommel, Limburg). That is a market signal, not a
+  claim of residence; keep the two ideas separate in copy.
 
 ## Facts about Stepan (keep copy truthful — no fabrication)
 - **Front-End / JavaScript developer, 8+ years.** React, Vue, Next.js,
@@ -115,10 +155,23 @@ Two layers, keep them consistent:
 - Real clients (Experience only, per NDA): childrensalon.com, vogacloset.com
   (luxury e-commerce), Oschadbank (banking CRM). **Never** put employer/client
   work in the public Projects gallery — only owned projects there.
-- Belgium; opening a **bijberoep** (secondary self-employment). Small-business
-  **VAT franchise** (no VAT charged under ~€25k/yr).
-- Works a main job; builds **mornings 06:00–12:00 CET**, ~20h/week. Takes 1–2
-  projects at a time.
+- **Employment timeline (corrected 2026-08-04 — the site had it wrong):**
+  E-Consulting ran to **Dec 2024**, not Jan 2024. Since **Jun 2025** he is
+  *Eerste keukenhulp* at **Albron / Center Parcs** in Lommel on a permanent
+  full-time contract. The only real gap is Jan–May 2025 (relocation), so do not
+  write about "a long career break" — there isn't one.
+- The Albron entry stays in the timeline on purpose. Work outside the field
+  beats an unexplained hole, and for a Benelux employer a permanent Belgian
+  contract answers the questions they cannot ask: right to work, residence,
+  actually living here.
+- Lives in **Lommel (Limburg)**, works his main job **14:00–22:30**, so the free
+  block is **mornings until ~13:00** — which is inside the client/interview
+  working day, unlike the evenings most side-projects run on.
+- Belgium; a **bijberoep** (secondary self-employment) was considered but is not
+  registered. Do not state it as fact anywhere in the copy. Small-business
+  **VAT franchise** (no VAT charged under ~€25k/yr) would apply if it happens.
+- **English is the working language; Dutch is weaker than English.** Never claim
+  fluent Dutch in copy or structured data.
 - Email **rozedev095@gmail.com** (single canonical email). GitHub **@irozedev**.
 - Pricing (starting, no VAT): automation €45/h (or €350/bot), websites €650,
   UI design €400, web apps €60/h, e-commerce €1,200, consulting €55/h.
@@ -154,8 +207,9 @@ Two layers, keep them consistent:
 - **`?lang=` is real.** `language-context.tsx` reads it on load (priority:
   URL > localStorage > browser) and `handleSetLanguage` mirrors the choice back
   into the URL. `index.html`, `public/sitemap.xml` and `seo-head.tsx` all
-  publish hreflang alternates built on it — keep the three in sync. Ukrainian
-  is published as `?lang=ua`, English as the bare origin `/` (also x-default).
+  publish hreflang alternates built on it — keep the three in sync. English is
+  the bare origin `/` (also x-default); every other offered language is
+  `?lang=<code>`. The old Ukrainian `?lang=ua` alias is gone with the language.
 - **Never inline a Supabase key as an env fallback in the edge function.**
   `supabase/functions/server/index.tsx` used to default to the real
   `service_role` key; the repo is public. Supabase injects `SUPABASE_URL`,
@@ -166,3 +220,27 @@ Two layers, keep them consistent:
 - `src/app/components/projects-section.tsx` is dead code with **pre-existing
   syntax errors**; it fails `tsc --noEmit` for the whole project. Vite never
   bundles it, so builds stay green. Delete it or fix it before relying on tsc.
+
+## Open items (as of 2026-08-04)
+Ordered by how much they matter, most first.
+
+1. **The About photo looks like a stock image** (`about-section.tsx`). If it is
+   not Stepan, it is the single most damaging thing on the page: a face that
+   does not match LinkedIn is spotted instantly. Needs a real photo from him.
+2. **One-page CV for the Belgian market** — not written yet. All the data is in
+   `experience-timeline-premium.tsx` and now correct. The existing
+   `public/Stepan_Roze_CV.pdf` has the old (wrong) E-Consulting end date and no
+   Albron entry. Plan: generate it from the same data as HTML that prints to
+   PDF, so the file and the site cannot drift apart again.
+3. **Prices are still freelance-era** (`services-creative-slider.tsx`): from
+   €45/h. In Belgium a rate under €50/h reads as a warning sign rather than a
+   bargain, and roughly half of any fee goes to tax and social contributions.
+   Raising the floor to €55–65 was agreed in principle, not applied.
+4. **Experience section is 3 464 px** for six entries — the largest block left
+   on the page. Page total is 11 125 px desktop / 14 051 px mobile.
+5. **Auth, comments, reactions and the personal cabinet are unused weight.**
+   A recruiter never signs in. Removing them would drop the Supabase dependency
+   to just the contact form, which Resend alone can serve. Not decided yet.
+6. **`knowsLanguage` in `index.html` still lists Ukrainian.** Left deliberately:
+   that is a language Stepan speaks, not a language the site is published in.
+   Confirm with him before touching it.

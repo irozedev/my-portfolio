@@ -84,7 +84,7 @@ export function StatsAirport() {
     {
       icon: Code2,
       value: "6",
-      label: language === 'uk' ? 'Активні' : 
+      label: 
              language === 'nl' ? 'Actief' : 
              language === 'ar' ? 'نشط' :
              language === 'es' ? 'Activos' :
@@ -94,7 +94,7 @@ export function StatsAirport() {
     {
       icon: Star,
       value: "99%",
-      label: language === 'uk' ? 'Рейтинг' : 
+      label: 
              language === 'nl' ? 'Rating' : 
              language === 'ar' ? 'التقييم' :
              language === 'es' ? 'Rating' :
@@ -104,7 +104,7 @@ export function StatsAirport() {
     {
       icon: Zap,
       value: "24/7",
-      label: language === 'uk' ? 'Онлайн' : 
+      label: 
              language === 'nl' ? 'Online' : 
              language === 'ar' ? 'متصل' :
              language === 'es' ? 'En Línea' :
@@ -120,7 +120,7 @@ export function StatsAirport() {
     {
       icon: CheckCircle2,
       value: `3`,
-      label: language === 'uk' ? 'Бренди' :
+      label: 
              language === 'nl' ? 'Merken' :
              language === 'ar' ? 'علامات' :
              language === 'es' ? 'Marcas' :
@@ -130,7 +130,7 @@ export function StatsAirport() {
     {
       icon: Users,
       value: `3`,
-      label: language === 'uk' ? 'Мови' :
+      label: 
              language === 'nl' ? 'Talen' :
              language === 'ar' ? 'لغات' :
              language === 'es' ? 'Idiomas' :
@@ -140,7 +140,7 @@ export function StatsAirport() {
     {
       icon: TrendingUp,
       value: `AI`,
-      label: language === 'uk' ? 'з 2022' :
+      label: 
              language === 'nl' ? 'sinds 2022' :
              language === 'ar' ? 'منذ 2022' :
              language === 'es' ? 'desde 2022' :

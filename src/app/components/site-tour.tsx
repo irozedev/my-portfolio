@@ -293,8 +293,8 @@ export function SiteTour() {
             className="flex-1 flex items-center justify-center gap-1 px-3 py-2.5 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black rounded-lg text-sm font-mono font-bold active:scale-95 transition-all min-h-[44px]"
           >
             {!hasNext
-              ? (language === 'uk' ? 'Готово' : language === 'nl' ? 'Klaar' : language === 'ar' ? 'تم' : language === 'es' ? 'Listo' : 'Finish')
-              : (language === 'uk' ? 'Далі' : language === 'nl' ? 'Volgende' : language === 'ar' ? 'التالي' : language === 'es' ? 'Siguiente' : 'Next')}
+              ? (language === 'nl' ? 'Klaar' : language === 'ar' ? 'تم' : language === 'es' ? 'Listo' : 'Finish')
+              : (language === 'nl' ? 'Volgende' : language === 'ar' ? 'التالي' : language === 'es' ? 'Siguiente' : 'Next')}
             <ArrowRight className="w-4 h-4" />
           </button>
           <button

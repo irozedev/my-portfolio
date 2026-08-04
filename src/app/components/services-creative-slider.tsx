@@ -94,7 +94,7 @@ const arrowClass =
 // Pixels of pointer travel above which a press counts as a drag, not a click.
 const DRAG_THRESHOLD = 6;
 
-type Lang = (en: string, uk: string, nl: string, ar: string, es: string) => string;
+type Lang = (en: string, nl: string, ar: string, es: string) => string;
 
 /**
  * Display copy per service, in all five languages.
@@ -105,110 +105,104 @@ type Lang = (en: string, uk: string, nl: string, ar: string, es: string) => stri
  * translated.
  */
 function serviceCopy(L: Lang) {
-  const from = L("from", "від", "vanaf", "من", "desde");
-  const perHour = L("/hr", "/год", "/uur", "/س", "/h");
+  const from = L("from", "vanaf", "من", "desde");
+  const perHour = L("/hr", "/uur", "/س", "/h");
 
   return {
     automation: {
-      title: L("Automation & Bots", "Автоматизація та боти", "Automatisering & bots", "الأتمتة والبوتات", "Automatización y bots"),
+      title: L("Automation & Bots", "Automatisering & bots", "الأتمتة والبوتات", "Automatización y bots"),
       description: L(
         "Telegram bots, workflow automation and API integrations that save you hours every week",
-        "Telegram-боти, автоматизація процесів та інтеграції з API, які щотижня економлять вам години",
         "Telegram-bots, procesautomatisering en API-integraties die je elke week uren besparen",
         "بوتات تيليجرام وأتمتة سير العمل وتكاملات API توفّر عليك ساعات كل أسبوع",
         "Bots de Telegram, automatización de procesos e integraciones de API que te ahorran horas cada semana",
       ),
       price: `${from} €45${perHour}`,
       features: [
-        L("Telegram & Discord bots", "Боти для Telegram і Discord", "Telegram- en Discord-bots", "بوتات تيليجرام وديسكورد", "Bots de Telegram y Discord"),
-        L("Payment & API integrations", "Інтеграції платежів та API", "Betaal- en API-integraties", "تكاملات الدفع وواجهات API", "Integraciones de pago y API"),
-        L("Workflow automation", "Автоматизація процесів", "Procesautomatisering", "أتمتة سير العمل", "Automatización de procesos"),
-        L("Data sync & scripts", "Синхронізація даних і скрипти", "Datasynchronisatie en scripts", "مزامنة البيانات والسكربتات", "Sincronización de datos y scripts"),
+        L("Telegram & Discord bots", "Telegram- en Discord-bots", "بوتات تيليجرام وديسكورد", "Bots de Telegram y Discord"),
+        L("Payment & API integrations", "Betaal- en API-integraties", "تكاملات الدفع وواجهات API", "Integraciones de pago y API"),
+        L("Workflow automation", "Procesautomatisering", "أتمتة سير العمل", "Automatización de procesos"),
+        L("Data sync & scripts", "Datasynchronisatie en scripts", "مزامنة البيانات والسكربتات", "Sincronización de datos y scripts"),
       ],
     },
     landing: {
-      title: L("Websites & Landing Pages", "Сайти та лендинги", "Websites & landingspagina's", "المواقع وصفحات الهبوط", "Webs y landing pages"),
+      title: L("Websites & Landing Pages", "Websites & landingspagina's", "المواقع وصفحات الهبوط", "Webs y landing pages"),
       description: L(
         "Fast, modern sites that turn visitors into customers — built with Next.js / React",
-        "Швидкі сучасні сайти, які перетворюють відвідувачів на клієнтів — на Next.js / React",
         "Snelle, moderne sites die bezoekers klant maken — gebouwd met Next.js / React",
         "مواقع سريعة وحديثة تحوّل الزوار إلى عملاء — مبنية بـ Next.js / React",
         "Sitios rápidos y modernos que convierten visitas en clientes — con Next.js / React",
       ),
       price: `${from} €650`,
       features: [
-        L("Responsive & fast", "Адаптивні та швидкі", "Responsief en snel", "متجاوب وسريع", "Responsive y rápido"),
-        L("Payments (Stripe/WayForPay)", "Оплати (Stripe/WayForPay)", "Betalingen (Stripe/WayForPay)", "مدفوعات (Stripe/WayForPay)", "Pagos (Stripe/WayForPay)"),
-        L("GA4 analytics", "Аналітика GA4", "GA4-analytics", "تحليلات GA4", "Analítica GA4"),
-        L("SEO-ready", "Готові до SEO", "SEO-klaar", "جاهز لتحسين محركات البحث", "Listo para SEO"),
+        L("Responsive & fast", "Responsief en snel", "متجاوب وسريع", "Responsive y rápido"),
+        L("Payments (Stripe/WayForPay)", "Betalingen (Stripe/WayForPay)", "مدفوعات (Stripe/WayForPay)", "Pagos (Stripe/WayForPay)"),
+        L("GA4 analytics", "GA4-analytics", "تحليلات GA4", "Analítica GA4"),
+        L("SEO-ready", "SEO-klaar", "جاهز لتحسين محركات البحث", "Listo para SEO"),
       ],
     },
     design: {
-      title: L("UI Design & Build", "UI-дизайн і верстка", "UI-ontwerp & bouw", "تصميم وتنفيذ الواجهات", "Diseño UI y desarrollo"),
+      title: L("UI Design & Build", "UI-ontwerp & bouw", "تصميم وتنفيذ الواجهات", "Diseño UI y desarrollo"),
       description: L(
         "Modern interface design and pixel-perfect build in one — AI-assisted, delivered fast",
-        "Сучасний дизайн інтерфейсу і точна верстка в одному — з AI, швидко",
         "Modern interface-ontwerp én pixel-perfecte bouw in één — AI-ondersteund, snel opgeleverd",
         "تصميم واجهات حديث وتنفيذ دقيق في آن واحد — بمساعدة الذكاء الاصطناعي وتسليم سريع",
         "Diseño de interfaz moderno y maquetación pixel-perfect en uno — con IA, entrega rápida",
       ),
       price: `${from} €400`,
       features: [
-        L("UI / UX design", "UI / UX дизайн", "UI / UX-ontwerp", "تصميم UI / UX", "Diseño UI / UX"),
-        L("Design-to-code", "Дизайн у код", "Design-to-code", "تحويل التصميم إلى كود", "De diseño a código"),
-        L("Responsive layouts", "Адаптивні макети", "Responsieve layouts", "تخطيطات متجاوبة", "Maquetación responsive"),
-        L("Reusable components", "Перевикористовувані компоненти", "Herbruikbare componenten", "مكوّنات قابلة لإعادة الاستخدام", "Componentes reutilizables"),
+        L("UI / UX design", "UI / UX-ontwerp", "تصميم UI / UX", "Diseño UI / UX"),
+        L("Design-to-code", "Design-to-code", "تحويل التصميم إلى كود", "De diseño a código"),
+        L("Responsive layouts", "Responsieve layouts", "تخطيطات متجاوبة", "Maquetación responsive"),
+        L("Reusable components", "Herbruikbare componenten", "مكوّنات قابلة لإعادة الاستخدام", "Componentes reutilizables"),
       ],
     },
     webapp: {
-      title: L("Web Apps & Dashboards", "Веб-застосунки та дашборди", "Webapps & dashboards", "تطبيقات الويب ولوحات التحكم", "Aplicaciones web y paneles"),
+      title: L("Web Apps & Dashboards", "Webapps & dashboards", "تطبيقات الويب ولوحات التحكم", "Aplicaciones web y paneles"),
       description: L(
         "Custom tools, dashboards and integrations for your business processes",
-        "Власні інструменти, дашборди та інтеграції під ваші бізнес-процеси",
         "Maatwerk-tools, dashboards en integraties voor je bedrijfsprocessen",
         "أدوات مخصّصة ولوحات تحكم وتكاملات لعمليات عملك",
         "Herramientas a medida, paneles e integraciones para tus procesos de negocio",
       ),
       price: `${from} €60${perHour}`,
       features: [
-        L("Custom dashboards", "Кастомні дашборди", "Custom dashboards", "لوحات تحكم مخصّصة", "Paneles a medida"),
-        L("Internal tools", "Внутрішні інструменти", "Interne tools", "أدوات داخلية", "Herramientas internas"),
-        L("REST API integration", "Інтеграція REST API", "REST API-integratie", "تكامل REST API", "Integración de REST API"),
-        L("Admin panels", "Адмін-панелі", "Beheerpanelen", "لوحات إدارة", "Paneles de administración"),
+        L("Custom dashboards", "Custom dashboards", "لوحات تحكم مخصّصة", "Paneles a medida"),
+        L("Internal tools", "Interne tools", "أدوات داخلية", "Herramientas internas"),
+        L("REST API integration", "REST API-integratie", "تكامل REST API", "Integración de REST API"),
+        L("Admin panels", "Beheerpanelen", "لوحات إدارة", "Paneles de administración"),
       ],
     },
     ecommerce: {
-      title: L("E-Commerce", "Електронна комерція", "E-commerce", "التجارة الإلكترونية", "E-commerce"),
+      title: L("E-Commerce", "E-commerce", "التجارة الإلكترونية", "E-commerce"),
       description: L(
         "Online stores and storefronts with payment and shipping — Magento or custom",
-        "Інтернет-магазини з оплатою та доставкою — Magento або власне рішення",
         "Webshops met betaling en verzending — Magento of maatwerk",
         "متاجر إلكترونية مع الدفع والشحن — Magento أو حل مخصّص",
         "Tiendas online con pago y envío — Magento o a medida",
       ),
       price: `${from} €1200`,
       features: [
-        L("Magento 1 & 2 / custom", "Magento 1 і 2 / власне", "Magento 1 & 2 / maatwerk", "Magento 1 و2 / مخصّص", "Magento 1 y 2 / a medida"),
-        L("Payment gateways", "Платіжні шлюзи", "Betaalproviders", "بوابات الدفع", "Pasarelas de pago"),
-        L("Shipping integrations", "Інтеграції доставки", "Verzendintegraties", "تكاملات الشحن", "Integraciones de envío"),
-        L("Product pages & SEO", "Картки товарів і SEO", "Productpagina's & SEO", "صفحات المنتجات وSEO", "Fichas de producto y SEO"),
+        L("Magento 1 & 2 / custom", "Magento 1 & 2 / maatwerk", "Magento 1 و2 / مخصّص", "Magento 1 y 2 / a medida"),
+        L("Payment gateways", "Betaalproviders", "بوابات الدفع", "Pasarelas de pago"),
+        L("Shipping integrations", "Verzendintegraties", "تكاملات الشحن", "Integraciones de envío"),
+        L("Product pages & SEO", "Productpagina's & SEO", "صفحات المنتجات وSEO", "Fichas de producto y SEO"),
       ],
     },
     consulting: {
-      title: L("Consulting / Hourly", "Консультації / погодинно", "Consultancy / per uur", "استشارات / بالساعة", "Consultoría / por horas"),
+      title: L("Consulting / Hourly", "Consultancy / per uur", "استشارات / بالساعة", "Consultoría / por horas"),
       description: L(
         "Front-end & automation advice, code review and hands-on help by the hour",
-        "Консультації з фронтенду й автоматизації, код-рев'ю та практична допомога погодинно",
         "Front-end- en automatiseringsadvies, code review en praktische hulp per uur",
         "استشارات في الواجهات والأتمتة ومراجعة الكود ومساعدة عملية بالساعة",
         "Asesoría de front-end y automatización, code review y ayuda práctica por horas",
       ),
       price: `€55${perHour}`,
       features: [
-        L("Code review & audits", "Код-рев'ю та аудити", "Code review & audits", "مراجعة الكود والتدقيق", "Code review y auditorías"),
-        L("Architecture advice", "Поради з архітектури", "Architectuuradvies", "استشارات معمارية", "Asesoría de arquitectura"),
-        L("Automation strategy", "Стратегія автоматизації", "Automatiseringsstrategie", "استراتيجية الأتمتة", "Estrategia de automatización"),
-        L("Pair programming", "Парне програмування", "Pair programming", "برمجة ثنائية", "Programación en pareja"),
+        L("Code review & audits", "Code review & audits", "مراجعة الكود والتدقيق", "Code review y auditorías"),
+        L("Architecture advice", "Architectuuradvies", "استشارات معمارية", "Asesoría de arquitectura"),
+        L("Automation strategy", "Automatiseringsstrategie", "استراتيجية الأتمتة", "Estrategia de automatización"),
+        L("Pair programming", "Pair programming", "برمجة ثنائية", "Programación en pareja"),
       ],
     },
   } as const;
@@ -257,8 +251,8 @@ export function ServicesCreativeSlider() {
   const { t, language } = useLanguage();
   const [isProcessingClick, setIsProcessingClick] = useState(false);
 
-  const L: Lang = (en, uk, nl, ar, es) =>
-    language === "uk" ? uk : language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+  const L: Lang = (en, nl, ar, es) =>
+    language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
   const copy = serviceCopy(L);
 
   // Detect mobile on mount
@@ -787,7 +781,6 @@ export function ServicesCreativeSlider() {
                           <p className="text-xs text-[var(--accent-primary)] font-mono mb-1">
                             {L(
                               "or fixed from €350/bot",
-                              "або фікс від €350/бот",
                               "of vast vanaf €350/bot",
                               "أو سعر ثابت من €350 للبوت",
                               "o fijo desde €350/bot",
@@ -818,7 +811,7 @@ export function ServicesCreativeSlider() {
                         {text.features.length > 4 && (
                           <p className="text-xs text-[var(--text-muted)] ml-8">
                             +{text.features.length - 4}{" "}
-                            {L("more", "ще", "meer", "أخرى", "más")}
+                            {L("more", "meer", "أخرى", "más")}
                           </p>
                         )}
                       </div>
@@ -834,7 +827,7 @@ export function ServicesCreativeSlider() {
                         whileTap={{ scale: 0.98 }}
                       >
                         <Zap className="w-4 h-4 group-hover/btn:rotate-12 transition-transform" />
-                        {L("Start project", "Почати проєкт", "Project starten", "ابدأ المشروع", "Iniciar proyecto")}
+                        {L("Start project", "Project starten", "ابدأ المشروع", "Iniciar proyecto")}
                         <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                       </motion.button>
                     </motion.div>
@@ -846,12 +839,12 @@ export function ServicesCreativeSlider() {
             <PrevArrow
               onClick={() => step(-1)}
               disabled={edges.atStart}
-              label={L("Previous service", "Попередня послуга", "Vorige dienst", "الخدمة السابقة", "Servicio anterior")}
+              label={L("Previous service", "Vorige dienst", "الخدمة السابقة", "Servicio anterior")}
             />
             <NextArrow
               onClick={() => step(1)}
               disabled={edges.atEnd}
-              label={L("Next service", "Наступна послуга", "Volgende dienst", "الخدمة التالية", "Servicio siguiente")}
+              label={L("Next service", "Volgende dienst", "الخدمة التالية", "Servicio siguiente")}
             />
           </motion.div>
 

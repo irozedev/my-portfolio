@@ -4,8 +4,6 @@ import { AvailabilityProvider } from "./contexts/availability-context";
 import { AuthProvider } from "./contexts/auth-context";
 import { ViewModeProvider } from "./contexts/view-mode-context";
 import { MainPage } from "./components/main-page";
-import { BetaBanner } from "./components/beta-banner";
-import { ViewModeToggle } from "./components/view-mode-toggle";
 import { Toaster } from "sonner";
 import { useState, useEffect, lazy, Suspense } from "react";
 import { AnimatePresence } from "motion/react";
@@ -172,8 +170,12 @@ export default function App() {
                   </Suspense>
                 ) : null}
               </AnimatePresence>
-              <BetaBanner />
-              <ViewModeToggle />
+              {/* Beta banner removed: the one piece of work a visitor judges
+                  the author by should not announce that it is unfinished.
+
+                  ViewModeToggle moved into Navigation — it is no longer a
+                  floating panel, so it is rendered where the rest of the
+                  navigation lives. */}
               <Toaster position="top-right" richColors />
               <SpeedInsights />
               <Analytics />
