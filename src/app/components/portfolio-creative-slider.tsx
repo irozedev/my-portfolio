@@ -1,8 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
-import { Award, Heart, ExternalLink, Github, ArrowRight } from "lucide-react";
+import { Award, ExternalLink, Github, ArrowRight } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
-import { useFavorites } from "../hooks/use-favorites";
 import { ProjectFullscreenView } from "./project-fullscreen-view";
 
 type Lang = (en: string, nl: string, ar: string, es: string) => string;
@@ -218,25 +217,11 @@ function projectCopy(L: Lang) {
 
 export function PortfolioCreativeSlider() {
   const { t, language } = useLanguage();
-  const { favorites, addFavorite, removeFavorite } = useFavorites();
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const L: Lang = (en, nl, ar, es) =>
     language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
   const copy = projectCopy(L);
-
-  const isFavorite = (projectId: string) => favorites.some((fav) => fav.projectId === projectId);
-
-  const handleToggleFavorite = (project: ProjectData) => {
-    if (isFavorite(project.id)) {
-      removeFavorite(project.id);
-    } else {
-      // addFavorite takes positional arguments, not an options object. Passing
-      // one object put the whole object into `projectId`, so the saved entry
-      // never matched isFavorite() and favouriting silently did nothing.
-      addFavorite(project.id, project.title, project.image, "project");
-    }
-  };
 
   // Merge static data with the current language's copy. The fullscreen view
   // takes the same shape, so it stays localized too.
@@ -267,7 +252,7 @@ export function PortfolioCreativeSlider() {
   return (
     <section
       id="projects"
-      className="relative py-6 md:py-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[var(--bg-primary)] overflow-hidden scroll-mt-32 md:scroll-mt-36"
+      className="relative py-6 md:py-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[var(--bg-primary)] overflow-hidden scroll-mt-24 md:scroll-mt-28"
     >
       {/* Ambient background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -307,7 +292,6 @@ export function PortfolioCreativeSlider() {
         <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 max-w-5xl mx-auto">
           {projects.map((project, index) => {
             const text = copy[project.id as keyof typeof copy];
-            const isFav = isFavorite(project.id);
 
             return (
               <motion.article
@@ -360,21 +344,9 @@ export function PortfolioCreativeSlider() {
                   )}
                 </button>
 
-                {/* Favourite — outside the button above, so it is its own tab
-                    stop and its click cannot bubble into "open project". */}
-                <button
-                  type="button"
-                  onClick={() => handleToggleFavorite(project)}
-                  className="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-black/45 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-black/65 transition-colors"
-                  aria-label={
-                    isFav
-                      ? L("Remove from favourites", "Uit favorieten halen", "إزالة من المفضّلة", "Quitar de favoritos")
-                      : L("Add to favourites", "Aan favorieten toevoegen", "إضافة إلى المفضّلة", "Añadir a favoritos")
-                  }
-                  aria-pressed={isFav}
-                >
-                  <Heart className={`w-5 h-5 transition-colors ${isFav ? "fill-red-500 text-red-500" : "text-white"}`} />
-                </button>
+                {/* The favourite heart used to sit here. Favourites were stored
+                    per signed-in account, and nobody signs in to a portfolio —
+                    it invited a click that led to a login wall. */}
 
                 {/* Body */}
                 <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">

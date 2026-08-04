@@ -9,11 +9,6 @@ const seoData: Record<string, { title: string; description: string; keywords: st
     description: "Front-End / JavaScript Developer with 8+ years of commercial experience building e-commerce and enterprise web apps (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js & Magento. Based in Antwerp, Belgium. Available for freelance.",
     keywords: "Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Freelance Developer Belgium, Web Developer, Knockout.js, Node.js",
   },
-  uk: {
-    title: "Степан Розе | Front-End та JavaScript розробник — React, TypeScript, Next.js | Бельгія",
-    description: "Front-End / JavaScript розробник з 8+ роками комерційного досвіду в e-commerce та enterprise (childrensalon.com, vogacloset.com, Ощадбанк). React, TypeScript, Vue, Next.js та Magento. Антверпен, Бельгія. Доступний для фрілансу.",
-    keywords: "Front-End розробник, JavaScript розробник, React, TypeScript, Vue.js, Next.js, Magento, E-commerce розробник, Фріланс Бельгія, Веб-розробник",
-  },
   nl: {
     title: "Stepan Roze | Front-End & JavaScript Developer — React, TypeScript, Next.js | België",
     description: "Front-End / JavaScript Developer met 8+ jaar commerciële ervaring in e-commerce en enterprise webapps (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js & Magento. Antwerpen, België. Beschikbaar als freelancer.",

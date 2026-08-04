@@ -14,9 +14,9 @@ const services = [
     color: "#f59e0b",
     gradient: "from-orange-500 to-yellow-500",
     popular: true,
-    priceRange: "from €45/hr",
-    price: 45,
-    priceWithTax: 45,
+    priceRange: "from €65/hr",
+    price: 65,
+    priceWithTax: 65,
     features: ["Telegram & Discord bots", "Payment & API integrations", "Workflow automation", "Data sync & scripts"],
   },
   {
@@ -27,9 +27,9 @@ const services = [
     description: "Fast, modern sites that turn visitors into customers — built with Next.js / React",
     color: "#00d9ff",
     gradient: "from-[#00d9ff] to-cyan-500",
-    priceRange: "from €650",
-    price: 650,
-    priceWithTax: 650,
+    priceRange: "from €950",
+    price: 950,
+    priceWithTax: 950,
     features: ["Responsive & fast", "Payments (Stripe/WayForPay)", "GA4 analytics", "SEO-ready"],
   },
   {
@@ -40,9 +40,9 @@ const services = [
     description: "Modern interface design and pixel-perfect build in one — AI-assisted, delivered fast",
     color: "#ec4899",
     gradient: "from-pink-500 to-rose-500",
-    priceRange: "from €400",
-    price: 400,
-    priceWithTax: 400,
+    priceRange: "from €600",
+    price: 600,
+    priceWithTax: 600,
     features: ["UI / UX design", "Design-to-code", "Responsive layouts", "Reusable components"],
   },
   {
@@ -53,9 +53,9 @@ const services = [
     description: "Custom tools, dashboards and integrations for your business processes",
     color: "#a78bfa",
     gradient: "from-purple-500 to-indigo-500",
-    priceRange: "from €60/hr",
-    price: 60,
-    priceWithTax: 60,
+    priceRange: "from €75/hr",
+    price: 75,
+    priceWithTax: 75,
     features: ["Custom dashboards", "Internal tools", "REST API integration", "Admin panels"],
   },
   {
@@ -66,9 +66,9 @@ const services = [
     description: "Online stores and storefronts with payment and shipping — Magento or custom",
     color: "#22c55e",
     gradient: "from-green-500 to-emerald-500",
-    priceRange: "from €1200",
-    price: 1200,
-    priceWithTax: 1200,
+    priceRange: "from €1800",
+    price: 1800,
+    priceWithTax: 1800,
     features: ["Magento 1 & 2 / custom", "Payment gateways", "Shipping integrations", "Product pages & SEO"],
   },
   {
@@ -79,9 +79,9 @@ const services = [
     description: "Front-end & automation advice, code review and hands-on help by the hour",
     color: "#8b5cf6",
     gradient: "from-violet-500 to-purple-500",
-    priceRange: "€55/hr",
-    price: 55,
-    priceWithTax: 55,
+    priceRange: "€75/hr",
+    price: 75,
+    priceWithTax: 75,
     features: ["Code review & audits", "Architecture advice", "Automation strategy", "Pair programming"],
   },
 ];
@@ -117,7 +117,7 @@ function serviceCopy(L: Lang) {
         "بوتات تيليجرام وأتمتة سير العمل وتكاملات API توفّر عليك ساعات كل أسبوع",
         "Bots de Telegram, automatización de procesos e integraciones de API que te ahorran horas cada semana",
       ),
-      price: `${from} €45${perHour}`,
+      price: `${from} €65${perHour}`,
       features: [
         L("Telegram & Discord bots", "Telegram- en Discord-bots", "بوتات تيليجرام وديسكورد", "Bots de Telegram y Discord"),
         L("Payment & API integrations", "Betaal- en API-integraties", "تكاملات الدفع وواجهات API", "Integraciones de pago y API"),
@@ -133,7 +133,7 @@ function serviceCopy(L: Lang) {
         "مواقع سريعة وحديثة تحوّل الزوار إلى عملاء — مبنية بـ Next.js / React",
         "Sitios rápidos y modernos que convierten visitas en clientes — con Next.js / React",
       ),
-      price: `${from} €650`,
+      price: `${from} €950`,
       features: [
         L("Responsive & fast", "Responsief en snel", "متجاوب وسريع", "Responsive y rápido"),
         L("Payments (Stripe/WayForPay)", "Betalingen (Stripe/WayForPay)", "مدفوعات (Stripe/WayForPay)", "Pagos (Stripe/WayForPay)"),
@@ -149,7 +149,7 @@ function serviceCopy(L: Lang) {
         "تصميم واجهات حديث وتنفيذ دقيق في آن واحد — بمساعدة الذكاء الاصطناعي وتسليم سريع",
         "Diseño de interfaz moderno y maquetación pixel-perfect en uno — con IA, entrega rápida",
       ),
-      price: `${from} €400`,
+      price: `${from} €600`,
       features: [
         L("UI / UX design", "UI / UX-ontwerp", "تصميم UI / UX", "Diseño UI / UX"),
         L("Design-to-code", "Design-to-code", "تحويل التصميم إلى كود", "De diseño a código"),
@@ -165,7 +165,7 @@ function serviceCopy(L: Lang) {
         "أدوات مخصّصة ولوحات تحكم وتكاملات لعمليات عملك",
         "Herramientas a medida, paneles e integraciones para tus procesos de negocio",
       ),
-      price: `${from} €60${perHour}`,
+      price: `${from} €75${perHour}`,
       features: [
         L("Custom dashboards", "Custom dashboards", "لوحات تحكم مخصّصة", "Paneles a medida"),
         L("Internal tools", "Interne tools", "أدوات داخلية", "Herramientas internas"),
@@ -181,7 +181,7 @@ function serviceCopy(L: Lang) {
         "متاجر إلكترونية مع الدفع والشحن — Magento أو حل مخصّص",
         "Tiendas online con pago y envío — Magento o a medida",
       ),
-      price: `${from} €1200`,
+      price: `${from} €1800`,
       features: [
         L("Magento 1 & 2 / custom", "Magento 1 & 2 / maatwerk", "Magento 1 و2 / مخصّص", "Magento 1 y 2 / a medida"),
         L("Payment gateways", "Betaalproviders", "بوابات الدفع", "Pasarelas de pago"),
@@ -197,7 +197,7 @@ function serviceCopy(L: Lang) {
         "استشارات في الواجهات والأتمتة ومراجعة الكود ومساعدة عملية بالساعة",
         "Asesoría de front-end y automatización, code review y ayuda práctica por horas",
       ),
-      price: `€55${perHour}`,
+      price: `€75${perHour}`,
       features: [
         L("Code review & audits", "Code review & audits", "مراجعة الكود والتدقيق", "Code review y auditorías"),
         L("Architecture advice", "Architectuuradvies", "استشارات معمارية", "Asesoría de arquitectura"),
@@ -491,7 +491,7 @@ export function ServicesCreativeSlider() {
     <>
       <section
         id="services"
-        className="relative py-12 md:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[var(--bg-primary)] overflow-hidden scroll-mt-32 md:scroll-mt-36"
+        className="relative py-12 md:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[var(--bg-primary)] overflow-hidden scroll-mt-24 md:scroll-mt-28"
       >
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -780,10 +780,10 @@ export function ServicesCreativeSlider() {
                         {service.key === 'automation' && (
                           <p className="text-xs text-[var(--accent-primary)] font-mono mb-1">
                             {L(
-                              "or fixed from €350/bot",
-                              "of vast vanaf €350/bot",
-                              "أو سعر ثابت من €350 للبوت",
-                              "o fijo desde €350/bot",
+                              "or fixed from €500/bot",
+                              "of vast vanaf €500/bot",
+                              "أو سعر ثابت من €500 للبوت",
+                              "o fijo desde €500/bot",
                             )}
                           </p>
                         )}

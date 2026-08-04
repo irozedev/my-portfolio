@@ -2,7 +2,6 @@ import { ContactSection } from "./contact-section";
 import { Footer } from "./footer";
 import { CookieBanner } from "./cookie-banner";
 import { SEOHead } from "./seo-head";
-import { PersonalCabinet } from "./personal-cabinet";
 import { Navigation } from "./navigation";
 import { HeroUltraModern } from "./hero-ultra-modern";
 import { AboutSection } from "./about-section";
@@ -14,10 +13,8 @@ import { GitHubShowcase } from "./github-showcase";
 import { ScrollToTopButton } from "./scroll-to-top-button";
 import { useViewMode } from "../contexts/view-mode-context";
 import { useLanguage } from "../contexts/language-context";
-import { useState } from "react";
 
 export function MainPage() {
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { isClientMode, isCVMode } = useViewMode();
   const { t } = useLanguage();
 
@@ -40,7 +37,7 @@ export function MainPage() {
       </a>
 
       {/* Navigation */}
-      <Navigation onOpenProfile={() => setIsProfileOpen(true)} />
+      <Navigation />
 
       {/* CLIENT MODE: Hero → Services → Projects → Why me → Contact */}
       {isClientMode && (
@@ -121,14 +118,16 @@ export function MainPage() {
       <Footer />
       
       <CookieBanner />
-      
-      
-      <PersonalCabinet isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
 
-      {/* SiteTour removed. Its launcher was a fixed button in the bottom-left
-          corner that sat on top of the About cards, and a guided tour is the
-          wrong affordance here: a recruiter reads the page for a minute and
-          leaves. The component is still in the tree if it is ever wanted. */}
+      {/* PersonalCabinet removed along with the rest of the account surface —
+          favourites, saved projects and profile settings for a visitor who has
+          no reason to have an account here. */}
+
+      {/* SiteTour is gone, file and all. Its launcher was a fixed button in the
+          bottom-left corner sitting on top of the About cards, a guided tour is
+          the wrong affordance for a page a recruiter reads in a minute, and
+          once unmounted it rotted: its first step pointed at the maintenance
+          banner, which no longer exists. */}
 
       {/* Unified Scroll-to-Top + ChatBot */}
       <ScrollToTopButton />

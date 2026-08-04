@@ -1,7 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ExternalLink, Github, Calendar, Users, Zap, ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react';
-import { ProjectComments } from './project-comments';
-import { ProjectReactions } from './project-reactions';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../contexts/language-context';
 
@@ -54,10 +52,6 @@ export function ProjectFullscreenView({
   // React then saw a different number of hooks between renders and threw
   // "Rendered more hooks than during the previous render". The guard now lives
   // after every hook, and each effect no-ops when there is no project.
-  const projectId = project
-    ? project.id || project.title.toLowerCase().replace(/\s+/g, '-')
-    : '';
-
   useEffect(() => {
     if (!project) return;
 
@@ -530,27 +524,10 @@ export function ProjectFullscreenView({
                 )}
               </motion.div>
 
-              {/* DIVIDER */}
-              <div className="h-0.5 bg-gradient-to-r from-transparent via-[var(--accent-primary)]/50 to-transparent mb-12" />
-
-              {/* 🔥 REACTIONS */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                className="mb-12"
-              >
-                <ProjectReactions projectId={projectId} />
-              </motion.div>
-
-              {/* 🔥 COMMENTS */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.9 }}
-              >
-                <ProjectComments projectId={projectId} />
-              </motion.div>
+              {/* Reactions and comments were removed here. Both required a
+                  Supabase sign-in to use, and a public comment box on a
+                  portfolio ages badly: empty is the normal state and it reads
+                  as an abandoned page. The case study ends on the links out. */}
             </div>
           </div>
 

@@ -174,54 +174,6 @@ export const translations = {
         centerCard: 'Click center card for details',
         controls: 'Use arrow keys or swipe to navigate'
       },
-      frontend: {
-        title: 'Frontend Development',
-        description: 'Custom web apps using React, Vue.js, modern CSS frameworks. Responsive, optimized, SEO-ready.',
-        features: {
-          '0': 'React & Vue.js expertise',
-          '1': 'Responsive design',
-          '2': 'Performance optimization',
-          '3': 'Cross-browser compatibility'
-        },
-        price: '€50',
-        timeline: '2-4 weeks'
-      },
-      ecommerce: {
-        title: 'E-commerce Solutions',
-        description: 'Magento development, custom integrations, performance tuning for online stores.',
-        features: {
-          '0': 'Magento 1 & 2 development',
-          '1': 'Custom integrations',
-          '2': 'Payment gateway setup',
-          '3': 'Performance optimization'
-        },
-        price: '€60',
-        timeline: '3-8 weeks'
-      },
-      consulting: {
-        title: 'JavaScript Consulting',
-        description: 'Code reviews, architecture advice, technical mentoring for your development team.',
-        features: {
-          '0': 'Code reviews & audits',
-          '1': 'Architecture planning',
-          '2': 'Team mentoring',
-          '3': 'Best practices guidance'
-        },
-        price: '€45',
-        timeline: 'Hourly basis'
-      },
-      fullstack: {
-        title: 'Full-Stack Розробка',
-        description: 'Повноцінні додатки: frontend, backend, база даних, розгортання. Комплексні рішення.',
-        features: {
-          '0': 'Frontend + Backend',
-          '1': 'Проектування бази даних',
-          '2': 'Розробка API',
-          '3': 'Хмарне розгортання'
-        },
-        price: '€70',
-        timeline: '4-12 тижнів'
-      }
     },
     testimonials: {
       title: 'Testimonials',
@@ -520,54 +472,6 @@ export const translations = {
         centerCard: 'Klik op middelste kaart voor details',
         controls: 'Gebruik pijltjestoetsen of veeg om te navigeren'
       },
-      frontend: {
-        title: 'Frontend Ontwikkeling',
-        description: 'Aangepaste web-apps met React, Vue.js, moderne CSS frameworks. Responsive, geoptimaliseerd, SEO-klaar.',
-        features: {
-          '0': 'React & Vue.js expertise',
-          '1': 'Responsive design',
-          '2': 'Prestatie-optimalisatie',
-          '3': 'Cross-browser compatibiliteit'
-        },
-        price: '€50',
-        timeline: '2-4 weken'
-      },
-      ecommerce: {
-        title: 'E-commerce Oplossingen',
-        description: 'Magento ontwikkeling, aangepaste integraties, prestatieafstemming voor online winkels.',
-        features: {
-          '0': 'Magento 1 & 2 ontwikkeling',
-          '1': 'Aangepaste integraties',
-          '2': 'Betalingsgateway setup',
-          '3': 'Prestatie-optimalisatie'
-        },
-        price: '€60',
-        timeline: '3-8 weken'
-      },
-      consulting: {
-        title: 'JavaScript Consultancy',
-        description: 'Code reviews, architectuur advies, technische begeleiding voor uw ontwikkelteam.',
-        features: {
-          '0': 'Code reviews & audits',
-          '1': 'Architectuur planning',
-          '2': 'Team mentoring',
-          '3': 'Best practices begeleiding'
-        },
-        price: '€45',
-        timeline: 'Per uur'
-      },
-      fullstack: {
-        title: 'Full-Stack Розробка',
-        description: 'Повноцінні додатки: frontend, backend, база даних, розгортання. Комплексні рішення.',
-        features: {
-          '0': 'Frontend + Backend',
-          '1': 'Проектування бази даних',
-          '2': 'Розробка API',
-          '3': 'Хмарне розгортання'
-        },
-        price: '€70',
-        timeline: '4-12 тижнів'
-      }
     },
     testimonials: {
       title: 'Getuigenissen',

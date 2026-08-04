@@ -87,10 +87,10 @@ function localAnswer(input: string, language: string): string {
 
   if (/(price|cost|rate|budget|pricing|quote|how much|цін|цена|скільки|prijs|kost|precio|cuánto|سعر|كم)/.test(s))
     return L(
-      "💶 Starting prices (no VAT — small-business scheme):\n• Landing page — from €650\n• Website 4–6 pages — €1,500–2,500\n• Telegram bot — from €350\n• Automation — €45/h\n• Web app / dashboard — €60/h\n• E-commerce — from €1,200\n• Consulting — €55/h\n\nTell me what you need and I'll narrow it down.",
-      "💶 Vanafprijzen (geen btw — vrijstellingsregeling):\n• Landingspagina — vanaf €650\n• Website 4–6 pagina's — €1.500–2.500\n• Telegram-bot — vanaf €350\n• Automatisering — €45/u\n• Webapp — €60/u\n• E-commerce — vanaf €1.200\n• Consulting — €55/u\n\nVertel wat je nodig hebt.",
-      "💶 أسعار البداية (بدون ضريبة — نظام المنشآت الصغيرة):\n• صفحة هبوط — من €650\n• موقع 4–6 صفحات — €1,500–2,500\n• بوت تيليجرام — من €350\n• أتمتة — €45/س\n• تطبيق ويب — €60/س\n• متجر — من €1,200\n• استشارة — €55/س\n\nأخبرني بما تحتاج.",
-      "💶 Precios iniciales (sin IVA — régimen de pequeñas empresas):\n• Landing — desde €650\n• Web 4–6 páginas — €1.500–2.500\n• Bot de Telegram — desde €350\n• Automatización — €45/h\n• Web app — €60/h\n• E-commerce — desde €1.200\n• Consultoría — €55/h\n\nCuéntame qué necesitas.",
+      "💶 Starting prices (no VAT — small-business scheme):\n• Landing page — from €950\n• Website 4–6 pages — €2,200–3,500\n• Telegram bot — from €500\n• Automation — €65/h\n• Web app / dashboard — €75/h\n• E-commerce — from €1,800\n• Consulting — €75/h\n\nTell me what you need and I'll narrow it down.",
+      "💶 Vanafprijzen (geen btw — vrijstellingsregeling):\n• Landingspagina — vanaf €950\n• Website 4–6 pagina's — €2.200–3.500\n• Telegram-bot — vanaf €500\n• Automatisering — €65/u\n• Webapp — €75/u\n• E-commerce — vanaf €1.800\n• Consulting — €75/u\n\nVertel wat je nodig hebt.",
+      "💶 أسعار البداية (بدون ضريبة — نظام المنشآت الصغيرة):\n• صفحة هبوط — من €950\n• موقع 4–6 صفحات — €2,200–3,500\n• بوت تيليجرام — من €500\n• أتمتة — €65/س\n• تطبيق ويب — €75/س\n• متجر — من €1,800\n• استشارة — €75/س\n\nأخبرني بما تحتاج.",
+      "💶 Precios iniciales (sin IVA — régimen de pequeñas empresas):\n• Landing — desde €950\n• Web 4–6 páginas — €2.200–3.500\n• Bot de Telegram — desde €500\n• Automatización — €65/h\n• Web app — €75/h\n• E-commerce — desde €1.800\n• Consultoría — €75/h\n\nCuéntame qué necesitas.",
     );
 
   if (/(time|timeline|how long|deadline|deliver|строк|термін|скільки часу|termijn|hoelang|plazo|cuánto tiempo|مدة|وقت)/.test(s))

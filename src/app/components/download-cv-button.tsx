@@ -4,7 +4,6 @@ import { useLanguage } from "../contexts/language-context";
 
 const labels = {
   en: "Download CV",
-  uk: "Завантажити CV",
   nl: "CV Downloaden",
   ar: "تحميل السيرة الذاتية",
   es: "Descargar CV",

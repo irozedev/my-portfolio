@@ -128,8 +128,8 @@ export function GitHubShowcase() {
 
   const getButtonText = (type: 'code' | 'demo') => {
     const texts = {
-      code: { en: 'Code', uk: 'Код', nl: 'Code', ar: 'كود', es: 'Código' },
-      demo: { en: 'Demo', uk: 'Демо', nl: 'Demo', ar: 'تجربة', es: 'Demo' }
+      code: { en: 'Code', nl: 'Code', ar: 'كود', es: 'Código' },
+      demo: { en: 'Demo', nl: 'Demo', ar: 'تجربة', es: 'Demo' }
     };
     return texts[type][language as keyof typeof texts.code] || texts[type].en;
   };

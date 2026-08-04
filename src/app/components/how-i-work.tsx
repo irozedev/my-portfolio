@@ -139,32 +139,32 @@ export function HowIWork() {
   const rows = [
     {
       what: L("Landing page", "Landingspagina", "صفحة هبوط", "Landing page"),
-      price: "€650 – €1 200",
+      price: "€950 – €1 800",
       time: L("1–1.5 weeks", "1–1.5 week", "1–1.5 أسبوع", "1–1.5 semanas"),
     },
     {
       what: L("Website (4–6 pages)", "Website (4–6 pagina's)", "موقع (4–6 صفحات)", "Web (4–6 páginas)"),
-      price: "€1 500 – €2 500",
+      price: "€2 200 – €3 500",
       time: L("2.5–3.5 weeks", "2.5–3.5 week", "2.5–3.5 أسبوع", "2.5–3.5 semanas"),
     },
     {
       what: L("Telegram bot", "Telegram-bot", "بوت تيليجرام", "Bot de Telegram"),
-      price: L("from €350", "vanaf €350", "من €350", "desde €350"),
+      price: L("from €500", "vanaf €500", "من €500", "desde €500"),
       time: L("~1 week", "~1 week", "~أسبوع", "~1 semana"),
     },
     {
       what: L("Automation / integration", "Automatisering / integratie", "أتمتة / تكامل", "Automatización / integración"),
-      price: "€45/h (~€225–450)",
+      price: "€65/h (~€325–650)",
       time: L("3–5 mornings", "3–5 ochtenden", "3–5 صباحات", "3–5 mañanas"),
     },
     {
       what: L("Web app / dashboard (MVP)", "Webapp / dashboard (MVP)", "تطبيق ويب / لوحة (MVP)", "Web app / panel (MVP)"),
-      price: "€60/h (~€2 500–5 000)",
+      price: "€75/h (~€3 000–6 000)",
       time: L("4–6 weeks", "4–6 weken", "4–6 أسابيع", "4–6 semanas"),
     },
     {
       what: L("Online store", "Webshop", "متجر إلكتروني", "Tienda online"),
-      price: L("from €1 200", "vanaf €1 200", "من €1 200", "desde €1 200"),
+      price: L("from €1 800", "vanaf €1 800", "من €1 800", "desde €1 800"),
       time: L("3–5 weeks", "3–5 weken", "3–5 أسابيع", "3–5 semanas"),
     },
   ];
@@ -179,7 +179,7 @@ export function HowIWork() {
   return (
     <section
       id="how-i-work"
-      className="relative py-12 md:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[var(--bg-primary)] overflow-hidden scroll-mt-32 md:scroll-mt-36"
+      className="relative py-12 md:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 bg-[var(--bg-primary)] overflow-hidden scroll-mt-24 md:scroll-mt-28"
     >
       {/* Ambient background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

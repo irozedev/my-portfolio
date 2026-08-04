@@ -1,33 +1,24 @@
-import { Menu, X, Sun, Moon, LogIn, User, ChevronDown, Terminal } from "lucide-react";
+import { Menu, X, Sun, Moon, ChevronDown, Terminal } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useLanguage, Language } from "../contexts/language-context";
 import { useTheme } from "../contexts/theme-context";
 import { smoothScrollToSection } from "../../utils/scroll-utils";
-import { useAuth } from "../contexts/auth-context";
 import { useAvailability } from "../contexts/availability-context";
 import { useViewMode } from "../contexts/view-mode-context";
 import { ViewModeToggle } from "./view-mode-toggle";
-import { ModernAuthModal } from "./modern-auth-modal";
 import { BookCallModal } from "./book-call-fixed";
 import { AvailabilityScheduleModal } from "./availability-schedule-modal";
 
-interface NavigationProps {
-  onOpenProfile?: () => void;
-}
-
-export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
+export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [showLangMenu, setShowLangMenu] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showBookCallModal, setShowBookCallModal] = useState(false);
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
-  const { user, signOut, loading } = useAuth();
   const { isAvailable } = useAvailability();
   const { isClientMode } = useViewMode();
   const rafRef = useRef(0);
@@ -129,34 +120,22 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
       setShowLangMenu(false);
-      setShowUserMenu(false);
     } else {
       document.body.style.overflow = '';
     }
     return () => { document.body.style.overflow = ''; };
   }, [isMobileMenuOpen]);
 
-  // Close dropdowns on outside click
+  // Close the language dropdown on outside click
   useEffect(() => {
-    if (!showLangMenu && !showUserMenu) return;
+    if (!showLangMenu) return;
     const handler = (e: MouseEvent) => {
       const t = e.target as HTMLElement;
-      if (showLangMenu && !t.closest('.language-selector')) setShowLangMenu(false);
-      if (showUserMenu && !t.closest('.user-menu')) setShowUserMenu(false);
+      if (!t.closest('.language-selector')) setShowLangMenu(false);
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [showLangMenu, showUserMenu]);
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (err) {
-      console.error('Sign out failed', err);
-    }
-    setShowUserMenu(false);
-    setIsMobileMenuOpen(false);
-  };
+  }, [showLangMenu]);
 
   const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -170,7 +149,11 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
     <>
       <nav
         id="navigation"
-        className={`fixed top-10 md:top-12 left-0 right-0 w-full z-[9999] transition-all duration-300 border-b ${
+        /* top-0, not top-10/top-12. Those offsets existed to clear the
+           maintenance ticker that used to sit above the header; with the
+           ticker unmounted they left a 48px strip of empty background across
+           the top of every page. */
+        className={`fixed top-0 left-0 right-0 w-full z-[9999] transition-all duration-300 border-b ${
           scrolled
             ? 'bg-[var(--bg-primary)]/95 backdrop-blur-md shadow-lg border-[var(--border-color)]'
             : 'bg-[var(--bg-primary)]/90 backdrop-blur-sm border-transparent'
@@ -266,7 +249,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               {/* Language Selector */}
               <div id="language-selector" className="relative language-selector">
                 <button
-                  onClick={() => { setShowLangMenu(!showLangMenu); setShowUserMenu(false); }}
+                  onClick={() => setShowLangMenu(!showLangMenu)}
                   className="p-2 hover:bg-[var(--bg-secondary)] rounded-md transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-lg">{currentLang.flag}</span>
@@ -302,72 +285,11 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                 {theme === "dark" ? <Sun className="w-5 h-5 text-[var(--text-secondary)]" /> : <Moon className="w-5 h-5 text-[var(--text-secondary)]" />}
               </button>
 
-              {/* Sign In (not logged in) */}
-              {!user && !loading && (
-                <button
-                  onClick={() => setShowAuthModal(true)}
-                  title={t('auth.signIn')}
-                  aria-label={t('auth.signIn')}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors"
-                >
-                  <LogIn className="w-4 h-4" />
-                  {/* Label only on very wide screens. Sign-in is secondary here
-                      — almost nobody uses it — while the Client/CV switch is the
-                      primary control and keeps its labels. Something had to give
-                      to stop the header wrapping onto two lines at 1440. */}
-                  <span className="hidden 2xl:inline">{t('auth.signIn')}</span>
-                </button>
-              )}
-
-              {/* User menu (logged in) */}
-              {user && !loading && (
-                <div className="relative user-menu">
-                  <button
-                    onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center gap-2 p-1 pr-2 rounded-md hover:bg-[var(--bg-secondary)] transition-colors"
-                    aria-label="Account menu"
-                  >
-                    <span className="w-8 h-8 rounded-full overflow-hidden border-2 border-[var(--accent-primary)]/30 flex-shrink-0">
-                      {user.user_metadata?.avatar_url || user.user_metadata?.picture ? (
-                        <img
-                          src={user.user_metadata.avatar_url || user.user_metadata.picture}
-                          alt=""
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <span className="w-full h-full bg-gradient-to-br from-[var(--accent-primary)] to-purple-500 flex items-center justify-center">
-                          <User className="w-4 h-4 text-white" />
-                        </span>
-                      )}
-                    </span>
-                    <ChevronDown className={`w-3.5 h-3.5 text-[var(--text-muted)] transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {showUserMenu && (
-                    <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} mt-2 w-56 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg shadow-xl overflow-hidden z-[100000]`}>
-                      <div className="px-3 py-2.5 border-b border-[var(--border-color)]">
-                        <p className="text-sm font-bold text-[var(--text-primary)] truncate">
-                          {user.user_metadata?.name || 'User'}
-                        </p>
-                        <p className="text-xs text-[var(--text-muted)] truncate">{user.email}</p>
-                      </div>
-                      <button
-                        onClick={() => { onOpenProfile(); setShowUserMenu(false); }}
-                        className={`w-full px-3 py-2.5 ${isRTL ? 'text-right' : 'text-left'} text-sm text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors`}
-                      >
-                        Profile
-                      </button>
-                      <button
-                        onClick={handleSignOut}
-                        className={`w-full px-3 py-2.5 ${isRTL ? 'text-right' : 'text-left'} text-sm text-red-400 hover:bg-red-500/10 transition-colors`}
-                      >
-                        Sign Out
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
+              {/* Sign-in, the account dropdown and the profile link used to sit
+                  here. Nobody signs in to read a CV, and an account control in
+                  the header of a portfolio raises a question it cannot answer
+                  ("an account for what?"). The owner still reaches the admin
+                  panel at #admin, which carries its own sign-in button. */}
 
               {/* CTA — Terminal-style "Start Project" */}
               <a
@@ -397,7 +319,7 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               {/* Language — compact */}
               <div className="relative language-selector">
                 <button
-                  onClick={() => { setShowLangMenu(!showLangMenu); setShowUserMenu(false); }}
+                  onClick={() => setShowLangMenu(!showLangMenu)}
                   className="p-2 bg-[var(--bg-secondary)]/60 border border-[var(--border-color)] rounded-md flex items-center gap-1 active:scale-95 transition-transform"
                 >
                   <span className="text-sm">{currentLang.flag}</span>
@@ -437,33 +359,6 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
                 {theme === "dark" ? <Sun className="w-5 h-5 text-[var(--text-secondary)]" /> : <Moon className="w-5 h-5 text-[var(--text-secondary)]" />}
               </button>
 
-              {/* Login (not logged in) */}
-              {!user && !loading && (
-                <button
-                  onClick={() => setShowAuthModal(true)}
-                  className="p-2 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 rounded-md active:scale-95 transition-transform"
-                  title="Sign In"
-                >
-                  <LogIn className="w-5 h-5 text-black" />
-                </button>
-              )}
-
-              {/* Avatar (logged in) */}
-              {user && !loading && (
-                <button
-                  onClick={() => setIsMobileMenuOpen(true)}
-                  className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-[var(--accent-primary)]/30 active:scale-95 transition-transform"
-                >
-                  {user.user_metadata?.avatar_url || user.user_metadata?.picture ? (
-                    <img src={user.user_metadata.avatar_url || user.user_metadata.picture} alt="" className="w-full h-full object-cover" loading="lazy" />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[var(--accent-primary)] to-purple-500 flex items-center justify-center">
-                      <User className="w-5 h-5 text-white" />
-                    </div>
-                  )}
-                </button>
-              )}
-
               {/* Burger */}
               <button
                 onClick={() => { setIsMobileMenuOpen(!isMobileMenuOpen); setShowLangMenu(false); }}
@@ -499,57 +394,6 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
               <button aria-label="Close" onClick={closeMobileMenu} className="p-2 hover:bg-[var(--bg-secondary)] rounded-md active:scale-90 transition-transform">
                 <X className="w-5 h-5 text-[var(--text-primary)]" />
               </button>
-            </div>
-
-            {/* User Section */}
-            <div className="px-5 py-4 border-b border-[var(--border-color)]">
-              {loading ? (
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-[var(--bg-secondary)] animate-pulse" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-[var(--bg-secondary)] rounded animate-pulse" />
-                    <div className="h-3 bg-[var(--bg-secondary)] rounded w-2/3 animate-pulse" />
-                  </div>
-                </div>
-              ) : user ? (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    {user.user_metadata?.avatar_url ? (
-                      <img src={user.user_metadata.avatar_url} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-[var(--accent-primary)]/40" loading="lazy" />
-                    ) : (
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--accent-primary)] to-purple-500 flex items-center justify-center">
-                        <User className="w-6 h-6 text-white" />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold text-[var(--text-primary)] truncate">{user.user_metadata?.name || 'User'}</p>
-                      <p className="text-xs text-[var(--text-muted)] truncate">{user.email}</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      onClick={() => { onOpenProfile(); closeMobileMenu(); }}
-                      className="py-2.5 bg-[var(--accent-primary)]/10 rounded-md text-sm font-medium text-[var(--accent-primary)] active:scale-95 transition-transform"
-                    >
-                      Profile
-                    </button>
-                    <button
-                      onClick={handleSignOut}
-                      className="py-2.5 bg-red-500/10 rounded-md text-sm font-medium text-red-400 active:scale-95 transition-transform"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() => { setShowAuthModal(true); closeMobileMenu(); }}
-                  className="w-full py-3 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black font-bold rounded-md flex items-center justify-center gap-2 text-sm active:scale-98 transition-transform"
-                >
-                  <LogIn className="w-4 h-4" />
-                  {t('auth.signIn')}
-                </button>
-              )}
             </div>
 
             {/* Nav Links */}
@@ -598,7 +442,6 @@ export function Navigation({ onOpenProfile = () => {} }: NavigationProps) {
         </div>
 
       {/* Modals */}
-      <ModernAuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
       <BookCallModal isOpen={showBookCallModal} onClose={() => setShowBookCallModal(false)} />
       <AvailabilityScheduleModal
         isOpen={showAvailabilityModal}

@@ -1,7 +1,6 @@
 import { ThemeProvider } from "./contexts/theme-context";
 import { LanguageProvider } from "./contexts/language-context";
 import { AvailabilityProvider } from "./contexts/availability-context";
-import { AuthProvider } from "./contexts/auth-context";
 import { ViewModeProvider } from "./contexts/view-mode-context";
 import { MainPage } from "./components/main-page";
 import { Toaster } from "sonner";
@@ -16,15 +15,11 @@ import { Analytics } from "./components/analytics";
 const LegalPage = lazy(() =>
   import("./components/legal-pages").then((m) => ({ default: m.LegalPage })),
 );
-const AdminPage = lazy(() =>
-  import("./components/admin-page").then((m) => ({ default: m.AdminPage })),
+const AdminRoute = lazy(() =>
+  import("./components/admin-page").then((m) => ({ default: m.AdminRoute })),
 );
-const Dashboard = lazy(() =>
-  import("./components/dashboard").then((m) => ({ default: m.Dashboard })),
-);
-const UserProfilePage = lazy(() =>
-  import("./components/user-profile-page").then((m) => ({ default: m.UserProfilePage })),
-);
+// /dashboard and /profile are gone with the rest of the account surface. They
+// were two full pages behind a sign-in that only ever had one user.
 
 function RouteFallback() {
   return (
@@ -41,19 +36,12 @@ function RouteFallback() {
 
 export default function App() {
  
-  const [currentPage, setCurrentPage] = useState<"home" | "privacy" | "terms" | "imprint" | "admin" | "dashboard" | "profile">(() => {
+  const [currentPage, setCurrentPage] = useState<"home" | "privacy" | "terms" | "imprint" | "admin">(() => {
     // Safe window check for SSR
     if (typeof window === 'undefined') return "home";
-    
+
     const hash = window.location.hash.slice(1);
-    const path = window.location.pathname;
-    
-    if (path === "/dashboard") {
-      return "dashboard";
-    }
-    if (path === "/profile") {
-      return "profile";
-    }
+
     if (["privacy", "terms", "imprint", "admin"].includes(hash)) {
       return hash as any;
     }
@@ -70,24 +58,13 @@ export default function App() {
       }
     };
 
-    const handlePopState = () => {
-      const path = window.location.pathname;
-      if (path === "/dashboard") {
-        setCurrentPage("dashboard");
-      } else if (path === "/profile") {
-        setCurrentPage("profile");
-      } else {
-        handleHashChange();
-      }
-    };
-
     handleHashChange();
-    
+
     window.addEventListener("hashchange", handleHashChange);
-    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("popstate", handleHashChange);
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
-      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("popstate", handleHashChange);
     };
   }, []);
 
@@ -101,55 +78,17 @@ export default function App() {
     return (
       <ThemeProvider>
         <LanguageProvider>
-          {/* AuthProvider is required: AdminPage gates on the owner account via
-              useAuth(). Without it the hook falls back to a logged-out stub and
-              the panel can never be opened. */}
-          <AuthProvider>
-            <AvailabilityProvider>
-              <Suspense fallback={<RouteFallback />}>
-                <AdminPage />
-              </Suspense>
-              <Toaster position="top-right" richColors />
-              <SpeedInsights />
-              <Analytics />
-            </AvailabilityProvider>
-          </AuthProvider>
-        </LanguageProvider>
-      </ThemeProvider>
-    );
-  }
-
-  if (currentPage === "dashboard") {
-    return (
-      <ThemeProvider>
-        <LanguageProvider>
-          <AuthProvider>
-            <AvailabilityProvider>
-              <Suspense fallback={<RouteFallback />}>
-                <Dashboard />
-              </Suspense>
-              <Toaster position="top-right" richColors />
-              <SpeedInsights />
-              <Analytics />
-            </AvailabilityProvider>
-          </AuthProvider>
-        </LanguageProvider>
-      </ThemeProvider>
-    );
-  }
-
-  if (currentPage === "profile") {
-    return (
-      <ThemeProvider>
-        <LanguageProvider>
-          <AuthProvider>
+          {/* AdminRoute brings its own AuthProvider, so `@supabase/supabase-js`
+              stays inside the lazily-loaded admin chunk instead of the entry
+              bundle every visitor downloads. */}
+          <AvailabilityProvider>
             <Suspense fallback={<RouteFallback />}>
-              <UserProfilePage />
+              <AdminRoute />
             </Suspense>
             <Toaster position="top-right" richColors />
             <SpeedInsights />
             <Analytics />
-          </AuthProvider>
+          </AvailabilityProvider>
         </LanguageProvider>
       </ThemeProvider>
     );
@@ -158,30 +97,30 @@ export default function App() {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <AuthProvider>
-          <AvailabilityProvider>
-            <ViewModeProvider>
-              <AnimatePresence mode="wait">
-                {currentPage === "home" ? (
-                  <MainPage key="main" />
-                ) : currentPage === "privacy" || currentPage === "terms" || currentPage === "imprint" ? (
-                  <Suspense key={currentPage} fallback={<RouteFallback />}>
-                    <LegalPage page={currentPage} onClose={handleCloseLegal} />
-                  </Suspense>
-                ) : null}
-              </AnimatePresence>
-              {/* Beta banner removed: the one piece of work a visitor judges
-                  the author by should not announce that it is unfinished.
+        {/* No AuthProvider on the public site any more. The only page that
+            authenticates is #admin, which wraps itself above. */}
+        <AvailabilityProvider>
+          <ViewModeProvider>
+            <AnimatePresence mode="wait">
+              {currentPage === "home" ? (
+                <MainPage key="main" />
+              ) : currentPage === "privacy" || currentPage === "terms" || currentPage === "imprint" ? (
+                <Suspense key={currentPage} fallback={<RouteFallback />}>
+                  <LegalPage page={currentPage} onClose={handleCloseLegal} />
+                </Suspense>
+              ) : null}
+            </AnimatePresence>
+            {/* Beta banner removed: the one piece of work a visitor judges
+                the author by should not announce that it is unfinished.
 
-                  ViewModeToggle moved into Navigation — it is no longer a
-                  floating panel, so it is rendered where the rest of the
-                  navigation lives. */}
-              <Toaster position="top-right" richColors />
-              <SpeedInsights />
-              <Analytics />
-            </ViewModeProvider>
-          </AvailabilityProvider>
-        </AuthProvider>
+                ViewModeToggle moved into Navigation — it is no longer a
+                floating panel, so it is rendered where the rest of the
+                navigation lives. */}
+            <Toaster position="top-right" richColors />
+            <SpeedInsights />
+            <Analytics />
+          </ViewModeProvider>
+        </AvailabilityProvider>
       </LanguageProvider>
     </ThemeProvider>
   );

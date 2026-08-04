@@ -32,8 +32,9 @@ Client mode still exists and still works — it is one click away, not deleted.
 - **React 19 + Vite 8 + TypeScript 5.9**
 - **Tailwind CSS v4.3**, **Motion** (`motion/react`, the framer-motion successor)
 - Services carousel is **CSS scroll-snap**, not a library (react-slick is gone)
-- **Supabase** edge function backend (`make-server-a62f57c7`) for chat AI,
-  contact form, comments, reactions, auth
+- **Supabase** edge function backend (`make-server-a62f57c7`), now used for the
+  contact form only (three plain `fetch` callers: `contact-section`,
+  `book-call-fixed`, `scroll-to-top-button`)
 - Deploy: **Netlify** (`netlify.toml`). `dist/` is **committed to git**.
 
 **Vite 8 bundles with rolldown**, so build config is `build.rolldownOptions`
@@ -46,10 +47,10 @@ imports it and pnpm does not hoist it.
   already hold that port — pass `--port` if the page looks like someone else's)
 - `npm run check` = typecheck + lint + build. **All three must be green**;
   they are as of the 2026-07 cleanup, so any error you see is yours.
-- Lint is at **0 errors / 32 warnings**, and `--max-warnings 32` is a ratchet:
-  the count may go down, never up. The remainder is 20 `any`, 9
-  `exhaustive-deps` and 2 non-null assertions — each needs a judgement call at
-  its own call site, so do not silence them in bulk.
+- Lint is at **0 errors / 20 warnings**, and `--max-warnings 20` is a ratchet:
+  the count may go down, never up (it went 32 → 20 when the account surface was
+  removed). The remainder needs a judgement call at each call site, so do not
+  silence them in bulk.
 - Netlify build command: `npm run build` → publishes `dist/`
 - **Package manager is pnpm** (`pnpm-lock.yaml`); install via
   `corepack pnpm install`. pnpm 11 no longer reads the `pnpm` field from
@@ -83,7 +84,10 @@ imports it and pnpm does not hoist it.
   auto-detection all validate against it; a language removed there is also
   rejected out of a visitor's stale `localStorage`.
 - `src/app/contexts/view-mode-context.tsx` — `client` | `cv`, `setViewMode`.
-  **Defaults to `cv`.**
+  **Defaults to `cv`.** The saved choice is read in the `useState` initialiser,
+  not an effect (as an effect it painted the wrong mode for one frame), and the
+  scroll reset is a `useLayoutEffect` on `viewMode`, not a call inside the
+  handler (before the commit, scroll anchoring dragged the page back to ~135px).
 - `src/app/hooks/use-modal-a11y.ts` — Escape, focus trap and focus restore for
   dialogs. **Every modal must use it**; none of them had any of this before.
 
@@ -173,8 +177,15 @@ Two layers, keep them consistent:
 - **English is the working language; Dutch is weaker than English.** Never claim
   fluent Dutch in copy or structured data.
 - Email **rozedev095@gmail.com** (single canonical email). GitHub **@irozedev**.
-- Pricing (starting, no VAT): automation €45/h (or €350/bot), websites €650,
-  UI design €400, web apps €60/h, e-commerce €1,200, consulting €55/h.
+- Pricing (starting, no VAT), **raised 2026-08-04** off the freelance-era floor:
+  automation €65/h (or €500/bot), websites €950, UI design €600, web apps €75/h,
+  e-commerce €1,800, consulting €75/h. The old floor was €45/h, which in Belgium
+  reads as a warning sign rather than a bargain once roughly half of a fee goes
+  to tax and social contributions. Everything was scaled by the same factor as
+  the €45 → €65 hourly floor, so the fixed prices still imply the same hours.
+  Prices live in **four** places and must move together:
+  `services-creative-slider.tsx` (the `services` array *and* `serviceCopy`),
+  `how-i-work.tsx`, and the chat price list in `scroll-to-top-button.tsx`.
 
 ## Gotchas learned the hard way
 - **`backdrop-filter` on an ancestor traps `position:fixed` descendants**
@@ -221,6 +232,27 @@ Two layers, keep them consistent:
   syntax errors**; it fails `tsc --noEmit` for the whole project. Vite never
   bundles it, so builds stay green. Delete it or fix it before relying on tsc.
 
+## The account surface is gone (2026-08-04)
+Sign-in, the header account menu, the personal cabinet, `/profile`,
+`/dashboard`, per-project comments, reactions and favourites were all removed.
+A recruiter never signs in, and an account control on a portfolio raises a
+question it cannot answer. Deleted: `personal-cabinet`, `profile-settings`,
+`cabinet-tabs-extended`, `user-profile-page`, `dashboard`, `project-comments`,
+`project-reactions`, `use-favorites`, `utils/supabase/api.ts`, plus the
+orphaned `beta-banner` and `site-tour`.
+
+What survives: `auth-context`, `modern-auth-modal` and `admin-page`, reachable
+only at `#admin`, which carries its own sign-in button. **`AdminRoute` mounts
+its own `AuthProvider`** — App.tsx must not import one. That is what keeps
+`@supabase/supabase-js` (202 KB) inside the lazy admin chunk; a static import in
+App.tsx put it in the entry bundle for every visitor.
+
+Relatedly, **there is deliberately no `supabase` group in `advancedChunks`**.
+Naming the group made rolldown fold the module-preload helper into that chunk,
+and since the entry needs the helper, the entry statically imported all 202 KB.
+Verify with `grep -o 'assets/[a-z-]*\.[A-Za-z0-9_-]*\.js' dist/index.html` —
+supabase must not appear.
+
 ## Open items (as of 2026-08-04)
 Ordered by how much they matter, most first.
 
@@ -230,17 +262,10 @@ Ordered by how much they matter, most first.
 2. **One-page CV for the Belgian market** — not written yet. All the data is in
    `experience-timeline-premium.tsx` and now correct. The existing
    `public/Stepan_Roze_CV.pdf` has the old (wrong) E-Consulting end date and no
-   Albron entry. Plan: generate it from the same data as HTML that prints to
-   PDF, so the file and the site cannot drift apart again.
-3. **Prices are still freelance-era** (`services-creative-slider.tsx`): from
-   €45/h. In Belgium a rate under €50/h reads as a warning sign rather than a
-   bargain, and roughly half of any fee goes to tax and social contributions.
-   Raising the floor to €55–65 was agreed in principle, not applied.
-4. **Experience section is 3 464 px** for six entries — the largest block left
+   Albron entry, so the file currently contradicts the site. Plan: generate it
+   from the same data as HTML that prints to PDF, so the two cannot drift apart.
+3. **Experience section is 3 464 px** for six entries — the largest block left
    on the page. Page total is 11 125 px desktop / 14 051 px mobile.
-5. **Auth, comments, reactions and the personal cabinet are unused weight.**
-   A recruiter never signs in. Removing them would drop the Supabase dependency
-   to just the contact form, which Resend alone can serve. Not decided yet.
-6. **`knowsLanguage` in `index.html` still lists Ukrainian.** Left deliberately:
+4. **`knowsLanguage` in `index.html` still lists Ukrainian.** Left deliberately:
    that is a language Stepan speaks, not a language the site is published in.
    Confirm with him before touching it.

@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { ArrowLeft, Plus, Edit2, Trash2, Save, X, ShieldAlert, LogIn } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useAuth } from "../contexts/auth-context";
+import { AuthProvider, useAuth } from "../contexts/auth-context";
 import { ModernAuthModal } from "./modern-auth-modal";
 
 // Only this account may open the admin panel. A client-side check alone is not a
@@ -9,7 +9,24 @@ import { ModernAuthModal } from "./modern-auth-modal";
 // server-side (Supabase RLS / edge-function auth check).
 const OWNER_EMAIL = "rozedev095@gmail.com";
 
-export function AdminPage() {
+/**
+ * Admin route, provider included.
+ *
+ * AuthProvider is mounted here rather than in App.tsx on purpose: this is the
+ * only page left that authenticates, and a static import in App.tsx pulled
+ * `@supabase/supabase-js` (~200 KB) into the entry chunk for every visitor who
+ * will never sign in. Wrapping inside the lazily-loaded route keeps it in the
+ * admin chunk.
+ */
+export function AdminRoute() {
+  return (
+    <AuthProvider>
+      <AdminPage />
+    </AuthProvider>
+  );
+}
+
+function AdminPage() {
   const { user, loading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [projects, setProjects] = useState<any[]>([]);

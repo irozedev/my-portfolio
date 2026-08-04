@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Video, Phone, X, ChevronLeft, Loader2, ArrowRight, CheckCircle, Mail, User as UserIcon, MessageSquare, Zap } from "lucide-react";
 import { format, addDays, startOfDay, isWeekend } from "date-fns";
 import { useLanguage } from "../contexts/language-context";
-import { useAuth } from "../contexts/auth-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
 import { useModalA11y } from "../hooks/use-modal-a11y";
 
@@ -39,33 +38,6 @@ const translations = {
     morning: "Morning",
     afternoon: "Afternoon",
     free: "30 min • Free",
-  },
-  uk: {
-    title: "Забронювати дзвінок",
-    subtitle: "Безкоштовна консультація",
-    step1: "Оберіть дату",
-    step2: "Оберіть час",
-    step3: "Ваші дані",
-    step4: "Підтверджено!",
-    weekdaysOnly: "Пн-Пт",
-    timezone: "Європа/Брюссель (CET)",
-    changeDate: "Змінити",
-    callType: "Тип дзвінка",
-    videoCall: "Відеодзвінок",
-    phoneCall: "Телефон",
-    name: "Ваше ім'я",
-    email: "Ваш Email",
-    purpose: "Про що ваш проект?",
-    purposePlaceholder: "Коротко опишіть ваш проект...",
-    back: "Назад",
-    confirm: "Підтвердити",
-    booking: "Бронюємо...",
-    confirmed: "Запит надіслано!",
-    confirmMsg: "Степан підтвердить дзвінок на email",
-    reschedule: "Потрібно перенести? rozedev095@gmail.com",
-    morning: "Ранок",
-    afternoon: "День",
-    free: "30 хв • Безкоштовно",
   },
   nl: {
     title: "Gesprek Boeken",
@@ -157,7 +129,6 @@ const afternoonSlots: string[] = [];
 
 export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
   const { language } = useLanguage();
-  const { user } = useAuth();
   const t = translations[language as keyof typeof translations] || translations.en;
   const dialogRef = useModalA11y({ isOpen, onClose });
 
@@ -165,8 +136,8 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [selectedTime, setSelectedTime] = useState("");
   const [callType, setCallType] = useState<"video" | "phone">("video");
-  const [name, setName] = useState(user?.user_metadata?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [purpose, setPurpose] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -195,13 +166,9 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
     }
   }, [isOpen]);
 
-  // Update user info
-  useEffect(() => {
-    if (user) {
-      if (!name) setName(user.user_metadata?.name || "");
-      if (!email) setEmail(user.email || "");
-    }
-  }, [user]);
+  // Name and email used to be prefilled from the signed-in account. With
+  // sign-in gone the visitor always types them, which is what almost everyone
+  // did anyway.
 
   const handleSubmit = async () => {
     if (!selectedDate || !selectedTime || !email) {

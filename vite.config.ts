@@ -36,14 +36,20 @@ export default defineConfig({
         chunkFileNames: 'assets/[name].[hash].js',
         assetFileNames: 'assets/[name].[hash].[ext]',
 
-        // Split the vendor code that used to sit in one ~1.1 MB chunk. React
-        // and motion are needed for first paint; Supabase is only touched once
-        // the user signs in or submits a form, so it should not block the hero.
+        // Split the vendor code that used to sit in one ~1.1 MB chunk. React,
+        // motion and the icons are needed for first paint.
+        //
+        // There is deliberately NO `supabase` group. There used to be, and it
+        // backfired: `@supabase/supabase-js` is now reached only through the
+        // lazily-loaded #admin route, but forcing it into a named group made
+        // rolldown fold the module-preload helper into that same chunk. The
+        // entry needs the helper, so the entry statically imported the chunk —
+        // and every visitor downloaded 202 KB of auth SDK to render a CV.
+        // Ungrouped, it rides along in the admin chunk where it belongs.
         advancedChunks: {
           groups: [
             { name: 'react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/ },
             { name: 'motion', test: /node_modules[\\/](motion|framer-motion)[\\/]/ },
-            { name: 'supabase', test: /node_modules[\\/]@supabase[\\/]/ },
             { name: 'icons', test: /node_modules[\\/]lucide-react[\\/]/ },
           ],
         },
