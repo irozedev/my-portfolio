@@ -31,6 +31,13 @@ export const experiences = [
   // better than any of them. For a Benelux employer a permanent Belgian
   // contract also answers what they cannot ask out loud: right to work,
   // residence, and whether the candidate actually lives here.
+  //
+  // `aside: true` renders it as a footnote rather than a job: a slim muted
+  // strip in the timeline, a single line on the CV. It has to be *present* to
+  // close the gap, and it has to be *quiet* so it does not read as a career
+  // move competing with the engineering roles for attention. Present and quiet
+  // are not in conflict — a reader who is counting months finds it, and a
+  // reader who is scanning for engineering skips past it.
   {
     id: 6,
     year: "2025",
@@ -39,6 +46,7 @@ export const experiences = [
     icon: Briefcase,
     gradient: "from-slate-500 via-gray-500 to-zinc-500",
     color: "#94a3b8",
+    aside: true,
   },
   {
     id: 2,

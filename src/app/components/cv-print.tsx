@@ -53,7 +53,29 @@ export function CVPrint({ onClose }: { onClose: () => void }) {
 
   const entry = (exp: (typeof experiences)[number]) => {
     const text = copy[exp.id as keyof typeof copy];
-    const bullets = NO_BULLETS.has(exp.id) ? [] : text.achievements;
+    const isAside = "aside" in exp && exp.aside;
+    const bullets = NO_BULLETS.has(exp.id) || isAside ? [] : text.achievements;
+
+    // The non-IT period is a footnote, not a job: one muted line closing the
+    // gap between E-Consulting and the freelance work. Its own bullets said
+    // "permanent contract" and "Dutch-speaking environment", and both facts
+    // already live in the sentence, so listing them again only bought volume.
+    if (isAside) {
+      return (
+        <article key={exp.id} className="cv-entry cv-aside">
+          <header className="cv-entry-head">
+            <h3>
+              {text.title}
+              <span className="cv-at"> — {exp.company}</span>
+            </h3>
+            <span className="cv-period">{text.period}</span>
+          </header>
+          <p className="cv-desc">
+            {text.location} · {text.type} — {text.description}
+          </p>
+        </article>
+      );
+    }
 
     return (
       <article key={exp.id} className="cv-entry">

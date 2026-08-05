@@ -96,6 +96,47 @@ export function ExperienceTimelinePremium() {
               const isSelected = selectedId === exp.id;
               const isHovered = hoveredId === exp.id;
               const text = copy[exp.id as keyof typeof copy];
+              const isAside = "aside" in exp && exp.aside;
+
+              // The non-IT period renders as a footnote on the spine instead of
+              // a card: it exists to close an eighteen-month gap, not to be
+              // read as a career step. A full-size card gave it the same weight
+              // as Oschadbank, which is the wrong claim; hiding it would leave
+              // the hole. So: same position in the chronology, a fraction of
+              // the visual volume, and no "Show more" to invite a detour.
+              if (isAside) {
+                return (
+                  <motion.div
+                    key={exp.id}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    className="relative pl-16 md:pl-0 md:flex md:justify-center"
+                  >
+                    {/* A small hollow marker on the spine, not a haloed icon. */}
+                    <div className="absolute left-[1.4rem] md:left-1/2 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-3 h-3 rounded-full border-2 border-[var(--border-color)] bg-[var(--bg-primary)]" />
+
+                    {/* Opaque enough to interrupt the spine behind it. At 40%
+                        the line showed straight through and read as if it had
+                        sliced the strip in half. */}
+                    <div className="relative md:w-[min(34rem,100%)] md:mt-6 md:mb-2 rounded-xl border border-dashed border-[var(--border-color)] bg-[var(--bg-primary)] px-4 py-3">
+                      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                        <span className="text-sm font-semibold text-[var(--text-secondary)]">
+                          {text.title}
+                        </span>
+                        <span className="text-sm text-[var(--text-muted)]">— {exp.company}</span>
+                        <span className="text-xs text-[var(--text-muted)] ms-auto whitespace-nowrap">
+                          {text.period}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs leading-relaxed text-[var(--text-muted)]">
+                        {text.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              }
 
               return (
                 <motion.div

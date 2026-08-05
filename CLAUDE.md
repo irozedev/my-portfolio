@@ -167,7 +167,12 @@ Two layers, keep them consistent:
 - The Albron entry stays in the timeline on purpose. Work outside the field
   beats an unexplained hole, and for a Benelux employer a permanent Belgian
   contract answers the questions they cannot ask: right to work, residence,
-  actually living here.
+  actually living here. It carries **`aside: true`** in `data/experience.ts`,
+  which renders it as a footnote rather than a job — a slim dashed strip
+  straddling the timeline spine (127px against ~450px for a real card) and one
+  muted line on the CV (14mm against 74mm). Present so the months add up, quiet
+  so it does not read as a career move competing with the engineering roles.
+  Do not restore it to a full card, and do not delete it either.
 - Lives in **Lommel (Limburg)**, works his main job **14:00–22:30**, so the free
   block is **mornings until ~13:00** — which is inside the client/interview
   working day, unlike the evenings most side-projects run on.

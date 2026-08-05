@@ -168,6 +168,28 @@
   margin-bottom: 0;
 }
 
+/* The non-IT period: same slot in the chronology, a fraction of the weight.
+   Set smaller and grey so a reader scanning for engineering passes over it,
+   while a reader checking the dates still finds the months accounted for. */
+.cv-aside {
+  font-size: 9.5pt;
+  color: #555;
+  padding-inline-start: 2.5mm;
+  border-inline-start: 1.5pt solid #d7dbe0;
+}
+
+.cv-aside .cv-entry-head h3 {
+  font-size: 9.5pt;
+  font-weight: 600;
+  color: #555;
+}
+
+.cv-aside .cv-at,
+.cv-aside .cv-desc {
+  color: #555;
+  font-weight: 400;
+}
+
 .cv-entry-head {
   display: flex;
   justify-content: space-between;
