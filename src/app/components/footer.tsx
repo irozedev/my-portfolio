@@ -5,6 +5,7 @@ import { useAvailability } from "../contexts/availability-context";
 import { useViewMode } from "../contexts/view-mode-context";
 import { LegalFooter } from "./legal-footer";
 import { smoothScrollToSection } from "../../utils/scroll-utils";
+import { VIEWPORT } from "../lib/motion";
 
 // `clientOnly` links are hidden in CV mode. An Upwork freelancer profile is a
 // useful proof point for a buyer and a mixed signal for a recruiter, who reads
@@ -65,22 +66,8 @@ export function Footer() {
     <footer id="footer" className="relative bg-[var(--bg-primary)] border-t border-[var(--border-color)] py-12 px-4 overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0">
-        <motion.div
-          className="absolute top-0 left-1/4 w-96 h-96 bg-[var(--accent-primary)]/5 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.5, 0.3, 0.5],
-          }}
-          transition={{ duration: 8, repeat: Infinity, delay: 1 }}
-        />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[var(--accent-primary)]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto max-w-7xl relative z-10">
@@ -97,9 +84,9 @@ export function Footer() {
         >
           {/* Brand Column */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={VIEWPORT}
             className="lg:col-span-2"
           >
             <div className="flex items-center gap-3 mb-4">
@@ -187,10 +174,10 @@ export function Footer() {
           {footerLinks.map((section, index) => (
             <motion.div
               key={section.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              viewport={VIEWPORT}
+              transition={{ delay: Math.min(index, 6) * 0.05 }}
             >
               <h4 className="text-lg font-semibold mb-4 text-[var(--accent-primary)]">{section.title}</h4>
               <ul className="space-y-3">
@@ -221,7 +208,7 @@ export function Footer() {
             className="text-sm md:text-base text-[var(--text-secondary)] text-center md:text-left"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={VIEWPORT}
           >
             © 2026 Stepan Roze. {t("footer.rights")}
           </motion.p>
@@ -231,7 +218,7 @@ export function Footer() {
             className="flex items-center gap-4"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={VIEWPORT}
             transition={{ delay: 0.2 }}
           >
             {socialLinks.filter((s) => isClientMode || !s.clientOnly).map((social) => {
@@ -258,7 +245,7 @@ export function Footer() {
           className="mt-8 text-center"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={VIEWPORT}
           transition={{ delay: 0.4 }}
         >
           <p className="text-sm md:text-base text-[var(--text-muted)]">

@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { Code2, Database, Box, Cpu, Terminal, Layers, GitBranch, Globe } from "lucide-react";
 import { useState } from "react";
+import { VIEWPORT } from "../lib/motion";
 
 interface Skill {
   name: string;
@@ -94,12 +95,12 @@ export function SkillsFuturistic() {
               <motion.div
                 key={skill.name}
                 layout
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ 
                   duration: 0.3,
-                  delay: index * 0.05
+                  delay: Math.min(index, 6) * 0.04
                 }}
                 onHoverStart={() => setHoveredSkill(skill.name)}
                 onHoverEnd={() => setHoveredSkill(null)}
@@ -162,8 +163,8 @@ export function SkillsFuturistic() {
                       style={{ backgroundColor: skill.color }}
                       initial={{ width: "0%" }}
                       whileInView={{ width: `${skill.level}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, delay: index * 0.05 }}
+                      viewport={VIEWPORT}
+                      transition={{ duration: 1, delay: Math.min(index, 6) * 0.04 }}
                     />
                   </div>
 
@@ -177,8 +178,8 @@ export function SkillsFuturistic() {
                     }}
                     initial={{ opacity: 0, x: 10 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.05 + 0.2 }}
+                    viewport={VIEWPORT}
+                    transition={{ delay: Math.min(index, 6) * 0.04 + 0.2 }}
                   >
                     {skill.level}%
                   </motion.div>
@@ -216,9 +217,9 @@ export function SkillsFuturistic() {
 
       {/* Stats Footer */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={VIEWPORT}
         className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8"
       >
         {[
@@ -229,10 +230,10 @@ export function SkillsFuturistic() {
         ].map((stat, i) => (
           <motion.div
             key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
+            viewport={VIEWPORT}
+            transition={{ delay: Math.min(i, 6) * 0.05 }}
             className="relative p-4 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl hover:border-[var(--accent-primary)]/50 transition-all group overflow-hidden"
           >
             {/* Hover gradient */}

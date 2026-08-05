@@ -136,22 +136,8 @@ export function ServiceActionModal({ service, onClose, onChatBot, onContact }: S
         >
           {/* Animated Background Orbs */}
           <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
-            <motion.div
-              className="absolute top-0 right-0 w-80 h-80 bg-[var(--accent-primary)]/20 rounded-full blur-3xl"
-              animate={{
-                scale: [1, 1.3, 1],
-                x: [0, 30, 0],
-              }}
-              transition={{ duration: 8, repeat: Infinity }}
-            />
-            <motion.div
-              className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"
-              animate={{
-                scale: [1.3, 1, 1.3],
-                x: [0, -30, 0],
-              }}
-              transition={{ duration: 10, repeat: Infinity }}
-            />
+            <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--accent-primary)]/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl" />
           </div>
 
           {/* Close Button */}

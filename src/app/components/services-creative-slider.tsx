@@ -3,6 +3,7 @@ import { Code, Globe, Bot, ShoppingCart, TrendingUp, Sparkles, Zap, CheckCircle2
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ServiceActionModal } from "./service-action-modal";
 import { useLanguage } from "../contexts/language-context";
+import { VIEWPORT, DURATION, EASE } from "../lib/motion";
 
 const services = [
   {
@@ -495,38 +496,24 @@ export function ServicesCreativeSlider() {
       >
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div
-            className="absolute top-1/3 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{ duration: 8, repeat: Infinity }}
-          />
-          <motion.div
-            className="absolute bottom-0 -left-40 w-96 h-96 bg-[#00d9ff]/10 rounded-full blur-3xl"
-            animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.5, 0.3, 0.5],
-            }}
-            transition={{ duration: 8, repeat: Infinity, delay: 1 }}
-          />
+          <div className="absolute top-1/3 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 -left-40 w-96 h-96 bg-[#00d9ff]/10 rounded-full blur-3xl" />
         </div>
 
         <div className="container mx-auto max-w-7xl relative z-10">
           {/* Section Header */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            viewport={VIEWPORT}
+            transition={{ duration: DURATION, ease: EASE }}
             className="text-center mb-16"
           >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              viewport={VIEWPORT}
+              transition={{ duration: DURATION, ease: EASE }}
               className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#00d9ff]/10 to-purple-500/10 border border-[#00d9ff]/30 rounded-full mb-6"
             >
               <Sparkles className="w-5 h-5 text-[#00d9ff]" />
@@ -546,10 +533,10 @@ export function ServicesCreativeSlider() {
 
           {/* Services Slider */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={VIEWPORT}
+            transition={{ duration: DURATION, ease: EASE, delay: 0.2 }}
             className="relative px-2 md:px-16 pb-4"
           >
             <style>
@@ -852,7 +839,7 @@ export function ServicesCreativeSlider() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={VIEWPORT}
             className="text-center mt-8 space-y-3 px-4"
           >
             <div className="flex items-center justify-center gap-2">

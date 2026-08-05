@@ -5,7 +5,7 @@ import { ViewModeProvider } from "./contexts/view-mode-context";
 import { MainPage } from "./components/main-page";
 import { Toaster } from "sonner";
 import { useState, useEffect, lazy, Suspense } from "react";
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, MotionConfig } from "motion/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "./components/analytics";
 
@@ -123,6 +123,19 @@ export default function App() {
             authenticates is #admin, which wraps itself above. */}
         <AvailabilityProvider>
           <ViewModeProvider>
+            {/*
+              `reducedMotion="user"` makes every Motion animation on the site
+              honour the OS "reduce motion" setting — it strips transforms and
+              keeps opacity, so entrances become clean fades.
+
+              This was a real gap, not a nicety. The CSS in index.css and
+              theme.css already had `@media (prefers-reduced-motion: reduce)`
+              blocks, but those only reach CSS animations and transitions.
+              Motion drives its animations from JavaScript through inline
+              styles, so all ~380 of them ignored the setting entirely — the
+              one group of animations big enough to actually make someone ill.
+            */}
+            <MotionConfig reducedMotion="user">
             <AnimatePresence mode="wait">
               {currentPage === "home" ? (
                 <MainPage key="main" />
@@ -141,6 +154,7 @@ export default function App() {
             <Toaster position="top-right" richColors />
             <SpeedInsights />
             <Analytics />
+            </MotionConfig>
           </ViewModeProvider>
         </AvailabilityProvider>
       </LanguageProvider>

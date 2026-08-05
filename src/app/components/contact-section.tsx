@@ -5,6 +5,7 @@ import { useLanguage } from "../contexts/language-context";
 import { useViewMode } from "../contexts/view-mode-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
 import { toast } from "sonner";
+import { VIEWPORT, DURATION, EASE } from "../lib/motion";
 
 // Simple form components
 const Input = ({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) => (
@@ -204,18 +205,18 @@ export function ContactSection() {
 
       <div className="container mx-auto max-w-6xl relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          viewport={VIEWPORT}
+          transition={{ duration: DURATION, ease: EASE }}
         >
           {/* Section Header */}
           <div className="text-center mb-12 sm:mb-16">
             <motion.h2
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 text-[var(--text-primary)]"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
             >
               {(t("contact.title") || "Get In Touch").toUpperCase()}
             </motion.h2>
@@ -224,7 +225,7 @@ export function ContactSection() {
               className="h-1 w-24 sm:w-32 bg-gradient-to-r from-transparent via-[#00d9ff] to-transparent mx-auto mb-4 sm:mb-6"
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
               transition={{ delay: 0.3 }}
             />
 
@@ -232,7 +233,7 @@ export function ContactSection() {
               className="text-base sm:text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto mb-4 px-2"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
               transition={{ delay: 0.5 }}
             >
               Whether you need a custom app, optimization, or technical advice, I'm here to help.
@@ -241,9 +242,9 @@ export function ContactSection() {
             {/* Benefits */}
             <motion.div
               className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6 sm:mt-8 px-2"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
               transition={{ delay: 0.7 }}
             >
               {benefits.map((benefit, index) => {
@@ -265,8 +266,8 @@ export function ContactSection() {
               className="space-y-8"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              viewport={VIEWPORT}
+              transition={{ duration: DURATION, ease: EASE }}
             >
               {contactLinks.map((link, index) => {
                 const Icon = link.icon;
@@ -277,10 +278,10 @@ export function ContactSection() {
                     target={link.href.startsWith('http') ? '_blank' : undefined}
                     rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                     className="block group"
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 14 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
+                    viewport={VIEWPORT}
+                    transition={{ delay: Math.min(index, 6) * 0.05 }}
                     whileHover={{ scale: 1.02, x: 10 }}
                   >
                     <div className="relative p-4 sm:p-6 md:p-8 bg-[var(--bg-secondary)]/50 backdrop-blur-md border border-[var(--border-color)] rounded-2xl sm:rounded-3xl
@@ -337,8 +338,8 @@ export function ContactSection() {
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              viewport={VIEWPORT}
+              transition={{ duration: DURATION, ease: EASE }}
               className="relative"
             >
               {/* Service Preselected Badge */}

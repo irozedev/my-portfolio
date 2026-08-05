@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Award, ExternalLink, Github, ArrowRight } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { ProjectFullscreenView } from "./project-fullscreen-view";
+import { VIEWPORT, DURATION, EASE } from "../lib/motion";
 
 type Lang = (en: string, nl: string, ar: string, es: string) => string;
 
@@ -263,10 +264,10 @@ export function PortfolioCreativeSlider() {
       <div className="container mx-auto max-w-6xl relative z-10">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          viewport={VIEWPORT}
+          transition={{ duration: DURATION, ease: EASE }}
           className="text-center mb-12 md:mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/30 rounded-full mb-6">
@@ -298,8 +299,8 @@ export function PortfolioCreativeSlider() {
                 key={project.id}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={VIEWPORT}
+                transition={{ duration: DURATION, ease: EASE, delay: Math.min(index, 6) * 0.05 }}
                 className="group relative flex flex-col overflow-hidden rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 hover:shadow-[0_24px_60px_-24px_var(--shadow-color)] transition-all duration-500"
               >
                 {/* Screenshot.

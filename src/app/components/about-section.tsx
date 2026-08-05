@@ -3,6 +3,7 @@ import { Code2, Globe, CheckCircle2, Award, Target, GraduationCap, MapPin, Calen
 import { useLanguage } from "../contexts/language-context";
 import { SkillsFuturistic } from "./skills-futuristic";
 import { LanguagesModern } from "./languages-modern";
+import { VIEWPORT, DURATION, EASE } from "../lib/motion";
 
 const highlights = [
   { icon: Award, key: "experience", color: "#00d9ff" },
@@ -25,18 +26,18 @@ export function AboutSection() {
 
       <div className="container mx-auto max-w-7xl relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          viewport={VIEWPORT}
+          transition={{ duration: DURATION, ease: EASE }}
         >
           {/* Section Header */}
           <div className="text-center mb-12 sm:mb-16">
             <motion.h2
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 text-[var(--text-primary)]"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
             >
               <span className="text-[var(--accent-primary)]">{(t("about.title") || "About Me").toUpperCase()}</span>
             </motion.h2>
@@ -44,14 +45,14 @@ export function AboutSection() {
               className="h-1 w-24 sm:w-32 bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent mx-auto mb-4 sm:mb-6"
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
               transition={{ delay: 0.3 }}
             />
             <motion.p
               className="text-base sm:text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto px-2"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
               transition={{ delay: 0.5 }}
             >
               {t("about.subtitle")}
@@ -65,7 +66,7 @@ export function AboutSection() {
               className="lg:col-span-5"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
               transition={{ delay: 0.3 }}
             >
               <div className="relative">
@@ -147,7 +148,7 @@ export function AboutSection() {
               className="lg:col-span-7 space-y-6"
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
               transition={{ delay: 0.5 }}
             >
               {/* Description */}
@@ -171,9 +172,9 @@ export function AboutSection() {
                       className="bg-[var(--bg-secondary)] backdrop-blur-sm border border-[var(--border-color)] rounded-xl p-6 
                         hover:bg-[var(--bg-secondary)] hover:border-[var(--accent-primary)]/50 transition-all duration-300 
                         hover:scale-105 group cursor-pointer"
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 14 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
+                      viewport={VIEWPORT}
                       transition={{ delay: 0.1 * index }}
                     >
                       <div className="flex items-start gap-4">
@@ -199,15 +200,15 @@ export function AboutSection() {
             {/* Enhanced Technical Skills Header */}
             <motion.div
               className="relative mb-8"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
             >
               <div className="flex items-center justify-center gap-4 mb-3">
                 <motion.div
                   className="p-3 bg-[var(--accent-primary)]/10 rounded-xl border-2 border-[var(--accent-primary)]/30"
                   whileHover={{ rotate: 360, scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
+                  transition={{ duration: DURATION, ease: EASE }}
                 >
                   <Code2 className="w-8 h-8 text-[var(--accent-primary)]" />
                 </motion.div>
@@ -232,15 +233,15 @@ export function AboutSection() {
             {/* Enhanced Languages Header */}
             <motion.div
               className="relative mb-8"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
             >
               <div className="flex items-center justify-center gap-4 mb-3">
                 <motion.div
                   className="p-3 bg-purple-500/10 rounded-xl border-2 border-purple-500/30"
                   whileHover={{ rotate: 360, scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
+                  transition={{ duration: DURATION, ease: EASE }}
                 >
                   <Globe className="w-8 h-8 text-purple-400" />
                 </motion.div>
@@ -264,9 +265,9 @@ export function AboutSection() {
           <div className="mt-16">
             <motion.h3
               className="text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-8 flex items-center justify-center gap-3 text-[var(--text-primary)]"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={VIEWPORT}
             >
               <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-[var(--accent-primary)]" />
               {(t("about.educationTitle") || "Education").toUpperCase()}
@@ -280,7 +281,7 @@ export function AboutSection() {
                   hover:scale-105 hover:shadow-[0_0_30px_rgba(0,217,255,0.2)] group"
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+                viewport={VIEWPORT}
                 transition={{ delay: 0.1 }}
               >
                 <div className="flex items-start gap-4 mb-4">
@@ -313,7 +314,7 @@ export function AboutSection() {
                   hover:scale-105 hover:shadow-[0_0_30px_rgba(0,217,255,0.2)] group relative overflow-hidden"
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+                viewport={VIEWPORT}
                 transition={{ delay: 0.2 }}
               >
                 {/* The "university logo watermark" that used to sit here was a

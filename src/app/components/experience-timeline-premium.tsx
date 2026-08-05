@@ -3,6 +3,7 @@ import { Briefcase, MapPin, Calendar, Award, ChevronRight, Code2, Building2, Tar
 import { useState } from "react";
 import { useLanguage } from "../contexts/language-context";
 import { experiences, experienceCopy, type Lang } from "../data/experience";
+import { VIEWPORT, DURATION, EASE } from "../lib/motion";
 
 
 export function ExperienceTimelinePremium() {
@@ -36,31 +37,23 @@ export function ExperienceTimelinePremium() {
     >
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.5, 0.3, 0.5] }}
-          transition={{ duration: 10, repeat: Infinity, delay: 2 }}
-        />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto max-w-6xl relative z-10">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          viewport={VIEWPORT}
+          transition={{ duration: DURATION, ease: EASE }}
           className="text-center mb-16"
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VIEWPORT}
             className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[var(--accent-primary)]/10 to-purple-500/10 border border-[var(--accent-primary)]/30 rounded-full mb-6"
           >
             <Briefcase className="w-5 h-5 text-[var(--accent-primary)]" />
@@ -110,8 +103,8 @@ export function ExperienceTimelinePremium() {
                     key={exp.id}
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
+                    viewport={VIEWPORT}
+                    transition={{ duration: DURATION, ease: EASE }}
                     className="relative pl-16 md:pl-0 md:flex md:justify-center"
                   >
                     {/* A small hollow marker on the spine, not a haloed icon. */}
@@ -141,10 +134,10 @@ export function ExperienceTimelinePremium() {
               return (
                 <motion.div
                   key={exp.id}
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 14 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={VIEWPORT}
+                  transition={{ duration: DURATION, ease: EASE, delay: Math.min(index, 6) * 0.05 }}
                   className="relative grid md:grid-cols-2 gap-8 items-start pl-16 md:pl-0"
                   onMouseEnter={() => setHoveredId(exp.id)}
                   onMouseLeave={() => setHoveredId(null)}
@@ -311,10 +304,10 @@ export function ExperienceTimelinePremium() {
 
         {/* Stats Summary */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          viewport={VIEWPORT}
+          transition={{ duration: DURATION, ease: EASE, delay: 0.3 }}
           className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
         >
           {stats.map((stat, index) => {
@@ -322,10 +315,10 @@ export function ExperienceTimelinePremium() {
             return (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={VIEWPORT}
+                transition={{ delay: Math.min(index, 6) * 0.05 }}
                 className="bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] rounded-2xl p-4 md:p-6 text-center hover:border-[var(--accent-primary)]/50 transition-all duration-300 group"
               >
                 <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3 md:mb-4 bg-gradient-to-br from-[var(--accent-primary)]/20 to-purple-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">

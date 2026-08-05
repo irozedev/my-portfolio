@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { Star, Globe, Award, TrendingUp } from "lucide-react";
+import { VIEWPORT, DURATION, EASE } from "../lib/motion";
 
 const languages = [
   { name: "Ukrainian", level: "Native", stars: 5, color: "#0057B7", flag: "🇺🇦", description: "Mother tongue" },
@@ -15,10 +16,10 @@ export function LanguagesModern() {
         {languages.map((lang, index) => (
           <motion.div
             key={lang.name}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
+            viewport={VIEWPORT}
+            transition={{ delay: Math.min(index, 6) * 0.05 }}
             whileHover={{ scale: 1.03, y: -4 }}
             className="group relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-2xl p-5 sm:p-6 hover:border-[var(--accent-primary)]/60 transition-all duration-300 overflow-hidden"
           >
@@ -53,7 +54,7 @@ export function LanguagesModern() {
                     className="relative p-3 rounded-xl transition-all duration-300 group-hover:scale-110"
                     style={{ backgroundColor: `${lang.color}20` }}
                     whileHover={{ rotate: [0, -5, 5, 0] }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: DURATION, ease: EASE }}
                   >
                     <span className="text-2xl sm:text-3xl">{lang.flag}</span>
                     
@@ -85,9 +86,9 @@ export function LanguagesModern() {
                     key={i}
                     initial={{ opacity: 0, scale: 0, rotate: -180 }}
                     whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                    viewport={{ once: true }}
+                    viewport={VIEWPORT}
                     transition={{ 
-                      delay: index * 0.1 + i * 0.08,
+                      delay: Math.min(index, 6) * 0.05 + i * 0.08,
                       type: "spring",
                       stiffness: 200
                     }}
@@ -110,8 +111,8 @@ export function LanguagesModern() {
                   style={{ color: lang.color }}
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 + 0.5 }}
+                  viewport={VIEWPORT}
+                  transition={{ delay: Math.min(index, 6) * 0.05 + 0.5 }}
                 >
                   {lang.stars}/5
                 </motion.span>
@@ -124,8 +125,8 @@ export function LanguagesModern() {
                   style={{ backgroundColor: lang.color }}
                   initial={{ width: "0%" }}
                   whileInView={{ width: `${(lang.stars / 5) * 100}%` }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: index * 0.1 + 0.3, ease: "easeOut" }}
+                  viewport={VIEWPORT}
+                  transition={{ duration: 1, delay: Math.min(index, 6) * 0.05 + 0.3, ease: "easeOut" }}
                 />
               </div>
             </div>
@@ -135,9 +136,9 @@ export function LanguagesModern() {
 
       {/* Stats Footer - New Addition */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={VIEWPORT}
         className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mt-8"
       >
         {[
@@ -164,10 +165,10 @@ export function LanguagesModern() {
           return (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ delay: Math.min(i, 6) * 0.05 }}
               whileHover={{ scale: 1.05, y: -2 }}
               className="relative p-4 sm:p-5 bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-xl hover:border-[var(--accent-primary)]/50 transition-all group overflow-hidden"
             >
@@ -192,7 +193,7 @@ export function LanguagesModern() {
                   className="p-2 rounded-lg"
                   style={{ backgroundColor: `${stat.color}20` }}
                   whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.6 }}
+                  transition={{ duration: DURATION, ease: EASE }}
                 >
                   <Icon className="w-5 h-5" style={{ color: stat.color }} />
                 </motion.div>

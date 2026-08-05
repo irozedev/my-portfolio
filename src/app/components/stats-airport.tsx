@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { Award, CheckCircle2, Users, TrendingUp, Star, Zap, Code2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "../contexts/language-context";
+import { VIEWPORT } from "../lib/motion";
 
 interface StatCardProps {
   icon: React.ElementType;
@@ -28,12 +29,12 @@ function StatCard({ icon: Icon, value, label, color, index }: StatCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      viewport={VIEWPORT}
       transition={{
         duration: 0.4,
-        delay: index * 0.05,
+        delay: Math.min(index, 6) * 0.04,
       }}
       className="relative group"
     >

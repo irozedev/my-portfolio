@@ -13,6 +13,7 @@ import {
   CalendarCheck,
 } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
+import { VIEWPORT, DURATION, EASE } from "../lib/motion";
 
 /**
  * "How I work" — process + honest, part-time timelines.
@@ -190,10 +191,10 @@ export function HowIWork() {
       <div className="container mx-auto max-w-6xl relative z-10">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          viewport={VIEWPORT}
+          transition={{ duration: DURATION, ease: EASE }}
           className="text-center mb-12 md:mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[var(--accent-primary)]/10 to-purple-500/10 border border-[var(--accent-primary)]/30 rounded-full mb-6">
@@ -210,10 +211,10 @@ export function HowIWork() {
 
         {/* Availability strip */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          viewport={VIEWPORT}
+          transition={{ duration: DURATION, ease: EASE }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-12 md:mb-16"
         >
           {availability.map((a, i) => {
@@ -238,10 +239,10 @@ export function HowIWork() {
             return (
               <motion.div
                 key={s.n}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.06 }}
+                viewport={VIEWPORT}
+                transition={{ duration: DURATION, ease: EASE, delay: Math.min(i, 6) * 0.04 }}
                 className="group relative p-6 bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl hover:border-[var(--accent-primary)]/50 transition-all duration-300"
               >
                 <div className="flex items-center justify-between mb-4">
@@ -261,10 +262,10 @@ export function HowIWork() {
 
         {/* Realistic totals table */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          viewport={VIEWPORT}
+          transition={{ duration: DURATION, ease: EASE }}
           className="bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl overflow-hidden"
         >
           <div className="overflow-x-auto">

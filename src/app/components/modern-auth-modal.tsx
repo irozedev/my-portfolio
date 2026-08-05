@@ -104,28 +104,8 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
           <div className="relative bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-3xl shadow-2xl overflow-hidden">
             {/* Animated Background Orbs */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <motion.div
-                className="absolute -top-20 -right-20 w-40 h-40 bg-[#00d9ff]/10 rounded-full blur-3xl"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.5, 0.3],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                }}
-              />
-              <motion.div
-                className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl"
-                animate={{
-                  scale: [1.2, 1, 1.2],
-                  opacity: [0.3, 0.5, 0.3],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                }}
-              />
+              <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#00d9ff]/10 rounded-full blur-3xl" />
+              <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl" />
             </div>
 
             {/* Close Button */}

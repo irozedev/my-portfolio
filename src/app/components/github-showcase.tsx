@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Github, Star, GitFork, ExternalLink, Code2, Sparkles } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../contexts/language-context";
+import { VIEWPORT, DURATION, EASE } from "../lib/motion";
 
 interface GitHubRepo {
   id: number;
@@ -208,9 +209,9 @@ export function GitHubShowcase() {
         
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={VIEWPORT}
           className="text-center mb-12 md:mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--bg-secondary)]/60 backdrop-blur-xl border border-[var(--border-color)] rounded-full mb-4">
@@ -248,7 +249,7 @@ export function GitHubShowcase() {
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 30 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: DURATION, ease: EASE }}
               className="relative group"
             >
               <div className="relative bg-[var(--bg-secondary)]/40 backdrop-blur-xl border-2 border-[var(--accent-primary)]/30 rounded-3xl p-8 overflow-hidden hover:border-[var(--accent-primary)]/60 transition-all duration-500">
@@ -272,7 +273,7 @@ export function GitHubShowcase() {
                     <motion.div
                       className="p-2 bg-[var(--accent-primary)]/10 rounded-lg"
                       whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6 }}
+                      transition={{ duration: DURATION, ease: EASE }}
                     >
                       <Sparkles className="w-5 h-5 text-[var(--accent-primary)]" />
                     </motion.div>
@@ -324,9 +325,9 @@ export function GitHubShowcase() {
                       {featuredRepo.topics.slice(0, 5).map((topic, index) => (
                         <motion.span
                           key={topic}
-                          initial={{ opacity: 0, scale: 0.8 }}
+                          initial={{ opacity: 0, y: 14 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: index * 0.1 }}
+                          transition={{ delay: Math.min(index, 6) * 0.05 }}
                           className="px-3 py-1 bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30 rounded-full text-xs font-medium text-[var(--accent-primary)]"
                         >
                           #{topic}
@@ -373,10 +374,10 @@ export function GitHubShowcase() {
               <motion.button
                 key={repo.id}
                 onClick={() => setFeaturedIndex(index)}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                viewport={VIEWPORT}
+                transition={{ delay: Math.min(index, 6) * 0.05 }}
                 whileHover={{ scale: 1.03, y: -5 }}
                 whileTap={{ scale: 0.98 }}
                 className={`relative text-left bg-[var(--bg-secondary)]/40 backdrop-blur-xl border-2 rounded-2xl p-5 transition-all duration-300 ${
