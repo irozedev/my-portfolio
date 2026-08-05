@@ -6,23 +6,23 @@ const SITE_URL = "https://roze.live";
 const seoData: Record<string, { title: string; description: string; keywords: string }> = {
   en: {
     title: "Stepan Roze | Front-End & JavaScript Developer — React, TypeScript, Next.js | Belgium",
-    description: "Front-End / JavaScript Developer with 8+ years of commercial experience building e-commerce and enterprise web apps (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js & Magento. Based in Antwerp, Belgium. Available for freelance.",
-    keywords: "Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Freelance Developer Belgium, Web Developer, Knockout.js, Node.js",
+    description: "Front-End / JavaScript Developer with 8+ years of commercial experience building e-commerce and enterprise web apps (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js & Magento. Living in Belgium on a permanent contract — no sponsorship needed. Open to front-end roles in Flanders, the Netherlands or remote.",
+    keywords: "Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Front-end developer Belgium, React developer Flanders, JavaScript developer Netherlands, Knockout.js, Node.js",
   },
   nl: {
     title: "Stepan Roze | Front-End & JavaScript Developer — React, TypeScript, Next.js | België",
-    description: "Front-End / JavaScript Developer met 8+ jaar commerciële ervaring in e-commerce en enterprise webapps (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js & Magento. Antwerpen, België. Beschikbaar als freelancer.",
-    keywords: "Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Freelance Developer België, Webontwikkelaar",
+    description: "Front-End / JavaScript Developer met 8+ jaar commerciële ervaring in e-commerce en enterprise webapps (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js & Magento. Woonachtig in België met een vast contract — geen sponsoring nodig. Open voor front-endfuncties in Vlaanderen, Nederland of op afstand.",
+    keywords: "Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Front-end developer België, React developer Vlaanderen, JavaScript developer Nederland, Webontwikkelaar",
   },
   ar: {
     title: "ستيبان روز | مطور Front-End و JavaScript — React, TypeScript, Next.js | بلجيكا",
-    description: "مطور Front-End / JavaScript مع أكثر من 8 سنوات خبرة تجارية في التجارة الإلكترونية وتطبيقات المؤسسات. React, TypeScript, Vue, Next.js و Magento. أنتويرب، بلجيكا.",
+    description: "مطور Front-End / JavaScript مع أكثر من 8 سنوات خبرة تجارية في التجارة الإلكترونية وتطبيقات المؤسسات. React, TypeScript, Vue, Next.js و Magento. مقيم في بلجيكا بعقد دائم — لا حاجة إلى كفالة. متاح لوظائف front-end في فلاندرز أو هولندا أو عن بُعد.",
     keywords: "مطور Front-End, مطور JavaScript, مطور React, TypeScript, Vue.js, Next.js, Magento, مطور مستقل بلجيكا",
   },
   es: {
     title: "Stepan Roze | Front-End & JavaScript Developer — React, TypeScript, Next.js | Bélgica",
-    description: "Desarrollador Front-End / JavaScript con 8+ años de experiencia comercial en e-commerce y aplicaciones enterprise (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js y Magento. Amberes, Bélgica. Disponible como freelance.",
-    keywords: "Desarrollador Front-End, Desarrollador JavaScript, Desarrollador React, TypeScript, Vue.js, Next.js, Magento, Desarrollador Freelance Bélgica",
+    description: "Desarrollador Front-End / JavaScript con 8+ años de experiencia comercial en e-commerce y aplicaciones enterprise (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js y Magento. Residente en Bélgica con contrato indefinido — sin necesidad de patrocinio. Abierto a puestos de front-end en Flandes, Países Bajos o en remoto.",
+    keywords: "Desarrollador Front-End, Desarrollador JavaScript, Desarrollador React, TypeScript, Vue.js, Next.js, Magento, Desarrollador front-end Bélgica, Desarrollador React Flandes, Desarrollador JavaScript Países Bajos",
   },
 };
 
@@ -36,14 +36,34 @@ const structuredData = {
   image: "https://roze.live/og-image.jpg",
   email: "rozedev095@gmail.com",
   telephone: "+32469631424",
-  address: { "@type": "PostalAddress", addressLocality: "Antwerp", addressRegion: "Flanders", addressCountry: "BE" },
+  // Where he actually lives. Antwerp stays in the geo meta below as a market
+  // signal — it is where he wants to work — but a PostalAddress is a claim of
+  // residence, and this one has to match the CV.
+  address: { "@type": "PostalAddress", addressLocality: "Lommel", addressRegion: "Limburg", addressCountry: "BE" },
   sameAs: [
     "https://github.com/irozedev",
     "https://linkedin.com/in/rozestepan",
     "https://www.upwork.com/freelancers/rozestepan",
   ],
   knowsAbout: ["JavaScript", "TypeScript", "React", "Next.js", "Vue.js", "Node.js", "Knockout.js", "Magento", "E-commerce", "Web Performance"],
-  worksFor: { "@type": "Organization", name: "Freelance" },
+  // Languages Stepan speaks — not the languages the site is published in. The
+  // static block used to list Arabic and Spanish because the site is
+  // translated into them, which is a claim an interviewer can test in one
+  // sentence. Dutch is here because he uses it daily at work; the copy is
+  // careful never to call it fluent, and this must not either.
+  knowsLanguage: [
+    { "@type": "Language", name: "English", alternateName: "en" },
+    { "@type": "Language", name: "Ukrainian", alternateName: "uk" },
+    { "@type": "Language", name: "Russian", alternateName: "ru" },
+    { "@type": "Language", name: "Dutch", alternateName: "nl" },
+  ],
+  // Not `worksFor: Freelance`. The site exists to get him hired, and naming
+  // a freelance "employer" is the wrong signal to a recruiter and to Google.
+  seeks: {
+    "@type": "Demand",
+    name: "Front-End / JavaScript Developer position",
+    areaServed: ["BE", "NL"],
+  },
   alumniOf: [{ "@type": "CollegeOrUniversity", name: "V.N. Karazin Kharkiv National University" }],
   description: "Front-End / JavaScript Developer with 8+ years of commercial experience building e-commerce and enterprise web applications, from large-scale luxury retail platforms to banking systems.",
 };
@@ -95,7 +115,7 @@ export function SEOHead() {
       ["property", "og:image:height", "630"],
       ["property", "og:image:alt", "Stepan Roze — Front-End / JavaScript Developer"],
       ["property", "og:url", pageUrl],
-      ["property", "og:locale", language === 'nl' ? 'nl_BE' : language === 'ar' ? 'ar_SA' : language === 'es' ? 'es_ES' : 'en_US'],
+      ["property", "og:locale", language === 'nl' ? 'nl_BE' : language === 'ar' ? 'ar_SA' : language === 'es' ? 'es_ES' : 'en_GB'],
       // Twitter
       ["name", "twitter:card", "summary_large_image"],
       ["name", "twitter:title", data.title],

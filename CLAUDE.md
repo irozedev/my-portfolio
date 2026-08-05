@@ -151,7 +151,21 @@ Two layers, keep them consistent:
   renders English, so leaving it published would be duplicate content.
 - Geo meta deliberately targets **Antwerp**, which is where Stepan wants to
   work — not where he lives (Lommel, Limburg). That is a market signal, not a
-  claim of residence; keep the two ideas separate in copy.
+  claim of residence; keep the two ideas separate in copy. **A `PostalAddress`
+  is on the wrong side of that line** — both `Person` blocks now say Lommel,
+  Limburg, matching the CV. Only `geo.*` meta still points at Antwerp.
+- **Structured data must not out-claim the copy.** It used to: a `LocalBusiness`
+  with an Antwerpen address, opening hours, a phone number, a (mojibake) price
+  range and nine priced Offers — a registered business, asserted in
+  machine-readable form, that does not exist. Removed. `knowsLanguage` listed
+  Arabic and Spanish because the *site* is translated into them; it now lists
+  what Stepan actually speaks (English, Ukrainian, Russian, Dutch). `worksFor:
+  Freelance` became `seeks: Demand` — the site exists to get him hired.
+- The two SEO layers share JSON-LD ids. `index.html` tags its static blocks
+  `id="ld-person"` / `id="ld-website"`, and `seo-head.tsx` upserts by that id.
+  **Do not remove those ids**: without them the runtime layer cannot find the
+  static blocks and appends a second Person and WebSite, leaving two
+  conflicting entities for the same person on the page.
 
 ## Facts about Stepan (keep copy truthful — no fabrication)
 - **Front-End / JavaScript developer, 8+ years.** React, Vue, Next.js,

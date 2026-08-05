@@ -24,9 +24,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
     <!-- Primary Meta Tags -->
-    <title>Stepan Roze | Front-End / JavaScript Developer — React, Vue, Next.js, TypeScript</title>
-    <meta name="title" content="Stepan Roze | Front-End / JavaScript Developer — React, Vue, Next.js, TypeScript" />
-    <meta name="description" content="Front-End Developer with 8+ years of experience — e-commerce (childrensalon.com, vogacloset.com) and banking systems. React, Vue, Next.js, TypeScript. Based in Belgium, available for freelance projects." />
+    <title>Stepan Roze | Front-End / JavaScript Developer in Belgium — React, TypeScript, Next.js</title>
+    <meta name="title" content="Stepan Roze | Front-End / JavaScript Developer in Belgium — React, TypeScript, Next.js" />
+    <meta name="description" content="Front-End / JavaScript developer, 8+ years — e-commerce at childrensalon.com and vogacloset.com, banking systems at Oschadbank. React, Vue, Next.js, TypeScript. Living in Belgium with a permanent contract, no sponsorship needed. Open to front-end roles in Flanders, the Netherlands or remote." />
     <!-- Belgium / EU first: the local Dutch-language terms carry the commercial
          intent. The brand name follows; Cyrillic terms are kept only so the
          name itself is findable, not as a target market. -->
@@ -53,13 +53,13 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://roze.live/" />
-    <meta property="og:title" content="Stepan Roze | Front-End / JavaScript Developer — React, Vue, Next.js, TypeScript" />
-    <meta property="og:description" content="Front-End Developer with 8+ years of experience — e-commerce (childrensalon.com, vogacloset.com) and banking systems. React, Vue, Next.js, TypeScript. Based in Belgium, available for freelance projects." />
+    <meta property="og:title" content="Stepan Roze | Front-End / JavaScript Developer in Belgium — React, TypeScript, Next.js" />
+    <meta property="og:description" content="Front-End / JavaScript developer, 8+ years — e-commerce at childrensalon.com and vogacloset.com, banking systems at Oschadbank. React, Vue, Next.js, TypeScript. Living in Belgium with a permanent contract, no sponsorship needed. Open to front-end roles in Flanders, the Netherlands or remote." />
     <meta property="og:image" content="https://roze.live/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Stepan Roze — Front-End / JavaScript Developer" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content="en_GB" />
     <meta property="og:locale:alternate" content="nl_BE" />
     <meta property="og:locale:alternate" content="ar_SA" />
     <meta property="og:locale:alternate" content="es_ES" />
@@ -68,8 +68,8 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://roze.live/" />
-    <meta name="twitter:title" content="Stepan Roze | Front-End / JavaScript Developer — React, Vue, Next.js, TypeScript" />
-    <meta name="twitter:description" content="Front-End Developer with 8+ years of experience — e-commerce (childrensalon.com, vogacloset.com) and banking systems. React, Vue, Next.js, TypeScript. Based in Belgium, available for freelance projects." />
+    <meta name="twitter:title" content="Stepan Roze | Front-End / JavaScript Developer in Belgium — React, TypeScript, Next.js" />
+    <meta name="twitter:description" content="Front-End / JavaScript developer, 8+ years — e-commerce at childrensalon.com and vogacloset.com, banking systems at Oschadbank. React, Vue, Next.js, TypeScript. Living in Belgium with a permanent contract, no sponsorship needed. Open to front-end roles in Flanders, the Netherlands or remote." />
     <meta name="twitter:image" content="https://roze.live/og-image.jpg" />
     <meta name="twitter:image:alt" content="Stepan Roze — Front-End / JavaScript Developer" />
     
@@ -93,8 +93,12 @@
     <meta name="geo.position" content="51.2194;4.4025" />
     <meta name="ICBM" content="51.2194, 4.4025" />
     
-    <!-- Structured Data - JSON-LD -->
-    <script type="application/ld+json">
+    <!-- Structured Data - JSON-LD.
+         The `id`s matter: seo-head.tsx refreshes these per language via
+         getElementById. Without them it could not find the static blocks and
+         appended a second Person and WebSite instead, leaving two conflicting
+         entities for the same person in the page. -->
+    <script type="application/ld+json" id="ld-person">
     {
       "@context": "https://schema.org",
       "@type": "Person",
@@ -108,14 +112,23 @@
         "https://www.upwork.com/freelancers/rozestepan"
       ],
       "jobTitle": "Front-End / JavaScript Developer",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Freelance"
+      "seeks": {
+        "@type": "Demand",
+        "name": "Front-End / JavaScript Developer position",
+        "areaServed": ["BE", "NL"],
+        "availableAtOrFrom": {
+          "@type": "Place",
+          "address": {
+            "@type": "PostalAddress",
+            "addressRegion": "Flanders",
+            "addressCountry": "BE"
+          }
+        }
       },
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Antwerp",
-        "addressRegion": "Flanders",
+        "addressLocality": "Lommel",
+        "addressRegion": "Limburg",
         "addressCountry": "BE"
       },
       "email": "rozedev095@gmail.com",
@@ -145,25 +158,20 @@
         },
         {
           "@type": "Language",
+          "name": "Russian",
+          "alternateName": "ru"
+        },
+        {
+          "@type": "Language",
           "name": "Dutch",
           "alternateName": "nl"
-        },
-        {
-          "@type": "Language",
-          "name": "Arabic",
-          "alternateName": "ar"
-        },
-        {
-          "@type": "Language",
-          "name": "Spanish",
-          "alternateName": "es"
         }
       ]
     }
     </script>
     
     <!-- WebSite Schema -->
-    <script type="application/ld+json">
+    <script type="application/ld+json" id="ld-website">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
@@ -190,23 +198,16 @@
       "url": "https://roze.live",
       "telephone": "+32469631424",
       "email": "rozedev095@gmail.com",
-      "priceRange": "€€",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Antwerp",
-        "addressRegion": "Flanders",
+        "addressLocality": "Lommel",
+        "addressRegion": "Limburg",
         "addressCountry": "BE"
       },
       "geo": {
         "@type": "GeoCoordinates",
         "latitude": "51.2194",
         "longitude": "4.4025"
-      },
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        "opens": "06:00",
-        "closes": "12:00"
       },
       "areaServed": ["BE", "NL", "LU", "DE", "FR", "EU"],
       "hasOfferCatalog": {
@@ -246,160 +247,28 @@
     }
     </script>
     
-    <!-- LocalBusiness Schema for Flanders/Belgium/Netherlands -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Stepan Roze - Webontwikkelaar Vlaanderen",
-      "alternateName": [
-        "Stepan Roze - Front-End Developer België",
-        "Степан Розе - Веб-розробник"
-      ],
-      "description": "Professionele front-end webontwikkelaar gespecialiseerd in React, Vue, Next.js en TypeScript. Beschikbaar voor freelance projecten in Vlaanderen en België.",
-      "url": "https://roze.live",
-      "telephone": "+32469631424",
-      "email": "rozedev095@gmail.com",
-      "image": "https://roze.live/og-image.jpg",
-      "priceRange": "€€",
-      "address": {
-        "@type": "PostalAddress",
-        "addressRegion": "Vlaanderen",
-        "addressLocality": "Antwerpen",
-        "addressCountry": "BE"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "51.2194",
-        "longitude": "4.4025"
-      },
-      "areaServed": [
-        {
-          "@type": "City",
-          "name": "Antwerpen",
-          "containedIn": {
-            "@type": "AdministrativeArea",
-            "name": "Vlaanderen"
-          }
-        },
-        {
-          "@type": "City",
-          "name": "Gent",
-          "containedIn": {
-            "@type": "AdministrativeArea",
-            "name": "Oost-Vlaanderen"
-          }
-        },
-        {
-          "@type": "City",
-          "name": "Brussel",
-          "containedIn": {
-            "@type": "Country",
-            "name": "België"
-          }
-        },
-        {
-          "@type": "City",
-          "name": "Leuven"
-        },
-        {
-          "@type": "City",
-          "name": "Mechelen"
-        },
-        {
-          "@type": "City",
-          "name": "Brugge"
-        },
-        {
-          "@type": "City",
-          "name": "Hasselt",
-          "containedIn": {
-            "@type": "AdministrativeArea",
-            "name": "Limburg"
-          }
-        },
-        {
-          "@type": "Country",
-          "name": "België"
-        }
-      ],
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday"
-        ],
-        "opens": "06:00",
-        "closes": "12:00"
-      },
-      "paymentAccepted": "Cash, Credit Card, Bank Transfer, Cryptocurrency",
-      "currenciesAccepted": "EUR, USD",
-      "knowsLanguage": [
-        "en",
-        "nl",
-        "uk"
-      ],
-      "slogan": "Modern weboplossingen voor Vlaanderen en België",
-      "serviceArea": {
-        "@type": "GeoCircle",
-        "geoMidpoint": {
-          "@type": "GeoCoordinates",
-          "latitude": "51.2194",
-          "longitude": "4.4025"
-        },
-        "geoRadius": "200000"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Webontwikkeling Diensten",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Website Ontwikkeling",
-              "description": "Op maat gemaakte websites met React en TypeScript"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "E-commerce Ontwikkeling",
-              "description": "Professionele webshops en online platforms"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Web Applicatie Ontwikkeling",
-              "description": "Web apps, dashboards en bedrijfsapplicaties"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "API Ontwikkeling",
-              "description": "RESTful APIs en backend services met Node.js"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Technisch Advies",
-              "description": "IT consulting en technische consultancy"
-            }
-          }
-        ]
-      }
-    }
-    </script>
+    <!--
+      A LocalBusiness block used to sit here, and it had to go.
+
+      It declared a business at a postal address in Antwerpen, with opening
+      hours (06:00-12:00), a phone number and a price range, plus a catalogue
+      of nine priced Offers. Three things were wrong with that:
+
+        1. There is no registered business. A bijberoep was considered and
+           never registered, so this asserted as machine-readable fact what
+           the copy is careful never to claim.
+        2. The address was Antwerpen. Antwerp is where Stepan wants to work,
+           not where he lives - a fair thing to signal with geo meta, but a
+           PostalAddress on a business entity is a claim of establishment.
+           The Person block now says Lommel, Limburg, which is true and
+           matches the CV.
+        3. The site is aimed at getting hired. Telling Google this domain is
+           a local service business invites exactly the wrong result card.
+
+      ProfessionalService above still covers the freelance side. Its
+      priceRange was mojibake and its opening hours were invented, so both
+      are gone from it too.
+    -->
 
     <!-- Breadcrumb Schema -->
     <script type="application/ld+json">
@@ -464,7 +333,7 @@
         }, { passive: false });
       })();
     </script>
-    <script type="module" crossorigin src="/assets/index.C2xEYwSO.js"></script>
+    <script type="module" crossorigin src="/assets/index.CK_nWeTw.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime.CNC7AqOf.js">
     <link rel="modulepreload" crossorigin href="/assets/react.B2zbEGbw.js">
     <link rel="modulepreload" crossorigin href="/assets/motion.3GUJXvgE.js">
