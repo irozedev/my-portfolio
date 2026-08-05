@@ -84,8 +84,18 @@ export function AboutSection() {
                     decoding="async"
                     className="relative w-full h-[400px] object-cover rounded-2xl"
                     onError={(e) => {
-                      // Fallback to Unsplash if Google Drive fails
-                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1737575655055-e3967cbefd03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcmVhdGl2ZSUyMGRldmVsb3BlciUyMHBvcnRyYWl0fGVufDF8fHx8MTc2ODI0MzA1NHww&ixlib=rb-4.1.0&q=80&w=1080";
+                      // Falls back to the real photo, served from /public.
+                      //
+                      // This used to fall back to an Unsplash stock portrait —
+                      // a photograph of a stranger, under the caption "Stepan
+                      // Roze", on the page whose whole job is to say who he is.
+                      // The primary source is a Google Drive link, which can
+                      // fail for reasons nobody controls (rate limiting, a
+                      // permission change, Google retiring /d/ URLs), and the
+                      // failure mode was silent. Lower resolution is a small
+                      // price; showing someone else's face is not a price worth
+                      // paying at all.
+                      (e.target as HTMLImageElement).src = "/cv-photo.jpg";
                     }}
                   />
                   
@@ -306,14 +316,12 @@ export function AboutSection() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
               >
-                {/* University Logo Watermark */}
-                <div className="absolute -bottom-4 -right-4 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <img 
-                    src="https://images.unsplash.com/photo-1695556575317-9d49e3dccf75?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5JTIwbG9nbyUyMGVtYmxlbXxlbnwxfHx8fDE3NjkyMDM4Nzd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                    alt="University emblem"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+                {/* The "university logo watermark" that used to sit here was a
+                    stock photo from Unsplash with alt="University emblem" — it
+                    is not Karazin's emblem, and claiming an institution's mark
+                    is not a claim worth making for decoration rendered at 5%
+                    opacity. It also cost a third-party request for something
+                    effectively invisible. */}
 
                 <div className="relative">
                   <div className="flex items-start gap-4 mb-4">

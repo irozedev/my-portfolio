@@ -287,11 +287,16 @@ not squeeze it to one.
 ## Open items (as of 2026-08-04)
 Ordered by how much they matter, most first.
 
-1. **The About photo looks like a stock image** (`about-section.tsx`). If it is
-   not Stepan, it is the single most damaging thing on the page: a face that
-   does not match LinkedIn is spotted instantly. Needs a real photo from him.
-2. **Experience section is 3 464 px** for six entries — the largest block left
+1. **Experience section is 3 464 px** for six entries — the largest block left
    on the page. Page total is 11 125 px desktop / 14 051 px mobile.
-3. **`knowsLanguage` in `index.html` still lists Ukrainian.** Left deliberately:
+2. **`knowsLanguage` in `index.html` still lists Ukrainian.** Left deliberately:
    that is a language Stepan speaks, not a language the site is published in.
    Confirm with him before touching it.
+3. **The About portrait is hosted on Google Drive**
+   (`lh3.googleusercontent.com/d/...`). Confirmed 2026-08-04 as genuinely
+   Stepan and loading fine at 1024×1024 — an earlier note in this file guessed
+   it was stock, and that guess was wrong. What remains is hosting: a `/d/` URL
+   can break on a permission change or rate limit, for reasons nobody here
+   controls. It now falls back to `/cv-photo.jpg` (a real photo, lower
+   resolution) instead of the Unsplash stranger it used to fall back to.
+   Self-hosting the full-resolution original would close this properly.

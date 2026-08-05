@@ -102,7 +102,9 @@ export function CVPrint({ onClose }: { onClose: () => void }) {
       <main className="cv-sheet" dir="auto">
         <header className="cv-header">
           {/* Lifted out of the original PDF, so the document keeps the same
-              face. Note it is NOT the photo the About section shows. */}
+              face. It is a different shot from the one About shows — both are
+              Stepan; this one is his CV photo. It doubles as About's fallback
+              if the Google Drive link there ever fails. */}
           <img className="cv-photo" src="/cv-photo.jpg" alt="Stepan Roze" />
           <div className="cv-identity">
             <h1>Stepan Roze</h1>
