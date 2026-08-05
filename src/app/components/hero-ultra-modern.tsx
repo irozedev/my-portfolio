@@ -20,7 +20,7 @@ const socialLinks = [
 
 // Emoji-free tech list — rendered as monospace pills
 const techStack = [
-  "JavaScript", "TypeScript", "React", "Next.js", "Vue.js",
+  "JavaScript", "Dynamics 365", "TypeScript", "React", "Next.js", "Vue.js",
   "Node.js", "Knockout.js", "Magento", "Tailwind", "Git",
 ];
 
@@ -33,12 +33,17 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
   const isClient = viewMode === "client";
 
   const viewWorkLabel = t("hero.viewWork");
+  // "Front-End / JavaScript Developer" described the work accurately and sold
+  // nothing: in Flanders that phrase puts the reader in a stack of two hundred
+  // React CVs. Dynamics 365 goes in the title because it is the scarce half of
+  // the profile — Microsoft partners here hire for exactly "JS + D365" and
+  // rarely find it. Front-end stays first, because it is still the longer
+  // experience and it is what a direct client is shopping for.
   const roleTitle =
-    
-    language === "nl" ? "Front-End / JavaScript Developer" :
-    language === "ar" ? "مطور Front-End / JavaScript" :
-    language === "es" ? "Desarrollador Front-End / JavaScript" :
-    "Front-End / JavaScript Developer";
+    language === "nl" ? "Front-End & Dynamics 365 Developer" :
+    language === "ar" ? "مطور Front-End و Dynamics 365" :
+    language === "es" ? "Desarrollador Front-End y Dynamics 365" :
+    "Front-End & Dynamics 365 Developer";
 
   // Tiny localization helper
   const L = (en: string, nl: string, ar: string, es: string) =>

@@ -12,8 +12,19 @@ interface Skill {
   years: string;
 }
 
+// Order matters: this list is read top-down and the first two entries are the
+// ones a recruiter actually remembers. Dynamics 365 leads because it is the
+// scarce skill — Belgium has a large Microsoft-partner ecosystem and very few
+// developers who have shipped XRM web resources in production. React is
+// abundant here; D365 is not. JavaScript sits second because it is the longest
+// and most honest claim on the page, and because "JS + D365" is the exact
+// combination those partners hire for.
 const skills: Skill[] = [
+  // Enterprise
+  { name: "Dynamics 365 XRM", icon: Database, category: "Enterprise", level: 85, color: "#0078d4", glow: "shadow-[0_0_30px_rgba(0,120,212,0.6)]", years: "2+ yrs" },
+
   // Frontend
+  { name: "JavaScript (ES6+)", icon: Code2, category: "Frontend", level: 95, color: "#f7df1e", glow: "shadow-[0_0_30px_rgba(247,223,30,0.6)]", years: "9+ yrs" },
   { name: "React", icon: Code2, category: "Frontend", level: 95, color: "#00d9ff", glow: "shadow-[0_0_24px_rgba(0,217,255,0.18)]", years: "5+ yrs" },
   { name: "Vue.js", icon: Layers, category: "Frontend", level: 90, color: "#42b883", glow: "shadow-[0_0_30px_rgba(66,184,131,0.6)]", years: "3+ yrs" },
   { name: "TypeScript", icon: Terminal, category: "Frontend", level: 92, color: "#3178c6", glow: "shadow-[0_0_30px_rgba(49,120,198,0.6)]", years: "4+ yrs" },
@@ -30,7 +41,7 @@ const skills: Skill[] = [
   { name: "Magento 2", icon: Globe, category: "E-commerce", level: 82, color: "#ee672f", glow: "shadow-[0_0_30px_rgba(238,103,47,0.6)]", years: "4+ yrs" },
 ];
 
-const categories = ["All", "Frontend", "Backend", "Tools", "E-commerce"];
+const categories = ["All", "Enterprise", "Frontend", "Backend", "Tools", "E-commerce"];
 
 export function SkillsFuturistic() {
   const [selectedCategory, setSelectedCategory] = useState("All");

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Mail, Linkedin, Github, Briefcase, Send, CheckCircle2, Clock, MessageSquare, Sparkles } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
+import { useViewMode } from "../contexts/view-mode-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
 import { toast } from "sonner";
 
@@ -51,7 +52,12 @@ const contactLinks = [
 ];
 
 export function ContactSection() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { isClientMode } = useViewMode();
+
+  const L = (en: string, nl: string, ar: string, es: string) =>
+    language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -120,13 +126,29 @@ export function ContactSection() {
     setIsSubmitting(true);
     
     try {
+      // The two modes reuse the same three server fields, so the payload says
+      // which meaning they carry. Without this the lead email reads "Budget:
+      // Colruyt Group / Timeline: Front-End Developer", which is unusable when
+      // you are trying to answer it a week later.
+      const payload = isClientMode
+        ? { ...formData, source: 'client' }
+        : {
+            name: formData.name,
+            email: formData.email,
+            service: `Hiring enquiry — ${formData.service || 'unspecified'}`,
+            budget: formData.budget ? `Company: ${formData.budget}` : 'Company: not given',
+            timeline: formData.timeline ? `Role: ${formData.timeline}` : 'Role: not given',
+            message: formData.message,
+            source: 'cv',
+          };
+
       const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${publicAnonKey}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (response.ok) {
@@ -144,10 +166,34 @@ export function ContactSection() {
     }
   };
 
+  // "Free initial consultation" and "Flexible working arrangements" are things
+  // you say to someone deciding whether to buy. To someone deciding whether to
+  // interview you, the useful facts are different — and the right-to-work one
+  // answers a question a Belgian employer is not allowed to ask outright.
   const benefits = [
     { icon: Clock, text: t('contact.benefits.response') },
-    { icon: MessageSquare, text: t('contact.benefits.consultation') },
-    { icon: CheckCircle2, text: t('contact.benefits.flexible') },
+    {
+      icon: MessageSquare,
+      text: isClientMode
+        ? t('contact.benefits.consultation')
+        : L(
+            "Happy to start with a short intro call",
+            "Graag eerst een kort kennismakingsgesprek",
+            "يسعدني البدء بمكالمة تعارف قصيرة",
+            "Encantado de empezar con una llamada breve",
+          ),
+    },
+    {
+      icon: CheckCircle2,
+      text: isClientMode
+        ? t('contact.benefits.flexible')
+        : L(
+            "Based in Belgium — no sponsorship needed",
+            "Woonachtig in België — geen sponsoring nodig",
+            "مقيم في بلجيكا — لا حاجة إلى كفالة",
+            "Residente en Bélgica — sin necesidad de patrocinio",
+          ),
+    },
   ];
 
   return (
@@ -352,10 +398,21 @@ export function ContactSection() {
                     </div>
                   </div>
 
-                  {/* Service */}
+                  {/*
+                    The form asks different questions of the two audiences.
+
+                    It used to ask everyone the same three: pick a service, name
+                    a budget, name a timeline — and all three were `required`.
+                    In CV mode that made the form not merely off-key but
+                    unusable: a recruiter with a vacancy has no budget figure to
+                    type, so they either invented one or gave up on the only
+                    contact channel on the page.
+                  */}
                   <div>
                     <label htmlFor="service" className="block text-xs font-semibold uppercase tracking-wider mb-2 text-[var(--text-muted)]">
-                      {t("contact.form.service")}
+                      {isClientMode
+                        ? t("contact.form.service")
+                        : L("What is this about?", "Waar gaat het over?", "بخصوص ماذا؟", "¿De qué se trata?")}
                     </label>
                     <select
                       id="service"
@@ -366,30 +423,54 @@ export function ContactSection() {
                         text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
                         focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 focus:outline-none transition-all cursor-pointer"
                     >
-                      <option value="">Select a service</option>
-                      <option value="Web Development">Web Development</option>
-                      <option value="E-Commerce Solutions">E-Commerce Solutions</option>
-                      <option value="Web Applications">Web Applications</option>
-                      <option value="Process Automation">Process Automation</option>
-                      <option value="AI Chatbots">AI Chatbots</option>
-                      <option value="Tech Consulting">Tech Consulting</option>
-                      <option value="Other">Other</option>
+                      {isClientMode ? (
+                        <>
+                          <option value="">Select a service</option>
+                          <option value="Web Development">Web Development</option>
+                          <option value="E-Commerce Solutions">E-Commerce Solutions</option>
+                          <option value="Web Applications">Web Applications</option>
+                          <option value="Process Automation">Process Automation</option>
+                          <option value="AI Chatbots">AI Chatbots</option>
+                          <option value="Tech Consulting">Tech Consulting</option>
+                          <option value="Other">Other</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="">
+                            {L("Select one", "Maak een keuze", "اختر واحدًا", "Elige una opción")}
+                          </option>
+                          <option value="Full-time position">
+                            {L("Full-time position", "Vaste functie", "وظيفة بدوام كامل", "Puesto a tiempo completo")}
+                          </option>
+                          <option value="Contract / interim role">
+                            {L("Contract / interim role", "Contract / interim", "عقد / مؤقت", "Contrato / interino")}
+                          </option>
+                          <option value="Introductory call">
+                            {L("Introductory call", "Kennismakingsgesprek", "مكالمة تعارف", "Llamada introductoria")}
+                          </option>
+                          <option value="Other">{L("Other", "Anders", "أخرى", "Otro")}</option>
+                        </>
+                      )}
                     </select>
                   </div>
 
-                  {/* Budget + Timeline */}
+                  {/* Client: budget + timeline. CV: company + role — the two
+                      things a recruiter can actually answer, and neither is
+                      required, so nothing blocks the send. */}
                   <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
                     <div>
                       <label htmlFor="budget" className="block text-xs font-semibold uppercase tracking-wider mb-2 text-[var(--text-muted)]">
-                        {t("contact.form.budget")}
+                        {isClientMode
+                          ? t("contact.form.budget")
+                          : L("Company", "Bedrijf", "الشركة", "Empresa")}
                       </label>
                       <Input
                         id="budget"
                         type="text"
-                        placeholder="€5,000 - €10,000"
+                        placeholder={isClientMode ? "€5,000 - €10,000" : L("Company name", "Bedrijfsnaam", "اسم الشركة", "Nombre de la empresa")}
                         value={formData.budget}
                         onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                        required
+                        required={isClientMode}
                         className="w-full h-12 px-4 text-base bg-white dark:bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl
                           text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
                           focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 focus:outline-none transition-all"
@@ -397,15 +478,17 @@ export function ContactSection() {
                     </div>
                     <div>
                       <label htmlFor="timeline" className="block text-xs font-semibold uppercase tracking-wider mb-2 text-[var(--text-muted)]">
-                        {t("contact.form.timeline")}
+                        {isClientMode
+                          ? t("contact.form.timeline")
+                          : L("Role", "Functie", "الوظيفة", "Puesto")}
                       </label>
                       <Input
                         id="timeline"
                         type="text"
-                        placeholder="1-3 months"
+                        placeholder={isClientMode ? "1-3 months" : L("e.g. Front-End Developer", "bijv. Front-end developer", "مثال: مطوّر واجهات", "p. ej. Desarrollador Front-End")}
                         value={formData.timeline}
                         onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                        required
+                        required={isClientMode}
                         className="w-full h-12 px-4 text-base bg-white dark:bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl
                           text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
                           focus:border-[#00d9ff] focus:ring-2 focus:ring-[#00d9ff]/20 focus:outline-none transition-all"
@@ -420,7 +503,16 @@ export function ContactSection() {
                     </label>
                     <Textarea
                       id="message"
-                      placeholder={t("contact.form.messagePlaceholder")}
+                      placeholder={
+                        isClientMode
+                          ? t("contact.form.messagePlaceholder")
+                          : L(
+                              "Tell me about the role and the team…",
+                              "Vertel iets over de functie en het team…",
+                              "أخبرني عن الوظيفة والفريق…",
+                              "Cuéntame sobre el puesto y el equipo…",
+                            )
+                      }
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       required

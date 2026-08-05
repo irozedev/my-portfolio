@@ -125,7 +125,11 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
               aria-modal="true"
               aria-labelledby="availability-modal-title"
               tabIndex={-1}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] sm:w-[420px] md:w-[480px] lg:w-[540px] xl:w-[600px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/40 rounded-xl shadow-[0_20px_50px_rgba(0,217,255,0.3)] z-[100000] overflow-hidden"
+              /* A column that is never taller than the viewport, so the action
+                 bar at the bottom is always on screen. Previously the dialog
+                 had no height cap at all and the scroll body was pinned to
+                 60vh, which is what pushed the primary button out of sight. */
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] sm:w-[420px] md:w-[480px] lg:w-[540px] xl:w-[600px] bg-[var(--bg-primary)] border-2 border-[var(--accent-primary)]/40 rounded-xl shadow-[0_20px_50px_rgba(0,217,255,0.3)] z-[100000] overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Ambient gradient */}
@@ -139,7 +143,7 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
               </div>
 
               {/* Header - Slightly larger */}
-              <div className="relative flex items-center justify-between px-4 py-3 border-b border-[var(--glass-border)]">
+              <div className="relative shrink-0 flex items-center justify-between px-4 py-3 border-b border-[var(--glass-border)]">
                 <div className="flex items-center gap-2.5">
                   <div className="relative">
                     <Clock className="w-6 h-6 text-[var(--accent-primary)]" />
@@ -168,7 +172,10 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
               </div>
 
               {/* Content - Larger padding */}
-              <div className="relative p-4 space-y-3 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent">
+              {/* `flex-1 min-h-0` instead of `max-h-[60vh]`: the body takes
+                  whatever room is left after the header and the action bar,
+                  rather than claiming a fixed slice and shoving the rest out. */}
+              <div className="relative flex-1 min-h-0 p-4 space-y-3 overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent">
                 
                 {/* Working Hours Badge */}
                 <div className="relative p-3 bg-gradient-to-br from-[var(--accent-primary)]/10 to-purple-500/5 border border-[var(--accent-primary)]/30 rounded-lg overflow-hidden">
@@ -225,7 +232,15 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
                   </p>
                 </div>
 
-                {/* Book Call Button - Larger */}
+              </div>
+
+              {/* Action bar.
+                  The button used to be the last child of the scroll body, 72px
+                  below its visible edge — so the one thing this dialog exists
+                  to offer was invisible until you noticed the thin scrollbar
+                  and scrolled. It lives outside the scroller now and is always
+                  on screen. */}
+              <div className="relative shrink-0 px-4 py-3 border-t border-[var(--glass-border)]">
                 <motion.button
                   onClick={() => {
                     setIsBookCallOpen(true);
@@ -250,7 +265,7 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
               </div>
 
               {/* Footer stats - Larger */}
-              <div className="relative border-t border-[var(--glass-border)] px-4 py-2.5 bg-[var(--bg-secondary)]/30 flex items-center justify-around">
+              <div className="relative shrink-0 border-t border-[var(--glass-border)] px-4 py-2.5 bg-[var(--bg-secondary)]/30 flex items-center justify-around">
                 <div className="text-center">
                   <p className="text-sm font-mono font-bold text-[var(--accent-primary)]">7</p>
                   <p className="text-[9px] font-mono text-[var(--text-muted)] uppercase">Days</p>

@@ -311,8 +311,24 @@ img {
   box-sizing: border-box;
 }
 
-.container,
-.section-wrapper,
-[class*="max-w-"] {
-  max-width: 100%;
-}
+/*
+ * There used to be a `.container, .section-wrapper, [class*="max-w-"]
+ * { max-width: 100% }` rule here. All three selectors are gone, because the
+ * rule silently disabled every Tailwind max-width utility on the site —
+ * max-w-3xl, max-w-6xl, max-w-7xl, all of them — by forcing them back to 100%.
+ * `.container` did the same damage wherever it sits next to a cap, which is
+ * the standard pattern in this codebase (`container mx-auto max-w-7xl`).
+ * `.section-wrapper` matched nothing at all.
+ *
+ * It was added to "prevent content overflow", which it cannot do, because
+ * max-width never causes overflow in the first place: a block with
+ * `max-width: 48rem` inside a 320px parent is 320px wide, not 768px.
+ *
+ * The damage was invisible below ~1430px, where containers are narrower than
+ * their caps anyway, and showed on wide screens as everything drifting left:
+ *   - hero subtitle: its `max-w-3xl mx-auto` wrapper went full width, so
+ *     `mx-auto` had nothing to centre, the paragraph hit the 72ch measure from
+ *     fonts.css instead and sat flush left — 179px off centre at 1920.
+ *   - footer: the `max-w-7xl` shell stretched to 1878px, putting the
+ *     copyright 777px left of centre.
+ */
