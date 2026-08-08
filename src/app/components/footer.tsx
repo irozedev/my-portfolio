@@ -117,10 +117,15 @@ export function Footer() {
               {isClientMode
                 ? t("hero.description")
                 : L(
-                    "8+ years building e-commerce and enterprise web applications — luxury retail at childrensalon.com and vogacloset.com, banking systems at Oschadbank. Based in Belgium, working in English.",
-                    "8+ jaar e-commerce en enterprise-webapplicaties gebouwd — luxe retail bij childrensalon.com en vogacloset.com, banksystemen bij Oschadbank. Gevestigd in België, werktaal Engels.",
-                    "أكثر من 8 سنوات في بناء تطبيقات التجارة الإلكترونية وتطبيقات المؤسسات — تجزئة فاخرة في childrensalon.com وvogacloset.com، وأنظمة مصرفية في Oschadbank. مقيم في بلجيكا، ولغة العمل الإنجليزية.",
-                    "8+ años construyendo e-commerce y aplicaciones web empresariales — retail de lujo en childrensalon.com y vogacloset.com, sistemas bancarios en Oschadbank. Residente en Bélgica, idioma de trabajo inglés.",
+                    // "at childrensalon.com" / "at Oschadbank" read as places of
+                    // employment. They were clients, reached through E-Consulting
+                    // and Ronis BT, and a reference check would say so. "for"
+                    // keeps the names — which are the whole proof of scale —
+                    // without claiming a payroll he was never on.
+                    "8+ years building e-commerce and enterprise web applications — luxury retail for childrensalon.com and vogacloset.com, banking systems for Oschadbank. Based in Belgium, working in English.",
+                    "8+ jaar e-commerce en enterprise-webapplicaties gebouwd — luxe retail voor childrensalon.com en vogacloset.com, banksystemen voor Oschadbank. Gevestigd in België, werktaal Engels.",
+                    "أكثر من 8 سنوات في بناء تطبيقات التجارة الإلكترونية وتطبيقات المؤسسات — تجزئة فاخرة لـ childrensalon.com وvogacloset.com، وأنظمة مصرفية لـ Oschadbank. مقيم في بلجيكا، ولغة العمل الإنجليزية.",
+                    "8+ años construyendo e-commerce y aplicaciones web empresariales — retail de lujo para childrensalon.com y vogacloset.com, sistemas bancarios para Oschadbank. Residente en Bélgica, idioma de trabajo inglés.",
                   )}
             </p>
 

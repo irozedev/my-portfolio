@@ -237,11 +237,16 @@ export function experienceCopy(L: Lang) {
       period: L("May 2019 — Sep 2022", "mei 2019 — sep 2022", "مايو 2019 — سبتمبر 2022", "may 2019 — sep 2022"),
       location: `${kharkiv} (${L("hybrid", "hybride", "هجين", "híbrido")})`,
       type: fullTime,
+      // "Core team member on childrensalon.com" could be read as a job at
+      // Childrensalon itself. It was agency work: the employer is Ronis BT,
+      // in the company field right above this, and these two were its client
+      // accounts. Saying so costs one word and survives a reference check —
+      // and the brand names, which are what prove the scale, stay.
       description: L(
-        "Core team member on childrensalon.com — one of the world's largest luxury children's fashion retailers — and vogacloset.com (MENA fashion marketplace). Rewrote the Product Detail Page front-end during a Magento 1.9 → custom Symfony re-platforming.",
-        "Kernteamlid bij childrensalon.com — een van de grootste luxe kinderkledingretailers ter wereld — en vogacloset.com (MENA-fashionmarktplaats). De front-end van de productdetailpagina herschreven tijdens een re-platforming van Magento 1.9 naar custom Symfony.",
-        "عضو في الفريق الأساسي لـ childrensalon.com — أحد أكبر متاجر أزياء الأطفال الفاخرة في العالم — وvogacloset.com (سوق أزياء في الشرق الأوسط وشمال أفريقيا). أعدت كتابة واجهة صفحة تفاصيل المنتج خلال الانتقال من Magento 1.9 إلى Symfony مخصّص.",
-        "Miembro del equipo principal de childrensalon.com — uno de los mayores minoristas de moda infantil de lujo del mundo — y vogacloset.com (marketplace de moda MENA). Reescribí el front-end de la ficha de producto durante la migración de Magento 1.9 a Symfony a medida.",
+        "Core front-end team member on two client accounts: childrensalon.com — one of the world's largest luxury children's fashion retailers — and vogacloset.com (MENA fashion marketplace). Rewrote the Product Detail Page front-end during a Magento 1.9 → custom Symfony re-platforming.",
+        "Kernlid van het front-endteam op twee klantaccounts: childrensalon.com — een van de grootste luxe kinderkledingretailers ter wereld — en vogacloset.com (MENA-fashionmarktplaats). De front-end van de productdetailpagina herschreven tijdens een re-platforming van Magento 1.9 naar custom Symfony.",
+        "عضو أساسي في فريق الواجهات على حسابَي عميلين: childrensalon.com — أحد أكبر متاجر أزياء الأطفال الفاخرة في العالم — وvogacloset.com (سوق أزياء في الشرق الأوسط وشمال أفريقيا). أعدت كتابة واجهة صفحة تفاصيل المنتج خلال الانتقال من Magento 1.9 إلى Symfony مخصّص.",
+        "Miembro del equipo front-end en dos cuentas de cliente: childrensalon.com — uno de los mayores minoristas de moda infantil de lujo del mundo — y vogacloset.com (marketplace de moda MENA). Reescribí el front-end de la ficha de producto durante la migración de Magento 1.9 a Symfony a medida.",
       ),
       achievements: [
         L(

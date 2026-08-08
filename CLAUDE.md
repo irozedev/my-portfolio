@@ -173,6 +173,12 @@ Two layers, keep them consistent:
 - Real clients (Experience only, per NDA): childrensalon.com, vogacloset.com
   (luxury e-commerce), Oschadbank (banking CRM). **Never** put employer/client
   work in the public Projects gallery — only owned projects there.
+- **Those three are clients, not employers.** The employers are **Ronis BT**
+  (childrensalon.com, vogacloset.com) and **E-Consulting** (Oschadbank). Copy
+  must say "**for** Oschadbank", never "**at** Oschadbank" — `at` names a
+  payroll and a reference check would contradict it. Keep the brand names
+  regardless: they are what turns "8 years" into a verifiable scale. The same
+  applies in every language (nl `voor`, es `para`, ar `لـ`).
 - **Employment timeline (corrected 2026-08-04 — the site had it wrong):**
   E-Consulting ran to **Dec 2024**, not Jan 2024. Since **Jun 2025** he is
   *Eerste keukenhulp* at **Albron / Center Parcs** in Lommel on a permanent

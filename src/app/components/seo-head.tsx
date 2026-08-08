@@ -12,7 +12,7 @@ const seoData: Record<string, { title: string; description: string; keywords: st
   // They used to differ ("… in Belgium — React…" vs "… — React… | Belgium").
   en: {
     title: "Stepan Roze | Front-End / JavaScript Developer in Belgium — React, TypeScript, Next.js",
-    description: "Front-End / JavaScript developer, 8+ years — e-commerce at childrensalon.com and vogacloset.com, banking systems at Oschadbank. React, Vue, Next.js, TypeScript. Living in Belgium with a permanent contract, no sponsorship needed. Open to front-end roles in Flanders, the Netherlands or remote.",
+    description: "Front-End / JavaScript developer, 8+ years — e-commerce for childrensalon.com and vogacloset.com, banking CRM for Oschadbank. React, Vue, Next.js, TypeScript. Living in Belgium with a permanent contract, no sponsorship needed. Open to front-end roles in Flanders, the Netherlands or remote.",
     keywords: "Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Front-end developer Belgium, React developer Flanders, JavaScript developer Netherlands, Knockout.js, Node.js",
   },
   nl: {
