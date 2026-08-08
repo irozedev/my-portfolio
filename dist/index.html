@@ -189,6 +189,14 @@
     </script>
     
     <!-- Professional Service Schema -->
+    <!--
+      The GeoCoordinates below are Antwerp (51.2194 / 4.4025) while the
+      PostalAddress is Lommel, and that split is deliberate - the same one the
+      geo.region / geo.placename meta tags make. Lommel is where Stepan lives,
+      so it is what an address may claim; Antwerp is the market he is working
+      towards, which is what geo signals. Do not "correct" the coordinates to
+      match the address.
+    -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -270,35 +278,57 @@
       are gone from it too.
     -->
 
-    <!-- Breadcrumb Schema -->
+    <!--
+      Section list for the one page this site is.
+
+      This used to be a BreadcrumbList, and it is what Google rendered as
+      "roze.live > Projecten > Over Mij > Contact" under the search result:
+      Dutch labels hardcoded onto a page served in English, because the block
+      never varied by language.
+
+      It was also the wrong type. A BreadcrumbList describes a *path* through a
+      hierarchy, and every "item" here was a fragment URL. Google strips
+      everything after "#", so all four entries collapsed to
+      https://roze.live/ - four names for one page, not a trail.
+
+      ItemList is what this actually is: the sections of a single page, in the
+      order the default (CV) view renders them. The anchors are real ids in
+      main-page.tsx. Note #services and #how-i-work are deliberately absent -
+      they only exist in client mode, and the default view is the CV.
+
+      Real sitelinks cannot be produced from here in any case. They need
+      separate crawlable URLs, which a hash-routed single page does not have.
+    -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
+      "@type": "ItemList",
+      "name": "Sections",
+      "itemListOrder": "https://schema.org/ItemListOrderAscending",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "Home",
-          "item": "https://roze.live/"
+          "name": "About",
+          "url": "https://roze.live/#about"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Projecten",
-          "item": "https://roze.live/#projects"
+          "name": "Experience",
+          "url": "https://roze.live/#experience"
         },
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Over Mij",
-          "item": "https://roze.live/#about"
+          "name": "Projects",
+          "url": "https://roze.live/#projects"
         },
         {
           "@type": "ListItem",
           "position": 4,
           "name": "Contact",
-          "item": "https://roze.live/#contact"
+          "url": "https://roze.live/#contact"
         }
       ]
     }
