@@ -199,6 +199,14 @@ Two layers, keep them consistent:
 - Belgium; a **bijberoep** (secondary self-employment) was considered but is not
   registered. Do not state it as fact anywhere in the copy. Small-business
   **VAT franchise** (no VAT charged under ~€25k/yr) would apply if it happens.
+- **No self-assigned grades in job titles.** "Middle", "Junior → Middle" and
+  "Senior" are all out of `data/experience.ts`. In Belgium the employer sets the
+  grade after the interview, so one you award yourself can only cap an offer,
+  and on a page that gets scanned rather than read, the lowest word on it wins.
+  "Senior Front-End Developer" lives in the **keywords** instead — recruiters do
+  filter on it, and a search term is not a claim about a role. Putting it on the
+  self-employed entry would also be the one place he outranks himself where
+  nobody could contradict it, next to two employer roles carrying no grade.
 - **English is the working language; Dutch is weaker than English.** Never claim
   fluent Dutch in copy or structured data.
 - Email **rozedev095@gmail.com** (single canonical email). GitHub **@irozedev**.
