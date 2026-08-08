@@ -4,9 +4,15 @@ import { useLanguage } from "../contexts/language-context";
 const SITE_URL = "https://roze.live";
 
 const seoData: Record<string, { title: string; description: string; keywords: string }> = {
+  // The English entry must stay byte-identical to the <title> and
+  // <meta name="description"> in index.html. Googlebot indexes a SPA in two
+  // passes: the static HTML first, then the JS-rendered DOM from a slower
+  // queue. When the two passes disagree, the copy that finally lands in the
+  // index is whichever pass ran last — so the two have to say the same thing.
+  // They used to differ ("… in Belgium — React…" vs "… — React… | Belgium").
   en: {
-    title: "Stepan Roze | Front-End & JavaScript Developer — React, TypeScript, Next.js | Belgium",
-    description: "Front-End / JavaScript Developer with 8+ years of commercial experience building e-commerce and enterprise web apps (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js & Magento. Living in Belgium on a permanent contract — no sponsorship needed. Open to front-end roles in Flanders, the Netherlands or remote.",
+    title: "Stepan Roze | Front-End / JavaScript Developer in Belgium — React, TypeScript, Next.js",
+    description: "Front-End / JavaScript developer, 8+ years — e-commerce at childrensalon.com and vogacloset.com, banking systems at Oschadbank. React, Vue, Next.js, TypeScript. Living in Belgium with a permanent contract, no sponsorship needed. Open to front-end roles in Flanders, the Netherlands or remote.",
     keywords: "Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Front-end developer Belgium, React developer Flanders, JavaScript developer Netherlands, Knockout.js, Node.js",
   },
   nl: {
