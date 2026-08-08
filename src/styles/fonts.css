@@ -49,6 +49,19 @@ p:not([class*="max-w"]) {
   max-width: 72ch;
 }
 
+/* ...but the measure caps the BOX, and `text-align: center` only centres text
+   INSIDE that box. A centred paragraph wider than 72ch therefore rendered as a
+   772px box pinned to the left edge of a much wider parent, with its text
+   neatly centred inside it — which reads as "the text is off to the left".
+   Two places hit this: "Built with React, TypeScript & Motion" in the footer
+   (186px off) and the disclaimer under the contact form (105px off).
+
+   Centring the box as well is what the markup already asked for by putting
+   `text-center` on the parent. */
+:is(.text-center, [class*="text-center"]) > p:not([class*="max-w"]) {
+  margin-inline: auto;
+}
+
 code, pre, .font-mono {
   font-feature-settings: "liga" 0;
 }

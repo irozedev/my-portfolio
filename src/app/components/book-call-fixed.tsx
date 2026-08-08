@@ -241,7 +241,13 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
             aria-modal="true"
             aria-labelledby="book-call-title"
             tabIndex={-1}
-            className="bg-[var(--bg-primary)] border-t-2 sm:border-2 border-[#00d9ff]/30 rounded-t-3xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90dvh] overflow-hidden shadow-[0_0_24px_rgba(0,217,255,0.15)] flex flex-col"
+            /* Width grows with the screen instead of sitting at a fixed 512px.
+               `sm:max-w-lg` alone meant the dialog was 512px from a 768px
+               tablet all the way up to a 2560px display, where it covered 20%
+               of the screen while its own content — a 14-date grid and a
+               12-slot time grid — had to scroll. The `calc` keeps a margin so
+               the sheet never touches the edges once it is a floating card. */
+            className="bg-[var(--bg-primary)] border-t-2 sm:border-2 border-[#00d9ff]/30 rounded-t-3xl sm:rounded-2xl w-full sm:w-[calc(100%-3rem)] sm:max-w-xl md:max-w-2xl xl:max-w-3xl max-h-[90dvh] overflow-hidden shadow-[0_0_24px_rgba(0,217,255,0.15)] flex flex-col"
             initial={{ y: "100%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
@@ -299,7 +305,9 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                       <span className="text-xs text-[var(--text-muted)] font-mono">{t.weekdaysOnly}</span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2.5">
+                    {/* 14 dates. Two columns is seven rows and guaranteed
+                        scrolling; the extra width above buys real columns. */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
                       {availableDates().map((date) => {
                         const isSelected = selectedDate?.getTime() === date.getTime();
                         const dayName = format(date, "EEE");
@@ -367,7 +375,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                       <p className="text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">
                         {t.morning}
                       </p>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
                         {morningSlots.map((time) => (
                           <motion.button
                             key={time}
@@ -391,7 +399,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                       <p className="text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">
                         {t.afternoon}
                       </p>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
                         {afternoonSlots.map((time) => (
                           <motion.button
                             key={time}

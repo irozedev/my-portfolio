@@ -249,6 +249,20 @@ export function ServicesCreativeSlider() {
   // Scroll extent, not slide index, drives the arrows — see the comment on
   // `step` below.
   const [edges, setEdges] = useState({ atStart: true, atEnd: false });
+
+  // Scroll STOPS, which is what the dots actually address.
+  //
+  // The dots used to be one-per-card with "whichever card is nearest the track
+  // centre" as the active one. That model only holds when a single card fills
+  // the track. With three visible, the first and last card can never reach the
+  // centre, so two of the six dots were permanently unreachable: clicking dot 6
+  // left the counter reading "5 / 6", and at scrollLeft 0 the counter already
+  // claimed "2 / 6" because card 2 is what sits in the middle.
+  //
+  // A track showing `perView` of `n` cards has `n - perView + 1` stops, which
+  // is exactly the range the arrows already step through. Deriving the dots
+  // from the same number keeps the two controls telling one story.
+  const [pager, setPager] = useState({ page: 0, pages: 1, stepWidth: 0 });
   const { t, language } = useLanguage();
   const [isProcessingClick, setIsProcessingClick] = useState(false);
 
@@ -322,6 +336,21 @@ export function ServicesCreativeSlider() {
       const offset = Math.abs(track.scrollLeft);
       const max = track.scrollWidth - track.clientWidth;
       setEdges({ atStart: offset <= 1, atEnd: offset >= max - 1 });
+
+      // Pager: measured, not assumed, because how many cards fit is decided by
+      // the CSS flex-basis at the current breakpoint, not by JS.
+      const first = track.children[0] as HTMLElement | undefined;
+      if (first) {
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        const stepWidth = first.offsetWidth + gap;
+        const perView = Math.max(1, Math.round((track.clientWidth + gap) / stepWidth));
+        const pages = Math.max(1, track.children.length - perView + 1);
+        // Snap to the nearest stop, but never report a page past the last one:
+        // the final stop is the scroll extent, which can be short of a whole
+        // card width.
+        const page = max <= 0 ? 0 : Math.min(pages - 1, Math.round(offset / stepWidth));
+        setPager({ page, pages, stepWidth });
+      }
     };
 
     const onScroll = () => {
@@ -344,6 +373,15 @@ export function ServicesCreativeSlider() {
   // "nearest to centre" index tops out at 4 of 6. Index-based arrows therefore
   // stayed enabled but stopped moving anything. Stepping by one card width and
   // gating on the scroll extent behaves correctly at both ends.
+  // Jump to a scroll stop. Uses the same measured step width as the pager, so
+  // a dot always lands exactly where the arrows would have left the track.
+  const goToPage = useCallback((page: number) => {
+    const track = trackRef.current;
+    if (!track || !pager.stepWidth) return;
+    const rtl = getComputedStyle(track).direction === "rtl";
+    track.scrollTo({ left: (rtl ? -1 : 1) * page * pager.stepWidth, behavior: "smooth" });
+  }, [pager.stepWidth]);
+
   const step = useCallback((direction: 1 | -1) => {
     const track = trackRef.current;
     const card = track?.children[0] as HTMLElement | undefined;
@@ -360,38 +398,19 @@ export function ServicesCreativeSlider() {
   // The only way to move the carousel with a mouse was to hit an arrow.
   // ---------------------------------------------------------------------
 
-  // Vertical wheel → horizontal scroll.
+  // There is deliberately NO vertical-wheel-to-horizontal handler here.
   //
-  // Registered natively rather than via onWheel because React attaches its
-  // listeners passively and preventDefault() is a no-op there.
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const onWheel = (e: WheelEvent) => {
-      // A trackpad sends real horizontal deltas; the browser already handles
-      // those correctly, so only translate a dominantly-vertical wheel.
-      if (Math.abs(e.deltaX) >= Math.abs(e.deltaY) || e.deltaY === 0) return;
-
-      const max = track.scrollWidth - track.clientWidth;
-      if (max <= 0) return;
-
-      // RTL runs scrollLeft from 0 down to -max.
-      const rtl = getComputedStyle(track).direction === "rtl";
-      const travelled = Math.abs(track.scrollLeft);
-      const forward = e.deltaY > 0;
-
-      // Hand the gesture back to the page at either end instead of trapping
-      // the pointer in a carousel the user has already scrolled through.
-      if ((!forward && travelled <= 0) || (forward && travelled >= max - 1)) return;
-
-      e.preventDefault();
-      track.scrollLeft += (rtl ? -1 : 1) * e.deltaY;
-    };
-
-    track.addEventListener("wheel", onWheel, { passive: false });
-    return () => track.removeEventListener("wheel", onWheel);
-  }, []);
+  // There used to be one: a non-passive `wheel` listener that called
+  // preventDefault() and turned deltaY into scrollLeft, so a mouse could move
+  // the carousel. It released the gesture at either end of the track, which
+  // sounds polite and is not: on the way down the page the pointer crosses
+  // this section, the page stops dead, and you have to scroll through six
+  // cards before the page moves again. Hijacking the reader's primary axis to
+  // drive a secondary one is a scroll trap, whatever the escape hatch.
+  //
+  // A mouse still has arrows, dots, keyboard and drag, and the browser already
+  // maps Shift+wheel to horizontal scroll on an overflow container for free.
+  // Trackpads send real deltaX, which never needed translating.
 
   // Click-and-drag with a mouse.
   //
@@ -412,7 +431,24 @@ export function ServicesCreativeSlider() {
       startScroll: track.scrollLeft,
       moved: 0,
     };
-    setIsDragging(true);
+    // Snapping off IMMEDIATELY, as an inline style rather than through the
+    // `is-dragging` class. scroll-snap also governs programmatic scrollLeft
+    // writes, so with it on, every write in handlePointerMove is snapped
+    // straight back and the track does not move at all. A class cannot do this
+    // job: setState only lands on the next render, and the first moves of the
+    // gesture happen before that.
+    track.style.scrollSnapType = "none";
+
+    // NOT setIsDragging(true) here. `.services-track.is-dragging *` sets
+    // pointer-events: none on every descendant, and flipping that on mousedown
+    // broke every card click on the section: by the time the button came back
+    // up, hit-testing could no longer see the card, so the browser targeted the
+    // track instead and the card's onClick — the one that opens the chat with
+    // the service filled in — never ran. Nothing looked broken; the click just
+    // went nowhere.
+    //
+    // Dragging state now begins when the pointer has actually travelled far
+    // enough to be a drag, in handlePointerMove below.
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -420,6 +456,9 @@ export function ServicesCreativeSlider() {
     if (!dragRef.current.active || !track) return;
     const dx = e.clientX - dragRef.current.startX;
     dragRef.current.moved = Math.max(dragRef.current.moved, Math.abs(dx));
+    // Past the threshold this is a drag, not a click: kill text selection and
+    // snapping, and stop descendants from swallowing the gesture.
+    if (dragRef.current.moved > DRAG_THRESHOLD) setIsDragging(true);
     track.scrollLeft = dragRef.current.startScroll - dx;
   };
 
@@ -427,8 +466,20 @@ export function ServicesCreativeSlider() {
     if (!dragRef.current.active) return;
     dragRef.current.active = false;
     setIsDragging(false);
-    // Land on a card rather than wherever the mouse happened to stop.
-    if (dragRef.current.moved > DRAG_THRESHOLD) scrollToIndex(currentSlide);
+    if (trackRef.current) trackRef.current.style.scrollSnapType = "";
+    if (dragRef.current.moved <= DRAG_THRESHOLD) return;
+
+    // Land on the nearest scroll stop, not on `scrollToIndex(currentSlide)`.
+    // Centring the "nearest card to the middle" undoes the gesture whenever
+    // more than one card is visible: with three on screen, dragging 200px does
+    // not change which card is nearest the centre, so the track sprang back to
+    // exactly where it started and dragging looked broken. Snapping to a stop
+    // is also what the arrows and the dots do, so all three agree.
+    const track = trackRef.current;
+    if (!track || !pager.stepWidth) return;
+    const offset = Math.abs(track.scrollLeft);
+    const page = Math.max(0, Math.min(pager.pages - 1, Math.round(offset / pager.stepWidth)));
+    goToPage(page);
   };
 
   // Arrow keys move the carousel, but ONLY while it has focus. The old global
@@ -842,16 +893,20 @@ export function ServicesCreativeSlider() {
             viewport={VIEWPORT}
             className="text-center mt-8 space-y-3 px-4"
           >
+            {/* One dot per scroll stop, not per card. On mobile a stop IS a
+                card, so this still renders six; on desktop, where three are
+                visible at once, it renders four — the four positions the
+                arrows already move between. */}
             <div className="flex items-center justify-center gap-2">
-              {services.map((service, index) => (
+              {Array.from({ length: pager.pages }, (_, index) => (
                 <button
-                  key={service.id}
+                  key={index}
                   type="button"
-                  onClick={() => scrollToIndex(index)}
-                  aria-label={copy[service.key as keyof typeof copy].title}
-                  aria-current={currentSlide === index}
+                  onClick={() => goToPage(index)}
+                  aria-label={copy[services[index].key as keyof typeof copy].title}
+                  aria-current={pager.page === index}
                   className={`h-2 rounded-full transition-all duration-300 ${
-                    currentSlide === index
+                    pager.page === index
                       ? "w-6 bg-[var(--accent-primary)]"
                       : "w-2 bg-[var(--text-muted)]/35 hover:bg-[var(--accent-primary)]/60"
                   }`}
@@ -860,7 +915,7 @@ export function ServicesCreativeSlider() {
             </div>
 
             <p className="text-sm text-[var(--text-muted)]" aria-live="polite">
-              {currentSlide + 1} / {services.length}
+              {pager.page + 1} / {pager.pages}
             </p>
 
             <div className="hidden sm:flex items-center justify-center gap-2 text-xs text-[var(--text-muted)]">

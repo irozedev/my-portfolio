@@ -332,3 +332,45 @@ img {
  *   - footer: the `max-w-7xl` shell stretched to 1878px, putting the
  *     copyright 777px left of centre.
  */
+
+/*
+ * PAGE SHELL — one width for every section.
+ *
+ * Removing the rule above restored the Tailwind caps, and that exposed two
+ * things the caps had been hiding.
+ *
+ * 1. The sections disagree. Half are `max-w-6xl` (1152px) and half
+ *    `max-w-7xl` (1280px), so section edges stepped in and out by 64px per
+ *    side as you scrolled. Nothing chose that; it accumulated.
+ * 2. Neither cap grows. On a 2560px display the content sat at 1152-1280px
+ *    with ~700px of dead margin on each side — over half the screen empty,
+ *    which reads as the page being squashed into a column.
+ *
+ * So: one shell width, and let it breathe on large displays. Paragraphs keep
+ * their own 72ch measure from fonts.css, so widening the shell widens grids
+ * and layout, not lines of text — line length stays readable.
+ *
+ * Scoped to shells that are DIRECT children of a section or the footer. That
+ * is the deliberate difference from the deleted rule: it cannot reach a card,
+ * a modal or a paragraph, only the page-level column. `:is(section, footer)`
+ * carries the specificity of `section`, so this beats `.max-w-6xl` without
+ * !important.
+ */
+:is(section, footer) > .container,
+#hero > .max-w-6xl {
+  max-width: 80rem; /* 1280px — the wider of the two former caps */
+}
+
+@media (min-width: 1600px) {
+  :is(section, footer) > .container,
+  #hero > .max-w-6xl {
+    max-width: 88rem; /* 1408px */
+  }
+}
+
+@media (min-width: 1920px) {
+  :is(section, footer) > .container,
+  #hero > .max-w-6xl {
+    max-width: 96rem; /* 1536px */
+  }
+}
