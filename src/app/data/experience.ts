@@ -178,7 +178,16 @@ export function experienceCopy(L: Lang) {
       ],
     },
     2: {
-      title: L("Middle JavaScript Developer", "Middle JavaScript-ontwikkelaar", "مطوّر JavaScript متوسط", "Desarrollador JavaScript Middle"),
+      // The grade is gone from the title on purpose. In Belgium the employer
+      // assigns a grade after the interview, so a self-declared one can only
+      // cap the offer, never raise it — "Middle" was arguing against its own
+      // CV. What replaces it is the keyword recruiters actually search on.
+      title: L(
+        "JavaScript Developer — Dynamics 365 / CRM",
+        "JavaScript-ontwikkelaar — Dynamics 365 / CRM",
+        "مطوّر JavaScript — Dynamics 365 / CRM",
+        "Desarrollador JavaScript — Dynamics 365 / CRM",
+      ),
       period: L("Oct 2022 — Dec 2024", "okt 2022 — dec 2024", "أكتوبر 2022 — ديسمبر 2024", "oct 2022 — dic 2024"),
       location: `${remote}, ${L("Ukraine", "Oekraïne", "أوكرانيا", "Ucrania")}`,
       type: fullTime,
@@ -216,11 +225,14 @@ export function experienceCopy(L: Lang) {
       ],
     },
     3: {
+      // Same reason as role 2: the ladder is dropped. "Junior → Middle" told a
+      // growth story to a reader who is only scanning for the highest grade on
+      // the page, and the lowest word wins that scan.
       title: L(
-        "Front-End Developer (Junior → Middle)",
-        "Front-end-ontwikkelaar (Junior → Middle)",
-        "مطوّر واجهات (مبتدئ → متوسط)",
-        "Desarrollador Front-End (Junior → Middle)",
+        "Front-End Developer — E-commerce",
+        "Front-end-ontwikkelaar — E-commerce",
+        "مطوّر واجهات — التجارة الإلكترونية",
+        "Desarrollador Front-End — E-commerce",
       ),
       period: L("May 2019 — Sep 2022", "mei 2019 — sep 2022", "مايو 2019 — سبتمبر 2022", "may 2019 — sep 2022"),
       location: `${kharkiv} (${L("hybrid", "hybride", "هجين", "híbrido")})`,
