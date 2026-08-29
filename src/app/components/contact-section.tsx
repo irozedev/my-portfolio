@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Mail, Linkedin, Github, Briefcase, Send, CheckCircle2, Clock, MessageSquare, Sparkles } from "lucide-react";
+import { Mail, Linkedin, Github, Briefcase, Send, CheckCircle2, Clock, MessageSquare, MessageCircle, Sparkles } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { useViewMode } from "../contexts/view-mode-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
@@ -20,6 +20,16 @@ const Button = ({ className, children, ...props }: React.ButtonHTMLAttributes<HT
   <button className={className} {...props}>{children}</button>
 );
 
+/**
+ * Digits only, country code included, no + or spaces — that is the format
+ * wa.me wants. Leave it empty and the WhatsApp card is simply not rendered,
+ * so a half-filled number can never ship as a dead link.
+ *
+ * Worth having: WhatsApp is how business is contacted in the Netherlands and
+ * Flanders (13.8M users, ~90% of internet users) where a contact form is not.
+ */
+const WHATSAPP_NUMBER = "32469631424";
+
 const contactLinks = [
   {
     icon: Mail,
@@ -28,6 +38,16 @@ const contactLinks = [
     href: "mailto:rozedev095@gmail.com",
     color: "#00d9ff",
   },
+  ...(WHATSAPP_NUMBER
+    ? [{
+        icon: MessageCircle,
+        key: 'whatsapp',
+        value: "+32 469 63 14 24",
+        href: `https://wa.me/${WHATSAPP_NUMBER}`,
+        label: "WhatsApp",
+        color: "#25d366",
+      }]
+    : []),
   {
     icon: Linkedin,
     key: 'linkedin',

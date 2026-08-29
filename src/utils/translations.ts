@@ -217,6 +217,10 @@ export const translations = {
           label: 'LinkedIn',
           description: 'Professional networking'
         },
+        whatsapp: {
+          label: 'WhatsApp',
+          description: 'Fastest way to reach me'
+        },
         github: {
           label: 'GitHub',
           description: 'Check out my code'
@@ -514,6 +518,10 @@ export const translations = {
         linkedin: {
           label: 'LinkedIn',
           description: 'Professioneel netwerken'
+        },
+        whatsapp: {
+          label: 'WhatsApp',
+          description: 'Snelste manier om mij te bereiken'
         },
         github: {
           label: 'GitHub',
@@ -824,6 +832,10 @@ export const translations = {
         linkedin: {
           label: 'LinkedIn',
           description: 'الشبكات المهنية'
+        },
+        whatsapp: {
+          label: 'WhatsApp',
+          description: 'أسرع طريقة للتواصل معي'
         },
         github: {
           label: 'GitHub',
@@ -1142,6 +1154,10 @@ export const translations = {
         linkedin: {
           label: 'LinkedIn',
           description: 'Networking profesional'
+        },
+        whatsapp: {
+          label: 'WhatsApp',
+          description: 'La forma más rápida de contactarme'
         },
         github: {
           label: 'GitHub',
