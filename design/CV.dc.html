@@ -7,148 +7,239 @@
 <body>
 <x-dc>
 <helmet>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500;75..125,700;75..125,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <style>
     body { margin: 0; }
     a { color: #00d9ff; text-decoration: none; }
     a:hover { color: #00eeff; }
     .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
-    .role-h { font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 21px; margin: 0 0 4px; letter-spacing: -0.015em; }
-    .role-m { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #a3a3a3; letter-spacing: 0.05em; }
-    .bullet { color: #d4d4d4; font-size: 15px; margin: 0 0 8px; padding-left: 18px; position: relative; }
+    .disp { font-family: 'Archivo', 'Arial Narrow', sans-serif; font-variation-settings: 'wdth' 88; }
+    .idx { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #4d5561; }
+    .card { border: 1px solid rgba(255,255,255,0.10); background: #0d0e10; padding: 26px 28px; }
+    .role-h { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 21px; margin: 0 0 5px; letter-spacing: -0.02em; }
+    .role-m { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #7d8590; letter-spacing: 0.04em; }
+    .bullet { color: #b9bec6; font-size: 15px; margin: 0 0 8px; padding-left: 17px; position: relative; line-height: 1.55; }
+    .dotm { position: absolute; left: 0; color: #00d9ff; }
+    .dot { width: 46px; height: 46px; border-radius: 50%; border: 2px solid #00d9ff; background: #070708; display: flex; align-items: center; justify-content: center; }
   </style>
 </helmet>
 
-<div style="width: 1440px; background: #0a0a0a; color: #ffffff; font-family: 'Instrument Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.55;">
+<div style="width: 1440px; background: #070708; color: #ffffff; font-family: 'Instrument Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.55;">
 
-  <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px 72px; border-bottom: 1px solid rgba(255,255,255,0.10);">
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00d9ff" stroke-width="1.6"><path d="M12 3l7.5 4.5v9L12 21l-7.5-4.5v-9z"/></svg>
-      <span style="font-family: 'Archivo', sans-serif; font-weight: 700; letter-spacing: -0.01em;">Stepan Roze</span>
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 56px; border-bottom: 1px solid rgba(255,255,255,0.09);">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span class="disp" style="font-weight: 800; font-size: 19px; letter-spacing: -0.02em;">ROZE</span>
+      <span class="mono" style="font-size: 11px; color: #4d5561; letter-spacing: 0.14em;">CV</span>
     </div>
-    <div style="display: flex; align-items: center; gap: 32px; font-size: 14px; color: #d4d4d4;">
-      <span>Experience</span><span>Skills</span><span>Work</span><span>Contact</span>
-      <div style="display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; padding: 4px;">
-        <span style="padding: 5px 13px; font-size: 13px; color: #a3a3a3;">Hire me</span>
-        <span style="background: #ffffff; color: #0a0a0a; border-radius: 999px; padding: 5px 13px; font-weight: 600; font-size: 13px;">CV</span>
+    <div style="display: flex; align-items: center; gap: 30px; font-size: 14px; color: #b9bec6;">
+      <span>Ervaring</span><span>Vaardigheden</span><span>Werk</span><span>Contact</span>
+      <div style="display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.13); border-radius: 3px; overflow: hidden; margin-right: 4px;">
+        <span class="mono" style="padding: 7px 11px; font-size: 12px; background: rgba(255,255,255,0.09); color: #ffffff;">NL</span>
+        <span class="mono" style="padding: 7px 11px; font-size: 12px; color: #7d8590;">EN</span>
+      </div>
+      <div style="display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.13); border-radius: 3px; overflow: hidden;">
+        <span style="padding: 7px 15px; font-size: 13px; color: #7d8590;">Opdracht</span>
+        <span style="background: #00d9ff; color: #070708; padding: 7px 15px; font-weight: 600; font-size: 13px;">CV</span>
       </div>
     </div>
   </div>
 
-  <!-- hero speaks to a hiring manager, not a buyer -->
-  <div style="padding: 88px 72px 64px; display: grid; grid-template-columns: 1.5fr 1fr; gap: 72px; align-items: start;">
+  <!-- hero for a hiring manager -->
+  <div style="padding: 76px 56px 60px; display: grid; grid-template-columns: 92px 1.55fr 1fr; gap: 0 48px; align-items: start;">
+    <div style="padding-top: 12px;"><div class="idx">001</div></div>
     <div>
-      <div class="mono" style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #00d9ff; margin-bottom: 26px;">Front-end / JavaScript · Belgium</div>
-      <h1 style="font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 64px; line-height: 1.04; letter-spacing: -0.035em; margin: 0 0 26px; max-width: 18ch; text-wrap: balance;">Eight years of shipping interfaces that hold up in production.</h1>
-      <p style="font-size: 19px; line-height: 1.5; color: #d4d4d4; max-width: 58ch; margin: 0 0 36px;">React, TypeScript, Next.js and Vue — from luxury retail platforms at scale to a banking CRM, and one commercial product taken end to end on my own.</p>
+      <div class="mono" style="font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #00d9ff; margin-bottom: 24px;">Front-end · JavaScript · België</div>
+      <h1 class="disp" style="font-weight: 800; font-size: 78px; line-height: 0.94; letter-spacing: -0.04em; margin: 0 0 26px; text-transform: uppercase;">Acht jaar<br>interfaces die<br><span style="color: #00d9ff;">het houden.</span></h1>
+      <p style="font-size: 19px; line-height: 1.5; color: #b9bec6; max-width: 56ch; margin: 0 0 34px;">React, TypeScript, Next.js en Vue. Van luxe retailplatformen op schaal en een CRM voor een nationale bank, tot één commercieel product dat ik alleen van idee tot betalende klant heb gebracht.</p>
       <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <span style="background: #00d9ff; color: #0a0a0a; font-weight: 600; padding: 14px 26px; border-radius: 10px;">Download CV (PDF)</span>
-        <span style="border: 1px solid rgba(255,255,255,0.18); padding: 14px 26px; border-radius: 10px;">Get in touch</span>
+        <span style="background: #00d9ff; color: #070708; font-weight: 600; padding: 15px 28px; border-radius: 3px;">Download CV als PDF</span>
+        <span style="border: 1px solid rgba(255,255,255,0.16); padding: 15px 28px; border-radius: 3px;">Neem contact op</span>
       </div>
     </div>
-    <div style="border: 1px solid rgba(255,255,255,0.10); border-radius: 14px; background: #141414; padding: 28px 30px;">
-      <div class="mono" style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #a3a3a3; margin-bottom: 18px;">At a glance</div>
-      <div style="display: flex; flex-direction: column; gap: 14px; font-size: 15px;">
-        <div style="display: flex; justify-content: space-between;"><span style="color: #a3a3a3;">Location</span><span>Lommel, Belgium</span></div>
-        <div style="display: flex; justify-content: space-between;"><span style="color: #a3a3a3;">Right to work</span><span>Yes — no sponsorship</span></div>
-        <div style="display: flex; justify-content: space-between;"><span style="color: #a3a3a3;">Languages</span><span>EN, NL, UK, RU</span></div>
-        <div style="display: flex; justify-content: space-between;"><span style="color: #a3a3a3;">Notice</span><span>[YOUR NOTICE PERIOD]</span></div>
-        <div style="display: flex; justify-content: space-between;"><span style="color: #a3a3a3;">AI in workflow</span><span>Daily, since 2022</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- experience: dates in a rail, achievements as sentences -->
-  <div style="padding: 24px 72px 0;">
-    <h2 style="font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 36px; letter-spacing: -0.025em; margin: 0 0 36px;">Experience</h2>
-
-    <div style="display: grid; grid-template-columns: 180px 1fr; gap: 0; border-top: 1px solid rgba(255,255,255,0.10);">
-      <div style="padding: 30px 24px 30px 0; border-right: 1px solid rgba(255,255,255,0.10);">
-        <div class="mono" style="font-size: 12px; color: #00d9ff;">2025 — now</div>
-        <div class="mono" style="font-size: 12px; color: #6b7280; margin-top: 4px;">Independent</div>
-      </div>
-      <div style="padding: 30px 0 30px 36px; border-bottom: 1px solid rgba(255,255,255,0.10);">
-        <h3 class="role-h">Web products, end to end</h3>
-        <div class="role-m" style="margin-bottom: 14px;">Design · build · launch · maintain</div>
-        <p class="bullet"><span style="position: absolute; left: 0; color: #00d9ff;">·</span>Launched marinek.store on Next.js 14 — a paid coaching product with three tiers and verified card payments.</p>
-        <p class="bullet"><span style="position: absolute; left: 0; color: #00d9ff;">·</span>Made the payment webhook idempotent against a four-day retry window, so a retried callback can no longer grant or charge twice.</p>
-        <p class="bullet" style="margin-bottom: 0;"><span style="position: absolute; left: 0; color: #00d9ff;">·</span>Replaced a shared invite link that let anyone into the paid area with one-time per-buyer access.</p>
-      </div>
-
-      <div style="padding: 30px 24px 30px 0; border-right: 1px solid rgba(255,255,255,0.10);">
-        <div class="mono" style="font-size: 12px; color: #00d9ff;">2022 — 2025</div>
-        <div class="mono" style="font-size: 12px; color: #6b7280; margin-top: 4px;">[COMPANY]</div>
-      </div>
-      <div style="padding: 30px 0 30px 36px; border-bottom: 1px solid rgba(255,255,255,0.10);">
-        <h3 class="role-h">Front-end developer</h3>
-        <div class="role-m" style="margin-bottom: 14px;">Luxury retail platforms at scale</div>
-        <p class="bullet"><span style="position: absolute; left: 0; color: #00d9ff;">·</span>Built and maintained storefront interfaces for childrensalon.com and vogacloset.com.</p>
-        <p class="bullet" style="margin-bottom: 0;"><span style="position: absolute; left: 0; color: #00d9ff;">·</span>[ONE MORE ACHIEVEMENT — a number if you have one.]</p>
-      </div>
-
-      <div style="padding: 30px 24px 30px 0; border-right: 1px solid rgba(255,255,255,0.10);">
-        <div class="mono" style="font-size: 12px; color: #00d9ff;">2015 — 2022</div>
-        <div class="mono" style="font-size: 12px; color: #6b7280; margin-top: 4px;">Oschadbank</div>
-      </div>
-      <div style="padding: 30px 0 30px 36px; border-bottom: 1px solid rgba(255,255,255,0.10);">
-        <h3 class="role-h">CRM web development</h3>
-        <div class="role-m" style="margin-bottom: 14px;">MS Dynamics 365 · Vue.js</div>
-        <p class="bullet"><span style="position: absolute; left: 0; color: #00d9ff;">·</span>Developed CRM web resources for a national bank on MS Dynamics 365.</p>
-        <p class="bullet" style="margin-bottom: 0;"><span style="position: absolute; left: 0; color: #00d9ff;">·</span>Built a Vue.js document-signing app with async requests and canvas-based signatures.</p>
+    <div class="card" style="padding: 26px 28px;">
+      <div class="mono" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #4d5561; margin-bottom: 18px;">In het kort</div>
+      <div style="display: flex; flex-direction: column; gap: 13px; font-size: 15px;">
+        <div style="display: flex; justify-content: space-between;"><span style="color: #7d8590;">Woonplaats</span><span>Lommel, België</span></div>
+        <div style="display: flex; justify-content: space-between;"><span style="color: #7d8590;">Werkvergunning</span><span>Ja, geen sponsoring</span></div>
+        <div style="display: flex; justify-content: space-between;"><span style="color: #7d8590;">Talen</span><span>EN · NL · UK · RU</span></div>
+        <div style="display: flex; justify-content: space-between;"><span style="color: #7d8590;">Beschikbaar</span><span>In overleg</span></div>
+        <div style="display: flex; justify-content: space-between;"><span style="color: #7d8590;">AI in workflow</span><span>Dagelijks, sinds 2022</span></div>
       </div>
     </div>
   </div>
 
-  <!-- skills: grouped, no progress bars -->
-  <div style="padding: 72px 72px 0;">
-    <h2 style="font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 36px; letter-spacing: -0.025em; margin: 0 0 32px;">Skills</h2>
-    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;">
-      <div style="border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; padding: 26px; background: #141414;">
-        <div class="mono" style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #00d9ff; margin-bottom: 16px;">Core</div>
-        <div style="color: #d4d4d4; font-size: 15px; line-height: 1.9;">TypeScript · JavaScript<br>React · Next.js · Vue<br>HTML · CSS · Tailwind</div>
-      </div>
-      <div style="border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; padding: 26px; background: #141414;">
-        <div class="mono" style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #00d9ff; margin-bottom: 16px;">Backend &amp; data</div>
-        <div style="color: #d4d4d4; font-size: 15px; line-height: 1.9;">Node · Serverless functions<br>Supabase · PostgreSQL<br>REST · webhooks · payments</div>
-      </div>
-      <div style="border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; padding: 26px; background: #141414;">
-        <div class="mono" style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #00d9ff; margin-bottom: 16px;">Practice</div>
-        <div style="color: #d4d4d4; font-size: 15px; line-height: 1.9;">Testing · code review<br>Accessibility · Core Web Vitals<br>AI-assisted workflow</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- education -->
-  <div style="padding: 64px 72px 0;">
-    <h2 style="font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 36px; letter-spacing: -0.025em; margin: 0 0 28px;">Education</h2>
-    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
-      <div style="border-left: 2px solid #00d9ff; padding: 4px 0 4px 22px;">
-        <h3 style="font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 18px; margin: 0 0 4px;">Computer Academy STEP</h3>
-        <div class="mono" style="font-size: 12px; color: #a3a3a3;">Software development · [YEARS]</div>
-      </div>
-      <div style="border-left: 2px solid rgba(255,255,255,0.14); padding: 4px 0 4px 22px;">
-        <h3 style="font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 18px; margin: 0 0 4px;">V. N. Karazin Kharkiv National University</h3>
-        <div class="mono" style="font-size: 12px; color: #a3a3a3;">[FIELD] · [YEARS]</div>
-      </div>
-    </div>
-  </div>
-
-  <div style="padding: 72px 72px 96px;">
-    <div style="border: 1px solid rgba(255,255,255,0.10); border-radius: 16px; padding: 48px 56px; display: flex; align-items: center; justify-content: space-between; gap: 56px; background: #141414;">
+  <!-- timeline: centre spine, cards alternating, year on the spine -->
+  <div style="padding: 20px 56px 0;">
+    <div style="display: grid; grid-template-columns: 92px 1fr; gap: 0;">
+      <div><div class="idx">002</div></div>
       <div>
-        <h2 style="font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 34px; letter-spacing: -0.025em; margin: 0 0 12px;">Open to front-end roles in Belgium and the Netherlands.</h2>
-        <p style="color: #d4d4d4; margin: 0; font-size: 17px; max-width: 52ch;">Happy to start with a short intro call. Based in Belgium, so no sponsorship is needed.</p>
-      </div>
-      <div style="display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; min-width: 250px;">
-        <span style="background: #00d9ff; color: #0a0a0a; font-weight: 600; padding: 14px 26px; border-radius: 10px; text-align: center;">Download CV (PDF)</span>
-        <span style="border: 1px solid rgba(255,255,255,0.18); padding: 14px 26px; border-radius: 10px; color: #d4d4d4; text-align: center;">rozedev095@gmail.com</span>
+        <h2 class="disp" style="font-weight: 800; font-size: 58px; letter-spacing: -0.035em; margin: 0 0 52px; text-transform: uppercase; line-height: 0.95;">Ervaring</h2>
+
+        <div style="position: relative;">
+          <!-- the spine -->
+          <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.12); transform: translateX(-50%);"></div>
+
+          <!-- 2026, card left -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; position: relative; margin-bottom: 44px;">
+            <div class="card">
+              <h3 class="role-h">Webproducten van begin tot eind</h3>
+              <div class="role-m" style="margin-bottom: 16px;">Zelfstandig · ontwerp, bouw, livegang, onderhoud</div>
+              <p class="bullet"><span class="dotm">·</span>marinek.store gelanceerd op Next.js 14: coachingprogramma met drie tarieven en geverifieerde kaartbetalingen.</p>
+              <p class="bullet"><span class="dotm">·</span>Betaalwebhook idempotent gemaakt tegen vier dagen aan retries, zodat niemand dubbel wordt belast.</p>
+              <p class="bullet" style="margin-bottom: 0;"><span class="dotm">·</span>Gedeelde uitnodigingslink vervangen door eenmalige toegang per koper.</p>
+            </div>
+            <div></div>
+            <div style="position: absolute; left: 50%; top: 22px; transform: translateX(-50%);">
+              <div class="dot"><span class="mono" style="font-size: 12px; color: #ffffff; font-weight: 500;">2026</span></div>
+            </div>
+          </div>
+
+          <!-- 2025, card right -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; position: relative; margin-bottom: 44px;">
+            <div></div>
+            <div class="card">
+              <h3 class="role-h">Keuken, Center Parcs</h3>
+              <div class="role-m" style="margin-bottom: 16px;">Albron / Center Parcs · Lommel</div>
+              <p class="bullet" style="margin-bottom: 0;"><span class="dotm">·</span>Vaste baan in de horeca, terwijl het bouwen in de ochtenden doorloopt. Daarom zijn mijn doorlooptijden eerlijk gepland en worden ze gehaald.</p>
+            </div>
+            <div style="position: absolute; left: 50%; top: 22px; transform: translateX(-50%);">
+              <div class="dot"><span class="mono" style="font-size: 12px; color: #ffffff; font-weight: 500;">2025</span></div>
+            </div>
+          </div>
+
+          <!-- 2024, card left -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; position: relative; margin-bottom: 44px;">
+            <div class="card">
+              <h3 class="role-h">Front-end developer</h3>
+              <div class="role-m" style="margin-bottom: 16px;">E-Consulting · MS Dynamics 365 XRM</div>
+              <p class="bullet"><span class="dotm">·</span>CRM-webresources ontwikkeld voor een nationale bank.</p>
+              <p class="bullet" style="margin-bottom: 0;"><span class="dotm">·</span>Vue.js-applicatie gebouwd voor documentondertekening, met asynchrone verzoeken en handtekeningen op canvas.</p>
+            </div>
+            <div></div>
+            <div style="position: absolute; left: 50%; top: 22px; transform: translateX(-50%);">
+              <div class="dot"><span class="mono" style="font-size: 12px; color: #ffffff; font-weight: 500;">2024</span></div>
+            </div>
+          </div>
+
+          <!-- 2022, card right -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; position: relative; margin-bottom: 44px;">
+            <div></div>
+            <div class="card">
+              <h3 class="role-h">Front-end developer</h3>
+              <div class="role-m" style="margin-bottom: 16px;">Ronis BT · childrensalon.com, vogacloset.com</div>
+              <p class="bullet"><span class="dotm">·</span>Kernlid van het front-endteam op twee klantaccounts, waaronder een van de grootste luxe kinderkledingretailers ter wereld.</p>
+              <p class="bullet"><span class="dotm">·</span>Productdetailpagina herschreven tijdens de overstap van Magento 1.9 naar custom Symfony.</p>
+              <p class="bullet" style="margin-bottom: 0;"><span class="dotm">·</span>Meertalige interfaces, inclusief van rechts naar links.</p>
+            </div>
+            <div style="position: absolute; left: 50%; top: 22px; transform: translateX(-50%);">
+              <div class="dot"><span class="mono" style="font-size: 12px; color: #ffffff; font-weight: 500;">2022</span></div>
+            </div>
+          </div>
+
+          <!-- 2015, card left -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; position: relative;">
+            <div class="card">
+              <h3 class="role-h">Websites en webshops</h3>
+              <div class="role-m" style="margin-bottom: 16px;">Webstudio en freelance · HTML5, CSS3, jQuery, PHP</div>
+              <p class="bullet" style="margin-bottom: 0;"><span class="dotm">·</span>Meer dan twintig opdrachtgevers in Europa en Noord-Amerika bediend, van bouw tot onderhoud.</p>
+            </div>
+            <div></div>
+            <div style="position: absolute; left: 50%; top: 22px; transform: translateX(-50%);">
+              <div class="dot"><span class="mono" style="font-size: 12px; color: #ffffff; font-weight: 500;">2015</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- the stats row that closes the timeline -->
+        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.09); margin-top: 56px;">
+          <div style="background: #0d0e10; padding: 26px 28px;">
+            <div class="disp" style="font-weight: 800; font-size: 34px; letter-spacing: -0.03em;">8+</div>
+            <div class="mono" style="font-size: 11px; color: #7d8590; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px;">jaar commercieel</div>
+          </div>
+          <div style="background: #0d0e10; padding: 26px 28px;">
+            <div class="disp" style="font-weight: 800; font-size: 34px; letter-spacing: -0.03em;">20+</div>
+            <div class="mono" style="font-size: 11px; color: #7d8590; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px;">opdrachtgevers</div>
+          </div>
+          <div style="background: #0d0e10; padding: 26px 28px;">
+            <div class="disp" style="font-weight: 800; font-size: 34px; letter-spacing: -0.03em;">5</div>
+            <div class="mono" style="font-size: 11px; color: #7d8590; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px;">functies</div>
+          </div>
+          <div style="background: #0d0e10; padding: 26px 28px;">
+            <div class="disp" style="font-weight: 800; font-size: 34px; letter-spacing: -0.03em;">4</div>
+            <div class="mono" style="font-size: 11px; color: #7d8590; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px;">talen</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div style="border-top: 1px solid rgba(255,255,255,0.10); padding: 32px 72px; display: flex; justify-content: space-between; align-items: center;">
-    <span class="mono" style="font-size: 12px; color: #6b7280;">© 2026 Stepan Roze · Lommel, België</span>
-    <div style="display: flex; gap: 24px; font-size: 13px; color: #a3a3a3;"><span>GitHub</span><span>LinkedIn</span><span>Privacy</span></div>
+  <!-- skills -->
+  <div style="padding: 72px 56px 0;">
+    <div style="display: grid; grid-template-columns: 92px 1fr; gap: 0;">
+      <div><div class="idx">003</div></div>
+      <div>
+        <h2 class="disp" style="font-weight: 800; font-size: 58px; letter-spacing: -0.035em; margin: 0 0 40px; text-transform: uppercase; line-height: 0.95;">Vaardigheden</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.09);">
+          <div style="background: #0d0e10; padding: 28px;">
+            <div class="mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #00d9ff; margin-bottom: 16px;">Kern</div>
+            <div style="color: #b9bec6; font-size: 15px; line-height: 1.95;">TypeScript · JavaScript ES6+<br>React · Next.js 14 · Vue.js<br>HTML5 · CSS3 · Tailwind · SCSS</div>
+          </div>
+          <div style="background: #0d0e10; padding: 28px;">
+            <div class="mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #00d9ff; margin-bottom: 16px;">Platform en data</div>
+            <div style="color: #b9bec6; font-size: 15px; line-height: 1.95;">Magento 1 &amp; 2 · Knockout.js<br>MS Dynamics 365 XRM<br>Supabase · Netlify Functions</div>
+          </div>
+          <div style="background: #0d0e10; padding: 28px;">
+            <div class="mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #00d9ff; margin-bottom: 16px;">Praktijk</div>
+            <div style="color: #b9bec6; font-size: 15px; line-height: 1.95;">Betaalintegraties · webhooks<br>REST API's · GA4<br>Toegankelijkheid · code review</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- education + languages -->
+  <div style="padding: 64px 56px 0;">
+    <div style="display: grid; grid-template-columns: 92px 1.4fr 1fr; gap: 0 48px;">
+      <div><div class="idx">004</div></div>
+      <div>
+        <h2 class="disp" style="font-weight: 800; font-size: 40px; letter-spacing: -0.03em; margin: 0 0 26px; text-transform: uppercase; line-height: 0.95;">Opleiding</h2>
+        <div style="border-left: 2px solid #00d9ff; padding: 2px 0 2px 22px; margin-bottom: 22px;">
+          <h3 class="disp" style="font-weight: 700; font-size: 19px; margin: 0 0 4px;">Computer Academy STEP</h3>
+          <div class="mono" style="font-size: 12px; color: #7d8590;">Softwareontwikkeling</div>
+        </div>
+        <div style="border-left: 2px solid rgba(255,255,255,0.14); padding: 2px 0 2px 22px;">
+          <h3 class="disp" style="font-weight: 700; font-size: 19px; margin: 0 0 4px;">V. N. Karazin Kharkiv National University</h3>
+          <div class="mono" style="font-size: 12px; color: #7d8590;">Informatica, algoritmen, datastructuren · vanaf 2012</div>
+        </div>
+      </div>
+      <div>
+        <h2 class="disp" style="font-weight: 800; font-size: 40px; letter-spacing: -0.03em; margin: 0 0 26px; text-transform: uppercase; line-height: 0.95;">Talen</h2>
+        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 15px;">
+          <div style="display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07);"><span>Engels</span><span class="mono" style="font-size: 12px; color: #7d8590;">professioneel</span></div>
+          <div style="display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07);"><span>Nederlands</span><span class="mono" style="font-size: 12px; color: #7d8590;">lerend</span></div>
+          <div style="display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07);"><span>Oekraïens</span><span class="mono" style="font-size: 12px; color: #7d8590;">moedertaal</span></div>
+          <div style="display: flex; justify-content: space-between;"><span>Russisch</span><span class="mono" style="font-size: 12px; color: #7d8590;">moedertaal</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 76px; background: #00d9ff; color: #070708; padding: 60px 56px;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 56px;">
+      <div>
+        <h2 class="disp" style="font-weight: 800; font-size: 62px; letter-spacing: -0.04em; margin: 0 0 16px; text-transform: uppercase; line-height: 0.94;">Open voor<br>front-end rollen.</h2>
+        <p style="margin: 0; font-size: 18px; max-width: 48ch; color: rgba(7,7,8,0.78);">In België en Nederland. Ik begin graag met een kort kennismakingsgesprek. Woonachtig in België, dus geen sponsoring nodig.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; min-width: 270px;">
+        <span style="background: #070708; color: #ffffff; font-weight: 600; padding: 16px 28px; border-radius: 3px; text-align: center;">Download CV als PDF</span>
+        <span style="border: 1px solid rgba(7,7,8,0.28); padding: 16px 28px; border-radius: 3px; text-align: center; font-size: 15px;">rozedev095@gmail.com</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 30px 56px; display: flex; justify-content: space-between; align-items: center;">
+    <span class="mono" style="font-size: 11px; color: #4d5561;">© 2026 Stepan Roze · Lommel, België</span>
+    <div style="display: flex; gap: 22px; font-size: 13px; color: #7d8590;"><span>GitHub</span><span>LinkedIn</span><span>Privacy</span></div>
   </div>
 
 </div>
