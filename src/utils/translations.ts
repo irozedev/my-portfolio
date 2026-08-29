@@ -242,7 +242,7 @@ export const translations = {
       consulting: 'JavaScript Consulting',
       fullstack: 'Full-Stack Development',
       workType: 'Full-time & Freelance',
-      coffeeBreak: 'Coffee break ☕',
+      coffeeBreak: 'Coffee break',
       letsBuild: 'Let\'s build something',
       legal: {
         privacy: 'Privacy Policy',
@@ -544,7 +544,7 @@ export const translations = {
       consulting: 'JavaScript Consultancy',
       fullstack: 'Full-Stack Ontwikkeling',
       workType: 'Volledig Tijd & Freelance',
-      coffeeBreak: 'Koffiepauze ☕',
+      coffeeBreak: 'Koffiepauze',
       letsBuild: 'Laten we iets bouwen',
       legal: {
         privacy: 'Privacybeleid',
@@ -880,7 +880,7 @@ export const translations = {
       consulting: 'استشارات JavaScript',
       fullstack: 'تطوير Full-Stack',
       workType: 'دوام كامل وعمل حر',
-      coffeeBreak: 'استراحة قهوة ☕',
+      coffeeBreak: 'استراحة قهوة',
       letsBuild: 'لنبني شيئاً',
       legal: {
         privacy: 'سياسة الخصوصية',
@@ -1202,7 +1202,7 @@ export const translations = {
       consulting: 'Consultoría JavaScript',
       fullstack: 'Desarrollo Full-Stack',
       workType: 'Tiempo completo y Freelance',
-      coffeeBreak: 'Pausa para el café ☕',
+      coffeeBreak: 'Pausa para el café',
       letsBuild: 'Let\'s build something',
       legal: {
         privacy: 'Política de privacidad',

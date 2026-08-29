@@ -450,7 +450,7 @@ export function ServicesCreativeSlider() {
     step(e.key === "ArrowRight" ? 1 : -1);
   };
 
-  // 🔥 FIX: Debounced click handler to prevent multiple triggers
+  // FIX: Debounced click handler to prevent multiple triggers
   const handleBookService = (service: typeof services[0]) => {
     if (isProcessingClick) return;
     
@@ -722,7 +722,7 @@ export function ServicesCreativeSlider() {
                           className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 px-3 py-1 sm:px-4 sm:py-1.5 bg-[#00d9ff] rounded-full text-black text-[10px] sm:text-xs font-bold shadow-[0_0_20px_rgba(0,217,255,0.18)] z-30 whitespace-nowrap"
                         >
                           <span className="flex items-center gap-1">
-                            ⭐ {t("services.popular")}
+                            {t("services.popular")}
                           </span>
                         </div>
                       )}

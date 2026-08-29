@@ -99,7 +99,7 @@ export function AvailabilityProvider({ children }: { children: ReactNode }) {
   const statusColor = isAvailable ? "green" : "orange";
   const statusText = isAvailable ? "Let's build something" : "Deep work time";
   const statusTextKey = isAvailable ? "available" : "busy";
-  const statusEmoji = isAvailable ? "⚡" : "🔥";
+  const statusEmoji = isAvailable ? "" : "";
 
   return (
     <AvailabilityContext.Provider 
@@ -125,9 +125,9 @@ export function useAvailability() {
     return {
       isAvailable: false,
       statusColor: "orange",
-      statusText: "Coffee break ☕",
+      statusText: "Coffee break",
       statusTextKey: "coffee-break",
-      statusEmoji: "🌙",
+      statusEmoji: "",
       nextAvailable: "Check back later",
       detailedStatus: {
         date: '',

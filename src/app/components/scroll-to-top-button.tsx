@@ -24,38 +24,38 @@ function funnelStrings(language: string) {
     language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
   return {
     welcome: L(
-      "Hi! 👋 I'm Roze, Stepan's assistant. I'll get you a fast, honest quote in a few taps.\n\nWhat would you like to build?",
-      "Hoi! 👋 Ik ben Roze, Stepan's assistent. In een paar tikken geef ik je een eerlijke prijs.\n\nWat wil je bouwen?",
-      "مرحباً! 👋 أنا Roze، مساعد ستيبان. سأعطيك تقديراً صادقاً بسرعة.\n\nماذا تريد أن تبني؟",
-      "¡Hola! 👋 Soy Roze, asistente de Stepan. En unos toques te doy un presupuesto honesto.\n\n¿Qué quieres construir?",
+      "Hi! I'm Roze, Stepan's assistant. I'll get you a fast, honest quote in a few taps.\n\nWhat would you like to build?",
+      "Hoi! Ik ben Roze, Stepan's assistent. In een paar tikken geef ik je een eerlijke prijs.\n\nWat wil je bouwen?",
+      "مرحباً! أنا Roze، مساعد ستيبان. سأعطيك تقديراً صادقاً بسرعة.\n\nماذا تريد أن تبني؟",
+      "¡Hola! Soy Roze, asistente de Stepan. En unos toques te doy un presupuesto honesto.\n\n¿Qué quieres construir?",
     ),
-    reask: L("Sure — what would you like to build? 👇", "Prima — wat wil je bouwen? 👇", "تمام — ماذا تريد أن تبني؟ 👇", "Claro — ¿qué quieres construir? 👇"),
-    askBudget: L("Nice choice 👍 What's your rough budget?", "Goede keuze 👍 Wat is je budget ongeveer?", "اختيار جيد 👍 ما ميزانيتك التقريبية؟", "¡Buena elección! 👍 ¿Presupuesto aproximado?"),
-    askTimeline: L("Got it ⏰ When do you need it?", "Genoteerd ⏰ Wanneer heb je het nodig?", "تمام ⏰ متى تحتاجه؟", "Perfecto ⏰ ¿Para cuándo lo necesitas?"),
-    askName: L("Great 🙌 What's your name?", "Top 🙌 Wat is je naam?", "رائع 🙌 ما اسمك؟", "Genial 🙌 ¿Cómo te llamas?"),
-    askEmail: L("And your best email so Stepan can send the quote? 📧", "En je e-mail zodat Stepan de offerte kan sturen? 📧", "وبريدك ليرسل لك ستيبان العرض؟ 📧", "¿Tu email para que Stepan te envíe el presupuesto? 📧"),
-    badEmail: L("Hmm, that email looks off — mind trying again? 📧", "Dat e-mailadres klopt niet — nog een keer? 📧", "يبدو البريد غير صحيح — حاول مجدداً؟ 📧", "Ese email no parece válido — ¿otra vez? 📧"),
-    sending: L("Sending your request to Stepan… 🚀", "Ik stuur je aanvraag naar Stepan… 🚀", "أرسل طلبك إلى ستيبان… 🚀", "Enviando tu solicitud a Stepan… 🚀"),
+    reask: L("Sure — what would you like to build?", "Prima — wat wil je bouwen?", "تمام — ماذا تريد أن تبني؟", "Claro — ¿qué quieres construir?"),
+    askBudget: L("Nice choice. What's your rough budget?", "Goede keuze. Wat is je budget ongeveer?", "اختيار جيد. ما ميزانيتك التقريبية؟", "¡Buena elección! ¿Presupuesto aproximado?"),
+    askTimeline: L("Got it. When do you need it?", "Genoteerd. Wanneer heb je het nodig?", "تمام. متى تحتاجه؟", "Perfecto. ¿Para cuándo lo necesitas?"),
+    askName: L("Great. What's your name?", "Top. Wat is je naam?", "رائع. ما اسمك؟", "Genial. ¿Cómo te llamas?"),
+    askEmail: L("And your best email so Stepan can send the quote?", "En je e-mail zodat Stepan de offerte kan sturen?", "وبريدك ليرسل لك ستيبان العرض؟", "¿Tu email para que Stepan te envíe el presupuesto?"),
+    badEmail: L("Hmm, that email looks off — mind trying again?", "Dat e-mailadres klopt niet — nog een keer?", "يبدو البريد غير صحيح — حاول مجدداً؟", "Ese email no parece válido — ¿otra vez?"),
+    sending: L("Sending your request to Stepan…", "Ik stuur je aanvraag naar Stepan…", "أرسل طلبك إلى ستيبان…", "Enviando tu solicitud a Stepan…"),
     thanks: (n: string, e: string) => L(
-      `Thanks, ${n}! ✅ Your request is with Stepan. He builds every morning (CET) and replies the same day at ${e}.\n\nWant a rough price now, or anything else?`,
-      `Bedankt, ${n}! ✅ Je aanvraag staat bij Stepan. Hij bouwt elke ochtend (CET) en reageert dezelfde dag op ${e}.\n\nWil je nu een richtprijs of nog iets?`,
-      `شكراً، ${n}! ✅ طلبك عند ستيبان. يعمل كل صباح (CET) ويرد في نفس اليوم على ${e}.\n\nتريد سعراً تقريبياً الآن أو شيئاً آخر؟`,
-      `¡Gracias, ${n}! ✅ Tu solicitud está con Stepan. Trabaja cada mañana (CET) y responde el mismo día a ${e}.\n\n¿Quieres un precio aproximado ahora o algo más?`,
+      `Thanks, ${n}! Your request is with Stepan. He builds every morning (CET) and replies the same day at ${e}.\n\nWant a rough price now, or anything else?`,
+      `Bedankt, ${n}! Je aanvraag staat bij Stepan. Hij bouwt elke ochtend (CET) en reageert dezelfde dag op ${e}.\n\nWil je nu een richtprijs of nog iets?`,
+      `شكراً، ${n}! طلبك عند ستيبان. يعمل كل صباح (CET) ويرد في نفس اليوم على ${e}.\n\nتريد سعراً تقريبياً الآن أو شيئاً آخر؟`,
+      `¡Gracias, ${n}! Tu solicitud está con Stepan. Trabaja cada mañana (CET) y responde el mismo día a ${e}.\n\n¿Quieres un precio aproximado ahora o algo más?`,
     ),
     failed: (e: string) => L(
-      `I couldn't send it automatically 😕 Please email Stepan directly at rozedev095@gmail.com — I noted your address (${e}).`,
-      `Kon het niet automatisch versturen 😕 Mail Stepan direct: rozedev095@gmail.com (jouw e-mail: ${e}).`,
-      `تعذّر الإرسال تلقائياً 😕 راسل ستيبان مباشرة: rozedev095@gmail.com (بريدك: ${e}).`,
-      `No pude enviarlo automáticamente 😕 Escribe a Stepan: rozedev095@gmail.com (tu email: ${e}).`,
+      `I couldn't send it automatically. Please email Stepan directly at rozedev095@gmail.com — I noted your address (${e}).`,
+      `Kon het niet automatisch versturen. Mail Stepan direct: rozedev095@gmail.com (jouw e-mail: ${e}).`,
+      `تعذّر الإرسال تلقائياً. راسل ستيبان مباشرة: rozedev095@gmail.com (بريدك: ${e}).`,
+      `No pude enviarlo automáticamente. Escribe a Stepan: rozedev095@gmail.com (tu email: ${e}).`,
     ),
-    qaIntro: L("Sure — ask me about pricing, timelines, stack or availability. Or tap “Get a quote”. 👇", "Tuurlijk — vraag over prijzen, planning, stack of beschikbaarheid. Of tik “Offerte”. 👇", "بالتأكيد — اسأل عن الأسعار أو المدة أو الأدوات. أو اضغط «عرض سعر». 👇", "Claro — pregunta sobre precios, plazos o stack. O toca “Presupuesto”. 👇"),
+    qaIntro: L("Sure — ask me about pricing, timelines, stack or availability. Or tap “Get a quote”.", "Tuurlijk — vraag over prijzen, planning, stack of beschikbaarheid. Of tik “Offerte”.", "بالتأكيد — اسأل عن الأسعار أو المدة أو الأدوات. أو اضغط «عرض سعر».", "Claro — pregunta sobre precios, plazos o stack. O toca “Presupuesto”."),
     labels: {
-      website: L("🌐 Website", "🌐 Website", "🌐 موقع", "🌐 Web"),
-      bot: L("🤖 Bot / Automation", "🤖 Bot / automatisering", "🤖 بوت / أتمتة", "🤖 Bot / automatización"),
-      webapp: L("📱 Web app", "📱 Webapp", "📱 تطبيق ويب", "📱 Web app"),
-      ecom: L("🛒 E-commerce", "🛒 Webshop", "🛒 متجر", "🛒 E-commerce"),
-      ask: L("💬 Just a question", "💬 Even een vraag", "💬 مجرد سؤال", "💬 Solo una pregunta"),
-      quote: L("🚀 Get a quote", "🚀 Offerte", "🚀 عرض سعر", "🚀 Presupuesto"),
+      website: L("Website", "Website", "موقع", "Web"),
+      bot: L("Bot / Automation", "Bot / automatisering", "بوت / أتمتة", "Bot / automatización"),
+      webapp: L("Web app", "Webapp", "تطبيق ويب", "Web app"),
+      ecom: L("E-commerce", "Webshop", "متجر", "E-commerce"),
+      ask: L("Just a question", "Even een vraag", "مجرد سؤال", "Solo una pregunta"),
+      quote: L("Get a quote", "Offerte", "عرض سعر", "Presupuesto"),
       bUnder500: L("Under €500", "Onder €500", "أقل من €500", "Menos de €500"),
       b500: L("€500–1,500", "€500–1.500", "€500–1,500", "€500–1.500"),
       b1500: L("€1,500–5,000", "€1.500–5.000", "€1,500–5,000", "€1.500–5.000"),
@@ -79,58 +79,58 @@ function localAnswer(input: string, language: string): string {
 
   if (/(^|\b)(hi|hello|hey|прив|hallo|hoi|hola|مرحبا|salut)/.test(s))
     return L(
-      "Hi! 👋 I can help with pricing, timelines, my stack, availability or contact. What do you need?",
-      "Hoi! 👋 Ik help met prijzen, planning, stack, beschikbaarheid of contact. Wat heb je nodig?",
-      "مرحباً! 👋 أساعدك في الأسعار، المدة، الأدوات، التوفر أو التواصل. ماذا تريد؟",
-      "¡Hola! 👋 Puedo ayudarte con precios, plazos, stack, disponibilidad o contacto. ¿Qué necesitas?",
+      "Hi! I can help with pricing, timelines, my stack, availability or contact. What do you need?",
+      "Hoi! Ik help met prijzen, planning, stack, beschikbaarheid of contact. Wat heb je nodig?",
+      "مرحباً! أساعدك في الأسعار، المدة، الأدوات، التوفر أو التواصل. ماذا تريد؟",
+      "¡Hola! Puedo ayudarte con precios, plazos, stack, disponibilidad o contacto. ¿Qué necesitas?",
     );
 
   if (/(price|cost|rate|budget|pricing|quote|how much|цін|цена|скільки|prijs|kost|precio|cuánto|سعر|كم)/.test(s))
     return L(
-      "💶 Starting prices (no VAT — small-business scheme):\n• Landing page — from €950\n• Website 4–6 pages — €2,200–3,500\n• WhatsApp bot — from €500\n• Automation — €65/h\n• Web app / dashboard — €75/h\n• E-commerce — from €1,800\n• Consulting — €75/h\n\nTell me what you need and I'll narrow it down.",
-      "💶 Vanafprijzen (geen btw — vrijstellingsregeling):\n• Landingspagina — vanaf €950\n• Website 4–6 pagina's — €2.200–3.500\n• WhatsApp-bot — vanaf €500\n• Automatisering — €65/u\n• Webapp — €75/u\n• E-commerce — vanaf €1.800\n• Consulting — €75/u\n\nVertel wat je nodig hebt.",
-      "💶 أسعار البداية (بدون ضريبة — نظام المنشآت الصغيرة):\n• صفحة هبوط — من €950\n• موقع 4–6 صفحات — €2,200–3,500\n• بوت تيليجرام — من €500\n• أتمتة — €65/س\n• تطبيق ويب — €75/س\n• متجر — من €1,800\n• استشارة — €75/س\n\nأخبرني بما تحتاج.",
-      "💶 Precios iniciales (sin IVA — régimen de pequeñas empresas):\n• Landing — desde €950\n• Web 4–6 páginas — €2.200–3.500\n• Bot de WhatsApp — desde €500\n• Automatización — €65/h\n• Web app — €75/h\n• E-commerce — desde €1.800\n• Consultoría — €75/h\n\nCuéntame qué necesitas.",
+      "Starting prices (no VAT — small-business scheme):\n• Landing page — from €950\n• Website 4–6 pages — €2,200–3,500\n• WhatsApp bot — from €500\n• Automation — €65/h\n• Web app / dashboard — €75/h\n• E-commerce — from €1,800\n• Consulting — €75/h\n\nTell me what you need and I'll narrow it down.",
+      "Vanafprijzen (geen btw — vrijstellingsregeling):\n• Landingspagina — vanaf €950\n• Website 4–6 pagina's — €2.200–3.500\n• WhatsApp-bot — vanaf €500\n• Automatisering — €65/u\n• Webapp — €75/u\n• E-commerce — vanaf €1.800\n• Consulting — €75/u\n\nVertel wat je nodig hebt.",
+      "أسعار البداية (بدون ضريبة — نظام المنشآت الصغيرة):\n• صفحة هبوط — من €950\n• موقع 4–6 صفحات — €2,200–3,500\n• بوت تيليجرام — من €500\n• أتمتة — €65/س\n• تطبيق ويب — €75/س\n• متجر — من €1,800\n• استشارة — €75/س\n\nأخبرني بما تحتاج.",
+      "Precios iniciales (sin IVA — régimen de pequeñas empresas):\n• Landing — desde €950\n• Web 4–6 páginas — €2.200–3.500\n• Bot de WhatsApp — desde €500\n• Automatización — €65/h\n• Web app — €75/h\n• E-commerce — desde €1.800\n• Consultoría — €75/h\n\nCuéntame qué necesitas.",
     );
 
   if (/(time|timeline|how long|deadline|deliver|строк|термін|скільки часу|termijn|hoelang|plazo|cuánto tiempo|مدة|وقت)/.test(s))
     return L(
-      "⏱ Realistic timelines (I build mornings, ~20h/week):\n• Landing — 1–1.5 weeks\n• Website 4–6 pages — 2.5–3.5 weeks\n• WhatsApp bot — ~1 week\n• Automation — 3–5 mornings\n• Web app (MVP) — 4–6 weeks\n• E-commerce — 3–5 weeks",
-      "⏱ Realistische planning (ik bouw 's ochtends, ~20u/week):\n• Landing — 1–1.5 week\n• Website 4–6 pagina's — 2.5–3.5 week\n• Bot — ~1 week\n• Automatisering — 3–5 ochtenden\n• Webapp (MVP) — 4–6 weken\n• E-commerce — 3–5 weken",
-      "⏱ مواعيد واقعية (أعمل صباحاً، ~20 ساعة/أسبوع):\n• صفحة هبوط — 1–1.5 أسبوع\n• موقع 4–6 صفحات — 2.5–3.5 أسبوع\n• بوت — ~أسبوع\n• أتمتة — 3–5 صباحات\n• تطبيق (MVP) — 4–6 أسابيع\n• متجر — 3–5 أسابيع",
-      "⏱ Plazos realistas (trabajo por las mañanas, ~20h/semana):\n• Landing — 1–1.5 semanas\n• Web 4–6 páginas — 2.5–3.5 semanas\n• Bot — ~1 semana\n• Automatización — 3–5 mañanas\n• Web app (MVP) — 4–6 semanas\n• E-commerce — 3–5 semanas",
+      "Realistic timelines (I build mornings, ~20h/week):\n• Landing — 1–1.5 weeks\n• Website 4–6 pages — 2.5–3.5 weeks\n• WhatsApp bot — ~1 week\n• Automation — 3–5 mornings\n• Web app (MVP) — 4–6 weeks\n• E-commerce — 3–5 weeks",
+      "Realistische planning (ik bouw 's ochtends, ~20u/week):\n• Landing — 1–1.5 week\n• Website 4–6 pagina's — 2.5–3.5 week\n• Bot — ~1 week\n• Automatisering — 3–5 ochtenden\n• Webapp (MVP) — 4–6 weken\n• E-commerce — 3–5 weken",
+      "مواعيد واقعية (أعمل صباحاً، ~20 ساعة/أسبوع):\n• صفحة هبوط — 1–1.5 أسبوع\n• موقع 4–6 صفحات — 2.5–3.5 أسبوع\n• بوت — ~أسبوع\n• أتمتة — 3–5 صباحات\n• تطبيق (MVP) — 4–6 أسابيع\n• متجر — 3–5 أسابيع",
+      "Plazos realistas (trabajo por las mañanas, ~20h/semana):\n• Landing — 1–1.5 semanas\n• Web 4–6 páginas — 2.5–3.5 semanas\n• Bot — ~1 semana\n• Automatización — 3–5 mañanas\n• Web app (MVP) — 4–6 semanas\n• E-commerce — 3–5 semanas",
     );
 
   if (/(available|availability|when.*(free|start)|hire|busy|доступ|коли|beschikbaar|wanneer|disponible|cuándo|متاح|متوفر)/.test(s))
     return L(
-      "🌅 I work on projects every morning, 06:00–12:00 CET (I have a main job too). I reply within the day and take only 1–2 projects at a time, so yours gets real attention.",
-      "🌅 Ik werk elke ochtend aan projecten, 06:00–12:00 CET (ik heb ook een hoofdbaan). Ik reageer binnen de dag en neem 1–2 projecten tegelijk.",
-      "🌅 أعمل على المشاريع كل صباح، 06:00–12:00 بتوقيت وسط أوروبا. أرد خلال اليوم وأتولى مشروعين فقط في المرة.",
-      "🌅 Trabajo en proyectos cada mañana, 06:00–12:00 CET (también tengo trabajo principal). Respondo el mismo día y tomo solo 1–2 proyectos a la vez.",
+      "I work on projects every morning, 06:00–12:00 CET (I have a main job too). I reply within the day and take only 1–2 projects at a time, so yours gets real attention.",
+      "Ik werk elke ochtend aan projecten, 06:00–12:00 CET (ik heb ook een hoofdbaan). Ik reageer binnen de dag en neem 1–2 projecten tegelijk.",
+      "أعمل على المشاريع كل صباح، 06:00–12:00 بتوقيت وسط أوروبا. أرد خلال اليوم وأتولى مشروعين فقط في المرة.",
+      "Trabajo en proyectos cada mañana, 06:00–12:00 CET (también tengo trabajo principal). Respondo el mismo día y tomo solo 1–2 proyectos a la vez.",
     );
 
   if (/(contact|email|reach|mail|write|telegram|контакт|звʼяз|звяз|пошта|contacto|correo|تواصل|بريد)/.test(s))
     return L(
-      "📧 Best way to reach me:\n• Email: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nOr use the contact form below — I reply within the day.",
-      "📧 Zo bereik je me:\n• E-mail: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nOf het formulier hieronder — ik reageer binnen de dag.",
-      "📧 أفضل طريقة للتواصل:\n• البريد: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nأو نموذج التواصل أدناه.",
-      "📧 Mejor forma de contactarme:\n• Email: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nO el formulario de abajo — respondo el mismo día.",
+      "Best way to reach me:\n• Email: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nOr use the contact form below — I reply within the day.",
+      "Zo bereik je me:\n• E-mail: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nOf het formulier hieronder — ik reageer binnen de dag.",
+      "أفضل طريقة للتواصل:\n• البريد: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nأو نموذج التواصل أدناه.",
+      "Mejor forma de contactarme:\n• Email: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nO el formulario de abajo — respondo el mismo día.",
     );
 
   if (/(skill|tech|stack|experience|expertise|react|vue|next|typescript|magento|навич|досвід|стек|ervaring|vaardig|habilidad|experiencia|خبرة|مهارات)/.test(s))
     return L(
-      "🛠 8+ years, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. Built e-commerce (childrensalon.com, vogacloset.com) and banking systems (Oschadbank CRM). Based in Belgium.",
-      "🛠 8+ jaar, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) en banksystemen (Oschadbank). België.",
-      "🛠 خبرة 8+ سنوات، Front-End / JavaScript. الأدوات: React, Vue, Next.js, TypeScript, Node.js, Magento. تجارة إلكترونية وأنظمة مصرفية. مقيم في بلجيكا.",
-      "🛠 8+ años, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) y banca (Oschadbank). En Bélgica.",
+      "8+ years, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. Built e-commerce (childrensalon.com, vogacloset.com) and banking systems (Oschadbank CRM). Based in Belgium.",
+      "8+ jaar, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) en banksystemen (Oschadbank). België.",
+      "خبرة 8+ سنوات، Front-End / JavaScript. الأدوات: React, Vue, Next.js, TypeScript, Node.js, Magento. تجارة إلكترونية وأنظمة مصرفية. مقيم في بلجيكا.",
+      "8+ años, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) y banca (Oschadbank). En Bélgica.",
     );
 
   if (/(start|begin|hire|work with|project|почати|проект|starten|beginnen|empezar|proyecto|بدء|مشروع)/.test(s))
     return L(
-      "🚀 Great! Tell me briefly: what you want to build, rough budget and deadline. Then email rozedev095@gmail.com or use the form below — I'll send a fixed quote + timeline.",
-      "🚀 Top! Vertel kort: wat je wil bouwen, budget en deadline. Mail rozedev095@gmail.com of gebruik het formulier — je krijgt een vaste offerte + planning.",
-      "🚀 رائع! أخبرني باختصار: ما تريد بناءه، الميزانية والموعد. راسلني على rozedev095@gmail.com أو عبر النموذج، وسأرسل عرضاً ثابتاً + جدولاً.",
-      "🚀 ¡Genial! Cuéntame: qué quieres construir, presupuesto y plazo. Escribe a rozedev095@gmail.com o usa el formulario y te envío presupuesto fijo + plazo.",
+      "Great! Tell me briefly: what you want to build, rough budget and deadline. Then email rozedev095@gmail.com or use the form below — I'll send a fixed quote + timeline.",
+      "Top! Vertel kort: wat je wil bouwen, budget en deadline. Mail rozedev095@gmail.com of gebruik het formulier — je krijgt een vaste offerte + planning.",
+      "رائع! أخبرني باختصار: ما تريد بناءه، الميزانية والموعد. راسلني على rozedev095@gmail.com أو عبر النموذج، وسأرسل عرضاً ثابتاً + جدولاً.",
+      "¡Genial! Cuéntame: qué quieres construir, presupuesto y plazo. Escribe a rozedev095@gmail.com o usa el formulario y te envío presupuesto fijo + plazo.",
     );
 
   return ""; // no info match — the smart layer / funnel decides what to do
@@ -163,37 +163,37 @@ function assistantReply(input: string, language: string): { text: string; action
   // Site guide / help
   if (/(how (does|to use) (this|the)? ?(site|page|website)|what is this (site|page|website)|show me around|navigate|site ?guide|help me (find|navigate)|навігац|навигац|hoe werkt (deze|de) ?(site|website)|rondleiding|cómo funciona (este|el) ?(sitio|web)|guíame|كيف (يعمل|أستخدم) الموقع|جولة)/.test(s))
     return { matched: true, text: L(
-      "🧭 Quick tour:\n• Services — what I build & prices\n• Process — how I work + honest timelines\n• Projects — real work\n• GitHub — live code\n• Contact — reach Stepan\n\nTwo modes (top toggle): Client (hire me) & Company (full CV). 5 languages, dark/light. Where to?",
-      "🧭 Korte rondleiding:\n• Diensten — wat ik bouw & prijzen\n• Werkwijze — hoe ik werk + eerlijke planning\n• Projecten — echt werk\n• GitHub — live code\n• Contact — bereik Stepan\n\nTwee modi (boven): Client & Company (volledig cv). 5 talen, donker/licht. Waarheen?",
-      "🧭 جولة سريعة:\n• الخدمات — ما أبنيه والأسعار\n• آلية العمل — كيف أعمل + مواعيد صادقة\n• المشاريع — أعمال حقيقية\n• GitHub — كود مباشر\n• التواصل — الوصول لستيبان\n\nوضعان (بالأعلى): عميل وشركة. 5 لغات. إلى أين؟",
-      "🧭 Tour rápido:\n• Servicios — qué construyo y precios\n• Proceso — cómo trabajo + plazos honestos\n• Proyectos — trabajo real\n• GitHub — código en vivo\n• Contacto — contactar a Stepan\n\nDos modos (arriba): Cliente y Empresa. 5 idiomas. ¿A dónde?",
+      "Quick tour:\n• Services — what I build & prices\n• Process — how I work + honest timelines\n• Projects — real work\n• GitHub — live code\n• Contact — reach Stepan\n\nTwo modes (top toggle): Client (hire me) & Company (full CV). 5 languages, dark/light. Where to?",
+      "Korte rondleiding:\n• Diensten — wat ik bouw & prijzen\n• Werkwijze — hoe ik werk + eerlijke planning\n• Projecten — echt werk\n• GitHub — live code\n• Contact — bereik Stepan\n\nTwee modi (boven): Client & Company (volledig cv). 5 talen, donker/licht. Waarheen?",
+      "جولة سريعة:\n• الخدمات — ما أبنيه والأسعار\n• آلية العمل — كيف أعمل + مواعيد صادقة\n• المشاريع — أعمال حقيقية\n• GitHub — كود مباشر\n• التواصل — الوصول لستيبان\n\nوضعان (بالأعلى): عميل وشركة. 5 لغات. إلى أين؟",
+      "Tour rápido:\n• Servicios — qué construyo y precios\n• Proceso — cómo trabajo + plazos honestos\n• Proyectos — trabajo real\n• GitHub — código en vivo\n• Contacto — contactar a Stepan\n\nDos modos (arriba): Cliente y Empresa. 5 idiomas. ¿A dónde?",
     ) };
 
   // View mode
   if (/(view mode|client mode|company mode|cv mode|company view|switch.*(mode|view)|режим|weergave|modus|bedrijfsmodus|modo (empresa|cliente|cv))/.test(s))
     return { matched: true, action: { kind: 'view', mode: 'cv', label: lblCompany }, text: L(
-      "This site has two modes (toggle at the top):\n• 👤 Client — services, prices, projects\n• 🏢 Company — full CV: experience & skills\n\nOpen the full CV view?",
-      "Twee modi (schakelaar boven):\n• 👤 Client — diensten, prijzen, projecten\n• 🏢 Company — volledig cv: ervaring & skills\n\nCompany-weergave openen?",
-      "وضعان (بالأعلى):\n• 👤 عميل — خدمات وأسعار ومشاريع\n• 🏢 شركة — السيرة كاملة\n\nأفتح وضع الشركة؟",
-      "Dos modos (arriba):\n• 👤 Cliente — servicios, precios, proyectos\n• 🏢 Empresa — CV completo\n\n¿Abrir vista Empresa?",
+      "This site has two modes (toggle at the top):\n• Client — services, prices, projects\n• Company — full CV: experience & skills\n\nOpen the full CV view?",
+      "Twee modi (schakelaar boven):\n• Client — diensten, prijzen, projecten\n• Company — volledig cv: ervaring & skills\n\nCompany-weergave openen?",
+      "وضعان (بالأعلى):\n• عميل — خدمات وأسعار ومشاريع\n• شركة — السيرة كاملة\n\nأفتح وضع الشركة؟",
+      "Dos modos (arriba):\n• Cliente — servicios, precios, proyectos\n• Empresa — CV completo\n\n¿Abrir vista Empresa?",
     ) };
 
   // Process
   if (/(how (do|does)( you| he| stepan)? ?work|your process|work process|workflow|how it works|steps|як (ти )?прац|процес|hoe werk je|werkwijze|stappen|cómo (trabajas|funciona el proceso)|pasos|كيف تعمل|آلية العمل|خطوات)/.test(s))
     return { matched: true, action: { kind: 'nav', target: '#how-i-work', label: lblProcess }, text: L(
-      "⚙️ Simple: free intro → fixed quote & timeline → 30–50% deposit → build with live preview → 1–2 revisions → launch & handover. I build every morning (CET), steady daily progress.",
-      "⚙️ Simpel: gratis intro → vaste prijs & planning → 30–50% aanbetaling → bouwen met preview → 1–2 revisies → lancering. Ik bouw elke ochtend (CET).",
-      "⚙️ ببساطة: تعارف مجاني → سعر ثابت ومدة → دفعة 30–50% → بناء مع معاينة → تعديلان → إطلاق. أعمل كل صباح (CET).",
-      "⚙️ Simple: intro gratis → precio fijo y plazo → anticipo 30–50% → desarrollo con vista previa → 1–2 revisiones → lanzamiento. Trabajo cada mañana (CET).",
+      "Simple: free intro → fixed quote & timeline → 30–50% deposit → build with live preview → 1–2 revisions → launch & handover. I build every morning (CET), steady daily progress.",
+      "Simpel: gratis intro → vaste prijs & planning → 30–50% aanbetaling → bouwen met preview → 1–2 revisies → lancering. Ik bouw elke ochtend (CET).",
+      "ببساطة: تعارف مجاني → سعر ثابت ومدة → دفعة 30–50% → بناء مع معاينة → تعديلان → إطلاق. أعمل كل صباح (CET).",
+      "Simple: intro gratis → precio fijo y plazo → anticipo 30–50% → desarrollo con vista previa → 1–2 revisiones → lanzamiento. Trabajo cada mañana (CET).",
     ) };
 
   // Services
   if (/(service|offering|what.*(can|do) you (do|offer)|послуг|що ти робиш|dienst|wat doe je|servicio|qué (haces|ofreces)|خدمات|ماذا تقدم)/.test(s))
     return { matched: true, action: { kind: 'nav', target: '#services', label: lblServices }, text: L(
-      "🛠 Automation & bots, websites & landing pages, UI design & build, web apps & dashboards, e-commerce and consulting. Want the full list with prices?",
-      "🛠 Automatisering & bots, websites & landingspagina's, UI-ontwerp & build, webapps & dashboards, e-commerce en consulting. Lijst met prijzen?",
-      "🛠 أتمتة وبوتات، مواقع وصفحات هبوط، تصميم وبناء واجهات، تطبيقات ولوحات، متاجر، واستشارات. أعرض القائمة بالأسعار؟",
-      "🛠 Automatización y bots, webs y landings, diseño UI y build, web apps y paneles, e-commerce y consultoría. ¿Ver la lista con precios?",
+      "Automation & bots, websites & landing pages, UI design & build, web apps & dashboards, e-commerce and consulting. Want the full list with prices?",
+      "Automatisering & bots, websites & landingspagina's, UI-ontwerp & build, webapps & dashboards, e-commerce en consulting. Lijst met prijzen?",
+      "أتمتة وبوتات، مواقع وصفحات هبوط، تصميم وبناء واجهات، تطبيقات ولوحات، متاجر، واستشارات. أعرض القائمة بالأسعار؟",
+      "Automatización y bots, webs y landings, diseño UI y build, web apps y paneles, e-commerce y consultoría. ¿Ver la lista con precios?",
     ) };
 
   // CV / resume
@@ -201,82 +201,82 @@ function assistantReply(input: string, language: string): { text: string; action
     // Points at the generated CV page, not the retired static PDF. That file
     // was maintained by hand and had drifted out of sync with the site.
     return { matched: true, action: { kind: 'link', href: '#cv', label: lblCV }, text: L(
-      "📄 Open Stepan's CV — printable, and \"Save as PDF\" from there. Or switch to Company view for the full interactive timeline.",
-      "📄 Open Stepans cv — printbaar, en daar \"Opslaan als PDF\". Of schakel naar Company-weergave voor de volledige tijdlijn.",
-      "📄 افتح سيرة ستيبان — قابلة للطباعة والحفظ كـ PDF. أو بدّل لوضع الشركة للخبرة كاملة.",
-      "📄 Abre el CV de Stepan — imprimible, y desde ahí \"Guardar como PDF\". O cambia a vista Empresa para la trayectoria completa.",
+      "Open Stepan's CV — printable, and \"Save as PDF\" from there. Or switch to Company view for the full interactive timeline.",
+      "Open Stepans cv — printbaar, en daar \"Opslaan als PDF\". Of schakel naar Company-weergave voor de volledige tijdlijn.",
+      "افتح سيرة ستيبان — قابلة للطباعة والحفظ كـ PDF. أو بدّل لوضع الشركة للخبرة كاملة.",
+      "Abre el CV de Stepan — imprimible, y desde ahí \"Guardar como PDF\". O cambia a vista Empresa para la trayectoria completa.",
     ) };
 
   // Experience / career
   if (/(experience|career|work history|employment|\bjobs?\b|досвід|карʼєр|ervaring|loopbaan|experiencia|carrera|خبرة|مسيرة)/.test(s))
     return { matched: true, action: { kind: 'view', mode: 'cv', label: lblCompany }, text: L(
-      "💼 8+ years: luxury e-commerce (childrensalon.com, vogacloset.com), banking systems (Oschadbank CRM), shipped 2026 projects. Full timeline is in Company view.",
-      "💼 8+ jaar: luxe e-commerce (childrensalon.com, vogacloset.com), banksystemen (Oschadbank CRM), 2026-projecten. Volledige tijdlijn in Company-weergave.",
-      "💼 8+ سنوات: تجارة فاخرة (childrensalon.com، vogacloset.com)، أنظمة مصرفية (Oschadbank)، مشاريع 2026. الخبرة كاملة في وضع الشركة.",
-      "💼 8+ años: e-commerce de lujo (childrensalon.com, vogacloset.com), banca (Oschadbank CRM), proyectos 2026. Trayectoria completa en vista Empresa.",
+      "8+ years: luxury e-commerce (childrensalon.com, vogacloset.com), banking systems (Oschadbank CRM), shipped 2026 projects. Full timeline is in Company view.",
+      "8+ jaar: luxe e-commerce (childrensalon.com, vogacloset.com), banksystemen (Oschadbank CRM), 2026-projecten. Volledige tijdlijn in Company-weergave.",
+      "8+ سنوات: تجارة فاخرة (childrensalon.com، vogacloset.com)، أنظمة مصرفية (Oschadbank)، مشاريع 2026. الخبرة كاملة في وضع الشركة.",
+      "8+ años: e-commerce de lujo (childrensalon.com, vogacloset.com), banca (Oschadbank CRM), proyectos 2026. Trayectoria completa en vista Empresa.",
     ) };
 
   // GitHub
   if (/(github|source ?code|repos?|repositor|исходник|broncode|código fuente|جيت ?هاب)/.test(s))
     return { matched: true, action: { kind: 'link', href: 'https://github.com/irozedev', label: lblGithub }, text: L(
-      "💻 Stepan's public code is on GitHub (@irozedev). Open it?",
-      "💻 Stepans publieke code staat op GitHub (@irozedev). Openen?",
-      "💻 كود ستيبان العام على GitHub (@irozedev). أفتحه؟",
-      "💻 El código público de Stepan está en GitHub (@irozedev). ¿Lo abro?",
+      "Stepan's public code is on GitHub (@irozedev). Open it?",
+      "Stepans publieke code staat op GitHub (@irozedev). Openen?",
+      "كود ستيبان العام على GitHub (@irozedev). أفتحه؟",
+      "El código público de Stepan está en GitHub (@irozedev). ¿Lo abro?",
     ) };
 
   // Projects / work
   if (/(portfolio|projects?|your work|examples?|case ?stud|demo|роб(о|і)т|проєкт|портфоліо|приклад|\bwerk\b|voorbeeld|trabajos?|proyectos?|ejemplos?|أعمال|مشاريع|أمثلة)/.test(s))
     return { matched: true, action: { kind: 'nav', target: '#projects', label: lblWork }, text: L(
-      "🚀 Featured: marinek.store (Next.js 14, payments + Telegram automation) and this portfolio. Want to see them?",
-      "🚀 Uitgelicht: marinek.store (Next.js 14, betalingen + Telegram) en dit portfolio. Bekijken?",
-      "🚀 من الأعمال: marinek.store (Next.js 14، مدفوعات + تيليجرام) وهذا الموقع. أعرضها؟",
-      "🚀 Destacado: marinek.store (Next.js 14, pagos + Telegram) y este portfolio. ¿Los ves?",
+      "Featured: marinek.store (Next.js 14, payments + Telegram automation) and this portfolio. Want to see them?",
+      "Uitgelicht: marinek.store (Next.js 14, betalingen + Telegram) en dit portfolio. Bekijken?",
+      "من الأعمال: marinek.store (Next.js 14، مدفوعات + تيليجرام) وهذا الموقع. أعرضها؟",
+      "Destacado: marinek.store (Next.js 14, pagos + Telegram) y este portfolio. ¿Los ves?",
     ) };
 
   // About
   if (/(about (you|stepan|him)|who are you|who is stepan|your background|про себе|про степан|хто ти|over (jou|stepan)|wie ben je|sobre (ti|stepan|él)|quién eres|من أنت|نبذة)/.test(s))
     return { matched: true, action: { kind: 'nav', target: '#about', label: lblAbout }, text: L(
-      "👋 Stepan Roze — Front-End / JavaScript developer, 8+ years, Belgium. React, Vue, Next.js, TypeScript, Magento. More in the About section.",
-      "👋 Stepan Roze — Front-End / JavaScript developer, 8+ jaar, België. React, Vue, Next.js, TypeScript, Magento. Meer in About.",
-      "👋 ستيبان روز — مطور Front-End / JavaScript، 8+ سنوات، بلجيكا. المزيد في قسم نبذة.",
-      "👋 Stepan Roze — desarrollador Front-End / JavaScript, 8+ años, Bélgica. Más en Sobre mí.",
+      "Stepan Roze — Front-End / JavaScript developer, 8+ years, Belgium. React, Vue, Next.js, TypeScript, Magento. More in the About section.",
+      "Stepan Roze — Front-End / JavaScript developer, 8+ jaar, België. React, Vue, Next.js, TypeScript, Magento. Meer in About.",
+      "ستيبان روز — مطور Front-End / JavaScript، 8+ سنوات، بلجيكا. المزيد في قسم نبذة.",
+      "Stepan Roze — desarrollador Front-End / JavaScript, 8+ años, Bélgica. Más en Sobre mí.",
     ) };
 
   // Contact
   if (/(contact|reach (you|him|stepan)|get in touch|звʼяз|звяз|контакт|contacto|contact opnemen|اتصال|تواصل)/.test(s))
     return { matched: true, action: { kind: 'nav', target: '#contact', label: lblContact }, text: L(
-      "📧 Reach Stepan at rozedev095@gmail.com — replies within the day. Or open the contact form 👇",
-      "📧 Mail Stepan: rozedev095@gmail.com — reactie binnen de dag. Of open het formulier 👇",
-      "📧 راسل ستيبان: rozedev095@gmail.com — رد خلال اليوم. أو افتح النموذج 👇",
-      "📧 Escribe a Stepan: rozedev095@gmail.com — respuesta el mismo día. O abre el formulario 👇",
+      "Reach Stepan at rozedev095@gmail.com — replies within the day. Or open the contact form",
+      "Mail Stepan: rozedev095@gmail.com — reactie binnen de dag. Of open het formulier",
+      "راسل ستيبان: rozedev095@gmail.com — رد خلال اليوم. أو افتح النموذج",
+      "Escribe a Stepan: rozedev095@gmail.com — respuesta el mismo día. O abre el formulario",
     ) };
 
   // Hire / start → funnel
   if (/(\bhire\b|let'?s (build|work|start)|start a project|work with (you|me)|найняти|почати проект|inhuren|samenwerken|contratar|trabajar contigo|empezar (un )?proyecto|توظيف|لنبدأ)/.test(s))
     return { matched: true, action: { kind: 'quote', label: lblQuote }, text: L(
-      "🚀 Love it! I'll grab a few details for Stepan and get you a fast quote. Ready?",
-      "🚀 Top! Ik verzamel wat details voor Stepan voor een snelle offerte. Klaar?",
-      "🚀 رائع! سآخذ بعض التفاصيل لستيبان لعرض سريع. جاهز؟",
-      "🚀 ¡Genial! Tomo unos datos para Stepan y te doy un presupuesto rápido. ¿Listo?",
+      "Love it! I'll grab a few details for Stepan and get you a fast quote. Ready?",
+      "Top! Ik verzamel wat details voor Stepan voor een snelle offerte. Klaar?",
+      "رائع! سآخذ بعض التفاصيل لستيبان لعرض سريع. جاهز؟",
+      "¡Genial! Tomo unos datos para Stepan y te doy un presupuesto rápido. ¿Listo?",
     ) };
 
   // Spoken languages
   if (/(languages? (do )?you speak|do you speak|fluent|native language|які мови|розмовляєш|talen spreek|welke talen|idiomas hablas|qué idiomas|تتحدث|لغات تتكلم)/.test(s))
     return { matched: true, text: L(
-      "🗣 Stepan speaks Ukrainian (native) & English, and is learning Dutch. This site & chat work in English, Ukrainian, Dutch, Arabic and Spanish.",
-      "🗣 Stepan spreekt Oekraïens (moedertaal) & Engels, en leert Nederlands. Site & chat: 5 talen.",
-      "🗣 يتحدث ستيبان الأوكرانية (الأم) والإنجليزية ويتعلّم الهولندية. الموقع بخمس لغات.",
-      "🗣 Stepan habla ucraniano (nativo) e inglés, y aprende neerlandés. Sitio y chat en 5 idiomas.",
+      "Stepan speaks Ukrainian (native) & English, and is learning Dutch. This site & chat work in English, Ukrainian, Dutch, Arabic and Spanish.",
+      "Stepan spreekt Oekraïens (moedertaal) & Engels, en leert Nederlands. Site & chat: 5 talen.",
+      "يتحدث ستيبان الأوكرانية (الأم) والإنجليزية ويتعلّم الهولندية. الموقع بخمس لغات.",
+      "Stepan habla ucraniano (nativo) e inglés, y aprende neerlandés. Sitio y chat en 5 idiomas.",
     ) };
 
   // Location
   if (/(where.*(based|live|located|from)|your location|which country|\bcity\b|belgium|де ти|звідки|локац|waar.*(woon|gevestigd|zit)|locatie|dónde (estás|vives)|ubicación|país|أين (تقيم|تعيش)|بلد)/.test(s))
     return { matched: true, text: L(
-      "📍 Based in Belgium (CET), working remotely with clients across Europe and beyond.",
-      "📍 België (CET), werkt remote met klanten in heel Europa en daarbuiten.",
-      "📍 مقيم في بلجيكا (CET)، أعمل عن بُعد مع عملاء في أوروبا وخارجها.",
-      "📍 En Bélgica (CET), trabajo en remoto con clientes de Europa y más allá.",
+      "Based in Belgium (CET), working remotely with clients across Europe and beyond.",
+      "België (CET), werkt remote met klanten in heel Europa en daarbuiten.",
+      "مقيم في بلجيكا (CET)، أعمل عن بُعد مع عملاء في أوروبا وخارجها.",
+      "En Bélgica (CET), trabajo en remoto con clientes de Europa y más allá.",
     ) };
 
   // Info knowledge base (price / timeline / availability / stack / greeting …)
@@ -375,7 +375,7 @@ export function ScrollToTopButton() {
         setTimeout(() => {
           setMessages([{
             id: Date.now(),
-            text: `👋 ${serviceName} — great choice!\n\n${F.askBudget}`,
+            text: `${serviceName} — great choice!\n\n${F.askBudget}`,
             sender: "bot",
             timestamp: new Date(),
           }]);
@@ -391,7 +391,7 @@ export function ScrollToTopButton() {
         setTimeout(() => {
           setMessages([{
             id: Date.now(),
-            text: `👋 Hi! You're looking at my work at ${experience} as ${experienceRole} (${experiencePeriod}).\n\nAsk me anything about it — or tap “${F.labels.quote}” to start a project.`,
+            text: `Hi! You're looking at my work at ${experience} as ${experienceRole} (${experiencePeriod}).\n\nAsk me anything about it — or tap “${F.labels.quote}” to start a project.`,
             sender: "bot",
             timestamp: new Date(),
           }]);
@@ -488,7 +488,7 @@ export function ScrollToTopButton() {
         email: finalLead.email,
         service: `Chat lead — ${finalLead.project || 'General'}`,
         message:
-          `New lead from the site chat 🤖\n\n` +
+          `New lead from the site chat\n\n` +
           `• Project: ${finalLead.project || '—'}\n` +
           `• Budget: ${finalLead.budget || '—'}\n` +
           `• Timeline: ${finalLead.timeline || '—'}\n` +

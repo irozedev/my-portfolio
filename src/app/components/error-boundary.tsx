@@ -16,12 +16,12 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): State {
-    console.error('🚨 ErrorBoundary caught error:', error);
+    console.error('ErrorBoundary caught error:', error);
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('🚨 ErrorBoundary details:', error, errorInfo);
+    console.error('ErrorBoundary details:', error, errorInfo);
   }
 
   render() {
@@ -39,7 +39,7 @@ export class ErrorBoundary extends Component<Props, State> {
           padding: '2rem',
           textAlign: 'center'
         }}>
-          <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠️</h1>
+          <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}> </h1>
           <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
             Oops! Something went wrong
           </h2>

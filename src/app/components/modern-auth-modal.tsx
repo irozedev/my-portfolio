@@ -38,7 +38,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
       await signInWithProvider(provider);
       const providerName = provider === "google" ? "Google" : "GitHub";
       toast.success(
-        `🚀 ${L("Redirecting to", "Doorsturen naar", "جارٍ التحويل إلى", "Redirigiendo a")} ${providerName}…`,
+        `${L("Redirecting to", "Doorsturen naar", "جارٍ التحويل إلى", "Redirigiendo a")} ${providerName}…`,
       );
       // Don't close modal immediately - user is being redirected
     } catch (error: any) {
@@ -136,7 +136,7 @@ export function ModernAuthModal({ isOpen, onClose }: ModernAuthModalProps) {
                 transition={{ delay: 0.3 }}
                 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] mb-2"
               >
-                {t("auth.welcome")}! 👋
+                {t("auth.welcome")}! 
               </motion.h2>
 
               <motion.p

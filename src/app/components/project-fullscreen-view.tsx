@@ -107,7 +107,7 @@ export function ProjectFullscreenView({
 
   return (
     <AnimatePresence>
-      {/* 🔥 FULL-SCREEN IMMERSIVE VIEW - ZOOM IN EFFECT */}
+      {/* FULL-SCREEN IMMERSIVE VIEW - ZOOM IN EFFECT */}
       <motion.div
         key="project-view"
         initial={{ 
@@ -131,7 +131,7 @@ export function ProjectFullscreenView({
         }}
         className="fixed inset-0 z-[100000] bg-[var(--bg-primary)] overflow-hidden"
       >
-        {/* 🔥 FIXED HEADER - GLASSMORPHISM */}
+        {/* FIXED HEADER - GLASSMORPHISM */}
         <motion.div
           initial={{ y: -100 }}
           animate={{ y: 0 }}
@@ -210,7 +210,7 @@ export function ProjectFullscreenView({
           </div>
         </motion.div>
 
-        {/* 🔥 SCROLLABLE CONTENT */}
+        {/* SCROLLABLE CONTENT */}
         {/* `overflow-x-hidden` is load-bearing, not decoration. `overflow-y:
             auto` on its own computes overflow-x to `auto` as well, so the
             600px ambient glow below (wider than any phone) gave this container
@@ -221,7 +221,7 @@ export function ProjectFullscreenView({
           className="h-full w-full overflow-y-auto overflow-x-hidden overscroll-contain [-webkit-overflow-scrolling:touch] scrollbar-thin scrollbar-thumb-[var(--accent-primary)]/30 scrollbar-track-transparent pt-20"
           onScroll={handleScroll}
         >
-          {/* 🔥 HERO IMAGE — full screenshot, anchored to top, no parallax gap */}
+          {/* HERO IMAGE — full screenshot, anchored to top, no parallax gap */}
           <div className="relative h-[38vh] sm:h-[46vh] md:h-[54vh] lg:h-[62vh] overflow-hidden bg-[var(--bg-secondary)]">
             <img
               src={project.image}
@@ -256,7 +256,7 @@ export function ProjectFullscreenView({
                 transition={{ delay: 0.1 }}
                 className="px-4 py-2 bg-gradient-to-r from-[var(--accent-primary)] to-purple-500 text-white font-mono font-bold text-xs sm:text-sm rounded-lg shadow-[0_4px_20px_rgba(0,217,255,0.5)]"
               >
-                {L("⭐ FEATURED", "⭐ UITGELICHT", "⭐ مميّز", "⭐ DESTACADO")}
+                {L("FEATURED", "UITGELICHT", "مميّز", "DESTACADO")}
               </motion.div>
             </div>
 
@@ -307,7 +307,7 @@ export function ProjectFullscreenView({
             </AnimatePresence>
           </div>
 
-          {/* 🔥 MAIN CONTENT SECTION */}
+          {/* MAIN CONTENT SECTION */}
           <div className="relative w-full max-w-full overflow-x-hidden bg-[var(--bg-primary)]">
             {/* Background Glow — sized against the viewport so it can never be
                 wider than the screen it sits on. */}
@@ -315,7 +315,7 @@ export function ProjectFullscreenView({
             
             <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 pb-28 sm:pb-16">
               
-              {/* 🔥 TITLE SECTION */}
+              {/* TITLE SECTION */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -356,7 +356,7 @@ export function ProjectFullscreenView({
                 </div>
               </motion.div>
 
-              {/* 🔥 TECH STACK - ANGULAR CORNERS */}
+              {/* TECH STACK - ANGULAR CORNERS */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -388,7 +388,7 @@ export function ProjectFullscreenView({
                 </div>
               </motion.div>
 
-              {/* 🔥 METRICS - PREMIUM CARDS */}
+              {/* METRICS - PREMIUM CARDS */}
               {project.metrics && project.metrics.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -430,7 +430,7 @@ export function ProjectFullscreenView({
                 </motion.div>
               )}
 
-              {/* 🔥 DESCRIPTION */}
+              {/* DESCRIPTION */}
               {project.fullDescription && (
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -453,7 +453,7 @@ export function ProjectFullscreenView({
                 </motion.div>
               )}
 
-              {/* 🔥 FEATURES - CHECKLIST */}
+              {/* FEATURES - CHECKLIST */}
               {project.features && project.features.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -487,7 +487,7 @@ export function ProjectFullscreenView({
                 </motion.div>
               )}
 
-              {/* 🔥 ACTION BUTTONS - CLEAR TAP INDICATORS */}
+              {/* ACTION BUTTONS - CLEAR TAP INDICATORS */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -531,7 +531,7 @@ export function ProjectFullscreenView({
             </div>
           </div>
 
-          {/* 🔥 MOBILE NAVIGATION - BOTTOM */}
+          {/* MOBILE NAVIGATION - BOTTOM */}
           <div className="sm:hidden sticky bottom-0 left-0 right-0 bg-[var(--bg-primary)]/95 backdrop-blur-xl border-t-2 border-[var(--border-color)] px-4 py-4">
             <div className="flex items-center justify-between gap-3">
               <motion.button

@@ -197,7 +197,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
             email,
             service: `Call booking — ${callType === "video" ? "Video" : "Phone"}`,
             message:
-              `📞 New call booking request\n\n` +
+              `New call booking request\n\n` +
               `• Date: ${dateStr}\n` +
               `• Time: ${selectedTime} CET (Europe/Brussels)\n` +
               `• Type: ${callType}\n` +

@@ -72,10 +72,10 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
       es: "Disponible",
     },
     note: {
-      en: "💡 Need another time? Use the Book a Call button to schedule a custom meeting!",
-      nl: "💡 Andere tijd nodig? Gebruik de knop om een aangepast gesprek te plannen!",
-      ar: "💡 تحتاج وقتًا آخر؟ استخدم الزر لجدولة اجتماع مخصص!",
-      es: "💡 ¿Necesitas otro horario? ¡Usa el botón para programar una reunión personalizada!",
+      en: "Need another time? Use the Book a Call button to schedule a custom meeting!",
+      nl: "Andere tijd nodig? Gebruik de knop om een aangepast gesprek te plannen!",
+      ar: "تحتاج وقتًا آخر؟ استخدم الزر لجدولة اجتماع مخصص!",
+      es: "¿Necesitas otro horario? ¡Usa el botón para programar una reunión personalizada!",
     },
   };
 
@@ -114,7 +114,7 @@ export function AvailabilityScheduleModal({ isOpen, onClose, onBookCall }: Avail
               onClick={onClose}
             />
 
-            {/* 🔥 LARGER MODAL - 400px width for better readability */}
+            {/* LARGER MODAL - 400px width for better readability */}
             <motion.div
               initial={{ opacity: 0, scale: 0.85, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}

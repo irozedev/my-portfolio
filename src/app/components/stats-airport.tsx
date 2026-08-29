@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { Award, CheckCircle2, Users, TrendingUp, Star, Zap, Code2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "../contexts/language-context";
+import { useViewMode } from "../contexts/view-mode-context";
 import { VIEWPORT } from "../lib/motion";
 
 interface StatCardProps {
@@ -80,6 +81,7 @@ function StatCard({ icon: Icon, value, label, color, index }: StatCardProps) {
 
 export function StatsAirport() {
   const { language, t } = useLanguage();
+  const { isClientMode } = useViewMode();
 
   const stats = [
     {
@@ -161,7 +163,12 @@ export function StatsAirport() {
               icon={stat.icon}
               value={stat.value}
               label={stat.label}
-              color={stat.color}
+              /* Seven tiles in gold, violet, emerald and cyan is a row of
+                 confetti: every tile shouts, so none of them lands. In client
+                 mode they all take the accent and the numbers carry the
+                 difference. The CV keeps its colours — it was deliberately
+                 left out of the redesign. */
+              color={isClientMode ? "var(--accent-primary)" : stat.color}
               index={index}
             />
           ))}

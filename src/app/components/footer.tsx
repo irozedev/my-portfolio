@@ -25,7 +25,7 @@ export function Footer() {
   const L = (en: string, nl: string, ar: string, es: string) =>
     language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
 
-  // ✅ ВИПРАВЛЕННЯ: Обробник кліка для якірних посилань
+  // ВИПРАВЛЕННЯ: Обробник кліка для якірних посилань
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     smoothScrollToSection(href);

@@ -55,7 +55,7 @@ export function CookieBanner() {
             </div>
             <div>
               <h3 className="text-base md:text-lg font-bold text-[var(--text-primary)] mb-1">
-                🍪 {L("Cookie notice", "Cookiemelding", "إشعار ملفات تعريف الارتباط", "Aviso de cookies")}
+                {L("Cookie notice", "Cookiemelding", "إشعار ملفات تعريف الارتباط", "Aviso de cookies")}
               </h3>
               <p className="text-xs md:text-sm text-[var(--text-secondary)] leading-relaxed">
                 {L(
