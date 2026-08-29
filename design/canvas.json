@@ -5,16 +5,16 @@
       "x": 0,
       "y": 0,
       "w": 1440,
-      "h": 5100,
-      "title": "Client — dark"
+      "h": 7350,
+      "title": "Klant — donker"
     },
     {
       "file": "Light.dc.html",
       "x": 1560,
       "y": 0,
       "w": 1440,
-      "h": 3080,
-      "title": "Client — light"
+      "h": 7350,
+      "title": "Klant — licht"
     },
     {
       "file": "CV.dc.html",
@@ -35,7 +35,7 @@
     {
       "file": "AltEditorial.dc.html",
       "x": 0,
-      "y": 5300,
+      "y": 7550,
       "w": 880,
       "h": 780,
       "title": "Direction B — Editorial"
@@ -43,7 +43,7 @@
     {
       "file": "AltTerminal.dc.html",
       "x": 1000,
-      "y": 5300,
+      "y": 7550,
       "w": 880,
       "h": 780,
       "title": "Direction C — Terminal"
@@ -118,6 +118,13 @@
       "y": 3720,
       "w": 520,
       "text": "Mobile was one screen; it is five now: home, menu open with the four languages, prices, project view and the assistant.\n\nThe language selector is the site's real set (en, nl, ar, es), not a two-way toggle. Arabic carries RTL and its own fonts, so removing it would throw away real work."
+    },
+    {
+      "id": "besluit",
+      "x": 0,
+      "y": -330,
+      "w": 620,
+      "text": "Kleur blijft zoals hij was: cyaan 00d9ff op zwart. Licht gebruikt hetzelfde cyaan, dieper gezet (0E7490), want 00d9ff is onleesbaar op wit.\n\nHet CV en de A4-print zijn niet aangeraakt.\n\nDe dienstenslider is terug als slider, met de zes diensten en de kleuren van de live site."
     }
   ],
   "launch": {
