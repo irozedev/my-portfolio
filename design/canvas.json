@@ -5,7 +5,7 @@
       "x": 0,
       "y": 0,
       "w": 1440,
-      "h": 4200,
+      "h": 5100,
       "title": "Client — dark"
     },
     {
@@ -35,7 +35,7 @@
     {
       "file": "AltEditorial.dc.html",
       "x": 0,
-      "y": 4400,
+      "y": 5300,
       "w": 880,
       "h": 780,
       "title": "Direction B — Editorial"
@@ -43,7 +43,7 @@
     {
       "file": "AltTerminal.dc.html",
       "x": 1000,
-      "y": 4400,
+      "y": 5300,
       "w": 880,
       "h": 780,
       "title": "Direction C — Terminal"
@@ -69,7 +69,7 @@
       "x": 9360,
       "y": 0,
       "w": 1440,
-      "h": 1180,
+      "h": 1380,
       "title": "Componenten"
     },
     {
@@ -93,7 +93,7 @@
     {
       "id": "placeholders",
       "x": 2100,
-      "y": 5300,
+      "y": 6200,
       "w": 460,
       "text": "Still yours to fill: the KBO number (BE 0800.000.000 is a stand-in), and two screenshots.\n\nNothing else is invented. Every client name, stack and date came out of experience.ts."
     },
