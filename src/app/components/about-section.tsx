@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { Code2, Globe, CheckCircle2, Award, Target, GraduationCap, MapPin, Calendar, Briefcase } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
+import { useViewMode } from "../contexts/view-mode-context";
 import { SkillsFuturistic } from "./skills-futuristic";
 import { LanguagesModern } from "./languages-modern";
 import { VIEWPORT, DURATION, EASE } from "../lib/motion";
@@ -14,6 +15,7 @@ const highlights = [
 
 export function AboutSection() {
   const { t } = useLanguage();
+  const { isCVMode } = useViewMode();
 
   return (
     <section id="about" className="min-h-screen py-6 sm:py-8 md:py-10 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 bg-[var(--bg-primary)] relative overflow-hidden scroll-mt-24 md:scroll-mt-28">
@@ -195,7 +197,11 @@ export function AboutSection() {
             </motion.div>
           </div>
 
-          {/* Skills Bento Grid */}
+          {/* Skills, languages and education answer "should we hire him".
+              A client deciding whether to commission a bot needs none of it,
+              and in client mode it was two thirds of this section. */}
+          {isCVMode && (
+          <>
           <div className="mb-16">
             {/* Enhanced Technical Skills Header */}
             <motion.div
@@ -350,6 +356,8 @@ export function AboutSection() {
               </motion.div>
             </div>
           </div>
+          </>
+          )}
         </motion.div>
       </div>
     </section>
