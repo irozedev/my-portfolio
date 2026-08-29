@@ -87,8 +87,7 @@ const services = [
   },
 ];
 
-// Carousel arrows. We render these ourselves now — they used to be handed to
-// react-slick, which injected the onClick and removed them at the ends.
+// Carousel arrows, rendered here rather than handed to the slider library.
 const arrowClass =
   "absolute top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-10 md:h-10 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--accent-primary)]/30 rounded-full flex items-center justify-center hover:border-[var(--accent-primary)]/70 hover:scale-105 transition-all duration-300 group disabled:opacity-20 disabled:pointer-events-none";
 
@@ -246,22 +245,10 @@ export function ServicesCreativeSlider() {
     return false;
   });
   const trackRef = useRef<HTMLDivElement>(null);
-  // Scroll extent, not slide index, drives the arrows — see the comment on
-  // `step` below.
   const [edges, setEdges] = useState({ atStart: true, atEnd: false });
 
-  // Scroll STOPS, which is what the dots actually address.
-  //
-  // The dots used to be one-per-card with "whichever card is nearest the track
-  // centre" as the active one. That model only holds when a single card fills
-  // the track. With three visible, the first and last card can never reach the
-  // centre, so two of the six dots were permanently unreachable: clicking dot 6
-  // left the counter reading "5 / 6", and at scrollLeft 0 the counter already
-  // claimed "2 / 6" because card 2 is what sits in the middle.
-  //
-  // A track showing `perView` of `n` cards has `n - perView + 1` stops, which
-  // is exactly the range the arrows already step through. Deriving the dots
-  // from the same number keeps the two controls telling one story.
+  // One dot per scroll stop (n - perView + 1), not per card — with three cards
+  // visible the outer ones never reach the centre.
   const [pager, setPager] = useState({ page: 0, pages: 1, stepWidth: 0 });
   const { t, language } = useLanguage();
   const [isProcessingClick, setIsProcessingClick] = useState(false);
@@ -270,26 +257,15 @@ export function ServicesCreativeSlider() {
     language === "nl" ? nl : language === "ar" ? ar : language === "es" ? es : en;
   const copy = serviceCopy(L);
 
-  // Detect mobile on mount
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-
-    // Check immediately
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
-
-    // Listen for resize
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Centre a card in the track.
-  //
-  // `scrollLeft` is measured from the track's own inline-start, so
-  // `offsetLeft` (which is measured from the padding box, LTR-anchored) is the
-  // wrong reference in RTL, where scrollLeft runs negative. Deriving the delta
-  // from getBoundingClientRect keeps one formula correct in both directions.
+  // Measured from getBoundingClientRect rather than offsetLeft: in RTL
+  // scrollLeft runs negative and offsetLeft is anchored the wrong way.
   const scrollToIndex = useCallback((index: number) => {
     const track = trackRef.current;
     const card = track?.children[index] as HTMLElement | undefined;
@@ -303,13 +279,8 @@ export function ServicesCreativeSlider() {
     track.scrollBy({ left: delta, behavior: "smooth" });
   }, []);
 
-  // Active card = whichever centre is nearest the track centre.
-  //
-  // This used to be an IntersectionObserver at threshold 0.6. With three cards
-  // visible on desktop, two or three of them clear 0.6 at once and the
-  // callback fires for each; whichever entry happened to be last in the batch
-  // won, so the dots and the arrows' disabled state flickered between
-  // neighbours while scrolling. Distance-to-centre has exactly one answer.
+  // Nearest centre wins. An IntersectionObserver fires for several cards at
+  // once here and the last one in the batch would win, which flickered.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -337,17 +308,14 @@ export function ServicesCreativeSlider() {
       const max = track.scrollWidth - track.clientWidth;
       setEdges({ atStart: offset <= 1, atEnd: offset >= max - 1 });
 
-      // Pager: measured, not assumed, because how many cards fit is decided by
-      // the CSS flex-basis at the current breakpoint, not by JS.
+      // Measured, not assumed — flex-basis decides how many cards fit.
       const first = track.children[0] as HTMLElement | undefined;
       if (first) {
         const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
         const stepWidth = first.offsetWidth + gap;
         const perView = Math.max(1, Math.round((track.clientWidth + gap) / stepWidth));
         const pages = Math.max(1, track.children.length - perView + 1);
-        // Snap to the nearest stop, but never report a page past the last one:
-        // the final stop is the scroll extent, which can be short of a whole
-        // card width.
+        // The final stop is the scroll extent, which can be short of a card.
         const page = max <= 0 ? 0 : Math.min(pages - 1, Math.round(offset / stepWidth));
         setPager({ page, pages, stepWidth });
       }
@@ -368,13 +336,8 @@ export function ServicesCreativeSlider() {
     };
   }, []);
 
-  // Move by one card. Deliberately NOT `scrollToIndex(currentSlide ± 1)`:
-  // with three cards visible, the last card can never reach the centre, so the
-  // "nearest to centre" index tops out at 4 of 6. Index-based arrows therefore
-  // stayed enabled but stopped moving anything. Stepping by one card width and
-  // gating on the scroll extent behaves correctly at both ends.
-  // Jump to a scroll stop. Uses the same measured step width as the pager, so
-  // a dot always lands exactly where the arrows would have left the track.
+  // Step by one card width, not by index: the last card never reaches the
+  // centre, so an index-based arrow stops moving before the track ends.
   const goToPage = useCallback((page: number) => {
     const track = trackRef.current;
     if (!track || !pager.stepWidth) return;
@@ -390,11 +353,7 @@ export function ServicesCreativeSlider() {
     track.scrollBy({ left: direction * (card.offsetWidth + gap), behavior: "smooth" });
   }, []);
 
-  // ---------------------------------------------------------------------
-  // MOUSE INPUT
-  //
-  // Touch gets native momentum scrolling for free, but a mouse had nothing:
-  // no drag, and a vertical wheel over a horizontal track does nothing at all.
+  // Mouse input. Touch scrolls natively; a mouse needs drag and wheel mapping.
   // The only way to move the carousel with a mouse was to hit an arrow.
   // ---------------------------------------------------------------------
 
