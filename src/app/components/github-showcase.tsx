@@ -166,7 +166,7 @@ export function GitHubShowcase() {
                'GitHub Projects'}
             </span>
           </div>
-          <h2 className="text-2xl md:text-4xl font-black bg-gradient-to-r from-[#00d9ff] to-purple-500 bg-clip-text text-transparent mb-3">
+          <h2 className="font-display text-2xl md:text-4xl font-black uppercase tracking-[-0.03em] text-[var(--text-primary)] mb-3">
             {
              language === 'nl' ? 'Projecten binnenkort beschikbaar' :
              language === 'ar' ? 'المشاريع قادمة قريباً' :
@@ -224,7 +224,7 @@ export function GitHubShowcase() {
                'GitHub Projects'}
             </span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#00d9ff] to-purple-500 bg-clip-text text-transparent mb-3">
+          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-[-0.035em] leading-[0.92] text-[var(--text-primary)] mb-3">
             {
              language === 'nl' ? 'Recente Ontwikkelingen' : 
              language === 'ar' ? 'أحدث الت��ورات' :

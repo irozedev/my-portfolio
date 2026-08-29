@@ -185,7 +185,7 @@ export function HowIWork() {
       {/* Ambient background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[var(--accent-primary)]/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full bg-[radial-gradient(closest-side,var(--glow-secondary),transparent)]" />
       </div>
 
       <div className="container mx-auto max-w-6xl relative z-10">
@@ -197,11 +197,11 @@ export function HowIWork() {
           transition={{ duration: DURATION, ease: EASE }}
           className="text-center mb-12 md:mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[var(--accent-primary)]/10 to-purple-500/10 border border-[var(--accent-primary)]/30 rounded-full mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-primary)]/[0.07] border border-[var(--accent-primary)]/30 rounded-full mb-6">
             <Workflow className="w-5 h-5 text-[var(--accent-primary)]" />
             <span className="text-sm font-medium text-[var(--accent-primary)]">{kicker}</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-400 bg-clip-text text-transparent">
+          <h2 className="font-display text-4xl md:text-6xl font-black uppercase tracking-[-0.035em] leading-[0.92] text-[var(--text-primary)] mb-4">
             {title}
           </h2>
           <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
@@ -246,7 +246,7 @@ export function HowIWork() {
                 className="group relative p-6 bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl hover:border-[var(--accent-primary)]/50 transition-all duration-300"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--accent-primary)]/20 to-purple-500/20 border border-[var(--accent-primary)]/30 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/30 flex items-center justify-center">
                     <Icon className="w-6 h-6 text-[var(--accent-primary)]" />
                   </div>
                   <span className="text-2xl font-black font-mono text-[var(--text-muted)]/40 group-hover:text-[var(--accent-primary)]/40 transition-colors">

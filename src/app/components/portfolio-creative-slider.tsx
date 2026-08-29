@@ -257,7 +257,7 @@ export function PortfolioCreativeSlider() {
     >
       {/* Ambient background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] rounded-full bg-[radial-gradient(closest-side,var(--glow-secondary),transparent)]" />
         <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-3xl" />
       </div>
 
@@ -270,13 +270,13 @@ export function PortfolioCreativeSlider() {
           transition={{ duration: DURATION, ease: EASE }}
           className="text-center mb-12 md:mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/30 rounded-full mb-6">
-            <Award className="w-5 h-5 text-purple-400" />
-            <span className="text-sm font-medium text-purple-400">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-primary)]/[0.07] border border-[var(--accent-primary)]/30 rounded-full mb-6">
+            <Award className="w-5 h-5 text-[var(--accent-primary)]" />
+            <span className="text-sm font-medium text-[var(--accent-primary)]">
               {L("Things I've built", "Wat ik gebouwd heb", "أعمال بنيتها", "Cosas que he construido")}
             </span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-400 bg-clip-text text-transparent">
+          <h2 className="font-display text-4xl md:text-6xl font-black uppercase tracking-[-0.035em] leading-[0.92] text-[var(--text-primary)] mb-4">
             {t("projects.title")}
           </h2>
           <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">

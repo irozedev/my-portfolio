@@ -53,7 +53,7 @@ const services = [
     title: "Web Apps & Dashboards",
     description: "Custom tools, dashboards and integrations for your business processes",
     color: "#a78bfa",
-    gradient: "from-purple-500 to-indigo-500",
+    gradient: "from-[#7c8cf8] to-[#5a6ee0]",
     priceRange: "from €75/hr",
     price: 75,
     priceWithTax: 75,
@@ -79,7 +79,7 @@ const services = [
     title: "Consulting / Hourly",
     description: "Front-end & automation advice, code review and hands-on help by the hour",
     color: "#8b5cf6",
-    gradient: "from-violet-500 to-purple-500",
+    gradient: "from-[#7c8cf8] to-[#4c5fd7]",
     priceRange: "€75/hr",
     price: 75,
     priceWithTax: 75,
@@ -506,7 +506,7 @@ export function ServicesCreativeSlider() {
       >
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/3 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/3 -right-40 w-[36rem] h-[36rem] rounded-full bg-[radial-gradient(closest-side,var(--glow-secondary),transparent)]" />
           <div className="absolute bottom-0 -left-40 w-96 h-96 bg-[#00d9ff]/10 rounded-full blur-3xl" />
         </div>
 
@@ -524,7 +524,7 @@ export function ServicesCreativeSlider() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={VIEWPORT}
               transition={{ duration: DURATION, ease: EASE }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#00d9ff]/10 to-purple-500/10 border border-[#00d9ff]/30 rounded-full mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-primary)]/[0.07] border border-[var(--accent-primary)]/30 rounded-full mb-6"
             >
               <Sparkles className="w-5 h-5 text-[#00d9ff]" />
               <span className="text-sm font-medium text-[#00d9ff]">{t("services.subtitle")}</span>
@@ -533,7 +533,7 @@ export function ServicesCreativeSlider() {
             {/* `from-white` was invisible in the light theme — the gradient
                 started at the page colour. Anchor it to the text token so it
                 inverts with the palette. */}
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-400 bg-clip-text text-transparent">
+            <h2 className="font-display text-4xl md:text-6xl font-black uppercase tracking-[-0.035em] leading-[0.92] text-[var(--text-primary)] mb-6">
               {t("services.title")}
             </h2>
             <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
@@ -686,7 +686,7 @@ export function ServicesCreativeSlider() {
                     <motion.div
                       onClick={() => handleCardClick(service, index)}
                       data-active={isActive}
-                      className="service-card relative bg-[var(--glass-bg)] backdrop-blur-xl border-2 border-[var(--glass-border)] rounded-3xl p-6 md:p-8 hover:border-purple-500/50 group cursor-pointer overflow-visible"
+                      className="service-card relative bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl p-6 md:p-8 shadow-[var(--shadow-card)] hover:border-[var(--accent-primary)]/50 group cursor-pointer overflow-visible"
                       whileHover={!isMobile ? { y: -10 } : undefined}
                     >
                       {/* Animated Background Gradient - DISABLED ON MOBILE */}
@@ -771,7 +771,7 @@ export function ServicesCreativeSlider() {
 
                       {/* Price */}
                       <div className="mb-6 pb-6 border-b border-white/10">
-                        <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] bg-clip-text text-transparent mb-1">
+                        <div className="font-display text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--accent-primary)] mb-1">
                           {text.price}
                         </div>
                         {service.key === 'automation' && (

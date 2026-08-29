@@ -94,7 +94,7 @@ export function Footer() {
                 <Code2 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-500 bg-clip-text text-transparent">
+                <h3 className="font-display text-2xl font-black uppercase tracking-[-0.03em] text-[var(--text-primary)]">
                   Stepan Roze
                 </h3>
                 {/* `hero.role` is agency copy — "I build high-converting

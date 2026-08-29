@@ -221,7 +221,7 @@ export function ContactSection() {
     <section id="contact" className="min-h-screen py-6 sm:py-8 md:py-10 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 bg-gradient-to-b from-[var(--bg-primary)] via-[var(--bg-secondary)] to-[var(--bg-primary)] relative overflow-hidden scroll-mt-24 md:scroll-mt-28">
       {/* Background Elements */}
       <div className="absolute top-20 left-1/4 w-96 h-96 bg-[var(--accent-primary)]/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-1/4 w-96 h-96 rounded-full bg-[radial-gradient(closest-side,var(--glow-secondary),transparent)]" />
 
       <div className="container mx-auto max-w-6xl relative z-10">
         <motion.div
@@ -308,7 +308,7 @@ export function ContactSection() {
                       hover:bg-[var(--bg-secondary)] hover:border-[var(--accent-primary)]/50 transition-all duration-500
                       hover:shadow-[0_0_30px_var(--shadow-color)] overflow-hidden">
                       {/* Gradient Background on Hover */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#00d9ff]/0 via-[#00d9ff]/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#00d9ff]/0 via-[#00d9ff]/5 to-[#00d9ff]/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                       <div className="relative flex items-center gap-3 sm:gap-4 md:gap-5">
                         {/* Icon */}
@@ -380,7 +380,7 @@ export function ContactSection() {
 
               <form onSubmit={handleSubmit} className="relative p-6 sm:p-8 bg-[var(--bg-secondary)]/50 backdrop-blur-md border border-[var(--border-color)] rounded-3xl space-y-6">
                 {/* Light Theme Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#00d9ff]/5 to-purple-500/5 rounded-3xl opacity-50" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#00d9ff]/5 to-[#00d9ff]/[0.02] rounded-3xl opacity-50" />
                 
                 <div className="relative space-y-5">
                   {/* Name + Email */}
