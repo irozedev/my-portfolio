@@ -30,7 +30,7 @@
       "y": 0,
       "w": 390,
       "h": 2400,
-      "title": "Client — phone"
+      "title": "Mobiel · homepagina"
     },
     {
       "file": "AltEditorial.dc.html",
@@ -61,7 +61,7 @@
       "x": 7800,
       "y": 0,
       "w": 1440,
-      "h": 1760,
+      "h": 1820,
       "title": "Projectweergave"
     },
     {
@@ -80,6 +80,14 @@
       "h": 1123,
       "title": "CV, A4 print",
       "print": "fixed"
+    },
+    {
+      "file": "MobileStates.dc.html",
+      "x": 4680,
+      "y": 2600,
+      "w": 1860,
+      "h": 1010,
+      "title": "Mobiel · toestanden"
     }
   ],
   "annotations": [
@@ -103,6 +111,13 @@
       "y": 1300,
       "w": 520,
       "text": "195 emoji live in the code, 155 of them in the chat assistant alone (rocket x21, mail x16, fire x15, wave x15).\n\nThey are out of every mockup here. The ones inside code comments are harmless; the ones in text a client reads are the tell."
+    },
+    {
+      "id": "mobile",
+      "x": 4680,
+      "y": 3720,
+      "w": 520,
+      "text": "Mobile was one screen; it is five now: home, menu open with the four languages, prices, project view and the assistant.\n\nThe language selector is the site's real set (en, nl, ar, es), not a two-way toggle. Arabic carries RTL and its own fonts, so removing it would throw away real work."
     }
   ],
   "launch": {
