@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useLayoutEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useRef, useEffect, useLayoutEffect, ReactNode } from 'react';
 
 type ViewMode = 'client' | 'cv';
 
@@ -61,6 +61,39 @@ export function ViewModeProvider({ children }: { children: ReactNode }) {
     if (!pendingReset.current) return;
     pendingReset.current = false;
     window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [viewMode]);
+
+  // Publish the mode on <html> so CSS can reach it.
+  //
+  // The 2026 client design has its own palette and its own type — Archivo and
+  // Instrument Sans instead of Inter Tight and Inter. The CV keeps what it had,
+  // deliberately: it is the page recruiters already read, and it was not part
+  // of the redesign. Scoping every new token under [data-view="client"] is what
+  // lets one stylesheet carry both without the CV shifting a pixel.
+  //
+  // useLayoutEffect, not useEffect: as an effect the attribute landed after the
+  // first paint, so a returning client-mode visitor got a frame of CV colours.
+  useLayoutEffect(() => {
+    document.documentElement.setAttribute('data-view', viewMode);
+  }, [viewMode]);
+
+  // The client faces are not in index.html. Fetching them for a CV reader who
+  // never switches would be three families of dead weight, so they load the
+  // first time client mode is actually shown. Same approach as the Arabic faces
+  // in language-context.tsx; the <link> is idempotent and stays for the session.
+  useEffect(() => {
+    if (typeof document === 'undefined' || viewMode !== 'client') return;
+    const id = 'client-fonts';
+    if (document.getElementById(id)) return;
+
+    const link = document.createElement('link');
+    link.id = id;
+    link.rel = 'stylesheet';
+    link.href =
+      'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500;75..125,700;75..125,800' +
+      '&family=Instrument+Sans:wght@400;500;600' +
+      '&family=IBM+Plex+Mono:wght@400;500&display=swap';
+    document.head.appendChild(link);
   }, [viewMode]);
 
   return (
