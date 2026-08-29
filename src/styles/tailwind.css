@@ -36,6 +36,16 @@
   --spacing-stack: clamp(1.5rem, 1rem + 2vw, 2.5rem);
 }
 
+/* The display face as a utility.
+   h1–h6 already inherit var(--font-display) from index.css, but plenty of
+   display type is not a heading — a stat value, a logo word, a price. Kept
+   out of `@theme` on purpose: theme.css already owns --font-display and
+   redefines it per view mode, and a second definition emitted onto :root by
+   @theme would race with that one depending on import order. */
+.font-display {
+  font-family: var(--font-display);
+}
+
 /* Card Backgrounds - Theme adaptive */
 .card-bg {
   background: var(--bg-secondary);

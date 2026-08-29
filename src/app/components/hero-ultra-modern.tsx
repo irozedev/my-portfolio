@@ -77,40 +77,62 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
            header remains. */
         className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--bg-primary)] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 pt-28 md:pt-32 pb-12 scroll-mt-28 md:scroll-mt-32"
       >
-        {/* Lightweight Background Grid — pure CSS */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00d9ff08_1px,transparent_1px),linear-gradient(to_bottom,#00d9ff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000,transparent)]" />
+        {isClient ? (
+          /* A gradient mesh instead of a grid of lines. The ruled grid read as
+             a technical drawing, which is the one thing this hero should not
+             look like; three overlapping radial washes give the ground depth
+             without a single extra request. No blur filter here on purpose —
+             a blurred orb promotes the whole section to its own compositing
+             layer, and on a phone that is the most expensive thing in view. */
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[radial-gradient(820px_520px_at_12%_-10%,var(--glow-primary),transparent_62%),radial-gradient(680px_620px_at_88%_8%,var(--glow-secondary),transparent_66%)]"
+          />
+        ) : (
+          <>
+            {/* Lightweight Background Grid — pure CSS */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#00d9ff08_1px,transparent_1px),linear-gradient(to_bottom,#00d9ff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000,transparent)]" />
 
-        {/* Static gradient orbs — no JS animation, GPU-friendly */}
-        <div className="absolute top-1/4 -left-48 w-96 h-96 bg-[var(--accent-primary)] rounded-full mix-blend-multiply filter blur-[128px] opacity-15" />
-        <div className="absolute bottom-1/4 -right-48 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-15" />
+            {/* Static gradient orbs — no JS animation, GPU-friendly */}
+            <div className="absolute top-1/4 -left-48 w-96 h-96 bg-[var(--accent-primary)] rounded-full mix-blend-multiply filter blur-[128px] opacity-15" />
+            <div className="absolute bottom-1/4 -right-48 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-15" />
+          </>
+        )}
 
         {/* Main Content */}
         <div className="relative z-10 w-full max-w-6xl mx-auto">
           {/* ============ CLIENT MODE — split / agency ============ */}
           {isClient ? (
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-10 sm:mb-12">
+            /* Deliberately asymmetric: the type column is wider than the card
+               column, and the card is tipped and overlapped rather than sitting
+               in its own tidy half. Two equal halves of equal weight is what
+               made the old hero read as a wireframe. */
+            <div className="grid lg:grid-cols-[1fr_minmax(0,380px)] gap-8 lg:gap-10 items-start mb-10 sm:mb-12">
               {/* Left: message + CTAs */}
-              <div className="text-center lg:text-left">
+              <div className="text-center lg:text-left lg:pr-6">
                 {/* Availability + role kicker */}
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-5">
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-6 sm:mb-8">
                   {availabilityBadge}
                   <span className="text-xs sm:text-sm font-mono tracking-wider text-[var(--accent-primary)] uppercase">
                     Stepan Roze — {roleTitle}
                   </span>
                 </div>
 
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight text-[var(--text-primary)] mb-5">
+                {/* The headline is the graphic. Nothing else in the hero is
+                    allowed to compete with it, which is why the stat tiles that
+                    used to sit opposite are now one quiet card. */}
+                <h1 className="font-display text-[2.6rem] leading-[0.92] sm:text-6xl sm:leading-[0.9] lg:text-7xl xl:text-[5.5rem] xl:leading-[0.86] font-black tracking-[-0.04em] uppercase text-[var(--text-primary)] mb-6 sm:mb-7">
                   {t("hero.role")}
                 </h1>
 
-                <p className="text-base sm:text-lg text-[var(--text-secondary)] max-w-xl mx-auto lg:mx-0 mb-8">
+                <p className="text-base sm:text-xl leading-relaxed text-[var(--text-secondary)] max-w-[52ch] mx-auto lg:mx-0 mb-8 sm:mb-10">
                   {t("hero.description")}
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 sm:gap-4">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3">
                   <button
                     onClick={() => setIsBookCallOpen(true)}
-                    className="group relative px-8 py-4 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 text-black font-bold rounded-xl overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] active:scale-95"
+                    className="group relative px-8 py-4 bg-[var(--accent-primary)] text-black font-semibold rounded-full transition-all hover:brightness-110 active:scale-95 shadow-[var(--shadow-accent)]"
                   >
                     <span className="relative z-10 flex items-center justify-center gap-2">
                       <Rocket className="w-5 h-5" />
@@ -119,7 +141,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                   </button>
                   <button aria-label="View my work"
                     onClick={onViewWork}
-                    className="group px-8 py-4 bg-[var(--bg-secondary)] text-[var(--text-primary)] font-bold rounded-xl border-2 border-[var(--border-color)] hover:border-[var(--accent-primary)] transition-all active:scale-95"
+                    className="group px-8 py-4 bg-white/[0.03] text-[var(--text-primary)] font-semibold rounded-full border border-[var(--border-color)] hover:border-[var(--accent-primary)] transition-all active:scale-95"
                   >
                     <span className="flex items-center justify-center gap-2">
                       {viewWorkLabel}
@@ -129,17 +151,40 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                 </div>
               </div>
 
-              {/* Right: outcome bento */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                {clientProof.map((p) => (
-                  <div
-                    key={p.label}
-                    className="bg-[var(--bg-secondary)]/50 backdrop-blur-sm border border-[var(--border-color)] rounded-2xl p-5 sm:p-6 hover:border-[var(--accent-primary)]/50 transition-colors"
-                  >
-                    <div className="text-2xl sm:text-3xl font-black text-[var(--accent-primary)] mb-1.5">{p.value}</div>
-                    <div className="text-xs sm:text-sm text-[var(--text-secondary)] leading-snug">{p.label}</div>
+              {/* Right: the same four proof points, but as one card that floats
+                  over the composition instead of four tiles sitting flat beside
+                  it. The tilt and the glow are what give the hero a foreground;
+                  both are dropped below lg, where there is no room to overlap
+                  anything and a tilted card just looks broken. */}
+              <div className="relative mx-auto w-full max-w-sm lg:mt-16 lg:-ml-4 lg:rotate-[-1.6deg]">
+                <div
+                  aria-hidden
+                  className="hidden lg:block absolute -inset-6 rounded-[2rem] bg-[radial-gradient(closest-side,var(--glow-primary),transparent)]"
+                />
+                <div className="relative rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)]/90 p-6 shadow-[var(--shadow-panel)]">
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                      {L("in short", "kort gezegd", "باختصار", "en resumen")}
+                    </span>
+                    <span className="font-mono text-[11px] text-[var(--accent-primary)]">2015 &ndash; 2026</span>
                   </div>
-                ))}
+
+                  <div className="grid gap-2.5">
+                    {clientProof.map((p) => (
+                      <div
+                        key={p.label}
+                        className="flex items-baseline justify-between gap-4 rounded-2xl bg-white/[0.035] px-4 py-3"
+                      >
+                        <span className="font-display text-xl font-extrabold tracking-tight text-[var(--text-primary)]">
+                          {p.value}
+                        </span>
+                        <span className="text-right text-[13px] leading-snug text-[var(--text-secondary)]">
+                          {p.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           ) : (

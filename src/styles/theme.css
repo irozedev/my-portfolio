@@ -235,6 +235,12 @@ img {
   --card-border: rgba(255, 255, 255, 0.09);
   --card-bg: #0d0e10;
 
+  /* The second glow was violet everywhere else on the site. Here both washes
+     stay inside the cyan family — a stray purple in the corner of the hero is
+     most of what made the page read as a template. */
+  --glow-primary: rgba(0, 217, 255, 0.20);
+  --glow-secondary: rgba(0, 120, 160, 0.26);
+
   /* Depth. The old page had no shadows at all, so every surface sat on the
      same plane and the whole thing read as a wireframe. */
   --shadow-card: 0 24px 48px -28px rgba(0, 0, 0, 0.9),
@@ -274,6 +280,11 @@ img {
   --border-color: rgba(11, 15, 20, 0.09);
   --card-border: rgba(11, 15, 20, 0.08);
   --card-bg: #ffffff;
+
+  /* A 20% wash that reads on black is invisible on paper; these are the values
+     measured against the light ground, not the dark ones reused. */
+  --glow-primary: rgba(14, 116, 144, 0.17);
+  --glow-secondary: rgba(14, 116, 144, 0.12);
 
   /* A hairline is enough on black. On paper a white card needs to lift. */
   --shadow-card: 0 1px 2px rgba(11, 15, 20, 0.05),
