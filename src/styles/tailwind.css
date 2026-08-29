@@ -36,6 +36,36 @@
   --spacing-stack: clamp(1.5rem, 1rem + 2vw, 2.5rem);
 }
 
+/* Section headings in the components that BOTH modes render — the projects
+   slider, the GitHub feed, the footer.
+
+   The redesign sets these solid, uppercase and tight. The CV was deliberately
+   left out of it, so under data-view="cv" they keep exactly the gradient fill
+   they always had. Doing it here rather than with a ternary at each call site
+   keeps four components from having to know about view modes at all. */
+.section-heading {
+  font-family: var(--font-display);
+}
+
+[data-view="client"] .section-heading {
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  color: var(--text-primary);
+}
+
+[data-view="cv"] .section-heading {
+  background-image: linear-gradient(
+    to right,
+    var(--text-primary),
+    var(--accent-primary),
+    #a855f7
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 /* The display face as a utility.
    h1–h6 already inherit var(--font-display) from index.css, but plenty of
    display type is not a heading — a stat value, a logo word, a price. Kept

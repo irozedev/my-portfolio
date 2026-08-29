@@ -276,7 +276,7 @@ export function PortfolioCreativeSlider() {
               {L("Things I've built", "Wat ik gebouwd heb", "أعمال بنيتها", "Cosas que he construido")}
             </span>
           </div>
-          <h2 className="font-display text-4xl md:text-6xl font-black uppercase tracking-[-0.035em] leading-[0.92] text-[var(--text-primary)] mb-4">
+          <h2 className="section-heading text-4xl md:text-6xl font-black mb-4">
             {t("projects.title")}
           </h2>
           <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
