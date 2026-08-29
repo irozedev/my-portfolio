@@ -149,7 +149,7 @@ export function HowIWork() {
       time: L("2.5–3.5 weeks", "2.5–3.5 week", "2.5–3.5 أسبوع", "2.5–3.5 semanas"),
     },
     {
-      what: L("Telegram bot", "Telegram-bot", "بوت تيليجرام", "Bot de Telegram"),
+      what: L("WhatsApp bot", "WhatsApp-bot", "بوت واتساب", "Bot de WhatsApp"),
       price: L("from €500", "vanaf €500", "من €500", "desde €500"),
       time: L("~1 week", "~1 week", "~أسبوع", "~1 semana"),
     },

@@ -87,15 +87,15 @@ function localAnswer(input: string, language: string): string {
 
   if (/(price|cost|rate|budget|pricing|quote|how much|цін|цена|скільки|prijs|kost|precio|cuánto|سعر|كم)/.test(s))
     return L(
-      "💶 Starting prices (no VAT — small-business scheme):\n• Landing page — from €950\n• Website 4–6 pages — €2,200–3,500\n• Telegram bot — from €500\n• Automation — €65/h\n• Web app / dashboard — €75/h\n• E-commerce — from €1,800\n• Consulting — €75/h\n\nTell me what you need and I'll narrow it down.",
-      "💶 Vanafprijzen (geen btw — vrijstellingsregeling):\n• Landingspagina — vanaf €950\n• Website 4–6 pagina's — €2.200–3.500\n• Telegram-bot — vanaf €500\n• Automatisering — €65/u\n• Webapp — €75/u\n• E-commerce — vanaf €1.800\n• Consulting — €75/u\n\nVertel wat je nodig hebt.",
+      "💶 Starting prices (no VAT — small-business scheme):\n• Landing page — from €950\n• Website 4–6 pages — €2,200–3,500\n• WhatsApp bot — from €500\n• Automation — €65/h\n• Web app / dashboard — €75/h\n• E-commerce — from €1,800\n• Consulting — €75/h\n\nTell me what you need and I'll narrow it down.",
+      "💶 Vanafprijzen (geen btw — vrijstellingsregeling):\n• Landingspagina — vanaf €950\n• Website 4–6 pagina's — €2.200–3.500\n• WhatsApp-bot — vanaf €500\n• Automatisering — €65/u\n• Webapp — €75/u\n• E-commerce — vanaf €1.800\n• Consulting — €75/u\n\nVertel wat je nodig hebt.",
       "💶 أسعار البداية (بدون ضريبة — نظام المنشآت الصغيرة):\n• صفحة هبوط — من €950\n• موقع 4–6 صفحات — €2,200–3,500\n• بوت تيليجرام — من €500\n• أتمتة — €65/س\n• تطبيق ويب — €75/س\n• متجر — من €1,800\n• استشارة — €75/س\n\nأخبرني بما تحتاج.",
-      "💶 Precios iniciales (sin IVA — régimen de pequeñas empresas):\n• Landing — desde €950\n• Web 4–6 páginas — €2.200–3.500\n• Bot de Telegram — desde €500\n• Automatización — €65/h\n• Web app — €75/h\n• E-commerce — desde €1.800\n• Consultoría — €75/h\n\nCuéntame qué necesitas.",
+      "💶 Precios iniciales (sin IVA — régimen de pequeñas empresas):\n• Landing — desde €950\n• Web 4–6 páginas — €2.200–3.500\n• Bot de WhatsApp — desde €500\n• Automatización — €65/h\n• Web app — €75/h\n• E-commerce — desde €1.800\n• Consultoría — €75/h\n\nCuéntame qué necesitas.",
     );
 
   if (/(time|timeline|how long|deadline|deliver|строк|термін|скільки часу|termijn|hoelang|plazo|cuánto tiempo|مدة|وقت)/.test(s))
     return L(
-      "⏱ Realistic timelines (I build mornings, ~20h/week):\n• Landing — 1–1.5 weeks\n• Website 4–6 pages — 2.5–3.5 weeks\n• Telegram bot — ~1 week\n• Automation — 3–5 mornings\n• Web app (MVP) — 4–6 weeks\n• E-commerce — 3–5 weeks",
+      "⏱ Realistic timelines (I build mornings, ~20h/week):\n• Landing — 1–1.5 weeks\n• Website 4–6 pages — 2.5–3.5 weeks\n• WhatsApp bot — ~1 week\n• Automation — 3–5 mornings\n• Web app (MVP) — 4–6 weeks\n• E-commerce — 3–5 weeks",
       "⏱ Realistische planning (ik bouw 's ochtends, ~20u/week):\n• Landing — 1–1.5 week\n• Website 4–6 pagina's — 2.5–3.5 week\n• Bot — ~1 week\n• Automatisering — 3–5 ochtenden\n• Webapp (MVP) — 4–6 weken\n• E-commerce — 3–5 weken",
       "⏱ مواعيد واقعية (أعمل صباحاً، ~20 ساعة/أسبوع):\n• صفحة هبوط — 1–1.5 أسبوع\n• موقع 4–6 صفحات — 2.5–3.5 أسبوع\n• بوت — ~أسبوع\n• أتمتة — 3–5 صباحات\n• تطبيق (MVP) — 4–6 أسابيع\n• متجر — 3–5 أسابيع",
       "⏱ Plazos realistas (trabajo por las mañanas, ~20h/semana):\n• Landing — 1–1.5 semanas\n• Web 4–6 páginas — 2.5–3.5 semanas\n• Bot — ~1 semana\n• Automatización — 3–5 mañanas\n• Web app (MVP) — 4–6 semanas\n• E-commerce — 3–5 semanas",
