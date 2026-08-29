@@ -1,0 +1,111 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 4200,
+      "title": "Client — dark"
+    },
+    {
+      "file": "Light.dc.html",
+      "x": 1560,
+      "y": 0,
+      "w": 1440,
+      "h": 3080,
+      "title": "Client — light"
+    },
+    {
+      "file": "CV.dc.html",
+      "x": 3120,
+      "y": 0,
+      "w": 1440,
+      "h": 2760,
+      "title": "CV / hiring — dark"
+    },
+    {
+      "file": "Mobile.dc.html",
+      "x": 4680,
+      "y": 0,
+      "w": 390,
+      "h": 2400,
+      "title": "Client — phone"
+    },
+    {
+      "file": "AltEditorial.dc.html",
+      "x": 0,
+      "y": 4400,
+      "w": 880,
+      "h": 780,
+      "title": "Direction B — Editorial"
+    },
+    {
+      "file": "AltTerminal.dc.html",
+      "x": 1000,
+      "y": 4400,
+      "w": 880,
+      "h": 780,
+      "title": "Direction C — Terminal"
+    },
+    {
+      "file": "Legal.dc.html",
+      "x": 6240,
+      "y": 0,
+      "w": 1440,
+      "h": 1500,
+      "title": "Privacy / voorwaarden"
+    },
+    {
+      "file": "Project.dc.html",
+      "x": 7800,
+      "y": 0,
+      "w": 1440,
+      "h": 1760,
+      "title": "Projectweergave"
+    },
+    {
+      "file": "Components.dc.html",
+      "x": 9360,
+      "y": 0,
+      "w": 1440,
+      "h": 1180,
+      "title": "Componenten"
+    },
+    {
+      "file": "CvPrint.dc.html",
+      "x": 10920,
+      "y": 0,
+      "w": 794,
+      "h": 1123,
+      "title": "CV, A4 print",
+      "print": "fixed"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "brief",
+      "x": 0,
+      "y": -190,
+      "w": 620,
+      "text": "Direction A, bolder pass.\n\nReal data from the site: childrensalon.com, vogacloset.com, Oschadbank, marinek.store.\nSix services, a price table with durations, five-step process, project view, legal page.\n\nNL / EN switcher in the header. Dutch shown; English is the same page in English."
+    },
+    {
+      "id": "placeholders",
+      "x": 2100,
+      "y": 5300,
+      "w": 460,
+      "text": "Still yours to fill: the KBO number (BE 0800.000.000 is a stand-in), and two screenshots.\n\nNothing else is invented. Every client name, stack and date came out of experience.ts."
+    },
+    {
+      "id": "emoji",
+      "x": 9360,
+      "y": 1300,
+      "w": 520,
+      "text": "195 emoji live in the code, 155 of them in the chat assistant alone (rocket x21, mail x16, fire x15, wave x15).\n\nThey are out of every mockup here. The ones inside code comments are harmless; the ones in text a client reads are the tell."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

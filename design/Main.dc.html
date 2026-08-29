@@ -1,0 +1,329 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500;75..125,700;75..125,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #00d9ff; text-decoration: none; }
+    a:hover { color: #00eeff; }
+    .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+    .disp { font-family: 'Archivo', 'Arial Narrow', sans-serif; font-variation-settings: 'wdth' 88; }
+    .grain::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.16;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.5'/></svg>");
+    }
+    .idx { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #4d5561; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; background: #070708; color: #ffffff; font-family: 'Instrument Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.55; position: relative;">
+
+  <!-- header -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 56px; border-bottom: 1px solid rgba(255,255,255,0.09); position: relative; z-index: 2;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span class="disp" style="font-weight: 800; font-size: 19px; letter-spacing: -0.02em;">ROZE</span>
+      <span class="mono" style="font-size: 11px; color: #4d5561; letter-spacing: 0.14em;">BE 0800.000.000</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 30px; font-size: 14px; color: #b9bec6;">
+      <span>Diensten</span><span>Werk</span><span>Prijzen</span><span>Werkwijze</span>
+      <div style="display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.13); border-radius: 3px; overflow: hidden; margin-right: 4px;"><span class="mono" style="padding: 7px 11px; font-size: 12px; background: rgba(255,255,255,0.09); color: #ffffff;">NL</span><span class="mono" style="padding: 7px 11px; font-size: 12px; color: #7d8590;">EN</span></div>
+      <div style="display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.13); border-radius: 3px; overflow: hidden;">
+        <span style="background: #00d9ff; color: #070708; padding: 7px 15px; font-weight: 600; font-size: 13px;">Opdracht</span>
+        <span style="padding: 7px 15px; font-size: 13px; color: #7d8590;">CV</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- hero: oversized type as the graphic, hard cyan slab, grain -->
+  <div class="grain" style="position: relative; padding: 76px 56px 0; overflow: hidden;">
+    <div style="position: absolute; top: -160px; right: -140px; width: 620px; height: 620px; background: #00d9ff; opacity: 0.09; transform: rotate(24deg);"></div>
+
+    <div style="position: relative; z-index: 2; display: grid; grid-template-columns: 92px 1fr; gap: 0;">
+      <div style="padding-top: 16px;">
+        <div class="idx">001</div>
+        <div style="width: 1px; height: 210px; background: rgba(255,255,255,0.13); margin: 16px 0 0 4px;"></div>
+      </div>
+
+      <div>
+        <div class="mono" style="font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #00d9ff; margin-bottom: 26px;">Lommel · Limburg · beschikbaar</div>
+        <h1 class="disp" style="font-weight: 800; font-size: 108px; line-height: 0.90; letter-spacing: -0.045em; margin: 0 0 30px; text-transform: uppercase;">
+          Ik bouw het.<br>
+          <span style="color: #00d9ff;">En ik hou het</span><br>
+          draaiend.
+        </h1>
+        <p style="font-size: 21px; line-height: 1.45; color: #b9bec6; max-width: 54ch; margin: 0 0 42px;">Acht jaar front-end voor retailplatformen en banken, nu voor bedrijven in Limburg en Noord-Brabant. Een bureau levert op en verdwijnt. Ik blijf kijken, en repareer voordat jouw klant het merkt.</p>
+        <div style="display: flex; align-items: center; gap: 14px; padding-bottom: 76px;">
+          <span style="background: #00d9ff; color: #070708; font-weight: 600; padding: 16px 30px; border-radius: 3px;">Begin een project</span>
+          <span style="border: 1px solid rgba(255,255,255,0.16); padding: 16px 30px; border-radius: 3px;">Plan een gesprek</span>
+          <span style="border: 1px solid rgba(255,255,255,0.16); padding: 16px 30px; border-radius: 3px;">Bekijk het werk</span>
+          <span class="mono" style="font-size: 12px; color: #7d8590; margin-left: 10px;">antwoord binnen 1 werkdag</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- clients: real names, stated plainly -->
+  <div style="border-top: 1px solid rgba(255,255,255,0.09); border-bottom: 1px solid rgba(255,255,255,0.09); padding: 26px 56px; display: flex; align-items: center; gap: 46px;">
+    <span class="mono" style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #4d5561; flex-shrink: 0;">Eerder gebouwd voor</span>
+    <div style="display: flex; gap: 40px; align-items: baseline;">
+      <span class="disp" style="font-weight: 700; font-size: 19px; color: #b9bec6; letter-spacing: -0.01em;">childrensalon.com</span>
+      <span class="disp" style="font-weight: 700; font-size: 19px; color: #b9bec6; letter-spacing: -0.01em;">vogacloset.com</span>
+      <span class="disp" style="font-weight: 700; font-size: 19px; color: #b9bec6; letter-spacing: -0.01em;">Oschadbank</span>
+      <span class="disp" style="font-weight: 700; font-size: 19px; color: #b9bec6; letter-spacing: -0.01em;">marinek.store</span>
+    </div>
+  </div>
+
+  <!-- services: wide offer, one lead item -->
+  <div style="padding: 76px 56px 0;">
+    <div style="display: grid; grid-template-columns: 92px 1fr; gap: 0;">
+      <div><div class="idx">002</div></div>
+      <div>
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 44px;">
+          <h2 class="disp" style="font-weight: 800; font-size: 58px; letter-spacing: -0.035em; margin: 0; text-transform: uppercase; line-height: 0.95;">Wat ik doe</h2>
+          <span class="mono" style="font-size: 12px; color: #7d8590;">vaste prijs, vooraf afgesproken</span>
+        </div>
+
+        <!-- lead offer, full width, the thing that separates him -->
+        <div style="border: 1px solid #00d9ff; background: linear-gradient(180deg, rgba(0,217,255,0.07), rgba(0,217,255,0.02)); padding: 36px 40px; display: flex; align-items: center; justify-content: space-between; gap: 48px; margin-bottom: 20px;">
+          <div>
+            <div class="mono" style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #00d9ff; margin-bottom: 14px;">Waarom ik</div>
+            <h3 class="disp" style="font-weight: 700; font-size: 34px; margin: 0 0 12px; letter-spacing: -0.025em;">Onderhoud dat meeloopt</h3>
+            <p style="color: #b9bec6; margin: 0; max-width: 64ch; font-size: 17px;">Monitoring, updates en kleine wijzigingen zonder factuur per stuk. Breekt er iets op zondagnacht, dan weet ik het. Niet jouw klant op maandagochtend.</p>
+          </div>
+          <div style="text-align: right; flex-shrink: 0;">
+            <div class="disp" style="font-weight: 800; font-size: 44px; letter-spacing: -0.03em;">€150</div>
+            <div class="mono" style="font-size: 12px; color: #7d8590;">per maand</div>
+          </div>
+        </div>
+
+        <!-- the breadth -->
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.09);">
+          <div style="background: #0d0e10; padding: 30px 28px;">
+            <div class="idx" style="margin-bottom: 18px;">01</div>
+            <h3 class="disp" style="font-weight: 700; font-size: 22px; margin: 0 0 10px; letter-spacing: -0.02em;">Websites</h3>
+            <p style="color: #8b929c; margin: 0 0 18px; font-size: 15px;">Landingspagina's, bedrijfssites, meertalig. Snel op een telefoon, klaar voor Google.</p>
+            <div class="mono" style="font-size: 13px; color: #00d9ff;">vanaf €950</div>
+          </div>
+          <div style="background: #0d0e10; padding: 30px 28px;">
+            <div class="idx" style="margin-bottom: 18px;">02</div>
+            <h3 class="disp" style="font-weight: 700; font-size: 22px; margin: 0 0 10px; letter-spacing: -0.02em;">Webshops</h3>
+            <p style="color: #8b929c; margin: 0 0 18px; font-size: 15px;">Betalingen, verzending, voorraad. Magento en maatwerk, acht jaar ervaring in retail.</p>
+            <div class="mono" style="font-size: 13px; color: #00d9ff;">vanaf €1 800</div>
+          </div>
+          <div style="background: #0d0e10; padding: 30px 28px;">
+            <div class="idx" style="margin-bottom: 18px;">03</div>
+            <h3 class="disp" style="font-weight: 700; font-size: 22px; margin: 0 0 10px; letter-spacing: -0.02em;">WhatsApp-bots</h3>
+            <p style="color: #8b929c; margin: 0 0 18px; font-size: 15px;">Reserveringen, orderstatus, de vragen die iedereen stelt. Beantwoord zonder jou.</p>
+            <div class="mono" style="font-size: 13px; color: #00d9ff;">vanaf €500</div>
+          </div>
+          <div style="background: #0d0e10; padding: 30px 28px;">
+            <div class="idx" style="margin-bottom: 18px;">04</div>
+            <h3 class="disp" style="font-weight: 700; font-size: 22px; margin: 0 0 10px; letter-spacing: -0.02em;">Automatisering</h3>
+            <p style="color: #8b929c; margin: 0 0 18px; font-size: 15px;">Koppelingen tussen systemen die nu met de hand gaan. Facturen, voorraad, e-mail.</p>
+            <div class="mono" style="font-size: 13px; color: #00d9ff;">€65 / uur</div>
+          </div>
+          <div style="background: #0d0e10; padding: 30px 28px;">
+            <div class="idx" style="margin-bottom: 18px;">05</div>
+            <h3 class="disp" style="font-weight: 700; font-size: 22px; margin: 0 0 10px; letter-spacing: -0.02em;">Webapps</h3>
+            <p style="color: #8b929c; margin: 0 0 18px; font-size: 15px;">Dashboards, interne tools, klantportalen. React, Next.js, Vue.</p>
+            <div class="mono" style="font-size: 13px; color: #00d9ff;">€75 / uur</div>
+          </div>
+          <div style="background: #0d0e10; padding: 30px 28px;">
+            <div class="idx" style="margin-bottom: 18px;">06</div>
+            <h3 class="disp" style="font-weight: 700; font-size: 22px; margin: 0 0 10px; letter-spacing: -0.02em;">Losse hulp</h3>
+            <p style="color: #8b929c; margin: 0 0 18px; font-size: 15px;">Code review, een bug die niemand vindt, advies bij een verbouwing.</p>
+            <div class="mono" style="font-size: 13px; color: #00d9ff;">€75 / uur</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- prices: the table a buyer actually wants, with durations -->
+  <div style="padding: 76px 56px 0;">
+    <div style="display: grid; grid-template-columns: 92px 1fr; gap: 0;">
+      <div><div class="idx">003</div></div>
+      <div>
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 40px;">
+          <h2 class="disp" style="font-weight: 800; font-size: 58px; letter-spacing: -0.035em; margin: 0; text-transform: uppercase; line-height: 0.95;">Prijzen</h2>
+          <span class="mono" style="font-size: 12px; color: #7d8590; max-width: 34ch; text-align: right; line-height: 1.6;">geen btw, vrijstellingsregeling kleine ondernemingen</span>
+        </div>
+
+        <div style="border: 1px solid rgba(255,255,255,0.09);">
+          <div style="display: grid; grid-template-columns: 1.7fr 1fr 1fr; background: #0d0e10; border-bottom: 1px solid rgba(255,255,255,0.09);">
+            <div class="mono" style="padding: 14px 26px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #4d5561;">Wat</div>
+            <div class="mono" style="padding: 14px 26px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #4d5561;">Prijs</div>
+            <div class="mono" style="padding: 14px 26px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #4d5561;">Doorlooptijd</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.7fr 1fr 1fr; border-bottom: 1px solid rgba(255,255,255,0.07);">
+            <div style="padding: 20px 26px;">Landingspagina</div>
+            <div class="mono" style="padding: 20px 26px; color: #ffffff;">€950 – €1 800</div>
+            <div class="mono" style="padding: 20px 26px; color: #8b929c;">1 – 1,5 week</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.7fr 1fr 1fr; border-bottom: 1px solid rgba(255,255,255,0.07); background: #0a0b0c;">
+            <div style="padding: 20px 26px;">Website, 4 tot 6 pagina's</div>
+            <div class="mono" style="padding: 20px 26px; color: #ffffff;">€2 200 – €3 500</div>
+            <div class="mono" style="padding: 20px 26px; color: #8b929c;">2,5 – 3,5 weken</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.7fr 1fr 1fr; border-bottom: 1px solid rgba(255,255,255,0.07);">
+            <div style="padding: 20px 26px;">Webshop</div>
+            <div class="mono" style="padding: 20px 26px; color: #ffffff;">vanaf €1 800</div>
+            <div class="mono" style="padding: 20px 26px; color: #8b929c;">3 – 5 weken</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.7fr 1fr 1fr; border-bottom: 1px solid rgba(255,255,255,0.07); background: #0a0b0c;">
+            <div style="padding: 20px 26px;">WhatsApp-bot</div>
+            <div class="mono" style="padding: 20px 26px; color: #ffffff;">vanaf €500</div>
+            <div class="mono" style="padding: 20px 26px; color: #8b929c;">± 1 week</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.7fr 1fr 1fr; border-bottom: 1px solid rgba(255,255,255,0.07);">
+            <div style="padding: 20px 26px;">Automatisering</div>
+            <div class="mono" style="padding: 20px 26px; color: #ffffff;">€65 / uur</div>
+            <div class="mono" style="padding: 20px 26px; color: #8b929c;">3 – 5 ochtenden</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.7fr 1fr 1fr; border-bottom: 1px solid rgba(255,255,255,0.07); background: #0a0b0c;">
+            <div style="padding: 20px 26px;">Webapp of dashboard, eerste versie</div>
+            <div class="mono" style="padding: 20px 26px; color: #ffffff;">€3 000 – €6 000</div>
+            <div class="mono" style="padding: 20px 26px; color: #8b929c;">4 – 6 weken</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.7fr 1fr 1fr; border-bottom: 1px solid rgba(255,255,255,0.07);">
+            <div style="padding: 20px 26px;">Losse hulp of advies</div>
+            <div class="mono" style="padding: 20px 26px; color: #ffffff;">€75 / uur</div>
+            <div class="mono" style="padding: 20px 26px; color: #8b929c;">in overleg</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.7fr 1fr 1fr; background: rgba(0,217,255,0.06);">
+            <div style="padding: 20px 26px; color: #00d9ff;">Onderhoud, doorlopend</div>
+            <div class="mono" style="padding: 20px 26px; color: #00d9ff;">€150 / maand</div>
+            <div class="mono" style="padding: 20px 26px; color: #8b929c;">opzegbaar per maand</div>
+          </div>
+        </div>
+
+        <p class="mono" style="font-size: 12px; color: #7d8590; margin: 18px 0 0; line-height: 1.7;">
+          Ik bouw in de ochtenden, ongeveer 20 uur per week. Die doorlooptijden houden daar rekening mee,<br>
+          dus wat er staat is wat het wordt. Geen offerte die halverwege groeit.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- work: real project, real detail -->
+  <div style="padding: 76px 56px 0;">
+    <div style="display: grid; grid-template-columns: 92px 1fr; gap: 0;">
+      <div><div class="idx">004</div></div>
+      <div>
+        <h2 class="disp" style="font-weight: 800; font-size: 58px; letter-spacing: -0.035em; margin: 0 0 44px; text-transform: uppercase; line-height: 0.95;">Werk</h2>
+
+        <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: start; border-top: 1px solid rgba(255,255,255,0.09); padding-top: 34px;">
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 16px;">
+              <h3 class="disp" style="font-weight: 700; font-size: 32px; margin: 0; letter-spacing: -0.025em;">marinek.store</h3>
+              <span class="mono" style="font-size: 12px; color: #00d9ff;">2026 · live</span>
+            </div>
+            <p style="color: #b9bec6; margin: 0 0 22px; font-size: 17px; max-width: 58ch;">Een betaald coachingsprogramma waarvan de paywall echt dichtblijft. Geverifieerde kaartbetalingen, eenmalige toegang per koper, en een webhook die vier dagen aan retries overleeft zonder iemand dubbel te belasten.</p>
+            <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+              <span class="mono" style="font-size: 11px; color: #8b929c; border: 1px solid rgba(255,255,255,0.11); padding: 4px 10px;">Next.js 14</span>
+              <span class="mono" style="font-size: 11px; color: #8b929c; border: 1px solid rgba(255,255,255,0.11); padding: 4px 10px;">TypeScript</span>
+              <span class="mono" style="font-size: 11px; color: #8b929c; border: 1px solid rgba(255,255,255,0.11); padding: 4px 10px;">Supabase</span>
+              <span class="mono" style="font-size: 11px; color: #8b929c; border: 1px solid rgba(255,255,255,0.11); padding: 4px 10px;">WayForPay</span>
+              <span class="mono" style="font-size: 11px; color: #8b929c; border: 1px solid rgba(255,255,255,0.11); padding: 4px 10px;">Netlify Functions</span>
+            </div>
+          </div>
+          <div style="height: 230px; background: #0d0e10; border: 1px solid rgba(255,255,255,0.09); display: flex; align-items: center; justify-content: center;">
+            <span class="mono" style="font-size: 11px; color: #4d5561;">screenshot marinek.store</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: start; border-top: 1px solid rgba(255,255,255,0.09); padding-top: 34px; margin-top: 34px;">
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 16px;">
+              <h3 class="disp" style="font-weight: 700; font-size: 32px; margin: 0; letter-spacing: -0.025em;">childrensalon.com</h3>
+              <span class="mono" style="font-size: 12px; color: #7d8590;">2022 · Ronis BT</span>
+            </div>
+            <p style="color: #b9bec6; margin: 0 0 22px; font-size: 17px; max-width: 58ch;">Een van de grootste luxe kinderkledingretailers ter wereld. Kernlid van het front-endteam, en de productdetailpagina opnieuw geschreven tijdens de overstap van Magento 1.9 naar custom Symfony.</p>
+            <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+              <span class="mono" style="font-size: 11px; color: #8b929c; border: 1px solid rgba(255,255,255,0.11); padding: 4px 10px;">Magento 1 &amp; 2</span>
+              <span class="mono" style="font-size: 11px; color: #8b929c; border: 1px solid rgba(255,255,255,0.11); padding: 4px 10px;">React</span>
+              <span class="mono" style="font-size: 11px; color: #8b929c; border: 1px solid rgba(255,255,255,0.11); padding: 4px 10px;">Knockout.js</span>
+              <span class="mono" style="font-size: 11px; color: #8b929c; border: 1px solid rgba(255,255,255,0.11); padding: 4px 10px;">SCSS</span>
+            </div>
+          </div>
+          <div style="height: 230px; background: #0d0e10; border: 1px solid rgba(255,255,255,0.09); display: flex; align-items: center; justify-content: center;">
+            <span class="mono" style="font-size: 11px; color: #4d5561;">screenshot childrensalon</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- process -->
+  <div style="padding: 76px 56px 0;">
+    <div style="display: grid; grid-template-columns: 92px 1fr; gap: 0;">
+      <div><div class="idx">005</div></div>
+      <div>
+        <h2 class="disp" style="font-weight: 800; font-size: 58px; letter-spacing: -0.035em; margin: 0 0 40px; text-transform: uppercase; line-height: 0.95;">Werkwijze</h2>
+        <div style="border: 1px solid rgba(255,255,255,0.09);">
+          <div style="display: grid; grid-template-columns: 76px 1fr 1.15fr; border-bottom: 1px solid rgba(255,255,255,0.07); background: #0d0e10;">
+            <div class="disp" style="font-weight: 800; font-size: 24px; color: #00d9ff; padding: 26px 0 26px 26px;">01</div>
+            <div style="padding: 26px 20px;"><h3 class="disp" style="font-weight: 700; font-size: 20px; margin: 0 0 6px;">Bellen, gratis</h3><span class="mono" style="font-size: 11px; color: #4d5561;">20 minuten</span></div>
+            <div style="padding: 26px 26px 26px 0; color: #8b929c; font-size: 15px;">Je vertelt wat er traag is of stuk. Ik zeg meteen of ik het kan, en of het de moeite waard is. Geen presentatie, geen verkooppraatje.</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 76px 1fr 1.15fr; border-bottom: 1px solid rgba(255,255,255,0.07);">
+            <div class="disp" style="font-weight: 800; font-size: 24px; color: #00d9ff; padding: 26px 0 26px 26px;">02</div>
+            <div style="padding: 26px 20px;"><h3 class="disp" style="font-weight: 700; font-size: 20px; margin: 0 0 6px;">Prijs en datum</h3><span class="mono" style="font-size: 11px; color: #4d5561;">binnen 2 dagen</span></div>
+            <div style="padding: 26px 26px 26px 0; color: #8b929c; font-size: 15px;">Eén bedrag en één opleverdatum op papier, voordat er iets gebouwd wordt. Beide blijven staan, ook als het mij tegenvalt.</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 76px 1fr 1.15fr; border-bottom: 1px solid rgba(255,255,255,0.07); background: #0d0e10;">
+            <div class="disp" style="font-weight: 800; font-size: 24px; color: #00d9ff; padding: 26px 0 26px 26px;">03</div>
+            <div style="padding: 26px 20px;"><h3 class="disp" style="font-weight: 700; font-size: 20px; margin: 0 0 6px;">Bouwen, in het zicht</h3><span class="mono" style="font-size: 11px; color: #4d5561;">wekelijks te zien</span></div>
+            <div style="padding: 26px 26px 26px 0; color: #8b929c; font-size: 15px;">Elke week een link waar je zelf doorheen kunt klikken. Je ziet het groeien, dus er zijn geen verrassingen aan het eind.</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 76px 1fr 1.15fr; border-bottom: 1px solid rgba(255,255,255,0.07);">
+            <div class="disp" style="font-weight: 800; font-size: 24px; color: #00d9ff; padding: 26px 0 26px 26px;">04</div>
+            <div style="padding: 26px 20px;"><h3 class="disp" style="font-weight: 700; font-size: 20px; margin: 0 0 6px;">Opleveren</h3><span class="mono" style="font-size: 11px; color: #4d5561;">alles op jouw naam</span></div>
+            <div style="padding: 26px 26px 26px 0; color: #8b929c; font-size: 15px;">Code, domein, hosting en alle wachtwoorden komen op jouw naam te staan. Je zit nergens aan vast, ook niet aan mij.</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 76px 1fr 1.15fr; background: rgba(0,217,255,0.06);">
+            <div class="disp" style="font-weight: 800; font-size: 24px; color: #00d9ff; padding: 26px 0 26px 26px;">05</div>
+            <div style="padding: 26px 20px;"><h3 class="disp" style="font-weight: 700; font-size: 20px; margin: 0 0 6px;">En daarna</h3><span class="mono" style="font-size: 11px; color: #00d9ff;">optioneel</span></div>
+            <div style="padding: 26px 26px 26px 0; color: #b9bec6; font-size: 15px;">Voor €150 per maand blijf ik meekijken. Werkt het niet meer, dan hoor ik het van mijn monitoring en niet van jouw klant.</div>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- contact: full-bleed cyan, the one loud moment -->
+  <div style="margin-top: 76px; background: #00d9ff; color: #070708; padding: 68px 56px; position: relative; overflow: hidden;" class="grain">
+    <div style="position: relative; z-index: 2; display: flex; align-items: flex-end; justify-content: space-between; gap: 56px;">
+      <div>
+        <h2 class="disp" style="font-weight: 800; font-size: 76px; letter-spacing: -0.04em; margin: 0 0 18px; text-transform: uppercase; line-height: 0.92;">Vertel wat er<br>stuk is.</h2>
+        <p style="margin: 0; font-size: 19px; max-width: 48ch; color: rgba(7,7,8,0.78);">Een bericht op WhatsApp is genoeg om te beginnen. Antwoord binnen één werkdag, het eerste gesprek kost niets.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; min-width: 280px;">
+        <span style="background: #070708; color: #ffffff; font-weight: 600; padding: 17px 28px; border-radius: 3px; display: flex; align-items: center; gap: 10px; justify-content: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.7"><path d="M21 11.5a8.4 8.4 0 01-9 8.4 8.5 8.5 0 01-3.9-.9L3 21l1.9-5a8.4 8.4 0 01-.9-3.9 8.4 8.4 0 018.4-9 8.5 8.5 0 018.6 8.4z"/></svg>
+          WhatsApp
+        </span>
+        <span style="border: 1px solid rgba(7,7,8,0.45); padding: 17px 28px; border-radius: 3px; display: flex; align-items: center; gap: 10px; justify-content: center; font-weight: 600;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#070708" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          Plan een gesprek van 20 min
+        </span>
+        <span style="border: 1px solid rgba(7,7,8,0.28); padding: 17px 28px; border-radius: 3px; text-align: center; font-size: 15px;">rozedev095@gmail.com</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 30px 56px; display: flex; justify-content: space-between; align-items: center;">
+    <span class="mono" style="font-size: 11px; color: #4d5561;">© 2026 Stepan Roze · Lommel, België · KBO BE 0800.000.000</span>
+    <div style="display: flex; gap: 22px; font-size: 13px; color: #7d8590;"><span>GitHub</span><span>LinkedIn</span><span>Privacy</span></div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

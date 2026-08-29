@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500;75..125,700;75..125,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #00d9ff; text-decoration: none; }
+    a:hover { color: #00eeff; }
+    .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+    .disp { font-family: 'Archivo', 'Arial Narrow', sans-serif; font-variation-settings: 'wdth' 88; }
+    .idx { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #4d5561; }
+    .pill { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8b929c; border: 1px solid rgba(255,255,255,0.11); padding: 5px 11px; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; background: #070708; color: #ffffff; font-family: 'Instrument Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.55;">
+
+  <!-- fixed bar: back, counter, paging, close. no glass. -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 40px; border-bottom: 1px solid rgba(255,255,255,0.09); background: #070708;">
+    <div style="display: flex; align-items: center; gap: 18px;">
+      <span style="display: flex; align-items: center; gap: 9px; border: 1px solid rgba(255,255,255,0.13); padding: 8px 15px; border-radius: 3px; font-size: 14px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><path d="M15 18l-6-6 6-6"/></svg>
+        Terug
+      </span>
+      <span class="disp" style="font-weight: 700; font-size: 16px; letter-spacing: -0.01em;">marinek.store</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span class="mono" style="font-size: 12px; color: #4d5561;">01 / 02</span>
+      <span style="width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.13); display: flex; align-items: center; justify-content: center; opacity: 0.35;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><path d="M15 18l-6-6 6-6"/></svg>
+      </span>
+      <span style="width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.13); display: flex; align-items: center; justify-content: center;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><path d="M9 18l6-6-6-6"/></svg>
+      </span>
+      <span style="width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.13); display: flex; align-items: center; justify-content: center; margin-left: 6px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </span>
+    </div>
+  </div>
+
+  <!-- cover: the screenshot leads, badges sit on it, no parallax gap -->
+  <div style="position: relative; height: 420px; background: #0d0e10; border-bottom: 1px solid rgba(255,255,255,0.09); display: flex; align-items: center; justify-content: center;">
+    <span class="mono" style="font-size: 12px; color: #35404d;">screenshot marinek.store</span>
+    <div style="position: absolute; left: 40px; bottom: 28px; display: flex; gap: 8px;">
+      <span class="mono" style="font-size: 11px; background: #00d9ff; color: #070708; padding: 6px 12px; font-weight: 500;">LIVE</span>
+      <span class="mono" style="font-size: 11px; border: 1px solid rgba(255,255,255,0.22); padding: 6px 12px; color: #ffffff;">2026</span>
+      <span class="mono" style="font-size: 11px; border: 1px solid rgba(255,255,255,0.22); padding: 6px 12px; color: #ffffff;">Eigen product</span>
+    </div>
+  </div>
+
+  <!-- title + the numbers that matter, side by side -->
+  <div style="padding: 56px 40px 0;">
+    <div style="display: grid; grid-template-columns: 92px 1fr 340px; gap: 44px;">
+      <div><div class="idx">001</div></div>
+
+      <div>
+        <h1 class="disp" style="font-weight: 800; font-size: 68px; letter-spacing: -0.04em; margin: 0 0 22px; line-height: 0.94; text-transform: uppercase;">marinek<span style="color: #00d9ff;">.store</span></h1>
+        <p style="font-size: 20px; line-height: 1.5; color: #b9bec6; margin: 0 0 30px; max-width: 58ch;">Een betaald coachingsprogramma waarvan de paywall echt dichtblijft.</p>
+
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 40px;">
+          <span class="pill">Next.js 14</span><span class="pill">TypeScript</span><span class="pill">React</span>
+          <span class="pill">Supabase</span><span class="pill">Netlify Functions</span><span class="pill">WayForPay</span><span class="pill">GA4</span>
+        </div>
+
+        <div style="border-top: 1px solid rgba(255,255,255,0.09); padding-top: 34px;">
+          <h2 class="disp" style="font-weight: 700; font-size: 26px; margin: 0 0 14px; letter-spacing: -0.02em;">Het probleem</h2>
+          <p style="color: #8b929c; margin: 0 0 30px; max-width: 70ch;">De betaalde marathon werd verkocht via één gedeelde uitnodigingslink. Wie betaald had stuurde die door, en de rest kwam gratis binnen. Betalingen werden bovendien in de browser geprijsd, dus het bedrag was aan te passen voordat het de server bereikte.</p>
+
+          <h2 class="disp" style="font-weight: 700; font-size: 26px; margin: 0 0 14px; letter-spacing: -0.02em;">Wat ik gebouwd heb</h2>
+          <p style="color: #8b929c; margin: 0 0 18px; max-width: 70ch;">Prijzen komen nu van de server, betalingen worden op handtekening geverifieerd, en iedere koper krijgt een eigen eenmalige toegang die na gebruik vervalt.</p>
+          <p style="color: #8b929c; margin: 0; max-width: 70ch;">De webhook is idempotent gemaakt tegen een venster van vier dagen aan herhaalde oproepen, zodat een herhaling niemand twee keer toegang of twee keer een afschrijving oplevert.</p>
+        </div>
+      </div>
+
+      <!-- rail: outcome + links -->
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); padding-left: 30px;">
+        <div class="mono" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #4d5561; margin-bottom: 22px;">In het kort</div>
+        <div style="display: flex; flex-direction: column; gap: 22px; margin-bottom: 34px;">
+          <div>
+            <div class="disp" style="font-weight: 800; font-size: 30px; letter-spacing: -0.02em;">3</div>
+            <div class="mono" style="font-size: 11px; color: #7d8590; margin-top: 4px;">prijsniveaus</div>
+          </div>
+          <div>
+            <div class="disp" style="font-weight: 800; font-size: 30px; letter-spacing: -0.02em;">0</div>
+            <div class="mono" style="font-size: 11px; color: #7d8590; margin-top: 4px;">dubbele afschrijvingen</div>
+          </div>
+          <div>
+            <div class="disp" style="font-weight: 800; font-size: 30px; letter-spacing: -0.02em;">4 dgn</div>
+            <div class="mono" style="font-size: 11px; color: #7d8590; margin-top: 4px;">retry-venster afgedekt</div>
+          </div>
+          <div>
+            <div class="disp" style="font-weight: 800; font-size: 30px; letter-spacing: -0.02em;">1 op 1</div>
+            <div class="mono" style="font-size: 11px; color: #7d8590; margin-top: 4px;">toegang per koper</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="background: #00d9ff; color: #070708; font-weight: 600; padding: 13px 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center; gap: 9px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#070708" stroke-width="1.8"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            Bekijk live
+          </span>
+          <span style="border: 1px solid rgba(255,255,255,0.16); padding: 13px 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center; gap: 9px; color: #b9bec6; font-size: 15px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b9bec6" stroke-width="1.6"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 00-.9-2.6c3-.3 6.2-1.5 6.2-6.7A5.2 5.2 0 0019.9 5 4.9 4.9 0 0019.8.8s-1.1-.3-3.7 1.4a12.7 12.7 0 00-6.6 0C6.9.5 5.8.8 5.8.8A4.9 4.9 0 005.7 5a5.2 5.2 0 00-1.4 3.6c0 5.2 3.2 6.4 6.2 6.7a3.4 3.4 0 00-.9 2.6V22"/></svg>
+            Broncode
+          </span>
+        </div>
+
+        <p class="mono" style="font-size: 11px; color: #4d5561; margin: 22px 0 0; line-height: 1.7;">Gebouwd naast een fulltime baan, in de ochtenden.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- next project -->
+  <div style="margin-top: 64px; border-top: 1px solid rgba(255,255,255,0.09); padding: 34px 40px; display: flex; align-items: center; justify-content: space-between;">
+    <div>
+      <div class="mono" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #4d5561; margin-bottom: 6px;">Volgende</div>
+      <span class="disp" style="font-weight: 700; font-size: 26px; letter-spacing: -0.02em;">childrensalon.com</span>
+    </div>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00d9ff" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

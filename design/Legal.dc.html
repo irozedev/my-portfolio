@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500;75..125,700;75..125,800&family=Instrument+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #00d9ff; text-decoration: none; }
+    a:hover { color: #00eeff; }
+    .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+    .disp { font-family: 'Archivo', 'Arial Narrow', sans-serif; font-variation-settings: 'wdth' 88; }
+    .idx { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; color: #4d5561; }
+    .h3 { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 19px; margin: 0 0 10px; letter-spacing: -0.015em; }
+    .p { color: #8b929c; font-size: 15px; line-height: 1.65; margin: 0 0 24px; max-width: 74ch; }
+  </style>
+</helmet>
+
+<div style="width: 1440px; background: #070708; color: #ffffff; font-family: 'Instrument Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.55;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 56px; border-bottom: 1px solid rgba(255,255,255,0.09);">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span class="disp" style="font-weight: 800; font-size: 19px; letter-spacing: -0.02em;">ROZE</span>
+      <span class="mono" style="font-size: 11px; color: #4d5561; letter-spacing: 0.14em;">BE 0800.000.000</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 18px;"><div style="display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.13); border-radius: 3px; overflow: hidden; margin-right: 4px;"><span class="mono" style="padding: 7px 11px; font-size: 12px; background: rgba(255,255,255,0.09); color: #ffffff;">NL</span><span class="mono" style="padding: 7px 11px; font-size: 12px; color: #7d8590;">EN</span></div><span class="mono" style="font-size: 12px; color: #7d8590;">terug naar de site</span></div>
+  </div>
+
+  <!-- tabs across the three legal pages so they share one shell -->
+  <div style="padding: 56px 56px 0;">
+    <div style="display: grid; grid-template-columns: 92px 1fr;">
+      <div><div class="idx">JUR</div></div>
+      <div>
+        <h1 class="disp" style="font-weight: 800; font-size: 62px; letter-spacing: -0.04em; margin: 0 0 30px; text-transform: uppercase; line-height: 0.94;">Juridisch</h1>
+        <div style="display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.09); margin-bottom: 44px;">
+          <span style="padding: 12px 22px 14px 0; border-bottom: 2px solid #00d9ff; color: #ffffff; font-weight: 600; font-size: 15px;">Privacyverklaring</span>
+          <span style="padding: 12px 22px 14px; color: #7d8590; font-size: 15px;">Algemene voorwaarden</span>
+          <span style="padding: 12px 22px 14px; color: #7d8590; font-size: 15px;">Cookies</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0 56px 0;">
+    <div style="display: grid; grid-template-columns: 92px 1fr 300px; gap: 48px;">
+      <div></div>
+
+      <div>
+        <p class="mono" style="font-size: 12px; color: #4d5561; margin: 0 0 34px;">Laatst bijgewerkt op 29 augustus 2026</p>
+
+        <h2 class="h3">Wie is verantwoordelijk</h2>
+        <p class="p">Stepan Roze, eenmanszaak gevestigd te Lommel, België, ingeschreven bij de Kruispuntbank van Ondernemingen onder nummer BE 0800.000.000. Vragen over je gegevens gaan naar rozedev095@gmail.com, en je krijgt binnen dertig dagen antwoord.</p>
+
+        <h2 class="h3">Welke gegevens ik bewaar</h2>
+        <p class="p">Alleen wat je zelf invult in het contactformulier of meestuurt via WhatsApp of e-mail: je naam, je e-mailadres en wat je schrijft over je project. Er staat geen tracking op deze site die je over het web volgt, en ik verkoop niets door aan derden.</p>
+
+        <h2 class="h3">Waarom, en hoe lang</h2>
+        <p class="p">Om je bericht te kunnen beantwoorden en, als we samenwerken, om de opdracht te kunnen uitvoeren en factureren. Berichten bewaar ik twee jaar, facturen zeven jaar omdat de Belgische fiscus dat voorschrijft. Daarna verdwijnen ze.</p>
+
+        <h2 class="h3">Wie het nog meer ziet</h2>
+        <p class="p">De site draait bij een hostingpartij en het contactformulier loopt via een databank; beiden verwerken je gegevens alleen in mijn opdracht en binnen de Europese Economische Ruimte. Verder niemand.</p>
+
+        <h2 class="h3">Wat je kunt eisen</h2>
+        <p class="p">Inzage in wat ik van je heb, correctie, verwijdering, en bezwaar tegen de verwerking. Eén mail is genoeg. Vind je dat ik het niet goed doe, dan kun je klacht neerleggen bij de Gegevensbeschermingsautoriteit in Brussel.</p>
+
+        <h2 class="h3">Cookies</h2>
+        <p class="p">Deze site zet standaard geen cookies die je gedrag volgen. Wat er lokaal wordt onthouden, zoals je taal en of je licht of donker leest, blijft in je eigen browser en bereikt mij nooit.</p>
+      </div>
+
+      <!-- the sidebar is where the trust signals live -->
+      <div style="border-left: 1px solid rgba(255,255,255,0.09); padding-left: 32px;">
+        <div class="mono" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #4d5561; margin-bottom: 20px;">Bedrijfsgegevens</div>
+        <div style="display: flex; flex-direction: column; gap: 16px; font-size: 14px;">
+          <div><div style="color: #7d8590; font-size: 12px; margin-bottom: 3px;">Handelsnaam</div><div>Stepan Roze</div></div>
+          <div><div style="color: #7d8590; font-size: 12px; margin-bottom: 3px;">Rechtsvorm</div><div>Eenmanszaak, bijberoep</div></div>
+          <div><div style="color: #7d8590; font-size: 12px; margin-bottom: 3px;">Ondernemingsnummer</div><div class="mono">BE 0800.000.000</div></div>
+          <div><div style="color: #7d8590; font-size: 12px; margin-bottom: 3px;">Btw</div><div>Vrijstellingsregeling kleine ondernemingen</div></div>
+          <div><div style="color: #7d8590; font-size: 12px; margin-bottom: 3px;">Vestiging</div><div>Lommel, Limburg, België</div></div>
+          <div><div style="color: #7d8590; font-size: 12px; margin-bottom: 3px;">Contact</div><div>rozedev095@gmail.com</div></div>
+        </div>
+
+        <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.09);">
+          <div class="mono" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #4d5561; margin-bottom: 16px;">Betaling en garantie</div>
+          <div style="display: flex; flex-direction: column; gap: 14px; font-size: 14px; color: #b9bec6;">
+            <div>50% bij akkoord, 50% bij oplevering.</div>
+            <div>Betaaltermijn 14 dagen.</div>
+            <div>30 dagen garantie op fouten in wat ik gebouwd heb, kosteloos.</div>
+            <div>Belgisch recht, rechtbank Antwerpen afdeling Hasselt.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 64px; border-top: 1px solid rgba(255,255,255,0.09); padding: 30px 56px; display: flex; justify-content: space-between; align-items: center;">
+    <span class="mono" style="font-size: 11px; color: #4d5561;">© 2026 Stepan Roze · Lommel, België · KBO BE 0800.000.000</span>
+    <div style="display: flex; gap: 22px; font-size: 13px; color: #7d8590;"><span>Privacy</span><span>Voorwaarden</span><span>Cookies</span></div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

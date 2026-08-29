@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500;75..125,700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #0e7490; text-decoration: none; }
+    a:hover { color: #0c6579; }
+    .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+    .disp { font-family: 'Archivo', 'Arial Narrow', sans-serif; }
+    .sec { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 12pt; letter-spacing: 0.02em; text-transform: uppercase; color: #0e7490; margin: 0 0 9px; padding-bottom: 5px; border-bottom: 1px solid #d6dbe0; }
+    .role { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 12pt; margin: 0; color: #14202b; }
+    .meta { font-family: 'IBM Plex Mono', monospace; font-size: 9pt; color: #5d6874; margin: 2px 0 7px; }
+    .li { font-size: 10.5pt; line-height: 1.45; color: #33404e; margin: 0 0 5px; padding-left: 13px; position: relative; }
+    .dot { position: absolute; left: 0; top: 0; color: #0e7490; }
+  </style>
+</helmet>
+
+<!-- A4 at 96 css px per inch: 794 x 1123 -->
+<div style="width: 794px; height: 1123px; background: #ffffff; color: #14202b; font-family: 'Instrument Sans', system-ui, sans-serif; padding: 46px 52px; box-sizing: border-box; position: relative;">
+
+  <!-- header -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 18px; border-bottom: 2px solid #14202b;">
+    <div>
+      <h1 class="disp" style="font-weight: 700; font-size: 26pt; letter-spacing: -0.025em; margin: 0 0 3px; line-height: 1;">Stepan Roze</h1>
+      <p style="font-size: 11.5pt; color: #0e7490; margin: 0; font-weight: 500;">Front-end / JavaScript developer</p>
+    </div>
+    <div class="mono" style="font-size: 9pt; color: #5d6874; text-align: right; line-height: 1.75;">
+      Lommel, België<br>
+      rozedev095@gmail.com<br>
+      +32 469 63 14 24<br>
+      roze.live · github.com/irozedev
+    </div>
+  </div>
+
+  <!-- profile -->
+  <div style="margin-top: 20px;">
+    <h2 class="sec">Profiel</h2>
+    <p style="font-size: 10.5pt; line-height: 1.5; color: #33404e; margin: 0;">Acht jaar commerciële front-end ervaring, van luxe retailplatformen op schaal tot een CRM voor een nationale bank. Recent een eigen commercieel product van ontwerp tot livegang gebracht. Woonachtig in België, geen sponsoring nodig.</p>
+  </div>
+
+  <!-- skills -->
+  <div style="margin-top: 18px;">
+    <h2 class="sec">Kernvaardigheden</h2>
+    <div style="display: grid; grid-template-columns: 92px 1fr; gap: 5px 14px; font-size: 10pt; color: #33404e;">
+      <div class="mono" style="font-size: 9pt; color: #5d6874;">Talen</div>
+      <div>TypeScript, JavaScript (ES6+), HTML5, CSS3</div>
+      <div class="mono" style="font-size: 9pt; color: #5d6874;">Frameworks</div>
+      <div>React, Next.js 14, Vue.js, Knockout.js, Tailwind</div>
+      <div class="mono" style="font-size: 9pt; color: #5d6874;">Platform</div>
+      <div>Magento 1 &amp; 2, MS Dynamics 365 XRM, Supabase, Netlify Functions</div>
+      <div class="mono" style="font-size: 9pt; color: #5d6874;">Overig</div>
+      <div>REST API's, betaalintegraties, webhooks, GA4, toegankelijkheid</div>
+    </div>
+  </div>
+
+  <!-- experience -->
+  <div style="margin-top: 18px;">
+    <h2 class="sec">Werkervaring</h2>
+
+    <div style="margin-bottom: 13px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <p class="role">Zelfstandig · webproducten van begin tot eind</p>
+        <span class="mono" style="font-size: 9pt; color: #5d6874;">2026 – heden</span>
+      </div>
+      <p class="meta">Ontwerp, bouw, livegang en onderhoud</p>
+      <p class="li"><span class="dot">·</span>marinek.store gelanceerd op Next.js 14: coachingprogramma met drie tarieven en geverifieerde kaartbetalingen.</p>
+      <p class="li"><span class="dot">·</span>Betaalwebhook idempotent gemaakt tegen een retry-venster van vier dagen, zodat niemand dubbel wordt belast.</p>
+      <p class="li" style="margin-bottom: 0;"><span class="dot">·</span>Gedeelde uitnodigingslink vervangen door eenmalige toegang per koper.</p>
+    </div>
+
+    <div style="margin-bottom: 13px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <p class="role">Albron / Center Parcs</p>
+        <span class="mono" style="font-size: 9pt; color: #5d6874;">2025 – heden</span>
+      </div>
+      <p class="meta">Lommel, België</p>
+      <p class="li" style="margin-bottom: 0;"><span class="dot">·</span>Werkzaam in de keuken naast het bouwen van webproducten in de ochtenden.</p>
+    </div>
+
+    <div style="margin-bottom: 13px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <p class="role">E-Consulting · front-end developer</p>
+        <span class="mono" style="font-size: 9pt; color: #5d6874;">2024 – 2025</span>
+      </div>
+      <p class="meta">CRM voor Oschadbank op MS Dynamics 365 XRM</p>
+      <p class="li"><span class="dot">·</span>CRM-webresources ontwikkeld voor een nationale bank.</p>
+      <p class="li" style="margin-bottom: 0;"><span class="dot">·</span>Vue.js-applicatie voor documentondertekening gebouwd met asynchrone verzoeken en handtekeningen op canvas.</p>
+    </div>
+
+    <div style="margin-bottom: 13px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <p class="role">Ronis BT · front-end developer</p>
+        <span class="mono" style="font-size: 9pt; color: #5d6874;">2022 – 2024</span>
+      </div>
+      <p class="meta">childrensalon.com · vogacloset.com</p>
+      <p class="li"><span class="dot">·</span>Kernlid van het front-endteam op twee klantaccounts, waaronder een van de grootste luxe kinderkledingretailers ter wereld.</p>
+      <p class="li" style="margin-bottom: 0;"><span class="dot">·</span>Productdetailpagina herschreven tijdens de overstap van Magento 1.9 naar een custom Symfony-platform.</p>
+    </div>
+
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <p class="role">Webstudio en freelance</p>
+        <span class="mono" style="font-size: 9pt; color: #5d6874;">2015 – 2022</span>
+      </div>
+      <p class="meta">HTML5, CSS3, JavaScript, jQuery, PHP</p>
+      <p class="li" style="margin-bottom: 0;"><span class="dot">·</span>Websites en webshops gebouwd en onderhouden voor meer dan twintig klanten in Europa en Noord-Amerika.</p>
+    </div>
+  </div>
+
+  <!-- education + languages, two columns to fit the sheet -->
+  <div style="margin-top: 18px; display: grid; grid-template-columns: 1.35fr 1fr; gap: 26px;">
+    <div>
+      <h2 class="sec">Opleiding</h2>
+      <p class="role" style="font-size: 11pt;">Computer Academy STEP</p>
+      <p class="meta" style="margin-bottom: 9px;">Softwareontwikkeling</p>
+      <p class="role" style="font-size: 11pt;">V. N. Karazin Kharkiv National University</p>
+      <p class="meta" style="margin-bottom: 0;">Informatica, algoritmen, datastructuren · vanaf 2012</p>
+    </div>
+    <div>
+      <h2 class="sec">Talen</h2>
+      <div style="display: flex; flex-direction: column; gap: 4px; font-size: 10pt; color: #33404e;">
+        <div style="display: flex; justify-content: space-between;"><span>Engels</span><span class="mono" style="font-size: 9pt; color: #5d6874;">professioneel</span></div>
+        <div style="display: flex; justify-content: space-between;"><span>Nederlands</span><span class="mono" style="font-size: 9pt; color: #5d6874;">lerend</span></div>
+        <div style="display: flex; justify-content: space-between;"><span>Oekraïens</span><span class="mono" style="font-size: 9pt; color: #5d6874;">moedertaal</span></div>
+        <div style="display: flex; justify-content: space-between;"><span>Russisch</span><span class="mono" style="font-size: 9pt; color: #5d6874;">moedertaal</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- foot -->
+  <div style="position: absolute; left: 52px; right: 52px; bottom: 30px; padding-top: 10px; border-top: 1px solid #d6dbe0; display: flex; justify-content: space-between;">
+    <span class="mono" style="font-size: 8.5pt; color: #8b939c;">Stepan Roze · curriculum vitae · augustus 2026</span>
+    <span class="mono" style="font-size: 8.5pt; color: #8b939c;">roze.live</span>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
