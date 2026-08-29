@@ -8,6 +8,7 @@ import { useViewMode } from "../contexts/view-mode-context";
 import { ViewModeToggle } from "./view-mode-toggle";
 import { BookCallModal } from "./book-call-fixed";
 import { AvailabilityScheduleModal } from "./availability-schedule-modal";
+import { useModalA11y } from "../hooks/use-modal-a11y";
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -125,6 +126,12 @@ export function Navigation() {
     }
     return () => { document.body.style.overflow = ''; };
   }, [isMobileMenuOpen]);
+
+  // The menu is a dialog, so it gets Escape and a focus trap like the rest.
+  const mobileMenuRef = useModalA11y({
+    isOpen: isMobileMenuOpen,
+    onClose: () => setIsMobileMenuOpen(false),
+  });
 
   // Close the language dropdown on outside click
   useEffect(() => {
@@ -384,6 +391,11 @@ export function Navigation() {
 
           {/* Panel */}
           <div
+            ref={mobileMenuRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
+            tabIndex={-1}
             className={`absolute top-0 right-0 h-full w-full max-w-sm bg-[var(--bg-primary)] border-l border-[var(--border-color)] shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
               isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
