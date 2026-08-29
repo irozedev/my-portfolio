@@ -19,9 +19,9 @@ import type { Variants } from "motion/react";
  *  3. Triggering at the very edge. Every one of the 54 `viewport` props was a
  *     bare `{ once: true }`, firing at 0px intersection — the element starts
  *     moving the instant its first pixel appears, so the motion happens at the
- *     bottom edge of the screen where it is least legible. `VIEWPORT` waits
- *     for a fifth of the element and pulls the trigger line up, so the
- *     entrance finishes about where the eye lands.
+ *     bottom edge of the screen where it is least legible. `VIEWPORT` pulls the
+ *     trigger line up the screen instead, so the entrance finishes about where
+ *     the eye lands.
  */
 
 /**
@@ -37,11 +37,23 @@ export const EASE = [0.22, 1, 0.36, 1] as const;
 export const DURATION = 0.45;
 
 /**
- * Scroll trigger. `amount: 0.2` waits until a fifth of the element is showing;
- * the negative bottom margin moves the trigger line 8% up the viewport so the
- * entrance is finishing as the element reaches comfortable reading height.
+ * Scroll trigger — a line across the screen, not a fraction of the element.
+ *
+ * This used to be `amount: 0.2`, which waits for a fifth of the element to be
+ * showing. That is unreachable for anything taller than five viewports: the
+ * most of an element you can ever see at once is `viewport / element`, so a
+ * 4208px section on a 720px phone tops out at 0.171 and the entrance simply
+ * never fires. The section stays at `opacity: 0` for the whole visit. Measured
+ * on the live site at 390x720: #about never appeared, and #experience cleared
+ * the threshold by 0.009 — one browser toolbar away from the same fate.
+ *
+ * `amount: "some"` fires on any intersection, so height drops out of it
+ * entirely. The negative bottom margin then does the job the fraction was
+ * really there for: it moves the trigger line 20% up the screen, so an element
+ * reveals once its top has climbed to comfortable reading height rather than at
+ * the very bottom edge. Same intent, no dependency on how tall the thing is.
  */
-export const VIEWPORT = { once: true, amount: 0.2, margin: "0px 0px -8% 0px" } as const;
+export const VIEWPORT = { once: true, amount: "some", margin: "0px 0px -20% 0px" } as const;
 
 /** The default entrance: rise and fade. No scale. */
 export const fadeUp: Variants = {
