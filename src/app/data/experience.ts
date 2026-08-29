@@ -192,17 +192,17 @@ export function experienceCopy(L: Lang) {
       location: `${remote}, ${L("Ukraine", "Oekraïne", "أوكرانيا", "Ucrania")}`,
       type: fullTime,
       description: L(
-        "Built and customized CRM web resources for Oschadbank — Ukraine's state savings bank — on MS Dynamics 365 XRM in pure functional JavaScript. Developed a Vue.js electronic document-signing application for bank workflows and integrated REST APIs with back-end teams.",
-        "CRM-webresources gebouwd en aangepast voor Oschadbank — de Oekraïense staatsspaarbank — op MS Dynamics 365 XRM in puur functioneel JavaScript. Een Vue.js-applicatie voor elektronisch ondertekenen van documenten ontwikkeld en REST API's geïntegreerd met back-endteams.",
-        "بنيت وخصّصت موارد ويب لنظام CRM لبنك Oschadbank — بنك التوفير الحكومي في أوكرانيا — على MS Dynamics 365 XRM بجافاسكربت وظيفي خالص. طوّرت تطبيق توقيع مستندات إلكتروني بـ Vue.js لسير عمل البنك، وربطت واجهات REST مع فرق الخلفية.",
-        "Construí y personalicé recursos web de CRM para Oschadbank — la caja de ahorros estatal de Ucrania — sobre MS Dynamics 365 XRM en JavaScript funcional puro. Desarrollé una aplicación Vue.js de firma electrónica de documentos e integré APIs REST con los equipos de back-end.",
+        "Built and customized CRM web resources for a national bank on MS Dynamics 365 XRM in pure functional JavaScript. Developed a Vue.js electronic document-signing application for bank workflows and integrated REST APIs with back-end teams.",
+        "CRM-webresources gebouwd en aangepast voor een nationale bank op MS Dynamics 365 XRM in puur functioneel JavaScript. Een Vue.js-applicatie voor elektronisch ondertekenen van documenten ontwikkeld en REST API's geïntegreerd met back-endteams.",
+        "بنيت وخصّصت موارد ويب لنظام CRM لبنك أحد البنوك الوطنية على MS Dynamics 365 XRM بجافاسكربت وظيفي خالص. طوّرت تطبيق توقيع مستندات إلكتروني بـ Vue.js لسير عمل البنك، وربطت واجهات REST مع فرق الخلفية.",
+        "Construí y personalicé recursos web de CRM para un banco nacional sobre MS Dynamics 365 XRM en JavaScript funcional puro. Desarrollé una aplicación Vue.js de firma electrónica de documentos e integré APIs REST con los equipos de back-end.",
       ),
       achievements: [
         L(
-          "Developed CRM web resources for Oschadbank on MS Dynamics 365 XRM",
-          "CRM-webresources ontwikkeld voor Oschadbank op MS Dynamics 365 XRM",
-          "طوّرت موارد ويب لنظام CRM لبنك Oschadbank على MS Dynamics 365 XRM",
-          "Desarrollé recursos web de CRM para Oschadbank en MS Dynamics 365 XRM",
+          "Developed CRM web resources for a national bank on MS Dynamics 365 XRM",
+          "CRM-webresources ontwikkeld voor een nationale bank op MS Dynamics 365 XRM",
+          "طوّرت موارد ويب لنظام CRM لأحد البنوك الوطنية على MS Dynamics 365 XRM",
+          "Desarrollé recursos web de CRM para un banco nacional en MS Dynamics 365 XRM",
         ),
         L(
           "Built a Vue.js document-signing app (async requests, canvas-based UI)",

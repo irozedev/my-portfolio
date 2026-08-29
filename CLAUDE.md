@@ -171,11 +171,11 @@ Two layers, keep them consistent:
 - **Front-End / JavaScript developer, 8+ years.** React, Vue, Next.js,
   TypeScript, Node.js, Knockout.js, Magento.
 - Real clients (Experience only, per NDA): childrensalon.com, vogacloset.com
-  (luxury e-commerce), Oschadbank (banking CRM). **Never** put employer/client
+  (luxury e-commerce), a national bank (banking CRM). **Never** put employer/client
   work in the public Projects gallery — only owned projects there.
 - **Those three are clients, not employers.** The employers are **Ronis BT**
-  (childrensalon.com, vogacloset.com) and **E-Consulting** (Oschadbank). Copy
-  must say "**for** Oschadbank", never "**at** Oschadbank" — `at` names a
+  (childrensalon.com, vogacloset.com) and **E-Consulting** (a national bank). Copy
+  must say "**for** a national bank", never "**at** a national bank" — `at` names a
   payroll and a reference check would contradict it. Keep the brand names
   regardless: they are what turns "8 years" into a verifiable scale. The same
   applies in every language (nl `voor`, es `para`, ar `لـ`).

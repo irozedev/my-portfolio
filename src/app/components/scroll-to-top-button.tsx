@@ -119,10 +119,10 @@ function localAnswer(input: string, language: string): string {
 
   if (/(skill|tech|stack|experience|expertise|react|vue|next|typescript|magento|навич|досвід|стек|ervaring|vaardig|habilidad|experiencia|خبرة|مهارات)/.test(s))
     return L(
-      "8+ years, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. Built e-commerce (childrensalon.com, vogacloset.com) and banking systems (Oschadbank CRM). Based in Belgium.",
-      "8+ jaar, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) en banksystemen (Oschadbank). België.",
+      "8+ years, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. Built e-commerce (childrensalon.com, vogacloset.com) and banking systems (a national bank CRM). Based in Belgium.",
+      "8+ jaar, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) en banksystemen (een nationale bank). België.",
       "خبرة 8+ سنوات، Front-End / JavaScript. الأدوات: React, Vue, Next.js, TypeScript, Node.js, Magento. تجارة إلكترونية وأنظمة مصرفية. مقيم في بلجيكا.",
-      "8+ años, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) y banca (Oschadbank). En Bélgica.",
+      "8+ años, front-end / JavaScript. Stack: React, Vue, Next.js, TypeScript, Node.js, Magento. E-commerce (childrensalon.com, vogacloset.com) y banca (un banco nacional). En Bélgica.",
     );
 
   if (/(start|begin|hire|work with|project|почати|проект|starten|beginnen|empezar|proyecto|بدء|مشروع)/.test(s))
@@ -210,10 +210,10 @@ function assistantReply(input: string, language: string): { text: string; action
   // Experience / career
   if (/(experience|career|work history|employment|\bjobs?\b|досвід|карʼєр|ervaring|loopbaan|experiencia|carrera|خبرة|مسيرة)/.test(s))
     return { matched: true, action: { kind: 'view', mode: 'cv', label: lblCompany }, text: L(
-      "8+ years: luxury e-commerce (childrensalon.com, vogacloset.com), banking systems (Oschadbank CRM), shipped 2026 projects. Full timeline is in Company view.",
-      "8+ jaar: luxe e-commerce (childrensalon.com, vogacloset.com), banksystemen (Oschadbank CRM), 2026-projecten. Volledige tijdlijn in Company-weergave.",
-      "8+ سنوات: تجارة فاخرة (childrensalon.com، vogacloset.com)، أنظمة مصرفية (Oschadbank)، مشاريع 2026. الخبرة كاملة في وضع الشركة.",
-      "8+ años: e-commerce de lujo (childrensalon.com, vogacloset.com), banca (Oschadbank CRM), proyectos 2026. Trayectoria completa en vista Empresa.",
+      "8+ years: luxury e-commerce (childrensalon.com, vogacloset.com), banking systems (a national bank CRM), shipped 2026 projects. Full timeline is in Company view.",
+      "8+ jaar: luxe e-commerce (childrensalon.com, vogacloset.com), banksystemen (een nationale bank CRM), 2026-projecten. Volledige tijdlijn in Company-weergave.",
+      "8+ سنوات: تجارة فاخرة (childrensalon.com، vogacloset.com)، أنظمة مصرفية (أحد البنوك الوطنية)، مشاريع 2026. الخبرة كاملة في وضع الشركة.",
+      "8+ años: e-commerce de lujo (childrensalon.com, vogacloset.com), banca (un banco nacional CRM), proyectos 2026. Trayectoria completa en vista Empresa.",
     ) };
 
   // GitHub

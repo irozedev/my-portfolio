@@ -12,12 +12,12 @@ const seoData: Record<string, { title: string; description: string; keywords: st
   // They used to differ ("… in Belgium — React…" vs "… — React… | Belgium").
   en: {
     title: "Stepan Roze | Front-End / JavaScript Developer in Belgium — React, TypeScript, Next.js",
-    description: "Front-End / JavaScript developer, 8+ years — e-commerce for childrensalon.com and vogacloset.com, banking CRM for Oschadbank. React, Vue, Next.js, TypeScript. Living in Belgium with a permanent contract, no sponsorship needed. Open to front-end roles in Flanders, the Netherlands or remote.",
+    description: "Front-End / JavaScript developer, 8+ years — e-commerce for childrensalon.com and vogacloset.com, banking CRM for a national bank. React, Vue, Next.js, TypeScript. Living in Belgium with a permanent contract, no sponsorship needed. Open to front-end roles in Flanders, the Netherlands or remote.",
     keywords: "Front-End Developer, Senior Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Front-end developer Belgium, React developer Flanders, JavaScript developer Netherlands, Knockout.js, Node.js",
   },
   nl: {
     title: "Stepan Roze | Front-End & JavaScript Developer — React, TypeScript, Next.js | België",
-    description: "Front-End / JavaScript Developer met 8+ jaar commerciële ervaring in e-commerce en enterprise webapps (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js & Magento. Woonachtig in België met een vast contract — geen sponsoring nodig. Open voor front-endfuncties in Vlaanderen, Nederland of op afstand.",
+    description: "Front-End / JavaScript Developer met 8+ jaar commerciële ervaring in e-commerce en enterprise webapps (childrensalon.com, vogacloset.com, een nationale bank). React, TypeScript, Vue, Next.js & Magento. Woonachtig in België met een vast contract — geen sponsoring nodig. Open voor front-endfuncties in Vlaanderen, Nederland of op afstand.",
     keywords: "Front-End Developer, Senior Front-End Developer, JavaScript Developer, React Developer, TypeScript, Vue.js, Next.js, Magento, E-commerce Developer, Front-end developer België, React developer Vlaanderen, JavaScript developer Nederland, Webontwikkelaar, Front-end vacature Antwerpen",
   },
   ar: {
@@ -27,7 +27,7 @@ const seoData: Record<string, { title: string; description: string; keywords: st
   },
   es: {
     title: "Stepan Roze | Front-End & JavaScript Developer — React, TypeScript, Next.js | Bélgica",
-    description: "Desarrollador Front-End / JavaScript con 8+ años de experiencia comercial en e-commerce y aplicaciones enterprise (childrensalon.com, vogacloset.com, Oschadbank). React, TypeScript, Vue, Next.js y Magento. Residente en Bélgica con contrato indefinido — sin necesidad de patrocinio. Abierto a puestos de front-end en Flandes, Países Bajos o en remoto.",
+    description: "Desarrollador Front-End / JavaScript con 8+ años de experiencia comercial en e-commerce y aplicaciones enterprise (childrensalon.com, vogacloset.com, un banco nacional). React, TypeScript, Vue, Next.js y Magento. Residente en Bélgica con contrato indefinido — sin necesidad de patrocinio. Abierto a puestos de front-end en Flandes, Países Bajos o en remoto.",
     keywords: "Desarrollador Front-End, Desarrollador Front-End Senior, Desarrollador JavaScript, Desarrollador React, TypeScript, Vue.js, Next.js, Magento, Desarrollador front-end Bélgica, Desarrollador React Flandes, Desarrollador JavaScript Países Bajos",
   },
 };

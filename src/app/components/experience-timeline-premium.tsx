@@ -94,7 +94,7 @@ export function ExperienceTimelinePremium() {
               // The non-IT period renders as a footnote on the spine instead of
               // a card: it exists to close an eighteen-month gap, not to be
               // read as a career step. A full-size card gave it the same weight
-              // as Oschadbank, which is the wrong claim; hiding it would leave
+              // as a national bank, which is the wrong claim; hiding it would leave
               // the hole. So: same position in the chronology, a fraction of
               // the visual volume, and no "Show more" to invite a detour.
               if (isAside) {
