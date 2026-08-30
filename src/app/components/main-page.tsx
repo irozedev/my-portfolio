@@ -9,6 +9,7 @@ import { ExperienceTimelinePremium } from "./experience-timeline-premium";
 import { PortfolioCreativeSlider } from "./portfolio-creative-slider";
 import { ServicesCreativeSlider } from "./services-creative-slider";
 import { PricingTable } from "./pricing-table";
+import { StatementBand } from "./statement-band";
 import { HowIWork } from "./how-i-work";
 import { GitHubShowcase } from "./github-showcase";
 import { ScrollToTopButton } from "./scroll-to-top-button";
@@ -64,9 +65,13 @@ export function MainPage() {
 
           {/* Projects */}
           <PortfolioCreativeSlider />
-          
-          <div className="h-4 sm:h-6 md:h-8 lg:h-10" />
-          
+
+          {/* A place where nothing happens. Cards for seven screens on two
+              tones is what made this page read as one long stripe. No spacer
+              around it on purpose — the band runs edge to edge and brings its
+              own air. Client only: the CV was left out of the redesign. */}
+          <StatementBand />
+
           {/* GitHub Showcase */}
           <GitHubShowcase />
           
