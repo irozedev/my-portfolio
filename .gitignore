@@ -25,3 +25,8 @@ pnpm-debug.log*
 
 # Local Netlify folder
 .netlify
+
+# Build output. Netlify runs `npm run build` itself (see netlify.toml), so a
+# committed dist is never the thing that gets served - it was only ever a copy
+# that drifted from src and rewrote 28 files on every local build.
+dist/
