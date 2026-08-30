@@ -8,6 +8,7 @@ import { AboutSection } from "./about-section";
 import { ExperienceTimelinePremium } from "./experience-timeline-premium";
 import { PortfolioCreativeSlider } from "./portfolio-creative-slider";
 import { ServicesCreativeSlider } from "./services-creative-slider";
+import { PricingTable } from "./pricing-table";
 import { HowIWork } from "./how-i-work";
 import { GitHubShowcase } from "./github-showcase";
 import { ScrollToTopButton } from "./scroll-to-top-button";
@@ -49,6 +50,10 @@ export function MainPage() {
           
           {/* Services FIRST for clients */}
           <ServicesCreativeSlider />
+
+          {/* Prices with lead times. Straight after the services, because the
+              question a card leaves you with is "how long and what is in it". */}
+          <PricingTable />
 
           <div className="h-4 sm:h-6 md:h-8 lg:h-10" />
 
