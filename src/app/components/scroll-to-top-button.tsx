@@ -5,6 +5,7 @@ import { useLanguage } from "../contexts/language-context";
 import { useViewMode } from "../contexts/view-mode-context";
 import { lockScroll, unlockScroll } from "../../utils/scroll-lock";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
+import { hiringStrings, hiringAnswer, hiringFunnel, whatsappHandoff } from "../lib/hiring-assistant";
 
 interface Message {
   id: number;
@@ -16,8 +17,10 @@ interface Message {
 
 // Sales funnel: collect project → budget → timeline → name → email, then send
 // the lead to Stepan. 'qa' = free Q&A mode, 'done' = after a lead was sent.
-type Stage = 'intro' | 'qa' | 'budget' | 'timeline' | 'name' | 'email' | 'done';
-type Lead = { project?: string; budget?: string; timeline?: string; name?: string; email?: string };
+// 'role' belongs to the hiring track: a recruiter is asked what the job is,
+// not what they want built or what it may cost.
+type Stage = 'intro' | 'qa' | 'role' | 'budget' | 'timeline' | 'name' | 'email' | 'done';
+type Lead = { project?: string; role?: string; budget?: string; timeline?: string; name?: string; email?: string };
 
 function funnelStrings(language: string) {
   const L = (en: string, nl: string, ar: string, es: string) =>
@@ -307,10 +310,12 @@ export function ScrollToTopButton() {
   const [lead, setLead] = useState<Lead>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { language, setLanguage } = useLanguage();
-  // The chat is a lead funnel for prospective clients. In CV mode the reader is
-  // a recruiter who will never use it, so it is only clutter competing with the
-  // scroll-to-top button in the same corner — and one more thing that can break
-  // while the person who matters is looking at the page.
+  // The chat used to be hidden in CV mode, on the reasoning that a lead funnel
+  // asking for a budget is useless to a recruiter. True of that funnel — but the
+  // conclusion was wrong: it left the CV with no way to ask anything at all,
+  // including the one question a Benelux employer needs answered and cannot ask
+  // out loud. So company mode gets its own track (lib/hiring-assistant.ts) and
+  // its own three-field funnel, and the widget is shown in both.
   const { setViewMode, isClientMode } = useViewMode();
   const rafRef = useRef<number>(0);
 
@@ -414,13 +419,22 @@ export function ScrollToTopButton() {
       setTimeout(() => {
         setMessages([{
           id: Date.now(),
-          text: funnelStrings(language).welcome,
+          text: isClientMode ? funnelStrings(language).welcome : hiringStrings(language).welcome,
           sender: "bot",
           timestamp: new Date(),
         }]);
       }, 500);
     }
-  }, [isChatOpen, messages.length, hasServiceContext, language]);
+  }, [isChatOpen, messages.length, hasServiceContext, language, isClientMode]);
+
+  // Switching mode mid-conversation leaves a client funnel sitting in front of
+  // a recruiter (or the reverse). Clear it so the right script starts fresh.
+  useEffect(() => {
+    setMessages([]);
+    setStage('intro');
+    setLead({});
+    setHasServiceContext(false);
+  }, [isClientMode]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -486,10 +500,14 @@ export function ScrollToTopButton() {
       body: JSON.stringify({
         name: finalLead.name || 'Website visitor',
         email: finalLead.email,
-        service: `Chat lead — ${finalLead.project || 'General'}`,
+        service: isClientMode
+          ? `Chat lead — ${finalLead.project || 'General'}`
+          : `Hiring enquiry — ${finalLead.role || 'Role not stated'}`,
         message:
           `New lead from the site chat\n\n` +
+          `• Mode: ${isClientMode ? 'client' : 'company'}\n` +
           `• Project: ${finalLead.project || '—'}\n` +
+          `• Role: ${finalLead.role || '—'}\n` +
           `• Budget: ${finalLead.budget || '—'}\n` +
           `• Timeline: ${finalLead.timeline || '—'}\n` +
           `• Name: ${finalLead.name || '—'}\n` +
@@ -498,8 +516,34 @@ export function ScrollToTopButton() {
       }),
     })
       .then(async res => { const d = await res.json().catch(() => ({})); if (!res.ok) throw new Error(d.error || 'failed'); return d; })
-      .then(() => { setStage('done'); botSay(funnelStrings(language).thanks(finalLead.name || '', finalLead.email || ''), 600); })
-      .catch(err => { console.error('Lead submit error:', err); setStage('done'); botSay(funnelStrings(language).failed(finalLead.email || ''), 600); });
+      .then(() => {
+        setStage('done');
+        // Whatever the chat collected is already written into the WhatsApp
+        // message, so nobody has to type any of it a second time.
+        const wa: ChatAction = {
+          kind: 'link',
+          href: whatsappHandoff(language, finalLead),
+          label: hiringFunnel(language).labels.whatsapp,
+        };
+        botSay(
+          isClientMode
+            ? funnelStrings(language).thanks(finalLead.name || '', finalLead.email || '')
+            : hiringFunnel(language).done(finalLead.name || '', finalLead.email || ''),
+          600,
+          wa,
+        );
+      })
+      .catch(err => {
+        console.error('Lead submit error:', err);
+        setStage('done');
+        // The send failed, so the hand-off matters more here, not less: it is
+        // now the only route left that does not make him retype anything.
+        botSay(funnelStrings(language).failed(finalLead.email || ''), 600, {
+          kind: 'link',
+          href: whatsappHandoff(language, finalLead),
+          label: hiringFunnel(language).labels.whatsapp,
+        });
+      });
   };
 
   // One funnel step: record the answer for the current stage and ask the next.
@@ -510,6 +554,35 @@ export function ScrollToTopButton() {
 
     const detected = detectLanguage(text);
     if (detected !== language && ['en', 'nl', 'ar', 'es'].includes(detected)) setLanguage(detected as any);
+
+    // Company mode runs its own three questions and its own answers.
+    if (!isClientMode) {
+      const HF = hiringFunnel(language);
+      switch (stage) {
+        case 'role':
+          setLead(l => ({ ...l, role: text }));
+          setStage('name');
+          botSay(HF.askName);
+          return;
+        case 'name':
+          setLead(l => ({ ...l, name: text }));
+          setStage('email');
+          botSay(HF.askEmail);
+          return;
+        case 'email': {
+          if (!emailRe.test(text)) { botSay(HF.badEmail, 250); return; }
+          const finalLead = { ...lead, email: text };
+          setLead(finalLead);
+          submitLead(finalLead);
+          return;
+        }
+        default: {
+          const r = hiringAnswer(text, language);
+          botSay(r.text, 450);
+          return;
+        }
+      }
+    }
 
     switch (stage) {
       case 'intro': {
@@ -565,18 +638,34 @@ export function ScrollToTopButton() {
   };
 
   // Quick-reply chip tap.
-  const handleChip = (chip: { label: string; value: string; special?: 'qa' | 'quote' }) => {
+  const handleChip = (chip: { label: string; value: string; special?: 'qa' | 'quote' | 'hire' | 'wa' }) => {
     const F = funnelStrings(language);
     pushMsg(chip.label, "user");
     if (chip.special === 'qa') { setStage('qa'); botSay(F.qaIntro, 300); return; }
     if (chip.special === 'quote') { setStage('intro'); botSay(F.reask, 300); return; }
+    if (chip.special === 'hire') { setStage('role'); botSay(hiringFunnel(language).start, 300); return; }
+    if (chip.special === 'wa') { window.open(whatsappHandoff(language, lead), '_blank', 'noopener,noreferrer'); return; }
     processAnswer(chip.value);
   };
 
   // Quick-reply chips shown under the messages, driven by the current stage.
-  const chipsForStage = (): { label: string; value: string; special?: 'qa' | 'quote' }[] => {
+  const chipsForStage = (): { label: string; value: string; special?: 'qa' | 'quote' | 'hire' | 'wa' }[] => {
     const F = funnelStrings(language);
     const one = (label: string) => ({ label, value: label });
+
+    // Company mode: topics, then a way to leave a role. No budget, no timeline.
+    if (!isClientMode) {
+      const H = hiringStrings(language);
+      const HF = hiringFunnel(language);
+      if (stage === 'role' || stage === 'name' || stage === 'email') return [];
+      if (stage === 'done') return [{ label: HF.labels.whatsapp, value: '', special: 'wa' }];
+      return [
+        one(H.labels.permit), one(H.labels.location), one(H.labels.stack),
+        one(H.labels.languages), one(H.labels.experience),
+        { label: HF.labels.talk, value: '', special: 'hire' },
+      ];
+    }
+
     switch (stage) {
       case 'intro':
         return [one(F.labels.website), one(F.labels.bot), one(F.labels.webapp), one(F.labels.ecom), { label: F.labels.ask, value: '', special: 'qa' }];
@@ -603,7 +692,7 @@ export function ScrollToTopButton() {
     <>
       {/* Chat Window */}
       <AnimatePresence>
-        {isClientMode && isChatOpen && (
+        {isChatOpen && (
           <>
             {/* Backdrop */}
             <motion.div
@@ -637,9 +726,16 @@ export function ScrollToTopButton() {
                         set this line in the heading face at 13px where it only
                         looked wide. Force the body face here. */}
                     <h3 className="text-sm font-semibold text-black tracking-normal [font-family:var(--font-body)]">
-                      Roze — project assistant
+                      {isClientMode ? "Roze — project assistant" : "Roze — hiring assistant"}
                     </h3>
-                    <p className="text-[10px] text-black/60 font-mono tracking-wide">ONLINE • FAST QUOTES</p>
+                    {/* The subtitle is a promise, so it has to match the script
+                        behind it: quotes for a client, and the three things a
+                        hiring side checks first for a company. */}
+                    <p className="text-[10px] text-black/60 font-mono tracking-wide">
+                      {isClientMode
+                        ? "ONLINE • FAST QUOTES"
+                        : "ONLINE • PERMIT, STACK, LANGUAGES"}
+                    </p>
                   </div>
                 </div>
                 <button
@@ -818,8 +914,8 @@ export function ScrollToTopButton() {
           )}
         </AnimatePresence>
 
-        {/* Chat Bot Button — client mode only, see isClientMode above */}
-        {isClientMode && (
+        {/* Chat Bot Button — both modes, each with its own script */}
+        {(
         <motion.button
           id="chat-bot-button"
           onClick={() => setIsChatOpen(!isChatOpen)}

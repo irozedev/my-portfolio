@@ -18,8 +18,20 @@ Two audiences, one page, switched by a **view mode** toggle:
 - **Client** — services, pricing, process, owned projects, contact
 - **Company** — full CV: experience timeline and skills
 
-Five languages (`en`, `uk`, `nl`, `ar`, `es`) with RTL support for Arabic, and a
-dark/light theme. A local, zero-cost chat assistant doubles as a lead funnel.
+Four languages (`en`, `nl`, `ar`, `es`) with RTL support for Arabic, and a
+dark/light theme in both modes.
+
+A local, zero-cost chat assistant runs in **both** modes with a different script
+each: quotes and a project funnel for clients, and for companies the questions a
+hiring side checks first - right to work, location, stack, languages - then a
+three-field funnel. Either one can hand off to WhatsApp with everything it has
+collected already written into the message.
+
+**Client mode carries its own design system.** Its palette, type (Archivo /
+Instrument Sans / IBM Plex Mono) and radii are scoped under
+`[data-view="client"]` in `styles/theme.css`, and the three faces load only when
+that mode is first shown. The CV was deliberately excluded from the 2026
+redesign and still renders exactly as it did.
 
 ## Stack
 
@@ -28,7 +40,8 @@ dark/light theme. A local, zero-cost chat assistant doubles as a lead funnel.
 - **Supabase** — OAuth sign-in (Google / GitHub) and an edge function
   (`make-server-a62f57c7`) backing the contact form, comments and reactions
 - Services carousel is CSS `scroll-snap`, not a library
-- Deployed on **Netlify** (`netlify.toml`); `dist/` is committed to the repo
+- Deployed on **Netlify** (`netlify.toml`), which runs `npm run build` itself -
+  `dist/` is **not** tracked, it was only ever a copy that drifted from `src`
 
 **Vite 8 bundles with rolldown**, so build config lives under
 `build.rolldownOptions` and chunking under `output.advancedChunks.groups`.
@@ -67,8 +80,13 @@ supabase/functions/      Deno edge function (contact, comments, chat)
 docs/                    setup and reference guides
 ```
 
-Section anchors: `#hero`, `#services`, `#how-i-work`, `#projects`, `#github`,
-`#about`, `#contact` (client) and `#experience` (company).
+Section anchors: `#hero`, `#services`, `#pricing`, `#how-i-work`, `#projects`,
+`#github`, `#about`, `#contact` (client) and `#experience` (company).
+
+Everything below the first screen is `lazy`, so `motion` (42 kB gzipped) stays
+off the critical path. Three components render before any scroll and are
+therefore animated in CSS rather than with the library: the view-mode toggle,
+the stat row and the cookie banner.
 
 ## Configuration
 
