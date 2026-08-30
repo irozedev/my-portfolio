@@ -271,7 +271,7 @@ export function ContactSection() {
                 const Icon = benefit.icon;
                 return (
                   <div key={index} className="flex items-center gap-2 text-[var(--text-secondary)]">
-                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#00d9ff] flex-shrink-0" />
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--accent-primary)] flex-shrink-0" />
                     <span className="text-xs sm:text-sm">{benefit.text}</span>
                   </div>
                 );
@@ -328,7 +328,7 @@ export function ContactSection() {
 
                         {/* Info */}
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-base sm:text-lg md:text-xl font-bold mb-0.5 sm:mb-1 text-[var(--text-primary)] group-hover:text-[#00d9ff] transition-colors">
+                          <h3 className="text-base sm:text-lg md:text-xl font-bold mb-0.5 sm:mb-1 text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors">
                             {t(`contact.contactLinks.${link.key}.label`)}
                           </h3>
                           <p className="text-xs sm:text-sm md:text-base text-[var(--text-secondary)] truncate">
@@ -341,7 +341,7 @@ export function ContactSection() {
 
                         {/* Arrow */}
                         <motion.div
-                          className="flex-shrink-0 text-lg sm:text-xl text-[var(--text-muted)] group-hover:text-[#00d9ff] transition-colors"
+                          className="flex-shrink-0 text-lg sm:text-xl text-[var(--text-muted)] group-hover:text-[var(--accent-primary)] transition-colors"
                           animate={{ x: [0, 5, 0] }}
                           transition={{ duration: 1.5, repeat: Infinity }}
                         >

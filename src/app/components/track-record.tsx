@@ -33,7 +33,7 @@ export function TrackRecord() {
           transition={{ duration: DURATION, ease: EASE }}
         >
           <div className="flex flex-wrap items-baseline justify-between gap-3 mb-8">
-            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-faint)]">
+            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
               {L(
                 "Before that, on a team, at scale",
                 "Daarvoor, als teamlid op grote platformen",
@@ -41,7 +41,7 @@ export function TrackRecord() {
                 "Antes de eso, en equipo y a gran escala",
               )}
             </span>
-            <span className="font-mono text-[11px] text-[var(--text-faint)]">2015 &ndash; 2024</span>
+            <span className="font-mono text-[11px] text-[var(--text-muted)]">2015 &ndash; 2024</span>
           </div>
 
           <div className="grid lg:grid-cols-[1.32fr_1fr] gap-4">
@@ -60,11 +60,11 @@ export function TrackRecord() {
                   <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]">
                     {L("largest scale", "grootste schaal", "أكبر نطاق", "mayor escala")}
                   </span>
-                  <span className="font-mono text-[11px] text-[var(--text-faint)]">Ronis BT &middot; 2022</span>
+                  <span className="font-mono text-[11px] text-[var(--text-muted)]">Ronis BT &middot; 2022</span>
                 </div>
 
                 <h3 className="font-display text-3xl md:text-4xl font-extrabold tracking-[-0.03em] text-[var(--text-primary)] mb-4">
-                  childrensalon<span className="text-[var(--text-faint)]">.com</span>
+                  childrensalon<span className="text-[var(--text-muted)]">.com</span>
                 </h3>
 
                 <p className="text-[var(--text-secondary)] leading-relaxed mb-7">
@@ -100,9 +100,9 @@ export function TrackRecord() {
             <div className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 md:p-7 shadow-[var(--shadow-card)]">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mb-4">
                 <h3 className="font-display text-2xl font-bold tracking-[-0.02em] text-[var(--text-primary)]">
-                  vogacloset<span className="text-[var(--text-faint)]">.com</span>
+                  vogacloset<span className="text-[var(--text-muted)]">.com</span>
                 </h3>
-                <span className="font-mono text-[11px] text-[var(--text-faint)] shrink-0">Ronis BT &middot; 2022</span>
+                <span className="font-mono text-[11px] text-[var(--text-muted)] shrink-0">Ronis BT &middot; 2022</span>
               </div>
               <p className="text-[var(--text-muted)] leading-relaxed mb-5">
                 {L(
@@ -127,7 +127,7 @@ export function TrackRecord() {
                 <h3 className="font-display text-2xl font-bold tracking-[-0.02em] text-[var(--text-primary)]">
                   {L("A national bank", "Een nationale bank", "أحد البنوك الوطنية", "Un banco nacional")}
                 </h3>
-                <span className="font-mono text-[11px] text-[var(--text-faint)] shrink-0">
+                <span className="font-mono text-[11px] text-[var(--text-muted)] shrink-0">
                   E-Consulting &middot; 2022 &ndash; 2024
                 </span>
               </div>

@@ -241,6 +241,9 @@ img {
   --text-primary: #ffffff;
   --text-secondary: #b9bec6;
   --text-muted: #7d8590;
+  /* Hairlines and dividers, NOT words. It measures 2.5:1 against the raised
+     surface, so any label set in it fails AA at the small sizes it invites.
+     Ten of them were, until they were measured. */
   --text-faint: #4d5561;
 
   --border-color: rgba(255, 255, 255, 0.09);

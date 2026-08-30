@@ -329,11 +329,11 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                             whileTap={{ scale: 0.95 }}
                           >
                             <div className="flex items-baseline gap-2">
-                              <span className={`text-2xl font-black font-mono ${isSelected ? "text-[#00d9ff]" : "text-[var(--text-primary)]"}`}>
+                              <span className={`text-2xl font-black font-mono ${isSelected ? "text-[var(--accent-primary)]" : "text-[var(--text-primary)]"}`}>
                                 {dayNum}
                               </span>
                               <div>
-                                <span className={`text-xs font-bold uppercase block ${isSelected ? "text-[#00d9ff]" : "text-[var(--text-secondary)]"}`}>
+                                <span className={`text-xs font-bold uppercase block ${isSelected ? "text-[var(--accent-primary)]" : "text-[var(--text-secondary)]"}`}>
                                   {dayName}
                                 </span>
                                 <span className="text-[10px] text-[var(--text-muted)]">{monthName}</span>
@@ -364,7 +364,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                       </div>
                       <button
                         onClick={() => setStep(1)}
-                        className="text-xs text-[#00d9ff] font-mono font-bold hover:underline active:scale-95"
+                        className="text-xs text-[var(--accent-primary)] font-mono font-bold hover:underline active:scale-95"
                       >
                         {t.changeDate}
                       </button>
@@ -382,7 +382,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                             onClick={() => { setSelectedTime(time); setStep(3); }}
                             className={`py-3 px-2 rounded-xl border-2 font-mono font-bold text-sm transition-all active:scale-90 ${
                               selectedTime === time
-                                ? "border-[#00d9ff] bg-[#00d9ff]/10 text-[#00d9ff]"
+                                ? "border-[#00d9ff] bg-[#00d9ff]/10 text-[var(--accent-primary)]"
                                 : "border-[var(--border-color)] hover:border-[#00d9ff]/40 text-[var(--text-primary)] bg-[var(--bg-secondary)]/20"
                             }`}
                             whileTap={{ scale: 0.9 }}
@@ -406,7 +406,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                             onClick={() => { setSelectedTime(time); setStep(3); }}
                             className={`py-3 px-2 rounded-xl border-2 font-mono font-bold text-sm transition-all active:scale-90 ${
                               selectedTime === time
-                                ? "border-[#00d9ff] bg-[#00d9ff]/10 text-[#00d9ff]"
+                                ? "border-[#00d9ff] bg-[#00d9ff]/10 text-[var(--accent-primary)]"
                                 : "border-[var(--border-color)] hover:border-[#00d9ff]/40 text-[var(--text-primary)] bg-[var(--bg-secondary)]/20"
                             }`}
                             whileTap={{ scale: 0.9 }}
@@ -439,11 +439,11 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                   >
                     {/* Summary chip */}
                     <div className="flex items-center gap-2 p-3 bg-[#00d9ff]/8 border border-[#00d9ff]/20 rounded-xl">
-                      <Calendar className="w-4 h-4 text-[#00d9ff] flex-shrink-0" />
+                      <Calendar className="w-4 h-4 text-[var(--accent-primary)] flex-shrink-0" />
                       <span className="text-sm font-mono text-[var(--text-primary)]">
                         {selectedDate && format(selectedDate, "EEE, MMM d")} • {selectedTime} CET
                       </span>
-                      <button onClick={() => setStep(1)} className="ml-auto text-[10px] text-[#00d9ff] font-mono hover:underline">{t.changeDate}</button>
+                      <button onClick={() => setStep(1)} className="ml-auto text-[10px] text-[var(--accent-primary)] font-mono hover:underline">{t.changeDate}</button>
                     </div>
 
                     {/* Call Type */}
@@ -464,8 +464,8 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                             }`}
                             whileTap={{ scale: 0.95 }}
                           >
-                            <Icon className={`w-5 h-5 ${callType === type ? "text-[#00d9ff]" : "text-[var(--text-muted)]"}`} />
-                            <span className={`text-sm font-bold ${callType === type ? "text-[#00d9ff]" : "text-[var(--text-primary)]"}`}>{label}</span>
+                            <Icon className={`w-5 h-5 ${callType === type ? "text-[var(--accent-primary)]" : "text-[var(--text-muted)]"}`} />
+                            <span className={`text-sm font-bold ${callType === type ? "text-[var(--accent-primary)]" : "text-[var(--text-primary)]"}`}>{label}</span>
                           </motion.button>
                         ))}
                       </div>
@@ -576,12 +576,12 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                         {t.confirmed}
                       </h3>
                       <p className="text-sm text-[var(--text-secondary)] mt-2 font-mono">
-                        {t.confirmMsg} <span className="text-[#00d9ff] font-bold">{email}</span>
+                        {t.confirmMsg} <span className="text-[var(--accent-primary)] font-bold">{email}</span>
                       </p>
                     </div>
 
                     <div className="inline-flex items-center gap-3 px-4 py-3 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)]">
-                      <Calendar className="w-4 h-4 text-[#00d9ff]" />
+                      <Calendar className="w-4 h-4 text-[var(--accent-primary)]" />
                       <span className="text-sm font-mono text-[var(--text-primary)]">
                         {selectedDate && format(selectedDate, "MMM d")} • {selectedTime} CET
                       </span>

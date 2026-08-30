@@ -330,7 +330,7 @@ export function PortfolioCreativeSlider() {
 
                   {/* Caption over the photo */}
                   <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6" dir="auto">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-white/70 mb-1.5">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-white/90 mb-1.5">
                       {text.category}
                     </p>
                     <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight">

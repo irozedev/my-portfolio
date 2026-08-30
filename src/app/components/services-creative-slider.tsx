@@ -526,8 +526,8 @@ export function ServicesCreativeSlider() {
               transition={{ duration: DURATION, ease: EASE }}
               className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-primary)]/[0.07] border border-[var(--accent-primary)]/30 rounded-full mb-6"
             >
-              <Sparkles className="w-5 h-5 text-[#00d9ff]" />
-              <span className="text-sm font-medium text-[#00d9ff]">{t("services.subtitle")}</span>
+              <Sparkles className="w-5 h-5 text-[var(--accent-primary)]" />
+              <span className="text-sm font-medium text-[var(--accent-primary)]">{t("services.subtitle")}</span>
             </motion.div>
 
             {/* `from-white` was invisible in the light theme — the gradient

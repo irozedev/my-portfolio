@@ -145,7 +145,7 @@ export function PricingTable() {
                 mobile layout labels each value where it sits instead. */}
             <div className="hidden md:grid grid-cols-[1.7fr_1fr_1fr] bg-[var(--bg-secondary)] border-b border-[var(--border-color)]">
               {[head.what, head.price, head.time].map((h) => (
-                <div key={h} className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-faint)] px-6 py-4">
+                <div key={h} className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-muted)] px-6 py-4">
                   {h}
                 </div>
               ))}
@@ -165,13 +165,13 @@ export function PricingTable() {
                   </div>
                 </div>
                 <div className="font-mono text-[var(--text-primary)] mt-2 md:mt-0">
-                  <span className="md:hidden font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-faint)] mr-2">
+                  <span className="md:hidden font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-muted)] mr-2">
                     {head.price}
                   </span>
                   {r.price}
                 </div>
                 <div className="font-mono text-sm text-[var(--text-secondary)] mt-1 md:mt-0">
-                  <span className="md:hidden font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-faint)] mr-2">
+                  <span className="md:hidden font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-muted)] mr-2">
                     {head.time}
                   </span>
                   {r.time}
