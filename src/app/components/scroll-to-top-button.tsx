@@ -6,6 +6,7 @@ import { useViewMode } from "../contexts/view-mode-context";
 import { lockScroll, unlockScroll } from "../../utils/scroll-lock";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
 import { hiringStrings, hiringAnswer, hiringFunnel, whatsappHandoff } from "../lib/hiring-assistant";
+import { mailtoLead } from "../lib/lead-fallback";
 
 interface Message {
   id: number;
@@ -538,11 +539,23 @@ export function ScrollToTopButton() {
         setStage('done');
         // The send failed, so the hand-off matters more here, not less: it is
         // now the only route left that does not make him retype anything.
+        // Two of them, because a visitor on a desktop without WhatsApp Web has
+        // nowhere to go with the first one.
         botSay(funnelStrings(language).failed(finalLead.email || ''), 600, {
           kind: 'link',
           href: whatsappHandoff(language, finalLead),
           label: hiringFunnel(language).labels.whatsapp,
         });
+        window.setTimeout(() => {
+          pushMsg(
+            language === 'nl' ? 'Liever mailen? Ik zet je antwoorden alvast in het bericht.'
+              : language === 'ar' ? 'تفضّل البريد؟ سأضع إجاباتك في الرسالة سلفاً.'
+              : language === 'es' ? '¿Prefieres el correo? Dejo tus respuestas ya escritas.'
+              : 'Prefer email? I will put your answers into the message for you.',
+            'bot',
+            { kind: 'link', href: mailtoLead(language, finalLead), label: 'Email' },
+          );
+        }, 1400);
       });
   };
 
@@ -876,7 +889,12 @@ export function ScrollToTopButton() {
       </AnimatePresence>
 
       {/* Floating Action Buttons */}
-      <div className="fixed bottom-6 right-4 sm:right-6 z-[99900] flex flex-col gap-3 items-center">
+      {/* bottom rises by whatever the cookie banner is occupying; the
+          variable is unset the rest of the time, so this is just bottom-6 */}
+      <div
+        className="fixed right-4 sm:right-6 z-[99900] flex flex-col gap-3 items-center"
+        style={{ bottom: 'calc(1.5rem + var(--cookie-banner-h, 0px))' }}
+      >
         {/* Scroll to Top with Progress Ring */}
         <AnimatePresence>
           {isVisible && (

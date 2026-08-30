@@ -4,6 +4,7 @@ import { Mail, Linkedin, Github, Briefcase, Send, CheckCircle2, Clock, MessageSq
 import { useLanguage } from "../contexts/language-context";
 import { useViewMode } from "../contexts/view-mode-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
+import { openMailtoLead, CONTACT_EMAIL } from "../lib/lead-fallback";
 import { toast } from "sonner";
 import { VIEWPORT, DURATION, EASE } from "../lib/motion";
 
@@ -180,8 +181,23 @@ export function ContactSection() {
         toast.error(error.error || "Failed to send message. Please try emailing directly.");
       }
     } catch (error) {
+      /* The endpoint is unreachable, not merely unhappy: the Supabase project
+         the site posts to does not resolve. Telling the visitor to "email
+         directly" makes them retype everything they just filled in, so hand
+         them a draft that already contains it. */
       console.error('Error sending message:', error);
-      toast.error("Failed to send message. Please try emailing rozedev095@gmail.com directly.");
+      toast.error(
+        t("contact.sendFailed") ||
+          `Could not send from the site. Opening your mail app with the message ready \u2014 or write to ${CONTACT_EMAIL}.`,
+      );
+      openMailtoLead(language, {
+        name: formData.name,
+        email: formData.email,
+        service: formData.service,
+        budget: formData.budget,
+        timeline: formData.timeline,
+        message: formData.message,
+      });
     } finally {
       setIsSubmitting(false);
     }

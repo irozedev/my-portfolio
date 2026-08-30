@@ -1,5 +1,5 @@
 import { Cookie, X, Check } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../contexts/language-context";
 
 export function CookieBanner() {
@@ -37,10 +37,35 @@ export function CookieBanner() {
      No exit animation any more: AnimatePresence was the only reason this
      component needed the library, and an exit tween on a banner the reader has
      just dismissed is the one animation nobody waits to watch. */
+  /* Publish the banner's height so the floating buttons can clear it. They sit
+     in the same corner; on a phone this banner is nearly full width and covers
+     them outright. Neither component needs to import the other for this. */
+  const bannerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const root = document.documentElement;
+    if (!showBanner) {
+      root.style.removeProperty('--cookie-banner-h');
+      return;
+    }
+    const set = () => {
+      const h = bannerRef.current?.offsetHeight ?? 0;
+      // its own bottom offset (bottom-20 = 5rem) plus a gap
+      root.style.setProperty('--cookie-banner-h', h ? `${h + 92}px` : '0px');
+    };
+    set();
+    const ro = new ResizeObserver(set);
+    if (bannerRef.current) ro.observe(bannerRef.current);
+    return () => {
+      ro.disconnect();
+      root.style.removeProperty('--cookie-banner-h');
+    };
+  }, [showBanner]);
+
   if (!showBanner) return null;
 
   return (
     <div
+      ref={bannerRef}
       className="motion-safe:animate-[cookie-in_0.35s_cubic-bezier(0.22,1,0.36,1)] fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:bottom-20 md:max-w-md z-[9990] bg-[var(--card-bg)] border-2 border-[var(--border-color)] rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur-xl"
     >
           {/* Close Button */}

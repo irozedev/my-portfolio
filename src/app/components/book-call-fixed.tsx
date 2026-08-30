@@ -4,6 +4,7 @@ import { Calendar, Video, Phone, X, ChevronLeft, Loader2, ArrowRight, CheckCircl
 import { format, addDays, startOfDay, isWeekend } from "date-fns";
 import { useLanguage } from "../contexts/language-context";
 import { projectId, publicAnonKey } from "@/utils/supabase/info";
+import { openMailtoLead } from "../lib/lead-fallback";
 import { useModalA11y } from "../hooks/use-modal-a11y";
 
 interface BookCallModalProps {
@@ -216,8 +217,23 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
       setStep(4);
       setTimeout(onClose, 5000);
     } catch (err: any) {
+      /* Same as the contact form: the endpoint does not exist, so "try again"
+         is advice that cannot work. Hand over a draft with the booking in it. */
       console.error("Booking error:", err);
-      setError(err.message || "Failed to book. Please try again.");
+      setError(
+        language === "nl" ? "Boeken lukte niet vanaf de site. Ik open je mailprogramma met de aanvraag er al in."
+          : language === "ar" ? "تعذّر الحجز من الموقع. سأفتح بريدك والطلب جاهز."
+          : language === "es" ? "No se pudo reservar desde la web. Abro tu correo con la solicitud ya escrita."
+          : "Could not book from the site. Opening your mail app with the request ready.",
+      );
+      openMailtoLead(language, {
+        name,
+        email,
+        service: `Call booking - ${callType === "video" ? "Video" : "Phone"}`,
+        message: `${selectedDate ? format(selectedDate, "EEE, MMM d yyyy") : ""} at ${selectedTime} (CET)
+
+${purpose}`,
+      });
     } finally {
       setLoading(false);
     }
