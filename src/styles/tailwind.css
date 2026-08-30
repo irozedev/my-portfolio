@@ -36,6 +36,43 @@
   --spacing-stack: clamp(1.5rem, 1rem + 2vw, 2.5rem);
 }
 
+/* Glass, on one surface instead of everywhere.
+   ------------------------------------------------------------------
+   Frosted panels are a legitimate design language when they sit on something
+   that genuinely floats. Spread across every card they stop meaning anything
+   and start costing: each backdrop-filter forces its own compositing layer and
+   a re-blur of everything behind it on scroll, which is the most expensive
+   thing a phone paints. Client mode had 20 of them in always-rendered
+   sections.
+
+   So client mode keeps exactly one — the sticky header, which really does have
+   content moving under it. Everywhere else the panel becomes a plain surface.
+   It barely changes how it looks: --glass-bg is white at 3% over #070708, so
+   the card lands within a shade of --bg-secondary anyway.
+
+   Scoped to client mode: the CV was left out of the redesign and keeps its
+   glass. */
+[data-view="client"] .backdrop-blur-sm,
+[data-view="client"] .backdrop-blur-md,
+[data-view="client"] .backdrop-blur-lg,
+[data-view="client"] .backdrop-blur-xl,
+[data-view="client"] .backdrop-blur-2xl,
+[data-view="client"] .backdrop-blur-3xl {
+  /* Standard property only. Writing the -webkit- alias alongside it made the
+     minifier collapse the pair and keep just the prefixed one, so Chrome -
+     which reads the unprefixed property - carried on blurring all 82 of them.
+     Lightning CSS adds whatever prefixes are needed. */
+  backdrop-filter: none;
+}
+
+/* The header carries the blur class on the <nav> ITSELF, so a descendant
+   selector matched nothing and the one panel meant to keep its glass lost it
+   along with the rest. Both forms are needed. */
+[data-view="client"] :is(header, nav):is(.backdrop-blur-sm, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur-xl),
+[data-view="client"] :is(header, nav) :is(.backdrop-blur-sm, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur-xl) {
+  backdrop-filter: blur(14px);
+}
+
 /* Section headings in the components that BOTH modes render — the projects
    slider, the GitHub feed, the footer.
 
