@@ -54,20 +54,34 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       // Clear invalid value
       localStorage.removeItem("language");
       
-      // Auto-detect browser language
-      const browserLang = navigator.language || navigator.languages?.[0] || "en";
-      const langCode = browserLang.toLowerCase().split('-')[0]; // Get just 'en' from 'en-US'
+      // Auto-detect from the visitor's locale.
+      //
+      // navigator.languages is the full ordered preference list; navigator.language
+      // is only the first entry. Reading just the first meant a browser set to
+      // [fr-BE, nl-BE, en] fell through to English even though the visitor reads
+      // Dutch — in Belgium that ordering is completely ordinary.
+      const preferred: string[] = [
+        ...(navigator.languages ?? []),
+        navigator.language,
+      ].filter(Boolean) as string[];
       
-      // Auto-detection only honours languages in OFFERED, and 'nl' is excluded
-      // from it on top of that. The audience is employers in Belgium and the
-      // Netherlands, whose browsers are set to Dutch — serving them a
-      // translation the author cannot proof-read himself does active harm:
-      // weak Dutch is spotted instantly and costs trust, while English is
-      // normal and expected in Benelux IT. The version is still reachable via
-      // the switcher and ?lang=nl. Put it back into auto-detection once a
-      // native speaker has reviewed the copy.
-      if (langCode !== "nl" && OFFERED.includes(langCode)) {
-        return langCode as Language;
+      // Dutch is now detected like every other offered language.
+      //
+      // It used to be excluded on purpose: the copy has never been proof-read
+      // by a native speaker, and weak Dutch is spotted instantly in Benelux,
+      // where English is normal in IT anyway. That trade was made deliberately.
+      //
+      // It has been reversed deliberately too. The site sells to Flanders and
+      // the Netherlands now, and a Dutch-speaking buyer landing on English
+      // reads as "not really local here" — which costs more, on the commercial
+      // side, than an imperfect sentence does. The risk did not go away: the
+      // copy still wants a native pass, and that is now the highest-value
+      // proof-reading job on the site rather than an optional one.
+      for (const tag of preferred) {
+        const code = tag.toLowerCase().split("-")[0];
+        if (OFFERED.includes(code)) {
+          return code as Language;
+        }
       }
     }
 

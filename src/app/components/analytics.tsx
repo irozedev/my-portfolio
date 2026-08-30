@@ -30,7 +30,19 @@ function loadGA() {
  */
 export function Analytics() {
   useEffect(() => {
-    if (!GA_ID) return;
+    if (!GA_ID) {
+      // Silence is the failure mode here: with no id this component does
+      // nothing, forever, and the site looks perfectly fine while measuring
+      // nothing at all. Production was in exactly that state and there was no
+      // way to tell by looking at it. Set VITE_GA_ID in the Netlify build
+      // environment (Site configuration → Environment variables).
+      if (import.meta.env.DEV) {
+        console.warn(
+          "[analytics] VITE_GA_ID is not set — GA4 is disabled and no traffic is being measured.",
+        );
+      }
+      return;
+    }
 
     if (localStorage.getItem("cookie-consent") === "accepted") {
       loadGA();
