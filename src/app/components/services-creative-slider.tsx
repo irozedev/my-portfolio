@@ -89,7 +89,7 @@ const services = [
 
 // Carousel arrows, rendered here rather than handed to the slider library.
 const arrowClass =
-  "absolute top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-10 md:h-10 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--accent-primary)]/30 rounded-full flex items-center justify-center hover:border-[var(--accent-primary)]/70 hover:scale-105 transition-all duration-300 group disabled:opacity-20 disabled:pointer-events-none";
+  "absolute top-1/2 -translate-y-1/2 z-20 w-11 h-11 md:w-10 md:h-10 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--accent-primary)]/30 rounded-full flex items-center justify-center hover:border-[var(--accent-primary)]/70 hover:scale-105 transition-all duration-300 group disabled:opacity-20 disabled:pointer-events-none";
 
 // Pixels of pointer travel above which a press counts as a drag, not a click.
 const DRAG_THRESHOLD = 6;
@@ -864,12 +864,16 @@ export function ServicesCreativeSlider() {
                   onClick={() => goToPage(index)}
                   aria-label={copy[services[index].key as keyof typeof copy].title}
                   aria-current={pager.page === index}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    pager.page === index
-                      ? "w-6 bg-[var(--accent-primary)]"
-                      : "w-2 bg-[var(--text-muted)]/35 hover:bg-[var(--accent-primary)]/60"
-                  }`}
-                />
+                  className="group/dot grid place-items-center h-6 px-1 -my-2"
+                >
+                  <span
+                    className={`block h-2 rounded-full transition-all duration-300 ${
+                      pager.page === index
+                        ? "w-6 bg-[var(--accent-primary)]"
+                        : "w-2 bg-[var(--text-muted)]/35 group-hover/dot:bg-[var(--accent-primary)]/60"
+                    }`}
+                  />
+                </button>
               ))}
             </div>
 

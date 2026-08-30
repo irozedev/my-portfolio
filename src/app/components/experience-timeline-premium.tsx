@@ -262,7 +262,7 @@ export function ExperienceTimelinePremium() {
                       {/* Expand */}
                       <button
                         type="button"
-                        className="text-sm font-semibold text-[var(--accent-primary)] hover:text-[var(--accent-hover)] flex items-center gap-1 transition-colors relative z-10"
+                        className="text-sm font-semibold text-[var(--accent-primary)] hover:text-[var(--accent-hover)] inline-flex items-center gap-1 transition-colors relative z-10 py-2 -my-2"
                         aria-expanded={isSelected}
                         onClick={(e) => {
                           e.stopPropagation();
