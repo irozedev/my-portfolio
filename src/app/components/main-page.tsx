@@ -10,6 +10,7 @@ import { PortfolioCreativeSlider } from "./portfolio-creative-slider";
 import { ServicesCreativeSlider } from "./services-creative-slider";
 import { PricingTable } from "./pricing-table";
 import { StatementBand } from "./statement-band";
+import { TrackRecord } from "./track-record";
 import { HowIWork } from "./how-i-work";
 import { GitHubShowcase } from "./github-showcase";
 import { ScrollToTopButton } from "./scroll-to-top-button";
@@ -65,6 +66,11 @@ export function MainPage() {
 
           {/* Projects */}
           <PortfolioCreativeSlider />
+
+          {/* Who else trusted him. The employment history lives in the CV
+              timeline, which client mode never renders, so the client page had
+              nowhere to say it. */}
+          <TrackRecord />
 
           {/* A place where nothing happens. Cards for seven screens on two
               tones is what made this page read as one long stripe. No spacer
