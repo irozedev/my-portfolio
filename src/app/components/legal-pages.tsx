@@ -177,7 +177,7 @@ function getLegalContent(type: "privacy" | "terms" | "imprint") {
             heading: "6. Third-Party Services",
             content: [
               "Google Analytics: I use Google Analytics to understand how visitors interact with my site. Google Analytics uses cookies to collect anonymous data. You can opt-out of Google Analytics by installing the Google Analytics Opt-out Browser Add-on.",
-              "Vercel: hosts this website and serves it from an edge network with EU and US regions.",
+              "Vercel: hosts this website and serves it from an edge network with EU and US regions. Its analytics counts page views without cookies and without building a profile of you.",
               "Resend: delivers enquiry emails from the site to my inbox. It sees what you typed into the form, in order to send it.",
             ],
           },

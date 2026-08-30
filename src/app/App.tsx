@@ -7,6 +7,11 @@ import { Toaster } from "sonner";
 import { useState, useEffect, lazy, Suspense } from "react";
 import { AnimatePresence, MotionConfig } from "motion/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+/* Vercel's own audience measurement, alongside GA4. It is cookieless and
+   stores nothing on the visitor's device, so unlike GA4 it is not behind the
+   consent banner. Vercel documents the `/next` import; this app is Vite, so
+   the React entry point is the right one. */
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { Analytics } from "./components/analytics";
 
 // Secondary routes. None of these are on the path to first paint — the home
@@ -109,6 +114,7 @@ export default function App() {
             </Suspense>
             <Toaster position="top-right" richColors />
             <SpeedInsights />
+            <VercelAnalytics />
             <Analytics />
           </AvailabilityProvider>
         </LanguageProvider>
@@ -153,6 +159,7 @@ export default function App() {
                 navigation lives. */}
             <Toaster position="top-right" richColors />
             <SpeedInsights />
+            <VercelAnalytics />
             <Analytics />
             </MotionConfig>
           </ViewModeProvider>

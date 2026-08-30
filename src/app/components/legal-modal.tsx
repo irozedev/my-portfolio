@@ -167,7 +167,7 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
               <div className="text-[var(--text-secondary)] space-y-2">
                 <p><strong>Hosting:</strong> Vercel (edge network, EU and US regions)</p>
                 <p><strong>Enquiries:</strong> delivered by email through Resend; no database</p>
-                <p><strong>Analytics:</strong> Google Analytics 4, loaded only after you accept cookies, with IP anonymisation</p>
+                <p><strong>Analytics:</strong> Google Analytics 4, loaded only after you accept cookies, with IP anonymisation; plus Vercel Analytics, which counts page views without cookies and without identifying you</p>
               </div>
             </section>
           </div>
