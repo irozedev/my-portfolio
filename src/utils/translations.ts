@@ -102,42 +102,6 @@ export const translations = {
         clients: 'Happy Clients',
         satisfaction: 'Satisfaction Rate',
       },
-      'senior-dev': {
-        title: 'Senior Frontend Developer',
-        company: 'Freelance & Contract Work',
-        location: 'Remote (Europe)',
-        story: 'Leading complex web application development for international clients. Specialized in React, Vue.js, and modern JavaScript ecosystems. Architecting scalable solutions and mentoring junior developers while delivering high-quality code on tight deadlines.',
-        achievements: {
-          0: 'Successfully delivered 40+ projects ranging from e-commerce platforms to enterprise dashboards',
-          1: 'Reduced page load times by 60% through performance optimization and modern bundling techniques',
-          2: 'Built and maintained long-term relationships with 20+ satisfied clients across Europe and North America',
-        },
-        technologies: 'React, Vue.js, TypeScript, Next.js, Tailwind CSS, Node.js, PostgreSQL, MongoDB, AWS',
-      },
-      'freelance': {
-        title: 'Freelance Frontend Developer',
-        company: 'Self-Employed',
-        location: 'Remote (Europe)',
-        story: 'Transitioned to freelancing to work on diverse projects and expand technical expertise. Focused on delivering pixel-perfect, responsive websites and web applications. Collaborated directly with clients to understand requirements and exceed expectations.',
-        achievements: {
-          0: 'Built a strong portfolio of 15+ successful projects including landing pages, dashboards, and web apps',
-          1: 'Achieved 98% client satisfaction rate through consistent communication and quality deliverables',
-          2: 'Established efficient workflows and processes that reduced development time by 30%',
-        },
-        technologies: 'React, JavaScript ES6+, SCSS, Bootstrap, jQuery, Git, Figma, Adobe XD',
-      },
-      'junior-dev': {
-        title: 'Junior Frontend Developer',
-        company: 'Various Tech Companies',
-        location: 'Kharkiv, Ukraine',
-        story: 'Started professional career building websites and web applications for local businesses and startups. Learned fundamental development practices, version control, and teamwork. Rapidly grew skills through hands-on experience and continuous learning.',
-        achievements: {
-          0: 'Contributed to 10+ projects, gaining experience in HTML, CSS, JavaScript, and basic PHP',
-          1: 'Worked in agile teams, learned code review processes and professional development workflows',
-          2: 'Achieved 95% skill growth rate by dedicating time to learning new technologies and best practices',
-        },
-        technologies: 'HTML5, CSS3, JavaScript, jQuery, PHP, MySQL, Git, Photoshop, WordPress',
-      },
     },
     projects: {
       title: 'Featured Projects',
@@ -174,10 +138,6 @@ export const translations = {
         centerCard: 'Click center card for details',
         controls: 'Use arrow keys or swipe to navigate'
       },
-    },
-    testimonials: {
-      title: 'Testimonials',
-      subtitle: 'What clients say about my work'
     },
     contact: {
       title: 'Get in Touch',
@@ -404,42 +364,6 @@ export const translations = {
         clients: 'Tevreden klanten',
         satisfaction: 'Tevredenheid Tarief',
       },
-      'senior-dev': {
-        title: 'Senior Frontend Ontwikkelaar',
-        company: 'Freelance & Contractwerk',
-        location: 'Remote (Europa)',
-        story: 'Leid complexe webapplicatieontwikkeling voor internationale klanten. Gespecialiseerd in React, Vue.js en moderne JavaScript-ecosystemen. Architekten schaalbare oplossingen en mentoren junior ontwikkelaars terwijl hoge-kwaliteitscode wordt afgeleverd binnen korte termijnen.',
-        achievements: {
-          0: 'Met succes 40+ projecten afgeleverd van e-commerce platforms tot bedrijfsdashboards',
-          1: 'Pageladingstijden verminderd met 60% door prestatieoptimalisatie en moderne bundelingstechnieken',
-          2: 'Langdurige relaties opgebouwd en onderhouden met 20+ tevreden klanten over heel Europa en Noord-Amerika',
-        },
-        technologies: 'React, Vue.js, TypeScript, Next.js, Tailwind CSS, Node.js, PostgreSQL, MongoDB, AWS',
-      },
-      'freelance': {
-        title: 'Freelance Frontend Ontwikkelaar',
-        company: 'Zelfstandig',
-        location: 'Remote (Europa)',
-        story: 'Overging naar freelancing om te werken aan diverse projecten en technische expertise uit te breiden. Focus op het leveren van pixel-perfect, responsieve websites en webapplicaties. Direct gesproken met klanten om vereisten te begrijpen en verwachtingen te overschrijden.',
-        achievements: {
-          0: 'Een sterke portfolio opgebouwd van 15+ succesvolle projecten, waaronder landingspagina\'s, dashboards en webapps',
-          1: '98% klanttevredenheid behaald door consistente communicatie en kwalitatieve leveringen',
-          2: 'Efficiënte workflows en processen opgezet die de ontwikkelingstijd met 30% verminderden',
-        },
-        technologies: 'React, JavaScript ES6+, SCSS, Bootstrap, jQuery, Git, Figma, Adobe XD',
-      },
-      'junior-dev': {
-        title: 'Junior Frontend Developer',
-        company: 'Various Tech Companies',
-        location: 'Kharkiv, Ukraine',
-        story: 'Started professional career building websites and web applications for local businesses and startups. Learned fundamental development practices, version control, and teamwork. Rapidly grew skills through hands-on experience and continuous learning.',
-        achievements: {
-          0: 'Contributed to 10+ projects, gaining experience in HTML, CSS, JavaScript, and basic PHP',
-          1: 'Worked in agile teams, learned code review processes and professional development workflows',
-          2: 'Achieved 95% skill growth rate by dedicating time to learning new technologies and best practices',
-        },
-        technologies: 'HTML5, CSS3, JavaScript, jQuery, PHP, MySQL, Git, Photoshop, WordPress',
-      },
     },
     projects: {
       title: 'Uitgelichte Projecten',
@@ -476,10 +400,6 @@ export const translations = {
         centerCard: 'Klik op middelste kaart voor details',
         controls: 'Gebruik pijltjestoetsen of veeg om te navigeren'
       },
-    },
-    testimonials: {
-      title: 'Getuigenissen',
-      subtitle: 'Wat klanten zeggen over mijn werk'
     },
     contact: {
       title: 'Neem contact op',
@@ -706,45 +626,6 @@ export const translations = {
         clients: 'العملاء السعداء',
         satisfaction: 'معدل الرضا',
       },
-      'senior-dev': {
-        title: 'مطور واجهة أمامية أول',
-        company: 'العمل الحر والتعاقدي',
-        location: 'عن بُعد (أروبا)',
-        period: '2020 - Presente',
-        description: 'قيادة تطوير تطبيقات الويب المعقدة للعملاء الدوليين. متخصص في React و Vue.js وأنظمة JavaScript الحديثة. تصميم حلول قابلة للتوسع وتوجيه المطورين المبتدئين مع تقديم كود عالي الجودة ضمن مواعيد نهائية ضيقة.',
-        achievements: [
-          'تقديم أكثر من 30 مشروعاً ناجحاً للعملاء الأوروبيين',
-          'تحقيق تقييم رضا العملاء 98%',
-          'تقليل وقت التحميل بنسبة 40% في المتوسط من خلال تحسين الأداء',
-          'توجيه 5+ مطورين مبتدئين نحو أدوار أعلى'
-        ]
-      },
-      'frontend-dev': {
-        title: 'مطور واجهة أمامية',
-        company: 'مشاريع مختلفة',
-        location: 'عن بُعد',
-        period: '2018 - 2020',
-        description: 'تطوير تطبيقات ويب متجاوبة وصديقة للمستخدم للشركات الناشئة والشركات المتوسطة. ركزت على أفضل الممارسات ومبادئ التصميم الحديثة وبنية الكود النظيف. تعاونت مع فرق متعددة الوظائف لتقديم منتجات عالية الجودة.',
-        achievements: [
-          'بناء أكثر من 20 واجهة ويب متجاوبة باستخدام React و Vue.js',
-          'تنفيذ تصميمات متجاوبة باستخدام Tailwind CSS و Sass',
-          'تحسين أداء الواجهة الأمامية من خلال تقسيم الكود و lazy loading',
-          'التعاون مع مصممي UX/UI لإنشاء تجارب مستخدم سلسة'
-        ]
-      },
-      'web-developer': {
-        title: 'مطور ويب',
-        company: 'مستقل',
-        location: 'عن بُعد',
-        period: '2016 - 2018',
-        description: 'بداية رحلتي في تطوير الويب، والعمل على مشاريع صغيرة إلى متوسطة. تعلمت أساسيات HTML و CSS و JavaScript الحديث. طورت شغفاً ببناء واجهات جميلة ووظيفية.',
-        achievements: [
-          'إكمال 15+ موقع ويب للأعمال المحلية والعملاء الأفراد',
-          'إتقان HTML5 و CSS3 و JavaScript الحديث (ES6+)',
-          'تطوير مواقع ويب قابلة للتكيف تعمل بسلاسة عبر جميع الأجهزة',
-          'بناء علاقات قوية مع العملاء من خلال التواصل الممتاز'
-        ]
-      }
     },
     skills: {
       title: 'المهارات والتقنيات',
@@ -787,14 +668,6 @@ export const translations = {
         centerCard: 'انقر على البطاقة المركزية للتفاصيل',
         controls: 'استخدم مفاتيح الأسهم أو اسحب للتنقل'
       }
-    },
-    testimonials: {
-      title: 'Testimonios de clientes',
-      subtitle: 'Lo que dicn مساعدة',
-      description: 'No confíes solo en mi palabra - هنا está lo que dicn مساعدة',
-      errorMessage: 'HTTP 404 - الصفحة غير موجودة. تحقق من عنوان URL وحاول مرة أخرى.',
-      backHome: 'العودة إلى الرئيسية',
-      goBack: 'العودة'
     },
     contact: {
       title: 'لنعمل معاً',
@@ -1035,42 +908,6 @@ export const translations = {
         clients: 'Clientes satisfechos',
         satisfaction: 'Tasa de satisfacción',
       },
-      'senior-dev': {
-        title: 'Desarrollador Frontend Senior',
-        company: 'Freelance y trabajo por contrato',
-        location: 'Europa (Remoto)',
-        period: '2020 - Presente',
-        description: 'Liderando proyectos de frontend complejos para clientes internacionales, especializándome en React, Vue.js y arquitecturas modernas de JavaScript.',
-        achievements: [
-          'Entregué más de 50 proyectos con 100% de satisfacción del cliente',
-          'Aumenté el rendimiento de las aplicaciones en un promedio del 40%',
-          'Implementé CI/CD para tiempos de despliegue más rápidos'
-        ]
-      },
-      'magento-dev': {
-        title: 'Desarrollador Magento',
-        company: 'Varios clientes de comercio electrónico',
-        location: 'Remoto',
-        period: '2018 - 2020',
-        description: 'Desarrollé y mantuve soluciones de comercio electrónico personalizadas usando Magento 2, entregando experiencias de compra optimizadas.',
-        achievements: [
-          'Construí más de 30 tiendas Magento para clientes globales',
-          'Optimicé el rendimiento de las tiendas en un 50%',
-          'Integré pasarelas de pago y sistemas de envío'
-        ]
-      },
-      'fullstack-dev': {
-        title: 'Desarrollador Full-Stack',
-        company: 'Proyectos de startups',
-        location: 'Remoto',
-        period: '2016 - 2018',
-        description: 'Trabajé en varios proyectos de startups construyendo aplicaciones full-stack con Node.js, React y MongoDB.',
-        achievements: [
-          'Desarrollé 3 MVPs que se lanzaron con éxito',
-          'Implementé arquitecturas escalables',
-          'Colaboré con equipos multifuncionales'
-        ]
-      }
     },
     skills: {
       title: 'Habilidades técnicas',
@@ -1112,11 +949,6 @@ export const translations = {
         centerCard: 'Haz clic en la tarjeta central para ver detalles',
         controls: 'Usa las teclas de flecha o desliza para navegar'
       }
-    },
-    testimonials: {
-      title: 'Testimonios de clientes',
-      subtitle: 'Lo que dicen los clientes',
-      description: 'No confíes solo en mi palabra - aquí está lo que dicen mis clientes'
     },
     contact: {
       title: 'Trabajemos juntos',
