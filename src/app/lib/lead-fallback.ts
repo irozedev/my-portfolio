@@ -1,15 +1,14 @@
 /**
  * What to do with a lead when the server cannot take it.
  *
- * Every submission path on this site posts to one Supabase edge function. As of
- * this writing that project does not exist - `saeohtepfpuzzajfduad.supabase.co`
- * does not resolve in DNS - so the contact form, the booking modal and the chat
- * funnel all fail with "TypeError: Failed to fetch" in production, and every
- * lead typed into them is lost.
+ * Enquiries go to Netlify Forms (see lib/submit-lead.ts). This is what happens
+ * when that does not work - Forms switched off for the site, the visitor
+ * offline, an ad blocker eating the POST.
  *
- * Fixing that properly means standing the backend back up. This is the tourniquet:
- * a mail draft that already contains everything the visitor typed, so a failed
- * send costs them one tap instead of the whole enquiry.
+ * A mail draft that already contains everything they typed. Delivery still
+ * needs one tap from them, but the enquiry survives, which is more than was
+ * true while the site posted to a Supabase project that had been shut down and
+ * silently dropped every lead.
  *
  * Deliberately a draft rather than a silent background send. A mail client the
  * visitor can see is the one delivery method that cannot fail quietly, and they

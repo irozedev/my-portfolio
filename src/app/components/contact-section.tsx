@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Mail, Linkedin, Github, Briefcase, Send, CheckCircle2, Clock, MessageSquare, MessageCircle, Sparkles } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import { useViewMode } from "../contexts/view-mode-context";
-import { projectId, publicAnonKey } from "@/utils/supabase/info";
+import { submitLead } from "../lib/submit-lead";
 import { openMailtoLead, CONTACT_EMAIL } from "../lib/lead-fallback";
 import { toast } from "sonner";
 import { VIEWPORT, DURATION, EASE } from "../lib/motion";
@@ -164,21 +164,13 @@ export function ContactSection() {
             source: 'cv',
           };
 
-      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      const ok = await submitLead(payload);
 
-      if (response.ok) {
+      if (ok) {
         toast.success(t("contact.successMessage") || "Message sent successfully! I'll get back to you soon.");
         setFormData({ name: "", email: "", service: "", budget: "", timeline: "", message: "" });
       } else {
-        const error = await response.json();
-        toast.error(error.error || "Failed to send message. Please try emailing directly.");
+        throw new Error('form endpoint rejected the submission');
       }
     } catch (error) {
       /* The endpoint is unreachable, not merely unhappy: the Supabase project

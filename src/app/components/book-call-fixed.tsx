@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Video, Phone, X, ChevronLeft, Loader2, ArrowRight, CheckCircle, Mail, User as UserIcon, MessageSquare, Zap } from "lucide-react";
 import { format, addDays, startOfDay, isWeekend } from "date-fns";
 import { useLanguage } from "../contexts/language-context";
-import { projectId, publicAnonKey } from "@/utils/supabase/info";
+import { submitLead } from "../lib/submit-lead";
 import { openMailtoLead } from "../lib/lead-fallback";
 import { useModalA11y } from "../hooks/use-modal-a11y";
 
@@ -181,38 +181,25 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
     setError("");
 
     try {
-      // Submit through the /contact endpoint — it saves the request AND emails
-      // Stepan via Resend. (The /book-call endpoint only stored to KV and never
-      // sent any notification, so bookings silently went nowhere.)
+      // Goes to Netlify Forms, which emails it on. The Supabase function this
+      // used to post to was switched off, so bookings were failing outright.
       const dateStr = format(selectedDate, "EEE, MMM d yyyy");
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/contact`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${publicAnonKey}`,
-          },
-          body: JSON.stringify({
-            name: name || "Guest",
-            email,
-            service: `Call booking — ${callType === "video" ? "Video" : "Phone"}`,
-            message:
-              `New call booking request\n\n` +
-              `• Date: ${dateStr}\n` +
-              `• Time: ${selectedTime} CET (Europe/Brussels)\n` +
-              `• Type: ${callType}\n` +
-              `• Name: ${name || "—"}\n` +
-              `• Email: ${email}\n` +
-              `• About: ${purpose || "—"}`,
-          }),
-        }
-      );
+      const ok = await submitLead({
+        name: name || "Guest",
+        email,
+        service: `Call booking — ${callType === "video" ? "Video" : "Phone"}`,
+        source: "book-call",
+        message:
+          `New call booking request\n\n` +
+          `• Date: ${dateStr}\n` +
+          `• Time: ${selectedTime} CET (Europe/Brussels)\n` +
+          `• Type: ${callType}\n` +
+          `• Name: ${name || "—"}\n` +
+          `• Email: ${email}\n` +
+          `• About: ${purpose || "—"}`,
+      });
 
-      if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(errorData);
-      }
+      if (!ok) throw new Error("form endpoint rejected the booking");
 
       setStep(4);
       setTimeout(onClose, 5000);

@@ -4,9 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../contexts/language-context";
 import { useViewMode } from "../contexts/view-mode-context";
 import { lockScroll, unlockScroll } from "../../utils/scroll-lock";
-import { projectId, publicAnonKey } from "@/utils/supabase/info";
 import { hiringStrings, hiringAnswer, hiringFunnel, whatsappHandoff } from "../lib/hiring-assistant";
 import { mailtoLead } from "../lib/lead-fallback";
+import { submitLead as postLead } from "../lib/submit-lead";
 
 interface Message {
   id: number;
@@ -495,28 +495,27 @@ export function ScrollToTopButton() {
   const submitLead = (finalLead: Lead) => {
     const F = funnelStrings(language);
     botSay(F.sending, 200);
-    fetch(`https://${projectId}.supabase.co/functions/v1/make-server-a62f57c7/contact`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
-      body: JSON.stringify({
-        name: finalLead.name || 'Website visitor',
-        email: finalLead.email,
-        service: isClientMode
-          ? `Chat lead — ${finalLead.project || 'General'}`
-          : `Hiring enquiry — ${finalLead.role || 'Role not stated'}`,
-        message:
-          `New lead from the site chat\n\n` +
-          `• Mode: ${isClientMode ? 'client' : 'company'}\n` +
-          `• Project: ${finalLead.project || '—'}\n` +
-          `• Role: ${finalLead.role || '—'}\n` +
-          `• Budget: ${finalLead.budget || '—'}\n` +
-          `• Timeline: ${finalLead.timeline || '—'}\n` +
-          `• Name: ${finalLead.name || '—'}\n` +
-          `• Email: ${finalLead.email || '—'}\n` +
-          `• Language: ${language}`,
-      }),
+    // Netlify Forms, which emails it on. The Supabase function this used to
+    // post to is switched off, so every lead the chat collected was lost.
+    postLead({
+      name: finalLead.name || 'Website visitor',
+      email: finalLead.email,
+      service: isClientMode
+        ? `Chat lead — ${finalLead.project || 'General'}`
+        : `Hiring enquiry — ${finalLead.role || 'Role not stated'}`,
+      source: isClientMode ? 'chat-client' : 'chat-company',
+      message:
+        `New lead from the site chat\n\n` +
+        `• Mode: ${isClientMode ? 'client' : 'company'}\n` +
+        `• Project: ${finalLead.project || '—'}\n` +
+        `• Role: ${finalLead.role || '—'}\n` +
+        `• Budget: ${finalLead.budget || '—'}\n` +
+        `• Timeline: ${finalLead.timeline || '—'}\n` +
+        `• Name: ${finalLead.name || '—'}\n` +
+        `• Email: ${finalLead.email || '—'}\n` +
+        `• Language: ${language}`,
     })
-      .then(async res => { const d = await res.json().catch(() => ({})); if (!res.ok) throw new Error(d.error || 'failed'); return d; })
+      .then(ok => { if (!ok) throw new Error('form endpoint rejected the lead'); })
       .then(() => {
         setStage('done');
         // Whatever the chat collected is already written into the WhatsApp
