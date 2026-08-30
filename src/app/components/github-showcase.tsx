@@ -202,7 +202,7 @@ export function GitHubShowcase() {
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#00d9ff]/5 rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-[radial-gradient(closest-side,var(--glow-secondary),transparent)]" />
       </div>
 
       <div className="container mx-auto max-w-7xl relative z-10">{/* Changed from max-w-6xl to max-w-7xl */}

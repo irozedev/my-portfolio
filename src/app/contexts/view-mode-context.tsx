@@ -65,24 +65,22 @@ export function ViewModeProvider({ children }: { children: ReactNode }) {
 
   // Publish the mode on <html> so CSS can reach it.
   //
-  // The 2026 client design has its own palette and its own type — Archivo and
-  // Instrument Sans instead of Inter Tight and Inter. The CV keeps what it had,
-  // deliberately: it is the page recruiters already read, and it was not part
-  // of the redesign. Scoping every new token under [data-view="client"] is what
-  // lets one stylesheet carry both without the CV shifting a pixel.
+  // The 2026 design covers both modes now. The attribute is still needed: the
+  // tokens hang off [data-view], so they wait for the app to mount rather than
+  // flashing the browser default, and a few rules still branch on the mode.
   //
   // useLayoutEffect, not useEffect: as an effect the attribute landed after the
-  // first paint, so a returning client-mode visitor got a frame of CV colours.
+  // first paint, so a returning visitor got a frame of the wrong palette.
   useLayoutEffect(() => {
     document.documentElement.setAttribute('data-view', viewMode);
   }, [viewMode]);
 
-  // The client faces are not in index.html. Fetching them for a CV reader who
-  // never switches would be three families of dead weight, so they load the
-  // first time client mode is actually shown. Same approach as the Arabic faces
-  // in language-context.tsx; the <link> is idempotent and stays for the session.
+  // Both modes use these faces now, so they load on mount rather than on first
+  // entry to client mode. Still not in index.html: keeping the decision here
+  // means one place owns it, the way language-context.tsx owns the Arabic
+  // faces. The <link> is idempotent and stays for the session.
   useEffect(() => {
-    if (typeof document === 'undefined' || viewMode !== 'client') return;
+    if (typeof document === 'undefined') return;
     const id = 'client-fonts';
     if (document.getElementById(id)) return;
 

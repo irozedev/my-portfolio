@@ -28,7 +28,7 @@ export function DownloadCVButton() {
   return (
     <motion.button aria-label="Download CV"
       onClick={handleOpen}
-      className="relative px-6 py-3 rounded-xl font-bold text-sm transition-all overflow-hidden group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+      className="relative px-6 py-3 rounded-xl font-bold text-sm transition-all overflow-hidden group bg-[var(--accent-primary)] text-black hover:brightness-110 shadow-[var(--shadow-accent)]"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
@@ -39,7 +39,7 @@ export function DownloadCVButton() {
         transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
       />
 
-      <span className="relative z-10 flex items-center gap-2 text-white">
+      <span className="relative z-10 flex items-center gap-2 text-black">
         <Download className="w-5 h-5" />
         {label}
       </span>

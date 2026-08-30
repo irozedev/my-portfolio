@@ -233,7 +233,11 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
               <div className="grid sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mb-8">
                 {[
                   { icon: Building2, k: L("Luxury retail", "Luxe retail", "تجزئة فاخرة", "Retail de lujo"), v: "childrensalon · vogacloset" },
-                  { icon: ShieldCheck, k: L("Banking systems", "Banksystemen", "أنظمة مصرفية", "Sistemas bancarios"), v: "أحد البنوك الوطنية CRM" },
+                  /* Localised, unlike its two neighbours which are proper nouns.
+                     The bank-rename pass picked a language from the characters
+                     on the line, and this line already carried an Arabic label,
+                     so the English card was left reading Arabic. */
+                  { icon: ShieldCheck, k: L("Banking systems", "Banksystemen", "أنظمة مصرفية", "Sistemas bancarios"), v: L("National bank · CRM", "Nationale bank · CRM", "أحد البنوك الوطنية · CRM", "Banco nacional · CRM") },
                   { icon: Rocket, k: L("Shipped 2026", "Gelanceerd 2026", "إطلاق 2026", "Lanzado 2026"), v: "Next.js 14 · marinek.store" },
                 ].map((h) => {
                   const Icon = h.icon;

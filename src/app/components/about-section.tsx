@@ -75,7 +75,7 @@ export function AboutSection() {
                 {/* Photo Card */}
                 <div className="relative bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-primary)] backdrop-blur-md rounded-3xl border border-[var(--border-color)] overflow-hidden p-4 group">
                   <motion.div
-                    className="absolute -inset-4 bg-gradient-to-r from-[var(--accent-primary)] to-purple-500 rounded-3xl blur-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-500"
+                    className="absolute -inset-4 bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] rounded-3xl blur-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-500"
                   />
                   
                   <img
@@ -245,22 +245,22 @@ export function AboutSection() {
             >
               <div className="flex items-center justify-center gap-4 mb-3">
                 <motion.div
-                  className="p-3 bg-purple-500/10 rounded-xl border-2 border-purple-500/30"
+                  className="p-3 bg-[var(--accent-primary)]/10 rounded-xl border-2 border-[var(--accent-primary)]/30"
                   whileHover={{ rotate: 360, scale: 1.1 }}
                   transition={{ duration: DURATION, ease: EASE }}
                 >
-                  <Globe className="w-8 h-8 text-purple-400" />
+                  <Globe className="w-8 h-8 text-[var(--accent-primary)]" />
                 </motion.div>
                 <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-[var(--text-primary)] font-mono uppercase tracking-wider">
                   LANGUAGES
                 </h3>
               </div>
               <div className="flex items-center justify-center gap-2">
-                <div className="h-[2px] w-12 bg-gradient-to-r from-transparent to-purple-400" />
-                <div className="h-1 w-1 rounded-full bg-purple-400" />
-                <div className="h-[2px] w-24 bg-purple-400" />
-                <div className="h-1 w-1 rounded-full bg-purple-400" />
-                <div className="h-[2px] w-12 bg-gradient-to-l from-transparent to-purple-400" />
+                <div className="h-[2px] w-12 bg-gradient-to-r from-transparent to-[var(--accent-primary)]" />
+                <div className="h-1 w-1 rounded-full bg-[var(--accent-primary)]" />
+                <div className="h-[2px] w-24 bg-[var(--accent-primary)]" />
+                <div className="h-1 w-1 rounded-full bg-[var(--accent-primary)]" />
+                <div className="h-[2px] w-12 bg-gradient-to-l from-transparent to-[var(--accent-primary)]" />
               </div>
             </motion.div>
             
@@ -291,7 +291,7 @@ export function AboutSection() {
                 transition={{ delay: 0.1 }}
               >
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="p-3 bg-gradient-to-br from-[var(--accent-primary)]/20 to-purple-500/20 rounded-xl border border-[var(--accent-primary)]/30 group-hover:scale-110 transition-transform">
+                  <div className="p-3 bg-gradient-to-br from-[var(--accent-primary)]/20 to-[var(--accent-primary)]/10 rounded-xl border border-[var(--accent-primary)]/30 group-hover:scale-110 transition-transform">
                     <GraduationCap className="w-8 h-8 text-[var(--accent-primary)]" />
                   </div>
                   <div className="flex-1">
@@ -332,8 +332,8 @@ export function AboutSection() {
 
                 <div className="relative">
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="p-3 bg-gradient-to-br from-purple-500/20 to-[var(--accent-primary)]/20 rounded-xl border border-purple-500/30 group-hover:scale-110 transition-transform">
-                      <GraduationCap className="w-8 h-8 text-purple-400" />
+                    <div className="p-3 bg-gradient-to-br from-[var(--accent-primary)]/10 to-[var(--accent-primary)]/20 rounded-xl border border-[var(--accent-primary)]/30 group-hover:scale-110 transition-transform">
+                      <GraduationCap className="w-8 h-8 text-[var(--accent-primary)]" />
                     </div>
                     <div className="flex-1">
                       <h4 className="text-xl font-bold text-[var(--text-primary)] mb-1 group-hover:text-[var(--accent-primary)] transition-colors">
@@ -343,7 +343,7 @@ export function AboutSection() {
                         <MapPin className="w-4 h-4" />
                         <span>{t("about.education.karazin.location")}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-purple-400 text-sm font-medium">
+                      <div className="flex items-center gap-2 text-[var(--accent-primary)] text-sm font-medium">
                         <Calendar className="w-4 h-4" />
                         <span>{t("about.education.karazin.period")}</span>
                       </div>

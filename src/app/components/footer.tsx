@@ -67,7 +67,7 @@ export function Footer() {
       {/* Animated Background */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-[var(--accent-primary)]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-[radial-gradient(closest-side,var(--glow-secondary),transparent)]" />
       </div>
 
       <div className="container mx-auto max-w-7xl relative z-10">
@@ -90,7 +90,7 @@ export function Footer() {
             className="lg:col-span-2"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-[var(--accent-primary)] to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] rounded-xl flex items-center justify-center shadow-lg">
                 <Code2 className="w-6 h-6 text-white" />
               </div>
               <div>

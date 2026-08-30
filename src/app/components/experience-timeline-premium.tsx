@@ -38,7 +38,7 @@ export function ExperienceTimelinePremium() {
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full bg-[radial-gradient(closest-side,var(--glow-secondary),transparent)]" />
       </div>
 
       <div className="container mx-auto max-w-6xl relative z-10">
@@ -54,7 +54,7 @@ export function ExperienceTimelinePremium() {
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={VIEWPORT}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[var(--accent-primary)]/10 to-purple-500/10 border border-[var(--accent-primary)]/30 rounded-full mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-primary)]/[0.07] border border-[var(--accent-primary)]/30 rounded-full mb-6"
           >
             <Briefcase className="w-5 h-5 text-[var(--accent-primary)]" />
             <span className="text-sm font-medium text-[var(--accent-primary)]">
@@ -62,7 +62,7 @@ export function ExperienceTimelinePremium() {
             </span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[var(--text-primary)] via-[var(--accent-primary)] to-purple-400 bg-clip-text text-transparent">
+          <h2 className="section-heading text-4xl md:text-6xl font-black mb-6">
             {t("experience.title") || L("Work experience", "Werkervaring", "الخبرة العملية", "Experiencia")}
           </h2>
           <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
@@ -79,8 +79,8 @@ export function ExperienceTimelinePremium() {
         {/* Timeline */}
         <div className="relative">
           {/* Spine — desktop centre, mobile left */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--accent-primary)]/40 via-purple-500/40 to-pink-500/40 hidden md:block -translate-x-1/2" />
-          <div className="absolute left-7 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--accent-primary)]/40 via-purple-500/40 to-pink-500/40 block md:hidden" />
+          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--accent-primary)]/40 via-[var(--accent-primary)]/20 to-transparent hidden md:block -translate-x-1/2" />
+          <div className="absolute left-7 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--accent-primary)]/40 via-[var(--accent-primary)]/20 to-transparent block md:hidden" />
 
           <div className="space-y-12 md:space-y-16">
             {experiences.map((exp, index) => {
@@ -321,10 +321,10 @@ export function ExperienceTimelinePremium() {
                 transition={{ delay: Math.min(index, 6) * 0.05 }}
                 className="bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] rounded-2xl p-4 md:p-6 text-center hover:border-[var(--accent-primary)]/50 transition-all duration-300 group"
               >
-                <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3 md:mb-4 bg-gradient-to-br from-[var(--accent-primary)]/20 to-purple-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3 md:mb-4 bg-[var(--accent-primary)]/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Icon className="w-5 h-5 md:w-6 md:h-6 text-[var(--accent-primary)]" />
                 </div>
-                <div className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[var(--accent-primary)] to-purple-400 bg-clip-text text-transparent mb-1 md:mb-2">
+                <div className="font-display text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-[var(--accent-primary)] mb-1 md:mb-2">
                   {stat.value}
                 </div>
                 <div className="text-xs md:text-sm text-[var(--text-secondary)]">{stat.label}</div>

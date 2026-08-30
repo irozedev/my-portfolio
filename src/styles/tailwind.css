@@ -89,12 +89,12 @@
 
    Scoped to client mode: the CV was left out of the redesign and keeps its
    glass. */
-[data-view="client"] .backdrop-blur-sm,
-[data-view="client"] .backdrop-blur-md,
-[data-view="client"] .backdrop-blur-lg,
-[data-view="client"] .backdrop-blur-xl,
-[data-view="client"] .backdrop-blur-2xl,
-[data-view="client"] .backdrop-blur-3xl {
+[data-view] .backdrop-blur-sm,
+[data-view] .backdrop-blur-md,
+[data-view] .backdrop-blur-lg,
+[data-view] .backdrop-blur-xl,
+[data-view] .backdrop-blur-2xl,
+[data-view] .backdrop-blur-3xl {
   /* Standard property only. Writing the -webkit- alias alongside it made the
      minifier collapse the pair and keep just the prefixed one, so Chrome -
      which reads the unprefixed property - carried on blurring all 82 of them.
@@ -105,39 +105,26 @@
 /* The header carries the blur class on the <nav> ITSELF, so a descendant
    selector matched nothing and the one panel meant to keep its glass lost it
    along with the rest. Both forms are needed. */
-[data-view="client"] :is(header, nav):is(.backdrop-blur-sm, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur-xl),
-[data-view="client"] :is(header, nav) :is(.backdrop-blur-sm, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur-xl) {
+[data-view] :is(header, nav):is(.backdrop-blur-sm, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur-xl),
+[data-view] :is(header, nav) :is(.backdrop-blur-sm, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur-xl) {
   backdrop-filter: blur(14px);
 }
 
 /* Section headings in the components that BOTH modes render — the projects
    slider, the GitHub feed, the footer.
 
-   The redesign sets these solid, uppercase and tight. The CV was deliberately
-   left out of it, so under data-view="cv" they keep exactly the gradient fill
-   they always had. Doing it here rather than with a ternary at each call site
-   keeps four components from having to know about view modes at all. */
+   Both modes set them solid, uppercase and tight. The CV used to keep a
+   gradient fill here because it was excluded from the redesign; it is not
+   excluded any more, so the split is gone and the rule is simply the rule. */
 .section-heading {
   font-family: var(--font-display);
 }
 
-[data-view="client"] .section-heading {
+[data-view] .section-heading {
   text-transform: uppercase;
   letter-spacing: -0.035em;
   line-height: 0.92;
   color: var(--text-primary);
-}
-
-[data-view="cv"] .section-heading {
-  background-image: linear-gradient(
-    to right,
-    var(--text-primary),
-    var(--accent-primary),
-    #a855f7
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 /* The display face as a utility.

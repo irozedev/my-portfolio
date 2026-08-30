@@ -69,7 +69,7 @@ export function LanguagesModern() {
                     <h4 className="font-mono font-bold text-base sm:text-lg text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors mb-1">
                       {lang.name}
                     </h4>
-                    <p className="text-xs sm:text-sm font-medium" style={{ color: lang.color }}>
+                    <p className="text-xs sm:text-sm font-medium text-[var(--text-secondary)]">
                       {lang.level}
                     </p>
                     <p className="text-[10px] sm:text-xs text-[var(--text-muted)] font-mono">
@@ -107,8 +107,7 @@ export function LanguagesModern() {
                   </motion.div>
                 ))}
                 <motion.span 
-                  className="ml-2 text-sm sm:text-base font-mono font-bold"
-                  style={{ color: lang.color }}
+                  className="ml-2 text-sm sm:text-base font-mono font-bold text-[var(--text-secondary)]"
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={VIEWPORT}

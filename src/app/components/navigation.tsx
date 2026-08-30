@@ -168,7 +168,7 @@ export function Navigation() {
       >
         {/* Scroll Progress Bar — pure CSS driven */}
         <div
-          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-[var(--accent-primary)] via-purple-500 to-pink-500"
+          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)]"
           style={{ width: `${scrollProgress}%`, transition: 'width 0.1s linear' }}
         />
 

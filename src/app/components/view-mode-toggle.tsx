@@ -86,7 +86,7 @@ export function ViewModeToggle({ className = "", size = "full" }: Props) {
           className={`absolute top-0.5 bottom-0.5 rounded-full motion-safe:transition-[left,width] motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isClientMode
               ? "bg-gradient-to-r from-[#00d9ff] to-cyan-400"
-              : "bg-gradient-to-r from-purple-500 to-pink-500"
+              : "bg-[var(--text-primary)]"
           }`}
           style={{ left: pill.left, width: pill.width }}
         />
@@ -110,7 +110,7 @@ export function ViewModeToggle({ className = "", size = "full" }: Props) {
         onClick={() => setViewMode("cv")}
         title={t.cv}
         aria-pressed={!isClientMode}
-        className={`${base} ${!isClientMode ? "text-black" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}
+        className={`${base} ${!isClientMode ? "text-[var(--bg-primary)]" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}
       >
         <FileText className={size === "compact" ? "w-4 h-4 relative z-10" : "w-3.5 h-3.5 relative z-10"} />
         {size === "full" && <span className="relative z-10">{t.cvShort}</span>}

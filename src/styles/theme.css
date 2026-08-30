@@ -206,7 +206,7 @@ img {
 /* ==========================================================================
    CLIENT MODE — the 2026 redesign.
 
-   Scoped to [data-view="client"] on purpose. The CV is the page recruiters
+   Scoped to [data-view] on purpose. The CV is the page recruiters
    already read and it was explicitly left out of the redesign, so it keeps
    Inter, its own greys and its own rhythm. view-mode-context.tsx sets the
    attribute; it also loads these three faces the first time client mode is
@@ -219,7 +219,7 @@ img {
    page read as one long stripe.
    ========================================================================== */
 
-[data-view="client"] {
+[data-view] {
   --bg-primary: #070708;    /* page */
   --bg-secondary: #0d0e10;  /* raised: cards, panels */
   --bg-tertiary: #101317;   /* full-width bands */
@@ -276,12 +276,12 @@ img {
 /* Archivo carries a width axis. At its default width the caps read too wide
    for the headline sizes this design uses, so the display face is condensed
    slightly wherever it is set. */
-[data-view="client"] :is(h1, h2, h3, h4, h5, h6),
-[data-view="client"] .font-display {
+[data-view] :is(h1, h2, h3, h4, h5, h6),
+[data-view] .font-display {
   font-variation-settings: 'wdth' 88;
 }
 
-[data-view="client"][data-theme="light"] {
+[data-view][data-theme="light"] {
   --bg-primary: #f0f3f6;
   --bg-secondary: #ffffff;
   --bg-tertiary: #e0e6ec;
