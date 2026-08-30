@@ -54,7 +54,7 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
             <section>
               <h3 className="text-xl font-bold text-[var(--text-primary)] mb-3">3. Data Storage</h3>
               <p className="text-[var(--text-secondary)] leading-relaxed">
-                Your data is securely stored on EU-based servers (Supabase) and is never shared with third parties. You have the right to request data deletion at any time.
+                There is no database. What you send through the contact form, the booking form or the chat is delivered to Stepan by email and kept in his mailbox; nothing else about you is recorded. Your theme and language choices stay in your own browser and never leave it. You can ask for anything you have sent to be deleted at any time.
               </p>
             </section>
 
@@ -165,9 +165,9 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
             <section>
               <h3 className="text-xl font-bold text-[var(--text-primary)] mb-3">Technical Information</h3>
               <div className="text-[var(--text-secondary)] space-y-2">
-                <p><strong>Hosting:</strong> Netlify (USA, GDPR-compliant)</p>
-                <p><strong>Database:</strong> Supabase (EU region)</p>
-                <p><strong>Analytics:</strong> Privacy-friendly, no personal data tracking</p>
+                <p><strong>Hosting:</strong> Vercel (edge network, EU and US regions)</p>
+                <p><strong>Enquiries:</strong> delivered by email through Resend; no database</p>
+                <p><strong>Analytics:</strong> Google Analytics 4, loaded only after you accept cookies, with IP anonymisation</p>
               </div>
             </section>
           </div>

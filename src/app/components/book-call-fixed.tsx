@@ -204,8 +204,10 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
       setStep(4);
       setTimeout(onClose, 5000);
     } catch (err: any) {
-      /* Same as the contact form: the endpoint does not exist, so "try again"
-         is advice that cannot work. Hand over a draft with the booking in it. */
+      /* Not delivered - most likely because RESEND_API_KEY is not set on the
+         deployment yet, which /api/contact reports as a 503. Telling someone to
+         "try again" would be advice that cannot work, so hand over a draft with
+         the booking already written into it. */
       console.error("Booking error:", err);
       setError(
         language === "nl" ? "Boeken lukte niet vanaf de site. Ik open je mailprogramma met de aanvraag er al in."

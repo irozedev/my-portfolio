@@ -169,27 +169,25 @@ export function ContactSection() {
       if (ok) {
         toast.success(t("contact.successMessage") || "Message sent successfully! I'll get back to you soon.");
         setFormData({ name: "", email: "", service: "", budget: "", timeline: "", message: "" });
-      } else {
-        throw new Error('form endpoint rejected the submission');
+        return;
       }
-    } catch (error) {
-      /* The endpoint is unreachable, not merely unhappy: the Supabase project
-         the site posts to does not resolve. Telling the visitor to "email
-         directly" makes them retype everything they just filled in, so hand
-         them a draft that already contains it. */
-      console.error('Error sending message:', error);
-      toast.error(
+
+      /* Not delivered. Hand over a draft that already contains the enquiry,
+         built from the SAME payload the server would have received - the
+         labelling above exists precisely so a hiring enquiry does not arrive
+         reading "Budget: Colruyt Group", and the fallback has to keep it.
+
+         Not an error toast: nothing has gone wrong from where the visitor is
+         standing, their mail app is opening with the message written. Red
+         here would say "this failed" about a route that works. */
+      toast.info(
         t("contact.sendFailed") ||
-          `Could not send from the site. Opening your mail app with the message ready \u2014 or write to ${CONTACT_EMAIL}.`,
+          `Opening your mail app with the message ready — or write to ${CONTACT_EMAIL}.`,
       );
-      openMailtoLead(language, {
-        name: formData.name,
-        email: formData.email,
-        service: formData.service,
-        budget: formData.budget,
-        timeline: formData.timeline,
-        message: formData.message,
-      });
+      openMailtoLead(language, payload);
+    } catch (error) {
+      console.error('Contact form:', error);
+      toast.error(`Something went wrong. Please write to ${CONTACT_EMAIL}.`);
     } finally {
       setIsSubmitting(false);
     }

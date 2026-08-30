@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
-// GA4 measurement id — set VITE_GA_ID (e.g. G-XXXXXXX) in your Netlify env.
+// GA4 measurement id — set VITE_GA_ID (e.g. G-XXXXXXXXXX) in the Vercel
+// project. It is read at BUILD time, so a redeploy is needed after adding it.
 const GA_ID = import.meta.env.VITE_GA_ID as string | undefined;
 
 function loadGA() {
@@ -34,8 +35,8 @@ export function Analytics() {
       // Silence is the failure mode here: with no id this component does
       // nothing, forever, and the site looks perfectly fine while measuring
       // nothing at all. Production was in exactly that state and there was no
-      // way to tell by looking at it. Set VITE_GA_ID in the Netlify build
-      // environment (Site configuration → Environment variables).
+      // way to tell by looking at it. Set VITE_GA_ID in the Vercel project
+      // (Settings → Environment Variables), then redeploy.
       if (import.meta.env.DEV) {
         console.warn(
           "[analytics] VITE_GA_ID is not set — GA4 is disabled and no traffic is being measured.",

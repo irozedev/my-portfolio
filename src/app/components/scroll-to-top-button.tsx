@@ -536,10 +536,11 @@ export function ScrollToTopButton() {
       .catch(err => {
         console.error('Lead submit error:', err);
         setStage('done');
-        // The send failed, so the hand-off matters more here, not less: it is
-        // now the only route left that does not make him retype anything.
-        // Two of them, because a visitor on a desktop without WhatsApp Web has
-        // nowhere to go with the first one.
+        // Not delivered - most likely RESEND_API_KEY missing, which
+        // /api/contact answers as 503. The hand-off matters more here, not
+        // less: it is the only route left that does not make him retype
+        // anything. Two of them, because a visitor on a desktop without
+        // WhatsApp Web has nowhere to go with the first one.
         botSay(funnelStrings(language).failed(finalLead.email || ''), 600, {
           kind: 'link',
           href: whatsappHandoff(language, finalLead),

@@ -155,10 +155,10 @@ function getLegalContent(type: "privacy" | "terms" | "imprint") {
           {
             heading: "4. Data Storage and Security",
             content: [
-              "Your contact form data is securely stored using Supabase with industry-standard encryption.",
-              "All data is stored in EU-based servers to comply with GDPR requirements.",
-              "I implement appropriate technical and organizational measures to protect your data against unauthorized access, alteration, disclosure, or destruction.",
-              "Contact form data is retained for up to 2 years or until the purpose of collection is fulfilled.",
+              "There is no database. What you send through the contact form, the booking form or the chat is delivered straight to my email inbox and kept there - nothing is written to a server I run.",
+              "The site itself is served by Vercel; enquiry emails are delivered by Resend. Both process data under the GDPR.",
+              "Your theme and language preferences are stored in your own browser and are never sent anywhere.",
+              "Enquiries stay in my mailbox until they are no longer needed, and at most two years. Ask me and I will delete yours sooner.",
             ],
           },
           {
@@ -177,7 +177,8 @@ function getLegalContent(type: "privacy" | "terms" | "imprint") {
             heading: "6. Third-Party Services",
             content: [
               "Google Analytics: I use Google Analytics to understand how visitors interact with my site. Google Analytics uses cookies to collect anonymous data. You can opt-out of Google Analytics by installing the Google Analytics Opt-out Browser Add-on.",
-              "Supabase: Contact form data is stored securely using Supabase, which is GDPR compliant and uses EU-based servers.",
+              "Vercel: hosts this website and serves it from an edge network with EU and US regions.",
+              "Resend: delivers enquiry emails from the site to my inbox. It sees what you typed into the form, in order to send it.",
             ],
           },
           {
