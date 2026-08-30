@@ -54,7 +54,7 @@ export const translations = {
       basedIn: 'Based in',
       forWork: 'For work',
       open: 'Open',
-      location: 'Antwerp, BE',
+      location: 'Lommel, BE',
       educationTitle: 'Education',
       highlights: {
         experience: '8+ years commercial experience',
@@ -313,26 +313,26 @@ export const translations = {
       contact: 'Contact',
       hireMe: 'Huur mij in',
       hello: 'Hallo!',
-      signInMessage: 'Log in om toegang te krijgen tot uw dashboard'
+      signInMessage: 'Log in om toegang te krijgen tot je dashboard'
     },
     hero: {
       greeting: 'Hallo, ik ben',
       name: 'STEPAN ROZE',
       availableForWork: 'Beschikbaar voor werk',
-      role: 'Ik bouw high-converting websites & AI automatisering voor bedrijven',
-      aiEnthusiast: 'AI Enthousiast',
-      description: 'Ik help startups en bedrijven snel moderne websites te lanceren en processen te automatiseren met AI. Focus op prestaties, UX en echte resultaten.',
+      role: 'Ik bouw websites die klanten opleveren, en AI-automatisering voor bedrijven',
+      aiEnthusiast: 'AI-enthousiast',
+      description: 'Ik help starters en bedrijven snel een moderne website te lanceren en processen te automatiseren met AI. Gericht op snelheid, gebruiksgemak en resultaat dat je terugziet.',
       bookCall: 'Start project',
       viewWork: 'Bekijk werk',
-      viewServices: 'Bekijk Diensten',
-      getInTouch: 'Neem Contact Op',
+      viewServices: 'Bekijk diensten',
+      getInTouch: 'Neem contact op',
       scrollExplore: 'Scroll om te verkennen',
       scrollDown: 'Scroll Omlaag',
-      yearsExperience: 'Jaar Ervaring',
-      projectsCompleted: 'Voltooide Projecten',
-      happyClients: 'Tevreden Klanten',
+      yearsExperience: 'Jaar ervaring',
+      projectsCompleted: 'Voltooide projecten',
+      happyClients: 'Tevreden klanten',
       successRate: 'Succes Tarief',
-      fastReliable: 'Snel & Betrouwbaar',
+      fastReliable: 'Snel en betrouwbaar',
       fastReliableDesc: 'Schone code, geoptimaliseerde prestaties en pixel-perfecte ontwerpen op tijd geleverd. Elk project is gebouwd met aandacht voor detail en moderne best practices.',
       followMe: 'Volg mij:'
     },
@@ -341,7 +341,7 @@ export const translations = {
       limited: 'Beperkte beschikbaarheid',
       busy: 'Bezig',
       schedule: 'Werkrooster',
-      regularHours: 'Reguliere Uren',
+      regularHours: 'Reguliere uren',
       footer: 'Alle tijden zijn in Centraal Europa Tijd (CET)',
       off: 'Afwezig'
     },
@@ -350,13 +350,13 @@ export const translations = {
       subtitle: 'Front-End / JavaScript Developer met 8+ jaar commerciële ervaring',
       intro: 'Ik ben een Front-End / JavaScript Developer met 8+ jaar commerciële ervaring in het bouwen van e-commerce en enterprise webapplicaties.',
       description: 'Van grootschalige luxe retailplatforms (childrensalon.com, vogacloset.com) tot banksystemen (een nationale bank) bouw ik snelle, onderhoudbare interfaces met JavaScript, TypeScript, React, Vue en Next.js — en ik heb een commercieel Next.js 14-product end-to-end gelanceerd.',
-      skillsTitle: 'Technische Vaardigheden',
+      skillsTitle: 'Technische vaardigheden',
       downloadCV: 'Download CV',
       contactMe: 'Neem contact met mij op',
       basedIn: 'Gevestigd in',
       forWork: 'Voor werk',
       open: 'Open',
-      location: 'Antwerpen, België',
+      location: 'Lommel, België',
       educationTitle: 'Opleiding',
       highlights: {
         experience: '8+ jaar commerciële ervaring',
@@ -387,8 +387,8 @@ export const translations = {
       availability: 'Opmerking: tot 14 februari ben ik alleen beschikbaar voor werk voor 12:00 uur (CET). Na 14 februari herstelt mijn reguliere schema.',
       chapter: 'Hoofdstuk',
       story: 'De Verhaal',
-      achievements: 'Belangrijke Prestaties',
-      technologies: 'Gebruikte Technologieën',
+      achievements: 'Belangrijke prestaties',
+      technologies: 'Gebruikte technologieën',
       previous: 'Vorige',
       next: 'Volgende',
       metrics: {
@@ -400,8 +400,8 @@ export const translations = {
       },
       summary: {
         years: 'Jaren Ervaring',
-        projects: 'Voltooide Projecten',
-        clients: 'Tevreden Klanten',
+        projects: 'Voltooide projecten',
+        clients: 'Tevreden klanten',
         satisfaction: 'Tevredenheid Tarief',
       },
       'senior-dev': {
@@ -458,7 +458,7 @@ export const translations = {
     services: {
       title: 'Premium Diensten',
       subtitle: 'Wat Ik Aanbied',
-      description: 'Professionele ontwikkelingsdiensten afgestemd op uw zakelijke behoeften. Van eenvoudige websites tot complexe enterprise-oplossingen.',
+      description: 'Ontwikkeling op maat van wat je bedrijf nodig heeft. Van een eenvoudige website tot een complexe bedrijfsoplossing.',
       learnMore: 'Meer informatie',
       getStarted: 'Begin',
       startingAt: 'Vanaf',
@@ -467,7 +467,7 @@ export const translations = {
       priceNote: 'Vanafprijs · geen btw (vrijstellingsregeling)',
       popular: 'POPULAIR',
       customSolution: 'Aangepaste oplossing nodig?',
-      customSolutionDesc: 'Elk project is uniek. Laten we uw specifieke vereisten bespreken en een op maat gemaakte oplossing creëren.',
+      customSolutionDesc: 'Elk project is anders. Laten we bespreken wat je nodig hebt en er een oplossing op maat van maken.',
       startConversation: 'Start Gesprek',
       navigation: {
         inactive: 'Klik op inactieve kaart om te centreren',
@@ -482,7 +482,7 @@ export const translations = {
       subtitle: 'Wat klanten zeggen over mijn werk'
     },
     contact: {
-      title: 'Neem Contact Op',
+      title: 'Neem contact op',
       subtitle: 'Laten we samenwerken',
       name: 'Naam',
       email: 'Email',
@@ -490,7 +490,7 @@ export const translations = {
       send: 'Verstuur Bericht',
       sending: 'Verzenden...',
       successTitle: 'Bericht Verzonden!',
-      successMessage: 'Bedankt voor uw bericht. Ik neem spoedig contact met u op.',
+      successMessage: 'Bedankt voor je bericht. Ik neem snel contact met je op.',
       errorTitle: 'Fout',
       errorMessage: 'Kan bericht niet verzenden. Probeer het opnieuw.',
       emailMe: 'Email mij op',
@@ -503,7 +503,7 @@ export const translations = {
         budget: 'Projectbudget',
         timeline: 'Tijdlijn',
         message: 'Uw Bericht',
-        messagePlaceholder: 'Vertel me over uw project...'
+        messagePlaceholder: 'Vertel me over je project...'
       },
       benefits: {
         response: 'Reactie binnen 24 uur',
@@ -532,7 +532,7 @@ export const translations = {
           description: 'Huur mij in voor projecten'
         }
       },
-      formNote: 'Door dit formulier in te dienen, gaat u akkoord met contact per e-mail.'
+      formNote: 'Door dit formulier te versturen ga je akkoord met contact per e-mail.'
     },
     footer: {
       rights: 'Alle rechten voorbehouden',
@@ -567,14 +567,14 @@ export const translations = {
     },
     bookCall: {
       title: 'Plan een Gesprek',
-      subtitle: 'Plan een tijd om uw project te bespreken',
+      subtitle: 'Plan een moment om je project te bespreken',
       availableWeekdays: 'Beschikbare weekdagen voor de komende 30 dagen',
       changeDate: 'Wijzig datum',
       selectTime: 'Selecteer een tijdslot',
       callType: 'Type Gesprek',
       videoCall: 'Videogesprek',
       phoneCall: 'Telefoongesprek',
-      purpose: 'Wat wilt u bespreken?',
+      purpose: 'Wat wil je bespreken?',
       purposePlaceholder: 'Bijv., Nieuw project, consultatie, samenwerking',
       notes: 'Aanvullende Opmerkingen (Optioneel)',
       notesPlaceholder: 'Specifieke vereisten of vragen?',
@@ -593,7 +593,7 @@ export const translations = {
       lookingForward: 'Ik kijk uit naar ons gesprek'
     },
     notFound: {
-      title: 'Pagina Niet Gevonden',
+      title: 'Pagina niet gevonden',
       description: 'De pagina die u zoekt bestaat niet of is verplaatst.',
       errorMessage: 'HTTP 404 - Pagina niet gevonden. Controleer de URL en probeer het opnieuw.',
       backHome: 'Terug naar Home',
@@ -658,7 +658,7 @@ export const translations = {
       basedIn: 'مقيم في',
       forWork: 'للعمل',
       open: 'مفتوح',
-      location: 'أنتويرب، بلجيكا',
+      location: 'لوميل، بلجيكا',
       educationTitle: 'التعليم',
       highlights: {
         experience: '+8 سنوات خبرة تجارية',
@@ -987,7 +987,7 @@ export const translations = {
       basedIn: 'Ubicado en',
       forWork: 'Para trabajo',
       open: 'Abierto',
-      location: 'Amberes, Bélgica',
+      location: 'Lommel, Bélgica',
       educationTitle: 'Educación',
       highlights: {
         experience: '8+ años de experiencia comercial',
