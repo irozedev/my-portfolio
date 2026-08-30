@@ -1,13 +1,13 @@
 import { Menu, X, Sun, Moon, ChevronDown, Terminal } from "lucide-react";
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef, Suspense, lazy } from "react";
 import { useLanguage, Language } from "../contexts/language-context";
 import { useTheme } from "../contexts/theme-context";
 import { smoothScrollToSection } from "../../utils/scroll-utils";
 import { useAvailability } from "../contexts/availability-context";
 import { useViewMode } from "../contexts/view-mode-context";
 import { ViewModeToggle } from "./view-mode-toggle";
-import { BookCallModal } from "./book-call-fixed";
-import { AvailabilityScheduleModal } from "./availability-schedule-modal";
+const BookCallModal = lazy(() => import("./book-call-fixed").then(m => ({ default: m.BookCallModal })));
+const AvailabilityScheduleModal = lazy(() => import("./availability-schedule-modal").then(m => ({ default: m.AvailabilityScheduleModal })));
 import { useModalA11y } from "../hooks/use-modal-a11y";
 
 export function Navigation() {
@@ -321,7 +321,7 @@ export function Navigation() {
             <div className="lg:hidden flex items-center gap-1.5">
               {/* Icon-only here — the labels do not fit next to the language
                   chip, the theme button and the burger on a 390px screen. */}
-              <ViewModeToggle size="compact" layoutGroup="mobile" />
+              <ViewModeToggle size="compact" />
 
               {/* Language — compact */}
               <div className="relative language-selector">
@@ -454,12 +454,20 @@ export function Navigation() {
         </div>
 
       {/* Modals */}
-      <BookCallModal isOpen={showBookCallModal} onClose={() => setShowBookCallModal(false)} />
-      <AvailabilityScheduleModal
-        isOpen={showAvailabilityModal}
-        onClose={() => setShowAvailabilityModal(false)}
-        onBookCall={() => { setShowAvailabilityModal(false); setShowBookCallModal(true); }}
-      />
+      {showBookCallModal && (
+        <Suspense fallback={null}>
+          <BookCallModal isOpen onClose={() => setShowBookCallModal(false)} />
+        </Suspense>
+      )}
+      {showAvailabilityModal && (
+        <Suspense fallback={null}>
+          <AvailabilityScheduleModal
+            isOpen
+            onClose={() => setShowAvailabilityModal(false)}
+            onBookCall={() => { setShowAvailabilityModal(false); setShowBookCallModal(true); }}
+          />
+        </Suspense>
+      )}
     </>
   );
 }

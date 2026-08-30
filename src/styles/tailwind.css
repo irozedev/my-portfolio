@@ -36,6 +36,43 @@
   --spacing-stack: clamp(1.5rem, 1rem + 2vw, 2.5rem);
 }
 
+/* The cookie banner's entrance, formerly a motion `initial`/`animate` pair. */
+@keyframes cookie-in {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Reveal-on-scroll, the CSS half of lib/use-reveal.ts.
+   Matches what `motion` was doing for these elements: 14px up, 450ms, the same
+   ease curve as lib/motion's EASE. A reader who asked for less motion gets the
+   content with no transform at all. */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Glass, on one surface instead of everywhere.
    ------------------------------------------------------------------
    Frosted panels are a legitimate design language when they sit on something

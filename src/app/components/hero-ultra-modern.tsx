@@ -1,9 +1,14 @@
 import { useLanguage } from "../contexts/language-context";
 import { useAvailability } from "../contexts/availability-context";
 import { useViewMode } from "../contexts/view-mode-context";
-import { useState } from "react";
-import { BookCallModal } from "./book-call-fixed";
-import { DownloadCVButton } from "./download-cv-button";
+import { Suspense, lazy, useState } from "react";
+
+// Both pull in `motion`. Neither is needed to paint the hero: the modal only
+// exists once someone opens it, and the CV button sits far below the fold in
+// CV mode. Static imports here were enough to keep the 42 kB chunk on the
+// critical path for every visitor.
+const BookCallModal = lazy(() => import("./book-call-fixed").then(m => ({ default: m.BookCallModal })));
+const DownloadCVButton = lazy(() => import("./download-cv-button").then(m => ({ default: m.DownloadCVButton })));
 import { StatsAirport } from "./stats-airport";
 import { Github, Linkedin, Briefcase, Mail, Rocket, Code2, ArrowRight, Building2, ShieldCheck } from "lucide-react";
 
@@ -253,7 +258,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                     {viewWorkLabel}
                   </span>
                 </button>
-                <DownloadCVButton />
+                <Suspense fallback={null}><DownloadCVButton /></Suspense>
               </div>
             </div>
           )}
@@ -297,8 +302,11 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
       </section>
 
       {/* Modals */}
+      {/* Mounted only once opened, so the chunk is fetched on the click. */}
       {isBookCallOpen && (
-        <BookCallModal isOpen={isBookCallOpen} onClose={() => setIsBookCallOpen(false)} />
+        <Suspense fallback={null}>
+          <BookCallModal isOpen onClose={() => setIsBookCallOpen(false)} />
+        </Suspense>
       )}
     </>
   );

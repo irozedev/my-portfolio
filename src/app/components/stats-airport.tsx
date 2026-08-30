@@ -1,9 +1,8 @@
-import { motion } from "motion/react";
 import { Award, CheckCircle2, Users, TrendingUp, Star, Zap, Code2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "../contexts/language-context";
 import { useViewMode } from "../contexts/view-mode-context";
-import { VIEWPORT } from "../lib/motion";
+import { useReveal } from "../lib/use-reveal";
 
 interface StatCardProps {
   icon: React.ElementType;
@@ -28,16 +27,16 @@ function StatCard({ icon: Icon, value, label, color, index }: StatCardProps) {
     return () => clearTimeout(timer);
   }, [value, index, hasAnimated]);
 
+  /* This row renders before any scroll, so it cannot import motion without
+     pinning that chunk to the critical path. Same reveal, done in CSS. */
+  const { ref, shown } = useReveal<HTMLDivElement>();
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT}
-      transition={{
-        duration: 0.4,
-        delay: Math.min(index, 6) * 0.04,
-      }}
-      className="relative group"
+    <div
+      ref={ref}
+      data-shown={shown}
+      className="reveal relative group"
+      style={{ transitionDelay: `${Math.min(index, 6) * 40}ms` }}
     >
       {/* Card */}
       <div className="relative bg-[var(--bg-secondary)]/40 backdrop-blur-sm border border-[var(--border-color)] hover:border-[var(--accent-primary)]/50 rounded-xl p-3 md:p-4 overflow-hidden transition-all duration-300">
@@ -75,7 +74,7 @@ function StatCard({ icon: Icon, value, label, color, index }: StatCardProps) {
         {/* Hover effect - minimal */}
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--accent-primary)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
-    </motion.div>
+    </div>
   );
 }
 

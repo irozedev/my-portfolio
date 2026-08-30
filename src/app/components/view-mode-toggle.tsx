@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Briefcase, FileText } from "lucide-react";
 import { useViewMode } from "../contexts/view-mode-context";
 import { useLanguage } from "../contexts/language-context";
@@ -29,11 +29,9 @@ type Props = {
   className?: string;
   /** `full` shows the labels; `compact` is icon-only for narrow headers. */
   size?: "full" | "compact";
-  /** Unique per instance — two mounts sharing a layoutId fight over the pill. */
-  layoutGroup?: string;
 };
 
-export function ViewModeToggle({ className = "", size = "full", layoutGroup = "header" }: Props) {
+export function ViewModeToggle({ className = "", size = "full" }: Props) {
   const { setViewMode, isClientMode } = useViewMode();
   const { language } = useLanguage();
   const t = translations[language as keyof typeof translations] || translations.en;
@@ -46,44 +44,74 @@ export function ViewModeToggle({ className = "", size = "full", layoutGroup = "h
       ? "relative flex items-center justify-center w-9 h-9 rounded-full z-10 transition-colors"
       : "relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold z-10 transition-colors";
 
+  /* The pill used to be two `motion.div`s sharing a layoutId, which is a
+     shared-element animation: motion measured both and tweened between them.
+     One pill positioned from the active button's own box does the same thing
+     with a CSS transition, and it is the last thing keeping the 42 kB motion
+     chunk in the header's import graph.
+
+     Measured rather than assumed to be half the track: the two labels differ
+     in length in every language, so the buttons are not the same width, and
+     hard-coding 50% would have made the pill overhang one of them. */
+  const trackRef = useRef<HTMLDivElement>(null);
+  const clientRef = useRef<HTMLButtonElement>(null);
+  const cvRef = useRef<HTMLButtonElement>(null);
+  const [pill, setPill] = useState<{ left: number; width: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const active = isClientMode ? clientRef.current : cvRef.current;
+    if (!active) return;
+
+    const measure = () => setPill({ left: active.offsetLeft, width: active.offsetWidth });
+    measure();
+
+    // Labels reflow when the language changes and when a webfont finally
+    // arrives; without this the pill keeps the width it was first measured at.
+    const ro = new ResizeObserver(measure);
+    ro.observe(active);
+    if (trackRef.current) ro.observe(trackRef.current);
+    return () => ro.disconnect();
+  }, [isClientMode, size, language]);
+
   return (
     <div
-      className={`inline-flex items-center gap-0.5 p-0.5 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/60 ${className}`}
+      ref={trackRef}
+      className={`relative inline-flex items-center gap-0.5 p-0.5 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)]/60 ${className}`}
       role="group"
       aria-label="View mode"
     >
+      {pill && (
+        <span
+          aria-hidden
+          className={`absolute top-0.5 bottom-0.5 rounded-full motion-safe:transition-[left,width] motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            isClientMode
+              ? "bg-gradient-to-r from-[#00d9ff] to-cyan-400"
+              : "bg-gradient-to-r from-purple-500 to-pink-500"
+          }`}
+          style={{ left: pill.left, width: pill.width }}
+        />
+      )}
+
       <button
+        ref={clientRef}
         type="button"
         onClick={() => setViewMode("client")}
         title={t.client}
         aria-pressed={isClientMode}
         className={`${base} ${isClientMode ? "text-black" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}
       >
-        {isClientMode && (
-          <motion.div
-            layoutId={`view-mode-pill-${layoutGroup}`}
-            className="absolute inset-0 rounded-full bg-gradient-to-r from-[#00d9ff] to-cyan-400"
-            transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-          />
-        )}
         <Briefcase className={size === "compact" ? "w-4 h-4 relative z-10" : "w-3.5 h-3.5 relative z-10"} />
         {size === "full" && <span className="relative z-10">{t.clientShort}</span>}
       </button>
 
       <button
+        ref={cvRef}
         type="button"
         onClick={() => setViewMode("cv")}
         title={t.cv}
         aria-pressed={!isClientMode}
         className={`${base} ${!isClientMode ? "text-black" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}
       >
-        {!isClientMode && (
-          <motion.div
-            layoutId={`view-mode-pill-${layoutGroup}`}
-            className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 to-pink-500"
-            transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-          />
-        )}
         <FileText className={size === "compact" ? "w-4 h-4 relative z-10" : "w-3.5 h-3.5 relative z-10"} />
         {size === "full" && <span className="relative z-10">{t.cvShort}</span>}
       </button>

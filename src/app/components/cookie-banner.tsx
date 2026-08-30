@@ -1,4 +1,3 @@
-import { motion, AnimatePresence } from "motion/react";
 import { Cookie, X, Check } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "../contexts/language-context";
@@ -31,15 +30,19 @@ export function CookieBanner() {
     setShowBanner(false);
   };
 
+  /* The banner is on screen before anything is scrolled, so importing motion
+     here pinned the 42 kB chunk to the critical path for the sake of one slide
+     up. A CSS keyframe does the same entrance.
+
+     No exit animation any more: AnimatePresence was the only reason this
+     component needed the library, and an exit tween on a banner the reader has
+     just dismissed is the one animation nobody waits to watch. */
+  if (!showBanner) return null;
+
   return (
-    <AnimatePresence>
-      {showBanner && (
-        <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:bottom-20 md:max-w-md z-[9990] bg-[var(--card-bg)] border-2 border-[var(--border-color)] rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur-xl"
-        >
+    <div
+      className="motion-safe:animate-[cookie-in_0.35s_cubic-bezier(0.22,1,0.36,1)] fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:bottom-20 md:max-w-md z-[9990] bg-[var(--card-bg)] border-2 border-[var(--border-color)] rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur-xl"
+    >
           {/* Close Button */}
           <button aria-label={L("Close", "Sluiten", "إغلاق", "Cerrar")}
             onClick={handleDecline}
@@ -96,26 +99,20 @@ export function CookieBanner() {
 
           {/* Actions */}
           <div className="flex gap-2 md:gap-3">
-            <motion.button
+            <button
               onClick={handleAccept}
-              className="flex-1 flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 md:py-2.5 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 hover:from-[var(--accent-secondary)] hover:to-cyan-300 text-white text-sm md:text-base font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className="flex-1 flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 md:py-2.5 bg-gradient-to-r from-[var(--accent-primary)] to-cyan-400 hover:from-[var(--accent-secondary)] hover:to-cyan-300 text-white text-sm md:text-base font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl motion-safe:hover:scale-[1.02] motion-safe:active:scale-[0.98]"
             >
               <Check className="w-3.5 h-3.5 md:w-4 md:h-4" />
               {L("Accept all", "Alles accepteren", "قبول الكل", "Aceptar todo")}
-            </motion.button>
-            <motion.button
+            </button>
+            <button
               onClick={handleDecline}
-              className="px-3 md:px-4 py-2 md:py-2.5 border-2 border-[var(--border-color)] hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)] text-sm md:text-base font-semibold rounded-xl transition-all"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className="px-3 md:px-4 py-2 md:py-2.5 border-2 border-[var(--border-color)] hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)] text-sm md:text-base font-semibold rounded-xl transition-all motion-safe:hover:scale-[1.02] motion-safe:active:scale-[0.98]"
             >
               {L("Decline", "Weigeren", "رفض", "Rechazar")}
-            </motion.button>
+            </button>
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    </div>
   );
 }
