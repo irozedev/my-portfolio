@@ -89,7 +89,12 @@ const services = [
 
 // Carousel arrows, rendered here rather than handed to the slider library.
 const arrowClass =
-  "absolute top-1/2 -translate-y-1/2 z-20 w-11 h-11 md:w-10 md:h-10 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--accent-primary)]/30 rounded-full flex items-center justify-center hover:border-[var(--accent-primary)]/70 hover:scale-105 transition-all duration-300 group disabled:opacity-20 disabled:pointer-events-none";
+  "absolute top-1/2 -translate-y-1/2 z-20 hidden md:flex w-11 h-11 md:w-10 md:h-10 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--accent-primary)]/30 rounded-full items-center justify-center hover:border-[var(--accent-primary)]/70 hover:scale-105 transition-all duration-300 group disabled:opacity-20 disabled:pointer-events-none";
+
+/* The phone pair. 44px square: WCAG 2.2 Target Size (Minimum) asks for 24,
+   and a thumb wants more. */
+const mobileArrowClass =
+  "flex md:hidden w-11 h-11 shrink-0 items-center justify-center rounded-full border border-[var(--accent-primary)]/30 bg-[var(--glass-bg)] transition-colors duration-200 hover:border-[var(--accent-primary)]/70 disabled:opacity-20 disabled:pointer-events-none";
 
 // Pixels of pointer travel above which a press counts as a drag, not a click.
 const DRAG_THRESHOLD = 6;
@@ -856,7 +861,22 @@ export function ServicesCreativeSlider() {
                 card, so this still renders six; on desktop, where three are
                 visible at once, it renders four — the four positions the
                 arrows already move between. */}
+            {/* On a phone the side arrows sat at the card's right edge, exactly
+                where the fixed scroll-to-top button lives - measured at 390px
+                the two overlapped within a pixel, so the arrow was covered and
+                could not be tapped at all. Below md they move in here, beside
+                the dots, where nothing fixed can reach them. */}
             <div className="flex items-center justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => step(-1)}
+                disabled={edges.atStart}
+                aria-label={L("Previous service", "Vorige dienst", "الخدمة السابقة", "Servicio anterior")}
+                className={mobileArrowClass}
+              >
+                <ChevronLeft className="w-5 h-5 text-[var(--accent-primary)]" />
+              </button>
+
               {Array.from({ length: pager.pages }, (_, index) => (
                 <button
                   key={index}
@@ -875,6 +895,16 @@ export function ServicesCreativeSlider() {
                   />
                 </button>
               ))}
+
+              <button
+                type="button"
+                onClick={() => step(1)}
+                disabled={edges.atEnd}
+                aria-label={L("Next service", "Volgende dienst", "الخدمة التالية", "Servicio siguiente")}
+                className={mobileArrowClass}
+              >
+                <ChevronRight className="w-5 h-5 text-[var(--accent-primary)]" />
+              </button>
             </div>
 
             <p className="text-sm text-[var(--text-muted)]" aria-live="polite">

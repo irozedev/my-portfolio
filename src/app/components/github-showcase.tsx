@@ -227,7 +227,7 @@ export function GitHubShowcase() {
           <h2 className="section-heading text-3xl md:text-4xl lg:text-5xl font-black mb-3">
             {
              language === 'nl' ? 'Recente Ontwikkelingen' : 
-             language === 'ar' ? 'أحدث الت��ورات' :
+             language === 'ar' ? 'أحدث التطورات' :
              language === 'es' ? 'Desarrollos Recientes' :
              'Latest Developments'}
           </h2>

@@ -171,7 +171,7 @@ export function HeroUltraModern({ onViewWork }: HeroUltraModernProps) {
                     <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
                       {L("in short", "kort gezegd", "باختصار", "en resumen")}
                     </span>
-                    <span className="font-mono text-[11px] text-[var(--accent-primary)]">2015 &ndash; 2026</span>
+                    <span className="font-mono text-[11px] text-[var(--accent-primary)]">{L("2015 – now", "2015 – nu", "2015 – الآن", "2015 – hoy")}</span>
                   </div>
 
                   <div className="grid gap-2.5">

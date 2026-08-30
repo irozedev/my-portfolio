@@ -262,7 +262,11 @@ export function ContactSection() {
               viewport={VIEWPORT}
               transition={{ delay: 0.5 }}
             >
-              Whether you need a custom app, optimization, or technical advice, I'm here to help.
+              {/* Was hardcoded English: four of the five language choices
+                  read the whole page in their own language and then hit
+                  this one paragraph in another. */}
+              {t("contact.intro") ||
+                "Whether you need a custom app, a performance overhaul or a second opinion on something technical, write to me."}
             </motion.p>
 
             {/* Benefits */}
@@ -337,8 +341,14 @@ export function ContactSection() {
                           <h3 className="text-base sm:text-lg md:text-xl font-bold mb-0.5 sm:mb-1 text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors">
                             {t(`contact.contactLinks.${link.key}.label`)}
                           </h3>
+                          {/* <bdi>, not a plain span: these values are Latin and
+                              numeric, and inside the Arabic page the bidi
+                              algorithm reordered the phone number into
+                              "24 14 63 469 32+". An isolate keeps each value
+                              reading the way it is dialled or typed, whatever
+                              direction surrounds it. */}
                           <p className="text-xs sm:text-sm md:text-base text-[var(--text-secondary)] truncate">
-                            {link.value}
+                            <bdi>{link.value}</bdi>
                           </p>
                           <p className="text-xs text-[var(--text-muted)] mt-0.5 sm:mt-1 hidden sm:block">
                             {t(`contact.contactLinks.${link.key}.description`)}
@@ -452,14 +462,19 @@ export function ContactSection() {
                     >
                       {isClientMode ? (
                         <>
-                          <option value="">Select a service</option>
-                          <option value="Web Development">Web Development</option>
-                          <option value="E-Commerce Solutions">E-Commerce Solutions</option>
-                          <option value="Web Applications">Web Applications</option>
-                          <option value="Process Automation">Process Automation</option>
-                          <option value="AI Chatbots">AI Chatbots</option>
-                          <option value="Tech Consulting">Tech Consulting</option>
-                          <option value="Other">Other</option>
+                          {/* The option TEXT is translated; the value is not.
+                              The value is what lands in the enquiry email, and
+                              it has to stay one stable English string or the
+                              inbox fills with the same service under five
+                              spellings. */}
+                          <option value="">{L("Select a service", "Kies een dienst", "اختر خدمة", "Elige un servicio")}</option>
+                          <option value="Web Development">{L("Web Development", "Webontwikkeling", "تطوير مواقع", "Desarrollo web")}</option>
+                          <option value="E-Commerce Solutions">{L("E-Commerce Solutions", "E-commerce", "حلول التجارة الإلكترونية", "Soluciones de e-commerce")}</option>
+                          <option value="Web Applications">{L("Web Applications", "Webapplicaties", "تطبيقات ويب", "Aplicaciones web")}</option>
+                          <option value="Process Automation">{L("Process Automation", "Procesautomatisering", "أتمتة العمليات", "Automatización de procesos")}</option>
+                          <option value="AI Chatbots">{L("AI Chatbots", "AI-chatbots", "روبوتات محادثة بالذكاء الاصطناعي", "Chatbots con IA")}</option>
+                          <option value="Tech Consulting">{L("Tech Consulting", "Technisch advies", "استشارات تقنية", "Consultoría técnica")}</option>
+                          <option value="Other">{L("Other", "Anders", "أخرى", "Otro")}</option>
                         </>
                       ) : (
                         <>
@@ -494,7 +509,15 @@ export function ContactSection() {
                       <Input
                         id="budget"
                         type="text"
-                        placeholder={isClientMode ? "€5,000 - €10,000" : L("Company name", "Bedrijfsnaam", "اسم الشركة", "Nombre de la empresa")}
+                        /* A value that opens with a currency sign has no strong
+                           direction, so inside the Arabic page the bidi algorithm
+                           rendered "€5,000 - €10,000" as "€10,000 - €5,000" -
+                           the range backwards, which is worse than leaving it in
+                           English. The isolate characters around the placeholder
+                           fix that; dir="auto" alone does not, because an empty
+                           field has no content to infer a direction from. */
+                        dir="auto"
+                        placeholder={isClientMode ? "⁦€5,000 - €10,000⁩" : L("Company name", "Bedrijfsnaam", "اسم الشركة", "Nombre de la empresa")}
                         value={formData.budget}
                         onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                         required={isClientMode}
@@ -512,7 +535,8 @@ export function ContactSection() {
                       <Input
                         id="timeline"
                         type="text"
-                        placeholder={isClientMode ? "1-3 months" : L("e.g. Front-End Developer", "bijv. Front-end developer", "مثال: مطوّر واجهات", "p. ej. Desarrollador Front-End")}
+                        dir="auto"
+                        placeholder={isClientMode ? L("1-3 months", "1-3 maanden", "1-3 أشهر", "1-3 meses") : L("e.g. Front-End Developer", "bijv. Front-end developer", "مثال: مطوّر واجهات", "p. ej. Desarrollador Front-End")}
                         value={formData.timeline}
                         onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
                         required={isClientMode}

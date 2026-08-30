@@ -142,6 +142,7 @@ export const translations = {
     contact: {
       title: 'Get in Touch',
       subtitle: 'Let\'s work together',
+      intro: 'Whether you need a custom app, a performance overhaul or a second opinion on something technical, write to me.',
       name: 'Name',
       email: 'Email',
       message: 'Message',
@@ -404,6 +405,7 @@ export const translations = {
     contact: {
       title: 'Neem contact op',
       subtitle: 'Laten we samenwerken',
+      intro: 'Heb je een app op maat nodig, moet er snelheid bij, of wil je een tweede mening over iets technisch? Stuur een bericht.',
       name: 'Naam',
       email: 'Email',
       message: 'Bericht',
@@ -555,7 +557,7 @@ export const translations = {
       happyClients: 'العملاء السعداء',
       successRate: 'نسبة النجاح',
       fastReliable: 'سريع وموثوق',
-      fastReliableDesc: 'كود ن��يف وأداء محسّن وتصميمات مثالية يتم تسليمها في الوقت المحدد.',
+      fastReliableDesc: 'كود نظيف وأداء محسّن وتصميمات مثالية يتم تسليمها في الوقت المحدد.',
       followMe: 'تابعني:'
     },
     availability: {
@@ -673,6 +675,7 @@ export const translations = {
       title: 'لنعمل معاً',
       subtitle: 'تواصل معي',
       description: 'لنبني شيئاً رائعاً معاً',
+      intro: 'سواء كنت تحتاج تطبيقاً خاصاً أو تحسين الأداء أو رأياً تقنياً ثانياً، راسلني.',
       name: 'الاسم',
       email: 'البريد الإلكتروني',
       subject: 'الموضوع',
@@ -797,7 +800,7 @@ export const translations = {
       time: 'الوقت',
       type: 'النوع',
       video: 'فيديو',
-      phone: 'هات��',
+      phone: 'هاتف',
       thankYou: 'شكراً لك على الحجز!',
       lookingForward: 'أتطلع إلى محادثتنا'
     },
@@ -954,6 +957,7 @@ export const translations = {
       title: 'Trabajemos juntos',
       subtitle: 'Contáctame',
       description: 'Construyamos algo increíble juntos',
+      intro: 'Si necesitas una app a medida, mejorar el rendimiento o una segunda opinión técnica, escríbeme.',
       name: 'Nombre',
       email: 'Correo electrónico',
       subject: 'Asunto',
