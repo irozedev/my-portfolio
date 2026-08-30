@@ -24,7 +24,9 @@ export function StatementBand() {
       className="relative overflow-hidden bg-[var(--bg-band-deep)] py-20 md:py-28 px-4 sm:px-6 md:px-8"
       /* --bg-band-deep is only defined for client mode; the CV never renders
          this section, but the fallback keeps it from painting transparent if
-         it ever does. */
+         it ever does. The band stays dark in both themes, which is why the
+         text tokens here are --text-on-band rather than --text-primary: the
+         latter flips to ink in light mode and the sentence disappeared. */
       style={{ backgroundColor: "var(--bg-band-deep, var(--bg-secondary))" }}
     >
       <div
@@ -39,15 +41,15 @@ export function StatementBand() {
         viewport={VIEWPORT}
         transition={{ duration: DURATION, ease: EASE }}
       >
-        <p className="font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.08] tracking-[-0.03em] text-[var(--text-primary)]">
+        <p className="font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.08] tracking-[-0.03em] text-[var(--text-on-band)]">
           {L("One or two projects at a time.", "Eén of twee projecten tegelijk.", "مشروع أو مشروعان في الوقت نفسه.", "Uno o dos proyectos a la vez.")}
           <br />
-          <span className="text-[var(--accent-primary)]">
+          <span className="text-[var(--accent-on-band)]">
             {L("Yours is not in a queue.", "Het jouwe staat niet in de rij.", "مشروعك ليس في طابور.", "El tuyo no hace cola.")}
           </span>
         </p>
 
-        <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.16em] text-[var(--text-muted)] mt-8">
+        <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.16em] text-[var(--text-on-band-muted)] mt-8">
           {L(
             "mornings, CET · replies within the day · fixed price before we start",
             "ochtenden, CET · reactie binnen de dag · vaste prijs vooraf",

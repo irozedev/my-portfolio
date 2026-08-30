@@ -226,6 +226,18 @@ img {
   --bg-band-deep: #06272e;  /* the teal statement band */
   --bg-invert: #edefea;     /* the one bright band, bone not white */
 
+  /* The statement band is dark in BOTH themes — that is the point of it, an
+     inverted slab in the middle of the page. So its foreground cannot come
+     from --text-primary, which flips with the theme: in light mode that put
+     #0b0f14 ink on #06272e teal, a contrast ratio of 1.2, and the sentence
+     simply vanished. These two do not flip. */
+  --text-on-band: #eaf6f9;
+  --text-on-band-muted: #7fa6b0;
+  /* Same reason for the accent. In light mode --accent-primary is #0e7490,
+     which against the band's #06272e measures 2.9:1 - under AA even for large
+     text. The bright cyan is the one that works on a dark ground. */
+  --accent-on-band: #00d9ff;
+
   --text-primary: #ffffff;
   --text-secondary: #b9bec6;
   --text-muted: #7d8590;
