@@ -7,17 +7,16 @@
  * modal and the chat funnel alike. The visitor saw an error; the enquiry was
  * gone.
  *
- * Netlify Forms replaces it. The site is already hosted there, it is server
- * side, it emails on each submission, and there is nothing to run or pay for
- * below a hundred a month. The catch is that Netlify only registers a form it
- * can find in the built HTML, which is why index.html carries a hidden one
- * declaring these exact field names - change them in both places or the
- * submission is rejected.
+ * It now posts to /api/contact, a function on the host this site actually runs
+ * on. That is Vercel, not Netlify: production answers with `Server: Vercel` and
+ * an `X-Vercel-Cache` header, and the netlify.toml still in the repo is a
+ * leftover from an earlier deployment. A Netlify Forms attempt returned 405 for
+ * exactly that reason.
  *
- * If that POST fails too - Forms disabled on the site, or the visitor offline -
- * the caller falls back to a prefilled mail draft. Two independent routes, so
- * an enquiry is never simply lost the way it was for as long as the dead
- * endpoint sat there.
+ * The function emails Stepan through Resend and needs RESEND_API_KEY set on the
+ * Vercel project. Until that exists it answers 503, and the caller falls back
+ * to a prefilled mail draft - so an enquiry is never silently dropped the way
+ * it was for as long as the dead endpoint sat there.
  */
 
 export type LeadPayload = {
@@ -30,28 +29,24 @@ export type LeadPayload = {
   source?: string;
 };
 
-/** The name in index.html's hidden form. Both must agree. */
-const FORM_NAME = "contact";
-
 /**
- * Post one enquiry. Resolves true when Netlify accepted it.
+ * Post one enquiry. Resolves true only when it was actually delivered.
  *
  * Never throws: the caller's job is to decide what to do when delivery did not
- * happen, and wrapping every call site in try/catch to find that out is worse
- * than a boolean.
+ * happen, and wrapping every call site in try/catch to learn that is worse than
+ * a boolean.
  */
 export async function submitLead(payload: LeadPayload): Promise<boolean> {
-  const body = new URLSearchParams({ "form-name": FORM_NAME });
-  for (const [k, v] of Object.entries(payload)) {
-    if (v && String(v).trim()) body.append(k, String(v).trim());
-  }
-
   try {
-    const res = await fetch("/", {
+    const res = await fetch("/api/contact", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: body.toString(),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
+    if (!res.ok && import.meta.env.DEV) {
+      const detail = await res.text().catch(() => "");
+      console.warn("[submit-lead] not delivered:", res.status, detail);
+    }
     return res.ok;
   } catch {
     return false;

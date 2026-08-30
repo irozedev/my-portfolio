@@ -380,32 +380,6 @@
     </script>
   </head>
   <body>
-    <!--
-      Netlify Forms has to find a real <form> in the deployed HTML at build
-      time; it never sees anything React renders. So this hidden one declares
-      the shape, and the app posts url-encoded data to "/" with a matching
-      form-name. Submissions land in the Forms tab and in email notifications.
-
-      It replaces a Supabase edge function that was switched off: every enquiry
-      typed into the site was posting to a hostname that no longer resolves,
-      and being lost. Nothing new to run or pay for - the host the site is
-      already on does this.
-
-      bot-field is the honeypot. Real people never see it; bots fill it in and
-      Netlify drops those submissions.
-    -->
-    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
-      <input type="hidden" name="form-name" value="contact" />
-      <input type="text" name="bot-field" />
-      <input type="text" name="name" />
-      <input type="email" name="email" />
-      <input type="text" name="service" />
-      <input type="text" name="budget" />
-      <input type="text" name="timeline" />
-      <input type="text" name="source" />
-      <textarea name="message"></textarea>
-    </form>
-
     <div id="root"></div>
     <noscript>
       <h1>Stepan Roze — Front-End / JavaScript Developer</h1>
