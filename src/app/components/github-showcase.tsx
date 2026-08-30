@@ -258,7 +258,7 @@ export function GitHubShowcase() {
                 <motion.div
                   className="absolute inset-0 opacity-10"
                   style={{
-                    background: "linear-gradient(135deg, #00d9ff, #9333ea, #ec4899)",
+                    background: "linear-gradient(135deg, #00d9ff, #0891b2, #0e7490)",
                     backgroundSize: "200% 200%"
                   }}
                   animate={{
