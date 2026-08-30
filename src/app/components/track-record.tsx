@@ -98,7 +98,7 @@ export function TrackRecord() {
             </div>
 
             <div className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 md:p-7 shadow-[var(--shadow-card)]">
-              <div className="flex items-center justify-between gap-3 mb-4">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mb-4">
                 <h3 className="font-display text-2xl font-bold tracking-[-0.02em] text-[var(--text-primary)]">
                   vogacloset<span className="text-[var(--text-faint)]">.com</span>
                 </h3>
@@ -123,7 +123,7 @@ export function TrackRecord() {
                 profile in this market, so it gets the detail rather than one
                 line — but never the bank's name. */}
             <div className="rounded-3xl border border-[var(--card-border)] bg-[var(--card-bg)] p-6 md:p-7 shadow-[var(--shadow-card)]">
-              <div className="flex items-center justify-between gap-3 mb-1">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mb-1">
                 <h3 className="font-display text-2xl font-bold tracking-[-0.02em] text-[var(--text-primary)]">
                   {L("A national bank", "Een nationale bank", "أحد البنوك الوطنية", "Un banco nacional")}
                 </h3>
