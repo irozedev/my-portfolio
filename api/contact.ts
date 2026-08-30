@@ -24,10 +24,13 @@ export const config = { runtime: "edge" };
 
 const TO = "rozedev095@gmail.com";
 
-/* Resend will only send from a verified domain. Until roze.live is verified
-   there, their shared onboarding sender works and lands in the inbox. Swap it
-   for something@roze.live once the domain is added. */
-const FROM = "Roze site <onboarding@resend.dev>";
+/* roze.live is verified in Resend (EU region), so mail goes out over the
+   site's own domain and is signed for it. The shared onboarding.resend.dev
+   sender that stood here first also delivered, but Gmail stamped every
+   notification "via resend.dev" - fine for a smoke test, wrong for the
+   address a prospective client sees. Nobody replies to this box: replies go
+   to the visitor via reply_to below. */
+const FROM = "Roze site <hello@roze.live>";
 
 type Payload = {
   name?: string;
