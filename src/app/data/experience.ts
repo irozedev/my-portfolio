@@ -22,7 +22,7 @@ export const experiences = [
     company: "Self-Employed",
     tech: ["Next.js 14", "TypeScript", "React", "Netlify Functions", "Supabase", "Telegram Bot API", "WayForPay", "GA4"],
     icon: Rocket,
-    gradient: "from-cyan-500 via-blue-500 to-purple-500",
+    gradient: "from-cyan-400 via-cyan-500 to-sky-600",
     color: "#00d9ff",
   },
   // Work outside the field, and it is here on purpose. Without it there is an
@@ -54,7 +54,7 @@ export const experiences = [
     company: "E-Consulting",
     tech: ["JavaScript (ES6+)", "MS Dynamics 365 XRM", "Vue.js", "Canvas", "REST API"],
     icon: Code2,
-    gradient: "from-purple-500 via-pink-500 to-rose-500",
+    gradient: "from-sky-400 via-cyan-500 to-teal-500",
     color: "#a78bfa",
   },
   {
@@ -63,7 +63,7 @@ export const experiences = [
     company: "Ronis BT",
     tech: ["Magento 1 & 2", "React", "Knockout.js", "jQuery", "SCSS / LESS", "JavaScript (ES6+)"],
     icon: Users,
-    gradient: "from-green-500 via-emerald-500 to-teal-500",
+    gradient: "from-teal-400 via-cyan-500 to-cyan-600",
     color: "#10b981",
   },
   {
@@ -72,7 +72,7 @@ export const experiences = [
     company: "Web Studio & Freelance",
     tech: ["HTML5", "CSS3", "JavaScript", "jQuery", "Bootstrap", "PHP"],
     icon: Building2,
-    gradient: "from-amber-500 via-orange-500 to-red-500",
+    gradient: "from-cyan-300 via-sky-500 to-blue-600",
     color: "#f59e0b",
   },
   {
