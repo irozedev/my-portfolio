@@ -97,7 +97,7 @@ const DRAG_THRESHOLD = 6;
 type Lang = (en: string, nl: string, ar: string, es: string) => string;
 
 /**
- * Display copy per service, in all five languages.
+ * Display copy per service, in all four languages.
  *
  * The `services` array above stays canonical English on purpose: its `title`
  * is what goes into sessionStorage and the `openChatBot` event, and the chat

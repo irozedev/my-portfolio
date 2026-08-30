@@ -51,7 +51,7 @@ const projects = [
 type ProjectData = (typeof projects)[number];
 
 /**
- * Per-project copy in all five languages.
+ * Per-project copy in all four languages.
  *
  * The tone here is deliberately conversational rather than résumé-formal:
  * these cards are the first thing a prospective client reads, and a spec sheet
@@ -155,10 +155,10 @@ function projectCopy(L: Lang) {
         "Personal · portafolio",
       ),
       description: L(
-        "The site you're on right now. Five languages, two view modes for two audiences, a light theme that isn't an afterthought — and a chat that quotes your project without an API bill.",
-        "De site waar je nu bent. Vijf talen, twee weergavemodi voor twee doelgroepen, een licht thema dat geen bijzaak is — en een chat die je project inschat zonder API-rekening.",
-        "الموقع الذي تتصفّحه الآن. خمس لغات، ووضعان للعرض لجمهورين، وثيم فاتح ليس مجرد إضافة لاحقة — ودردشة تقدّر مشروعك دون فاتورة API.",
-        "El sitio en el que estás ahora. Cinco idiomas, dos modos de vista para dos públicos, un tema claro que no es un añadido — y un chat que presupuesta tu proyecto sin factura de API.",
+        "The site you're on right now. Four languages, two view modes for two audiences, a light theme that isn't an afterthought — and a chat that quotes your project without an API bill.",
+        "De site waar je nu bent. Vier talen, twee weergavemodi voor twee doelgroepen, een licht thema dat geen bijzaak is — en een chat die je project inschat zonder API-rekening.",
+        "الموقع الذي تتصفّحه الآن. أربع لغات، ووضعان للعرض لجمهورين، وثيم فاتح ليس مجرد إضافة لاحقة — ودردشة تقدّر مشروعك دون فاتورة API.",
+        "El sitio en el que estás ahora. Cuatro idiomas, dos modos de vista para dos públicos, un tema claro que no es un añadido — y un chat que presupuesta tu proyecto sin factura de API.",
       ),
       role: L(
         "Design & development",
@@ -169,17 +169,17 @@ function projectCopy(L: Lang) {
       duration: L("Personal", "Persoonlijk", "شخصي", "Personal"),
       team: L("Solo", "Solo", "منفرد", "En solitario"),
       fullDescription: L(
-        "My personal portfolio, built with React 19, TypeScript, Tailwind v4 and Vite. Five languages including Arabic with real RTL support, a light and a dark theme, and two view modes — one for clients looking to hire, one showing the full CV. The chat assistant runs entirely in the browser: it answers questions about pricing, timelines and stack, navigates the page for you and collects a lead, at zero API cost.",
-        "Mijn persoonlijke portfolio, gebouwd met React 19, TypeScript, Tailwind v4 en Vite. Vijf talen inclusief Arabisch met echte RTL-ondersteuning, een licht en een donker thema, en twee weergavemodi — één voor klanten, één met het volledige cv. De chat-assistent loopt volledig in de browser: hij antwoordt over prijzen, planning en stack, navigeert de pagina voor je en verzamelt een lead, tegen nul API-kosten.",
-        "بورتفوليو الشخصي، مبني بـ React 19 وTypeScript وTailwind v4 وVite. خمس لغات منها العربية بدعم RTL حقيقي، وثيم فاتح وآخر داكن، ووضعان للعرض — أحدهما للعملاء والآخر يعرض السيرة الكاملة. مساعد الدردشة يعمل بالكامل في المتصفّح: يجيب عن الأسعار والمواعيد والتقنيات، ويتنقّل في الصفحة عنك، ويجمع العميل المحتمل — بتكلفة API صفرية.",
-        "Mi portafolio personal, hecho con React 19, TypeScript, Tailwind v4 y Vite. Cinco idiomas incluido árabe con soporte RTL real, tema claro y oscuro, y dos modos de vista: uno para clientes y otro con el CV completo. El asistente de chat funciona íntegramente en el navegador: responde sobre precios, plazos y stack, navega la página por ti y capta el contacto, con coste de API cero.",
+        "My personal portfolio, built with React 19, TypeScript, Tailwind v4 and Vite. Four languages including Arabic with real RTL support, a light and a dark theme, and two view modes — one for clients looking to hire, one showing the full CV. The chat assistant runs entirely in the browser: it answers questions about pricing, timelines and stack, navigates the page for you and collects a lead, at zero API cost.",
+        "Mijn persoonlijke portfolio, gebouwd met React 19, TypeScript, Tailwind v4 en Vite. Vier talen inclusief Arabisch met echte RTL-ondersteuning, een licht en een donker thema, en twee weergavemodi — één voor klanten, één met het volledige cv. De chat-assistent loopt volledig in de browser: hij antwoordt over prijzen, planning en stack, navigeert de pagina voor je en verzamelt een lead, tegen nul API-kosten.",
+        "بورتفوليو الشخصي، مبني بـ React 19 وTypeScript وTailwind v4 وVite. أربع لغات منها العربية بدعم RTL حقيقي، وثيم فاتح وآخر داكن، ووضعان للعرض — أحدهما للعملاء والآخر يعرض السيرة الكاملة. مساعد الدردشة يعمل بالكامل في المتصفّح: يجيب عن الأسعار والمواعيد والتقنيات، ويتنقّل في الصفحة عنك، ويجمع العميل المحتمل — بتكلفة API صفرية.",
+        "Mi portafolio personal, hecho con React 19, TypeScript, Tailwind v4 y Vite. Cuatro idiomas incluido árabe con soporte RTL real, tema claro y oscuro, y dos modos de vista: uno para clientes y otro con el CV completo. El asistente de chat funciona íntegramente en el navegador: responde sobre precios, plazos y stack, navega la página por ti y capta el contacto, con coste de API cero.",
       ),
       features: [
         L(
-          "Five languages with a real ?lang= URL, honest hreflang and Arabic RTL",
-          "Vijf talen met een echte ?lang=-URL, eerlijke hreflang en Arabisch RTL",
-          "خمس لغات مع رابط ?lang= حقيقي، وhreflang صادق، وRTL للعربية",
-          "Cinco idiomas con una URL ?lang= real, hreflang honesto y RTL en árabe",
+          "Four languages with a real ?lang= URL, honest hreflang and Arabic RTL",
+          "Vier talen met een echte ?lang=-URL, eerlijke hreflang en Arabisch RTL",
+          "أربع لغات مع رابط ?lang= حقيقي، وhreflang صادق، وRTL للعربية",
+          "Cuatro idiomas con una URL ?lang= real, hreflang honesto y RTL en árabe",
         ),
         L(
           "Client and CV view modes off one dataset",

@@ -270,7 +270,7 @@ function assistantReply(input: string, language: string): { text: string; action
     return { matched: true, text: L(
       "Stepan speaks Ukrainian (native) & English, and is learning Dutch. This site & chat work in English, Ukrainian, Dutch, Arabic and Spanish.",
       "Stepan spreekt Oekraïens (moedertaal) & Engels, en leert Nederlands. Site & chat: 5 talen.",
-      "يتحدث ستيبان الأوكرانية (الأم) والإنجليزية ويتعلّم الهولندية. الموقع بخمس لغات.",
+      "يتحدث ستيبان الأوكرانية (الأم) والإنجليزية ويتعلّم الهولندية. الموقع بأربع لغات.",
       "Stepan habla ucraniano (nativo) e inglés, y aprende neerlandés. Sitio y chat en 5 idiomas.",
     ) };
 
