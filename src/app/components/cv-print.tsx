@@ -142,7 +142,7 @@ export function CVPrint({ onClose }: { onClose: () => void }) {
             <dl className="cv-contact">
               <dt>{L("Email", "E-mail", "البريد", "Email")}</dt>
               <dd>
-                <a href="mailto:rozedev095@gmail.com">rozedev095@gmail.com</a>
+                <a href="mailto:hello@roze.live">hello@roze.live</a>
               </dd>
 
               <dt>{L("Location", "Locatie", "الموقع", "Ubicación")}</dt>

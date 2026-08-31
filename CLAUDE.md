@@ -129,15 +129,28 @@ imports it and pnpm does not hoist it.
   only on `matched:false`, and it needs `ANTHROPIC_API_KEY` set in Supabase
   secrets (paid). Without the key it returns `{model:"fallback"}`.
 
-## Supabase / backend
-- Project ref: **`saeohtepfpuzzajfduad`** (note: `...tep...`, an old typo
-  `...tef...` appears as a harmless default in the server source).
-- Function base path: `/functions/v1/make-server-a62f57c7`
-- Secrets (set in Supabase dashboard → Edge Functions):
-  - `RESEND_API_KEY` — emails contact/chat leads to **rozedev095@gmail.com**.
-    Without it, leads are still saved to the KV store (visible on `#admin`).
-  - `ANTHROPIC_API_KEY` — real AI chat (optional, unused right now).
-- `src/utils/supabase/info.tsx` holds `projectId` + `publicAnonKey`.
+## Backend
+**Supabase is switched off.** Its hostname no longer resolves, so for months
+every enquiry posted into nothing and was lost silently. Do not restore it or
+send anything to it. `#admin`, the KV store and the AI chat endpoint all died
+with it; `@supabase/supabase-js` survives only inside the lazily-loaded admin
+chunk.
+
+The site is hosted on **Vercel**, not Netlify — check `Server:` on a live
+response before believing any config file about this; a stale `netlify.toml`
+cost a full round of debugging.
+
+- `api/contact.ts` — edge function, the only backend. The contact form, the
+  booking modal and the chat funnel all post here through
+  `src/app/lib/submit-lead.ts`, which never throws; anything other than 200
+  makes the client open a prefilled mail draft rather than drop the enquiry.
+- Delivery is Resend, from `hello@roze.live` (domain verified, eu-west-1) to
+  **rozedev095@gmail.com**. Without `RESEND_API_KEY` the function answers 503
+  with a reason instead of pretending to have sent.
+- A `botField` value is the honeypot: the endpoint answers 200 and sends
+  nothing, so a spam test is indistinguishable from success from outside.
+- Environment variables live in the Vercel project, Production scope. There is
+  no Vercel CLI or token on this machine; only Stepan can set them.
 
 ## SEO
 Two layers, keep them consistent:
@@ -209,7 +222,10 @@ Two layers, keep them consistent:
   nobody could contradict it, next to two employer roles carrying no grade.
 - **English is the working language; Dutch is weaker than English.** Never claim
   fluent Dutch in copy or structured data.
-- Email **rozedev095@gmail.com** (single canonical email). GitHub **@irozedev**.
+- Public email **hello@roze.live** — the address shown everywhere on the site.
+  Inbound is forwarded to rozedev095@gmail.com by ImprovMX (apex MX); Resend
+  keeps its own SPF/MX on the `send.roze.live` subdomain, which is why the two
+  do not collide. GitHub **@irozedev**.
 - Pricing (starting, no VAT), **raised 2026-08-04** off the freelance-era floor:
   automation €65/h (or €500/bot), websites €950, UI design €600, web apps €75/h,
   e-commerce €1,800, consulting €75/h. The old floor was €45/h, which in Belgium

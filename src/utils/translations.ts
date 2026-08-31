@@ -742,7 +742,7 @@ export const translations = {
         success: 'تم إرسال الرسالة!',
         successMessage: 'شكراً لتواصلك. سأرد عليك قريباً.',
         error: 'خطأ في الإرسال',
-        errorMessage: 'حدث خطأ ما. يرجى المحاولة مرة أخرى أو إرسال بريد إلكتروني مباشرة إلى rozedev095@gmail.com'
+        errorMessage: 'حدث خطأ ما. يرجى المحاولة مرة أخرى أو إرسال بريد إلكتروني مباشرة إلى hello@roze.live'
       },
       formNote: 'بإرسال هذا النموذج، فإنك توافق على الاتصال عبر البريد الإلكتروني.'
     },
@@ -1024,7 +1024,7 @@ export const translations = {
         success: '¡Mensaje enviado!',
         successMessage: 'Gracias por contactarme. Te responderé pronto.',
         error: 'Error al enviar',
-        errorMessage: 'Algo salió mal. Por favor intenta de nuevo o envía un correo directamente a rozedev095@gmail.com'
+        errorMessage: 'Algo salió mal. Por favor intenta de nuevo o envía un correo directamente a hello@roze.live'
       },
       formNote: 'Al enviar este formulario, aceptas ser contactado por correo electrónico.'
     },

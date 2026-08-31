@@ -35,8 +35,8 @@ const contactLinks = [
   {
     icon: Mail,
     key: 'email',
-    value: "rozedev095@gmail.com",
-    href: "mailto:rozedev095@gmail.com",
+    value: "hello@roze.live",
+    href: "mailto:hello@roze.live",
     color: "#00d9ff",
   },
   ...(WHATSAPP_NUMBER

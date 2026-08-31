@@ -47,10 +47,10 @@ function funnelStrings(language: string) {
       `¡Gracias, ${n}! Tu solicitud está con Stepan. Trabaja cada mañana (CET) y responde el mismo día a ${e}.\n\n¿Quieres un precio aproximado ahora o algo más?`,
     ),
     failed: (e: string) => L(
-      `I couldn't send it automatically. Please email Stepan directly at rozedev095@gmail.com — I noted your address (${e}).`,
-      `Kon het niet automatisch versturen. Mail Stepan direct: rozedev095@gmail.com (jouw e-mail: ${e}).`,
-      `تعذّر الإرسال تلقائياً. راسل ستيبان مباشرة: rozedev095@gmail.com (بريدك: ${e}).`,
-      `No pude enviarlo automáticamente. Escribe a Stepan: rozedev095@gmail.com (tu email: ${e}).`,
+      `I couldn't send it automatically. Please email Stepan directly at hello@roze.live — I noted your address (${e}).`,
+      `Kon het niet automatisch versturen. Mail Stepan direct: hello@roze.live (jouw e-mail: ${e}).`,
+      `تعذّر الإرسال تلقائياً. راسل ستيبان مباشرة: hello@roze.live (بريدك: ${e}).`,
+      `No pude enviarlo automáticamente. Escribe a Stepan: hello@roze.live (tu email: ${e}).`,
     ),
     qaIntro: L("Sure — ask me about pricing, timelines, stack or availability. Or tap “Get a quote”.", "Tuurlijk — vraag over prijzen, planning, stack of beschikbaarheid. Of tik “Offerte”.", "بالتأكيد — اسأل عن الأسعار أو المدة أو الأدوات. أو اضغط «عرض سعر».", "Claro — pregunta sobre precios, plazos o stack. O toca “Presupuesto”."),
     labels: {
@@ -115,10 +115,10 @@ function localAnswer(input: string, language: string): string {
 
   if (/(contact|email|reach|mail|write|telegram|контакт|звʼяз|звяз|пошта|contacto|correo|تواصل|بريد)/.test(s))
     return L(
-      "Best way to reach me:\n• Email: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nOr use the contact form below — I reply within the day.",
-      "Zo bereik je me:\n• E-mail: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nOf het formulier hieronder — ik reageer binnen de dag.",
-      "أفضل طريقة للتواصل:\n• البريد: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nأو نموذج التواصل أدناه.",
-      "Mejor forma de contactarme:\n• Email: rozedev095@gmail.com\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nO el formulario de abajo — respondo el mismo día.",
+      "Best way to reach me:\n• Email: hello@roze.live\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nOr use the contact form below — I reply within the day.",
+      "Zo bereik je me:\n• E-mail: hello@roze.live\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nOf het formulier hieronder — ik reageer binnen de dag.",
+      "أفضل طريقة للتواصل:\n• البريد: hello@roze.live\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nأو نموذج التواصل أدناه.",
+      "Mejor forma de contactarme:\n• Email: hello@roze.live\n• GitHub: github.com/irozedev\n• LinkedIn: linkedin.com/in/rozestepan\n\nO el formulario de abajo — respondo el mismo día.",
     );
 
   if (/(skill|tech|stack|experience|expertise|react|vue|next|typescript|magento|навич|досвід|стек|ervaring|vaardig|habilidad|experiencia|خبرة|مهارات)/.test(s))
@@ -131,10 +131,10 @@ function localAnswer(input: string, language: string): string {
 
   if (/(start|begin|hire|work with|project|почати|проект|starten|beginnen|empezar|proyecto|بدء|مشروع)/.test(s))
     return L(
-      "Great! Tell me briefly: what you want to build, rough budget and deadline. Then email rozedev095@gmail.com or use the form below — I'll send a fixed quote + timeline.",
-      "Top! Vertel kort: wat je wil bouwen, budget en deadline. Mail rozedev095@gmail.com of gebruik het formulier — je krijgt een vaste offerte + planning.",
-      "رائع! أخبرني باختصار: ما تريد بناءه، الميزانية والموعد. راسلني على rozedev095@gmail.com أو عبر النموذج، وسأرسل عرضاً ثابتاً + جدولاً.",
-      "¡Genial! Cuéntame: qué quieres construir, presupuesto y plazo. Escribe a rozedev095@gmail.com o usa el formulario y te envío presupuesto fijo + plazo.",
+      "Great! Tell me briefly: what you want to build, rough budget and deadline. Then email hello@roze.live or use the form below — I'll send a fixed quote + timeline.",
+      "Top! Vertel kort: wat je wil bouwen, budget en deadline. Mail hello@roze.live of gebruik het formulier — je krijgt een vaste offerte + planning.",
+      "رائع! أخبرني باختصار: ما تريد بناءه، الميزانية والموعد. راسلني على hello@roze.live أو عبر النموذج، وسأرسل عرضاً ثابتاً + جدولاً.",
+      "¡Genial! Cuéntame: qué quieres construir, presupuesto y plazo. Escribe a hello@roze.live o usa el formulario y te envío presupuesto fijo + plazo.",
     );
 
   return ""; // no info match — the smart layer / funnel decides what to do
@@ -250,10 +250,10 @@ function assistantReply(input: string, language: string): { text: string; action
   // Contact
   if (/(contact|reach (you|him|stepan)|get in touch|звʼяз|звяз|контакт|contacto|contact opnemen|اتصال|تواصل)/.test(s))
     return { matched: true, action: { kind: 'nav', target: '#contact', label: lblContact }, text: L(
-      "Reach Stepan at rozedev095@gmail.com — replies within the day. Or open the contact form",
-      "Mail Stepan: rozedev095@gmail.com — reactie binnen de dag. Of open het formulier",
-      "راسل ستيبان: rozedev095@gmail.com — رد خلال اليوم. أو افتح النموذج",
-      "Escribe a Stepan: rozedev095@gmail.com — respuesta el mismo día. O abre el formulario",
+      "Reach Stepan at hello@roze.live — replies within the day. Or open the contact form",
+      "Mail Stepan: hello@roze.live — reactie binnen de dag. Of open het formulier",
+      "راسل ستيبان: hello@roze.live — رد خلال اليوم. أو افتح النموذج",
+      "Escribe a Stepan: hello@roze.live — respuesta el mismo día. O abre el formulario",
     ) };
 
   // Hire / start → funnel
@@ -877,10 +877,10 @@ export function ScrollToTopButton() {
                 </div>
                 <p className="text-[9px] text-[var(--text-muted)] text-center mt-1.5 font-mono">
                   {
-                   language === 'nl' ? 'Reactie binnen de dag • rozedev095@gmail.com' :
-                   language === 'es' ? 'Respuesta el mismo día • rozedev095@gmail.com' :
-                   language === 'ar' ? 'رد خلال اليوم • rozedev095@gmail.com' :
-                   'Replies within the day • rozedev095@gmail.com'}
+                   language === 'nl' ? 'Reactie binnen de dag • hello@roze.live' :
+                   language === 'es' ? 'Respuesta el mismo día • hello@roze.live' :
+                   language === 'ar' ? 'رد خلال اليوم • hello@roze.live' :
+                   'Replies within the day • hello@roze.live'}
                 </p>
               </div>
             </motion.div>

@@ -40,7 +40,7 @@ const structuredData = {
   jobTitle: "Front-End / JavaScript Developer",
   url: "https://roze.live",
   image: "https://roze.live/og-image.jpg",
-  email: "rozedev095@gmail.com",
+  email: "hello@roze.live",
   telephone: "+32469631424",
   // Where he actually lives. Antwerp stays in the geo meta below as a market
   // signal — it is where he wants to work — but a PostalAddress is a claim of

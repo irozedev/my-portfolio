@@ -72,7 +72,7 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
             <section>
               <h3 className="text-xl font-bold text-[var(--text-primary)] mb-3">5. Contact</h3>
               <p className="text-[var(--text-secondary)] leading-relaxed">
-                For privacy concerns, contact: <a href="mailto:rozedev095@gmail.com" className="text-[var(--accent-primary)] hover:underline">rozedev095@gmail.com</a>
+                For privacy concerns, contact: <a href="mailto:hello@roze.live" className="text-[var(--accent-primary)] hover:underline">hello@roze.live</a>
               </p>
             </section>
           </div>
@@ -134,7 +134,7 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
                 <p><strong>Name:</strong> Stepan Roze</p>
                 <p><strong>Business:</strong> Software Development Services</p>
                 <p><strong>Location:</strong> Belgium, European Union</p>
-                <p><strong>Email:</strong> <a href="mailto:rozedev095@gmail.com" className="text-[var(--accent-primary)] hover:underline">rozedev095@gmail.com</a></p>
+                <p><strong>Email:</strong> <a href="mailto:hello@roze.live" className="text-[var(--accent-primary)] hover:underline">hello@roze.live</a></p>
                 <p><strong>Website:</strong> <a href="https://roze.live" className="text-[var(--accent-primary)] hover:underline">roze.live</a></p>
               </div>
             </section>
@@ -158,7 +158,7 @@ export function LegalModal({ type, onClose }: LegalModalProps) {
             <section>
               <h3 className="text-xl font-bold text-[var(--text-primary)] mb-3">Dispute Resolution</h3>
               <p className="text-[var(--text-secondary)] leading-relaxed">
-                For any complaints or disputes, please contact <a href="mailto:rozedev095@gmail.com" className="text-[var(--accent-primary)] hover:underline">rozedev095@gmail.com</a>. We aim to resolve issues amicably within 14 days.
+                For any complaints or disputes, please contact <a href="mailto:hello@roze.live" className="text-[var(--accent-primary)] hover:underline">hello@roze.live</a>. We aim to resolve issues amicably within 14 days.
               </p>
             </section>
 

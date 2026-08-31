@@ -16,7 +16,7 @@
  * reason they are writing is that the last thing they tried did not work.
  */
 
-export const CONTACT_EMAIL = "rozedev095@gmail.com";
+export const CONTACT_EMAIL = "hello@roze.live";
 
 type LeadFields = {
   name?: string;

@@ -51,10 +51,10 @@ export function hiringStrings(language: string) {
       contact: L("Contact & CV", "Contact & cv", "التواصل والسيرة", "Contacto y CV"),
     },
     fallback: L(
-      "I only answer from what is on this page, so I would rather not guess at that one. Stepan reads rozedev095@gmail.com himself and replies the same day.",
-      "Ik antwoord alleen met wat op deze pagina staat, dus daar gok ik liever niet naar. Stepan leest rozedev095@gmail.com zelf en reageert dezelfde dag.",
-      "أجيب فقط بما هو موجود على هذه الصفحة، ولا أفضّل التخمين. ستيبان يقرأ rozedev095@gmail.com بنفسه ويرد في نفس اليوم.",
-      "Solo respondo con lo que hay en esta página, así que prefiero no adivinar. Stepan lee rozedev095@gmail.com y responde el mismo día.",
+      "I only answer from what is on this page, so I would rather not guess at that one. Stepan reads hello@roze.live himself and replies the same day.",
+      "Ik antwoord alleen met wat op deze pagina staat, dus daar gok ik liever niet naar. Stepan leest hello@roze.live zelf en reageert dezelfde dag.",
+      "أجيب فقط بما هو موجود على هذه الصفحة، ولا أفضّل التخمين. ستيبان يقرأ hello@roze.live بنفسه ويرد في نفس اليوم.",
+      "Solo respondo con lo que hay en esta página, así que prefiero no adivinar. Stepan lee hello@roze.live y responde el mismo día.",
     ),
   };
 }
@@ -110,19 +110,19 @@ export function hiringAnswer(input: string, language: string): Answer {
 
   if (/(contact|email|reach|cv|resume|apply|hire|interview|solliciter|bereik|mail|contacto|correo|currículum|entrevista|تواصل|بريد|سيرة|مقابلة)/.test(s))
     return hit(L(
-      "rozedev095@gmail.com — he reads it himself and replies the same day. The CV downloads from the button in the header, and LinkedIn is linked in the footer.",
-      "rozedev095@gmail.com — hij leest het zelf en reageert dezelfde dag. Het cv download je via de knop in de header, LinkedIn staat in de footer.",
-      "rozedev095@gmail.com — يقرأه بنفسه ويرد في نفس اليوم. السيرة الذاتية من الزر في الأعلى، وLinkedIn في التذييل.",
-      "rozedev095@gmail.com — lo lee él y responde el mismo día. El CV se descarga desde el botón de la cabecera, y LinkedIn está en el pie.",
+      "hello@roze.live — he reads it himself and replies the same day. The CV downloads from the button in the header, and LinkedIn is linked in the footer.",
+      "hello@roze.live — hij leest het zelf en reageert dezelfde dag. Het cv download je via de knop in de header, LinkedIn staat in de footer.",
+      "hello@roze.live — يقرأه بنفسه ويرد في نفس اليوم. السيرة الذاتية من الزر في الأعلى، وLinkedIn في التذييل.",
+      "hello@roze.live — lo lee él y responde el mismo día. El CV se descarga desde el botón de la cabecera, y LinkedIn está en el pie.",
     ));
 
   // salary and notice: the page states neither, so neither gets invented
   if (/(salary|pay|compensation|wage|salaris|loon|vergoeding|sueldo|salario|راتب|أجر|notice|opzeg|termijn|preaviso|إشعار)/.test(s))
     return hit(L(
-      "That is not something this page states, and I am not going to invent a number. Ask Stepan directly at rozedev095@gmail.com — he answers that kind of question the same day.",
-      "Dat staat niet op deze pagina, en ik ga geen bedrag verzinnen. Vraag het Stepan direct via rozedev095@gmail.com — dat soort vragen beantwoordt hij dezelfde dag.",
-      "هذا غير مذكور في الصفحة، ولن أختلق رقماً. اسأل ستيبان مباشرة على rozedev095@gmail.com — يرد على هذا النوع من الأسئلة في نفس اليوم.",
-      "Eso no aparece en esta página y no voy a inventar una cifra. Pregúntale a Stepan en rozedev095@gmail.com — responde ese tipo de preguntas el mismo día.",
+      "That is not something this page states, and I am not going to invent a number. Ask Stepan directly at hello@roze.live — he answers that kind of question the same day.",
+      "Dat staat niet op deze pagina, en ik ga geen bedrag verzinnen. Vraag het Stepan direct via hello@roze.live — dat soort vragen beantwoordt hij dezelfde dag.",
+      "هذا غير مذكور في الصفحة، ولن أختلق رقماً. اسأل ستيبان مباشرة على hello@roze.live — يرد على هذا النوع من الأسئلة في نفس اليوم.",
+      "Eso no aparece en esta página y no voy a inventar una cifra. Pregúntale a Stepan en hello@roze.live — responde ese tipo de preguntas el mismo día.",
     ));
 
   return { text: hiringStrings(language).fallback, matched: false };
