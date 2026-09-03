@@ -27,3 +27,9 @@
 # Generated: collapse in diffs and exclude from language stats
 pnpm-lock.yaml linguist-generated=true -diff
 dist/**        linguist-generated=true
+
+# Design exports — not source. `design/roze-live-redesign.html` alone is 2.7 MB,
+# and linguist ranks languages by byte count, so these files were making a
+# React/TypeScript repository report itself as HTML. Excluded from the stats
+# and collapsed in diffs.
+design/**      linguist-generated=true
